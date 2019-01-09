@@ -8,7 +8,7 @@
 package frc.robot;
 
 import edu.wpi.cscore.VideoMode;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Hardware.Hardware;
 
