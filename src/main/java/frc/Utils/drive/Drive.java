@@ -1,12 +1,12 @@
-package frc.HardwareInterfaces.Transmission;
+package frc.Utils.drive;
 
 import frc.HardwareInterfaces.KilroyEncoder;
-import frc.HardwareInterfaces.transmission.MecanumTransmission;
-import frc.HardwareInterfaces.transmission.SwerveTransmission;
-import frc.HardwareInterfaces.transmission.TankTransmission;
-import frc.HardwareInterfaces.transmission.TransmissionBase;
-import frc.HardwareInterfaces.transmission.TransmissionBase.MotorPosition;
-import frc.HardwareInterfaces.transmission.TransmissionBase.TransmissionType;
+import frc.HardwareInterfaces.Transmission.MecanumTransmission;
+import frc.HardwareInterfaces.Transmission.SwerveTransmission;
+import frc.HardwareInterfaces.Transmission.TankTransmission;
+import frc.HardwareInterfaces.Transmission.TransmissionBase;
+import frc.HardwareInterfaces.Transmission.TransmissionBase.MotorPosition;
+import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.interfaces.Gyro;

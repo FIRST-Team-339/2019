@@ -1,8 +1,8 @@
 package frc.Utils.drive;
 
 import frc.HardwareInterfaces.KilroyEncoder;
-import frc.HardwareInterfaces.transmission.TransmissionBase;
-import frc.HardwareInterfaces.transmission.TransmissionBase.MotorPosition;
+import frc.HardwareInterfaces.Transmission.TransmissionBase;
+import frc.HardwareInterfaces.Transmission.TransmissionBase.MotorPosition;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
