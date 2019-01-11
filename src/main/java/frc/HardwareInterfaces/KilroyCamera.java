@@ -21,10 +21,8 @@ package frc.HardwareInterfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import edu.wpi.first.wpilibj.image.ColorImage;
-import edu.wpi.first.wpilibj.image.HSLImage;
-import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.vision.AxisCamera;
+
+import edu.wpi.cscore.AxisCamera;
 
 /**
  * A camera container/interface that holds an instance of the AxisCamera
@@ -93,7 +91,7 @@ public KilroyCamera (boolean hasCamera)
     this.haveCamera = hasCamera;
     if (hasCamera)
         {
-        this.camera = new AxisCamera(KILROY_CAMERA_IP);
+        this.camera = new AxisCamera("Kilroy Axis", KILROY_CAMERA_IP);
         }
     else
         {
@@ -122,7 +120,7 @@ public KilroyCamera (boolean hasCamera, String ip)
     if (hasCamera)
         {
         KILROY_CAMERA_IP = ip;
-        this.camera = new AxisCamera(KILROY_CAMERA_IP);
+        this.camera = new AxisCamera("Kilroy Axis", KILROY_CAMERA_IP);
         }
     else
         {
