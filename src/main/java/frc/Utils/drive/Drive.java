@@ -1032,12 +1032,12 @@ public void reset ()
 /**
  * Resets the accelerate function, if the robot changes direction too fast.
  * 
- * @deprecated use {@link #reset() reset()} instead.
+ * deprecated use {@link #reset() reset()} instead.
  */
-public void resetAccelerate ()
-{
-    this.reset();
-}
+// public void resetAccelerate ()
+// {
+//     this.reset();
+// }
 
 /**
  * Sets all the encoder's stored pulses back to zero.
@@ -1468,7 +1468,7 @@ public boolean turnDegrees2Stage (int degrees, double power)
 /**
  * Turns the robot based on values obtained from a gyroscopic sensor.
  * 
- * @deprecated Use instead {@link #turnDegrees(int, double, boolean)
+ * deprecated Use instead {@link #turnDegrees(int, double, boolean)
  *             turnDegrees(degrees, speed, usingGyro)}
  * 
  * @param angle
@@ -1478,35 +1478,35 @@ public boolean turnDegrees2Stage (int degrees, double power)
  *            How fast we should turn, in decimal percentage (0.0 to 1.0)
  * @return Whether or not we have finished turning.
  */
-public boolean turnDegreesGyro (int angle, double speed)
-{
-    // Reset the gyro on first start
-    if (turnDegreesGyroInit)
-        {
-        this.gyro.reset();
-        turnDegreesGyroInit = false;
-        }
+// public boolean turnDegreesGyro (int angle, double speed)
+// {
+//     // Reset the gyro on first start
+//     if (turnDegreesGyroInit)
+//         {
+//         this.gyro.reset();
+//         turnDegreesGyroInit = false;
+//         }
 
-    // If we have traveled the number of degrees in any direction, stop.
-    if (Math.abs(gyro.getAngle()) >= Math.abs(angle))
-        {
-        this.transmission.stop();
-        turnDegreesGyroInit = true;
-        return true;
-        }
+//     // If we have traveled the number of degrees in any direction, stop.
+//     if (Math.abs(gyro.getAngle()) >= Math.abs(angle))
+//         {
+//         this.transmission.stop();
+//         turnDegreesGyroInit = true;
+//         return true;
+//         }
 
-    // Turn the robot based on whether we are going left or right.
-    if (angle < 0)
-        {
-        this.transmission.driveRaw(-speed, speed);
-        }
-    else
-        {
-        this.transmission.driveRaw(speed, -speed);
-        }
+//     // Turn the robot based on whether we are going left or right.
+//     if (angle < 0)
+//         {
+//         this.transmission.driveRaw(-speed, speed);
+//         }
+//     else
+//         {
+//         this.transmission.driveRaw(speed, -speed);
+//         }
 
-    return false;
-}
+//     return false;
+// }
 
 /**
  * Turns the robot on the spot a number of degrees requested.
