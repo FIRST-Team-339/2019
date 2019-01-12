@@ -172,7 +172,7 @@ public void setPIDToleranceAccel (PIDDriveFunction driveFunction,
 /**
  * Brakes the robot using a PID loop, setting the setpoint to 0.
  * 
- * @deprecated This was a test function, and is BAD. do not use.
+ * @Deprecated This was a test function, and is BAD. do not use.
  * @return
  */
 public boolean brakePID(BrakeType brakeType)
