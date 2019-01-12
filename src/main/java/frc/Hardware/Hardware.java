@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj.Timer;
  * @class HardwareDeclarations
  * @author Bob Brown
  * @written Jan 2, 2011
- *          -------------------------------------------------------
+ * -------------------------------------------------------
  */
 
 public class Hardware
@@ -46,6 +46,12 @@ public class Hardware
 // ------------------------------------
 // Public Constants
 // ------------------------------------
+public enum robotYear 
+{
+        KILROY2018,
+        KILROY2019
+}
+public robotYear whichRobot = robotYear.KILROY2018;
 
 // -------------------------------------
 // Private Constants
@@ -72,7 +78,6 @@ public static boolean demoMode = false;
 // Talon classes
 // ------------------------------------
 public static Talon rightDriveMotor = new Talon(2);
-
 //
 public static Talon leftDriveMotor = new Talon(3);
 
