@@ -97,6 +97,8 @@ public void reset ()
     super.reset();
     this.turnDegreesInit = true;
     this.turnDegreesGyroInit = true;
+	this.driveStraightInchesInit = true;
+	this.brakeInit = true;
     // this.turnGyroPID.disable();
 }
 
@@ -125,6 +127,12 @@ public void setPIDToleranceAccel (PIDDriveFunction driveFunction,
 {
     switch (driveFunction)
         {
+        case BRAKE:
+            this.brakePIDTolerance[0] = p;
+            this.brakePIDTolerance[1] = i;
+            this.brakePIDTolerance[2] = d;
+            this.brakePIDTolerance[3] = tolerance;
+            break;
         case DRIVESTRAIGHT_ENC:
             this.driveStraightPIDTolerance[0] = p;
             this.driveStraightPIDTolerance[1] = i;
@@ -162,6 +170,42 @@ public void setPIDToleranceAccel (PIDDriveFunction driveFunction,
 }
 
 /**
+ * Brakes the robot using a PID loop, setting the setpoint to 0.
+ * 
+ * @deprecated This was a test function, and is BAD. do not use.
+ * @return
+ */
+public boolean brakePID(BrakeType brakeType)
+{
+	if (brakeInit == true)
+	{
+		this.brakeType = brakeType;
+		super.resetEncoders();
+		this.brakePID.getPIDController().setPID(brakePIDTolerance[0], brakePIDTolerance[1], brakePIDTolerance[2]);
+		this.brakePID.getPIDController().setAbsoluteTolerance(brakePIDTolerance[3]);
+		this.brakePID.getPIDController().reset();
+		this.brakePID.setSetpoint(0);
+		this.brakePID.enable();
+		brakeInit = false;
+	}
+	
+	if(brakeType == BrakeType.AFTER_DRIVE)
+		getTransmission().driveRaw(brakePIDOut, brakePIDOut);
+	else if(brakeType == BrakeType.AFTER_TURN)
+		getTransmission().driveRaw(brakePIDOut, -brakePIDOut);
+	
+	if(brakePID.onTarget() == true)
+	{
+		stop();
+		brakePID.disable();
+		brakeInit = true;
+		return true;
+	}
+	return false;
+
+}
+
+/**
  * Turns the robot X degrees on the spot, using left and right encoders.
  * 
  * @param degrees
@@ -182,12 +226,22 @@ public boolean turnDegrees (int degrees, double speed)
         this.turnDegreesPID_enc.getPIDController().setPID(
                 turnPIDToleranceAccel[0], turnPIDToleranceAccel[1],
                 turnPIDToleranceAccel[2]);
-        this.turnDegreesPID_enc
-                .setAbsoluteTolerance(turnPIDToleranceAccel[3]);
-        this.turnDegreesPID_enc.getPIDController()
-                .setOutputRange(-speed, speed);
-
+        this.turnDegreesPID_enc.setAbsoluteTolerance(turnPIDToleranceAccel[3]);
+        this.turnDegreesPID_enc.setOutputRange(-speed, speed);
+        this.turnDegreesPID_enc.setSetpoint(degrees);
+        this.turnDegreesPID_enc.enable();
+        super.reset();
+        turnDegreesInit = false;
         }
+    accelerateProportionaly(turnDegreesPIDOut, -turnDegreesPIDOut, turnPIDToleranceAccel[4]);
+	
+    if(turnDegreesPID_enc.onTarget() == true)
+        {
+        stop();
+        turnDegreesPID_enc.disable();
+        turnDegreesInit = true;
+        }
+        
     return false;
 }
 
@@ -206,7 +260,27 @@ public boolean turnDegrees (int degrees, double speed)
  */
 public boolean turnDegreesGyro (int degrees, double speed)
 {
-    return false;
+	if(turnDegreesGyroInit == true)
+	{
+		turnDegreesPID_gyro.getPIDController().setPID(turnGyroPIDToleranceAccel[0], turnGyroPIDToleranceAccel[1], turnGyroPIDToleranceAccel[2]);
+		turnDegreesPID_gyro.getPIDController().setAbsoluteTolerance(turnGyroPIDToleranceAccel[3]);
+		turnDegreesPID_gyro.setOutputRange(-speed, speed);
+		turnDegreesPID_gyro.getPIDController().reset();
+		turnDegreesPID_gyro.setSetpoint(degrees);
+		turnDegreesPID_gyro.enable();
+		super.reset();
+		turnDegreesGyroInit = false;
+	}
+	
+	accelerateProportionaly(turnDegreesGyroPIDOut, -turnDegreesGyroPIDOut, turnGyroPIDToleranceAccel[4]);
+	
+	if(turnDegreesPID_gyro.onTarget() == true)
+	{
+		stop();
+		turnDegreesPID_gyro.disable();
+		turnDegreesGyroInit = false;
+	}
+	return false;
 }
 
 /**
@@ -368,6 +442,12 @@ public boolean tunePID (PIDDriveFunction type)
 {
     switch (type)
         {
+        case BRAKE:
+            this.brakePIDTolerance[0] = brakeTuner.p;
+            this.brakePIDTolerance[1] = brakeTuner.i;
+            this.brakePIDTolerance[2] = brakeTuner.d;
+            this.brakePIDTolerance[3] = brakeTuner.tolerance;
+            break;
         case TURN_ENC:
             this.turnPIDToleranceAccel[0] = turnDegreesTuner_enc.p;
             this.turnPIDToleranceAccel[1] = turnDegreesTuner_enc.i;
@@ -412,7 +492,8 @@ public boolean isTuningPID ()
  */
 public enum PIDDriveFunction
     {
-/** Turning via encoders */
+BRAKE,
+        /** Turning via encoders */
 TURN_ENC,
 /** Turning via gyro sensor */
 TURN_GYRO,
@@ -424,135 +505,155 @@ DRIVESTRAIGHT_GYRO,
 DRIVESTRAIGHTINCHES
     }
 
-private final PIDSubsystem turnDegreesPID_enc = new PIDSubsystem(0, 0,
-        0)
-{
-
-@Override
-protected double returnPIDInput ()
-{
-    return getEncoderDistanceAverage(MotorPosition.ALL);
-}
-
-@Override
-protected void usePIDOutput (double output)
-{
-    turnDegreesPIDOut = output;
-}
-
-@Override
-protected void initDefaultCommand ()
-{
-
-}
-};
-
-private final PIDSubsystem turnDegreesPID_gyro = new PIDSubsystem(0, 0,
-        0)
-{
-
-@Override
-protected void initDefaultCommand ()
-{
-
-}
-
-@Override
-protected void usePIDOutput (double output)
-{
-    turnDegreesGyroPIDOut = output;
-}
-
-@Override
-protected double returnPIDInput ()
-{
-    return getGyro().getAngle();
-}
-};
-
+private final PIDSubsystem brakePID = new PIDSubsystem(0, 0, 0)
+    {
+    @Override
+    protected double returnPIDInput()
+    {
+        if(brakeType == BrakeType.AFTER_DRIVE)
+            return getEncoderRate(MotorPosition.ALL);
+        else if(brakeType == BrakeType.AFTER_TURN)
+            return getEncoderRate(MotorPosition.LEFT);
+        //If all else fails, return 0
+        return 0;
+    }
+    
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        brakePIDOut = output;
+    }
+    
+    @Override
+    protected void initDefaultCommand()
+    {
+    }
+    
+    };
+    
+private final PIDSubsystem turnDegreesPID_enc = new PIDSubsystem(0, 0, 0)
+    {
+    
+    @Override
+    protected double returnPIDInput()
+    {
+        return getEncoderDegreesTurned();
+    }
+    
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        turnDegreesPIDOut = output;
+    }
+    
+    @Override
+    protected void initDefaultCommand()
+    {
+    
+    }
+    };
+    
+private final PIDSubsystem turnDegreesPID_gyro = new PIDSubsystem(0, 0, 0)
+    {
+    
+    @Override
+    protected void initDefaultCommand()
+    {
+    
+    }
+    
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        turnDegreesGyroPIDOut = output;
+    }
+    
+    @Override
+    protected double returnPIDInput()
+    {
+        return getGyro().getAngle();
+    }
+    };
+    
 /**
  * The PID controller behind the driveStraight function when using encoders
  */
-private final PIDSubsystem driveStraightPID_enc = new PIDSubsystem(0, 0,
-        0)
-{
-
-@Override
-protected double returnPIDInput ()
-{
-    return getEncoderDistanceAverage(MotorPosition.LEFT)
-            - getEncoderDistanceAverage(MotorPosition.RIGHT);
-}
-
-@Override
-protected void usePIDOutput (double output)
-{
-    driveStraightPIDOutput_enc = output;
-}
-
-@Override
-protected void initDefaultCommand ()
-{
-}
-
-};
-
+private final PIDSubsystem driveStraightPID_enc = new PIDSubsystem(0, 0, 0)
+    {
+    
+    @Override
+    protected double returnPIDInput()
+    {
+        return getEncoderDistanceAverage(MotorPosition.LEFT) - getEncoderDistanceAverage(MotorPosition.RIGHT);
+    }
+    
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        driveStraightPIDOutput_enc = output;
+    }
+    
+    @Override
+    protected void initDefaultCommand()
+    {
+    }
+    
+    };
+    
 /**
  * The PID controller behind the driveStraight function when using the
  * gyroscopic sensor
  */
-private final PIDSubsystem driveStraightPID_gyro = new PIDSubsystem(0,
-        0, 0)
-{
-@Override
-protected double returnPIDInput ()
-{
-    return getGyro().getAngle();
-}
-
-@Override
-protected void usePIDOutput (double output)
-{
-    driveStraightPIDOutput_gyro = output;
-}
-
-@Override
-protected void initDefaultCommand ()
-{
-}
-};
-
+private final PIDSubsystem driveStraightPID_gyro = new PIDSubsystem(0, 0, 0)
+    {
+    @Override
+    protected double returnPIDInput()
+    {
+        return getGyro().getAngle();
+    }
+    
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        driveStraightPIDOutput_gyro = output;
+    }
+    
+    @Override
+    protected void initDefaultCommand()
+    {
+    }
+    };
+    
 /**
  * The PID loop behind the driveStraightInches function, for distance
  */
-private final PIDSubsystem driveStraightInchesPID = new PIDSubsystem(0,
-        0, 0)
-{
-
-@Override
-protected double returnPIDInput ()
-{
-    return (getEncoderDistanceAverage(MotorPosition.LEFT)
-            + getEncoderDistanceAverage(MotorPosition.RIGHT))
-            / 2.0;
-}
-
-@Override
-protected void usePIDOutput (double output)
-{
-    driveStraightInchesSpeed = output;
-}
-
-@Override
-protected void initDefaultCommand ()
-{
-}
-
-};
-
+private final PIDSubsystem driveStraightInchesPID = new PIDSubsystem(0, 0, 0)
+    {
+    
+    @Override
+    protected double returnPIDInput()
+    {
+        return (getEncoderDistanceAverage(MotorPosition.LEFT) + getEncoderDistanceAverage(MotorPosition.RIGHT)) / 2.0;
+    }
+    
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        driveStraightInchesSpeed = output;
+    }
+    
+    @Override
+    protected void initDefaultCommand()
+    {
+    }
+    
+    };
+    
 private final KilroyEncoder[] encoders;
 
 // ======================Variables======================
+
+private PIDTuner brakeTuner = new PIDTuner("Braking");
 
 private PIDTuner driveStraightTuner_enc = new PIDTuner(
         "Drive Straight Encoder");
@@ -569,6 +670,15 @@ private PIDTuner turnDegreesTuner_gyro = new PIDTuner(
         "Turn Degrees Gyro");
 
 private boolean isTuningPID = false;
+
+private double[] brakePIDTolerance =
+		// {P, I, D, Tolerance}
+		{ 0, 0, 0, 0 };
+private boolean brakeInit = true;
+
+private double brakePIDOut = 0;
+
+private BrakeType brakeType = BrakeType.AFTER_DRIVE;
 
 private double[] turnPIDToleranceAccel =
         // {P, I, D, Tolerance, Acceleration}
