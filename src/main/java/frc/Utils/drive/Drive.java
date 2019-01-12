@@ -1017,7 +1017,7 @@ public void reset ()
     this.driveInchesInit = true;
     this.driveStraightInchesInit = true;
     this.turnDegreesInit = true;
-    this.turnDegreesGyroInit = true;
+//    this.turnDegreesGyroInit = true;
     this.pivotTurnDegreesInit = true;
     this.strafeStraightInchesInit = true;
     this.turnDegrees2StageInit = true;
@@ -1629,7 +1629,7 @@ private boolean turnDegreesInit = true;
 
 private boolean strafeStraightInchesInit = true;
 
-private boolean turnDegreesGyroInit = true;
+//private boolean turnDegreesGyroInit = true;
 
 // VARIABLES
 private long timeSinceLastAccelReset = 0;// Milliseconds

@@ -141,7 +141,7 @@ public class KilroySPIGyro extends GyroBase
 			System.out.println("***Gyro is NOT enabled!***");
 			return;
 		}
-		this.gyro.free();
+		this.gyro.close();
 	}
 
 }

@@ -123,7 +123,7 @@ public void autonomousInit ()
     // =========================================================
     m_autoSelected = SmartDashboard.getString("Auto Selector",
     kDefaultAuto);
-   if (Hardware.demoModeSwitch.isOn() == false)
+    if (Hardware.demoModeSwitch.isOn() == false)
         Autonomous.init();
 
     // =========================================================
