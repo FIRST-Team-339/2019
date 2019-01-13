@@ -10,5 +10,11 @@
     ".classpath": true,
     ".project": true
   },
-  "wpilib.online": true
+  "wpilib.online": true,
+  "java.format.settings.url": "C:\\Robotics\\VSCode-Extras\\Kilroy-Formatter.xml",
+  "java.completion.importOrder": [
+    "java",
+    "javax",
+    "com",
+    "org"
 }
