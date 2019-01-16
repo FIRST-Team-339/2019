@@ -108,11 +108,6 @@ public class Hardware {
     // ------------------------------------
     // Servo classes
     // ------------------------------------
-    public static Servo climbingMechanismServo = new Servo(5);
-    // Documentation says 200* servo
-    // shotwell says 180* servo
-
-    public static Servo intakeArmPositionServo = new Servo(6);
 
     // ====================================
     // CAN classes
@@ -140,10 +135,6 @@ public class Hardware {
 
     public static Relay ringLightRelay = new Relay(1);
 
-    // TODO - FIX ME - JANKY temporary fix until wpi gets their
-    // crap together with the Relay class.
-    public static DigitalOutput tempRelay = new DigitalOutput(0);
-
     // ====================================
     // Digital Inputs
     // ====================================
@@ -155,8 +146,6 @@ public class Hardware {
     public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(25);
 
     public static DoubleThrowSwitch disableAutonomousSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
-
-    public static SingleThrowSwitch demoModeSwitch = new SingleThrowSwitch(8);
 
     public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(1, 2, 3, 4, 5, 6);
 
@@ -200,8 +189,6 @@ public class Hardware {
 
     public static LightSensor redLight = new LightSensor(7);
 
-    public static LightSensor cubePhotoSwitch = new LightSensor(22);
-
     // ====================================
     // I2C Classes
     // ====================================
@@ -241,7 +228,6 @@ public class Hardware {
     // Gyro class
     // ------------------------------------
     // P/N ADW22307
-    public static AnalogGyro gyroAnalog = new AnalogGyro(0);
 
     // --------------------------------------
     // Potentiometers
