@@ -110,9 +110,9 @@ public class Hardware {
     // ------------------------------------
     public static Servo climbingMechanismServo = new Servo(5);
     // Documentation says 200* servo
+    // shotwell says 180* servo
 
     public static Servo intakeArmPositionServo = new Servo(6);
-    // shotwell says 180* servo
 
     // ====================================
     // CAN classes
@@ -129,10 +129,10 @@ public class Hardware {
     public static WPI_TalonSRX leftFrontCANMotor = new WPI_TalonSRX(11);
 
     public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(12);
-    // fix number
+    // TODO - fix number
 
     public static WPI_TalonSRX leftRearCANMotor = new WPI_TalonSRX(13);
-    // fix number
+    // TODO - fix number
 
     // ====================================
     // Relay classes
@@ -140,7 +140,7 @@ public class Hardware {
 
     public static Relay ringLightRelay = new Relay(1);
 
-    // @TODO - FIX ME - JANKY temporary fix until wpi gets their
+    // TODO - FIX ME - JANKY temporary fix until wpi gets their
     // crap together with the Relay class.
     public static DigitalOutput tempRelay = new DigitalOutput(0);
 
@@ -199,8 +199,6 @@ public class Hardware {
     // TODO check port for 2018 robot
 
     public static LightSensor redLight = new LightSensor(7);
-
-    // public static LightSensor leftRedLight = new LightSensor(8);
 
     public static LightSensor cubePhotoSwitch = new LightSensor(22);
 
@@ -339,12 +337,11 @@ public class Hardware {
     // Drive system
     // ------------------------------------
     public static Drive drive = new Drive(transmission, leftFrontDriveEncoder, rightFrontDriveEncoder,
-            /*
-             * leftFrontDriveEncoder, rightFrontDriveEncoder,
-             */ gyro);
+            // leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
 
     public static DrivePID drivePID = new DrivePID(transmission,
-            /* leftFrontDriveEncoder, rightFrontDriveEncoder, */
+            // leftFrontDriveEncoder, rightFrontDriveEncoder,
             leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 
