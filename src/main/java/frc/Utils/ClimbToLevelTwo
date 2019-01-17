@@ -1,0 +1,209 @@
+package org.usfirst.frc.team339.Utils;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import org.usfirst.frc.team339.Hardware.Hardware;
+import org.usfirst.frc.team339.HardwareInterfaces.DoubleSolenoid;
+import org.usfirst.frc.team339.HardwareInterfaces.KilroyEncoder;
+import org.usfirst.frc.team339.HardwareInterfaces.SingleSolenoid;
+import org.usfirst.frc.team339.Utils.drive.Drive;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
+
+public class ClimbToLevelTwo
+{
+
+private static final int DISTANCE_TO_DRIVE_B4_RETRACTION = 0;
+
+private static final int DISTANCE_TO_FINISH_DRIVING = 0;
+
+public SingleSolenoid driveSolenoid = null;
+
+public SingleSolenoid armSolenoid = null;
+
+public static DoubleSolenoid testSolenoid = null;
+
+public static SpeedController liftMotor = null;
+
+public static Drive drive = null;
+
+public static KilroyEncoder liftEncoder = null;
+
+private static final Timer timer = new Timer ();
+
+
+public ClimbToLevelTwo ()
+{
+this.driveSolenoid = null;
+this.armSolenoid = null;
+ClimbToLevelTwo.liftMotor = null;
+ClimbToLevelTwo.drive = null;
+}
+
+public ClimbToLevelTwo (DoubleSolenoid testSolenoid, SpeedController liftMotor,
+        KilroyEncoder liftEncoder)
+{
+ClimbToLevelTwo.testSolenoid = testSolenoid;
+ClimbToLevelTwo.liftMotor = liftMotor;
+ClimbToLevelTwo.liftEncoder = liftEncoder;
+}
+
+
+public ClimbToLevelTwo (SingleSolenoid driveSolenoid, SingleSolenoid armSolenoid,
+        SpeedController liftMotor, KilroyEncoder liftEncoder, Drive drive)
+{
+this.driveSolenoid = driveSolenoid;
+this.armSolenoid = armSolenoid;
+ClimbToLevelTwo.liftMotor = liftMotor;
+ClimbToLevelTwo.liftEncoder = liftEncoder;
+ClimbToLevelTwo.drive = drive;
+
+
+}
+
+
+public static void climb ()
+{
+if (lowerForklift() == true)
+    {
+    lowerArm();
+    raiseBackWheels();
+    if (driveForward() == true)
+        {
+        System.out.println("PEACE OUT");
+    //raiseArm();
+    //retractWheels();
+        }
+    if (finishDriving() == true)
+        {
+        System.out.println("Alex sucks");
+    stop();
+        }
+    }
+}
+
+private static boolean lowerForklift ()
+{
+//System.out.println(liftEncoder.get());
+if (liftEncoder.get() >= MIN_LIFT_HEIGHT_TO_CLIMB)
+    {
+    liftMotor.set(LOWER_LIFT_SPEED);
+    }
+else
+    {
+    liftMotor.set(0.0);
+    return true;
+    }
+return false;
+}
+
+
+
+
+private static void lowerArm ()
+{
+//this.armSolenoid.set(CLIMB_ARM_POSITION);
+testSolenoid.set(edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward);
+}
+
+
+
+
+private static void raiseBackWheels ()
+{
+//driveSolenoid.set(LOWER_WHEELS_POSITION);
+testSolenoid.set(edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse);
+}
+
+
+
+private static boolean driveForward ()
+{
+//if(drive.driveInches(DISTANCE_TO_DRIVE_B4_RETRACTION, SPEED_TO_DRIVE_UP) == true)
+//    {
+//    return true;
+//    }
+System.out.println(timer.get());
+if(timerInit  == false)
+    {
+    timer.reset();
+    timer.start();
+    timerInit = true;
+    Hardware.cubeIntakeMotor.set(.5);
+    }
+
+
+if(timer.get()* 500 > 5.0)
+    {
+    Hardware.cubeIntakeMotor.set(0.0);
+    timer.stop();
+    System.out.println("CATS CATS");
+    return true;
+    }
+return false;
+}
+
+
+
+private static void raiseArm ()
+{
+//armSolenoid.set(RETRACTED_ARM_POSITION);
+testSolenoid.set(edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward);
+}
+
+
+
+private static void retractWheels ()
+{
+//driveSolenoid.set(RETRACT_WHEELS_POSITION);
+testSolenoid.set(edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse);
+}
+
+private static boolean finishDriving ()
+{
+//if(drive.driveInches(DISTANCE_TO_FINISH_DRIVING, SPEED_TO_DRIVE_UP))
+//    {
+//    return true;
+//    }
+timer.reset();
+timer.start();
+Hardware.cubeIntakeMotor.set(.5);
+if(timer.get() > 5.0)
+    {
+    Hardware.cubeIntakeMotor.set(0.0);
+    timer.stop();
+    return true;
+    }
+return false;
+}
+
+
+private static void stop ()
+{
+liftMotor.set(0.0);
+//armSolenoid.set(RETRACTED_ARM_POSITION);
+//driveSolenoid.set(RETRACT_WHEELS_POSITION);
+testSolenoid.set(edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward);
+drive.stop();
+}
+
+
+//---------------------------------------------
+//Constants
+//---------------------------------------------
+private static final double LOWER_LIFT_SPEED = 0;
+
+private static final double MIN_LIFT_HEIGHT_TO_CLIMB = 20.0;
+
+private static final boolean CLIMB_ARM_POSITION = true;
+
+private static final boolean RETRACTED_ARM_POSITION = false;
+
+private static final boolean LOWER_WHEELS_POSITION = true;
+
+private static final boolean RETRACT_WHEELS_POSITION = false;
+
+private static final double SPEED_TO_DRIVE_UP = .5;
+
+static boolean timerInit = false;
+
+}
