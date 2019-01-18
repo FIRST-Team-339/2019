@@ -1,4 +1,4 @@
-package org.usfirst.frc.team339.Utils;
+package frc.Utils
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import org.usfirst.frc.team339.Hardware.Hardware;
