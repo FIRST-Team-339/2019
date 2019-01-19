@@ -159,11 +159,9 @@ public class Hardware {
     // ------------------------------------
     // Encoders
     // ------------------------------------
-    // public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(14,
-    // 15);
+    public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(14, 15);
 
-    // public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16,
-    // 17);
+    public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
     // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
 
@@ -329,10 +327,9 @@ public class Hardware {
     // ------------------------------------
     // Drive system
     // ------------------------------------
-    // public static Drive drive = new Drive(transmission, leftFrontDriveEncoder,
-    // rightFrontDriveEncoder,
-    // leftFrontDriveEncoder, rightFrontDriveEncoder,
-    // gyro);
+    public static Drive drive = new Drive(transmission, leftFrontDriveEncoder, rightFrontDriveEncoder,
+            // leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
 
     // public static DrivePID drivePID = new DrivePID(transmission,
     // leftFrontDriveEncoder, rightFrontDriveEncoder,

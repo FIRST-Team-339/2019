@@ -34,6 +34,7 @@ package frc.robot;
 import frc.Hardware.Hardware;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
+import frc.Utils.drive.Drive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -122,6 +123,15 @@ public class Teleop {
 
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.printToConsole();
+        // TODO untested code by Anna, Patrick, Meghan Brown
+        // This enables us to drive the robot with the joysticks
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+
+        // Calls the shiftGears function from drive, so we caan input the the gear shift
+        // buttons and it will shift gears if we need it to.
+        Hardware.drive.shiftGears(Hardware.leftDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+
     } // end Periodic()
 
     public static void printStatements() {
@@ -135,17 +145,10 @@ public class Teleop {
             // Motor
             // Prints the value of motors
             // =================================
-            // System.out.println("Right Drive Motor " + Hardware.rightDriveMotor.get());
-            // SmartDashboard.putNumber("R Drive Motor", Hardware.rightDriveMotor.get());
-            // System.out.println("Left Drive Motor " + Hardware.leftDriveMotor.get());
-            // SmartDashboard.putNumber("L Drive Motor", //Hardware.leftDriveMotor.get());
-
-            // =================================
-            // CAN items
-            // prints value of the CAN controllers
-            // =================================
-            //
-            // =================================
+            // Hardware.rightFrontCANMotor.get());
+            // SmartDashboard.putNumber("Right Rear Drive Motor",
+            // Hardware.rightRearCANMotor.get());
+            // System.out.println("Left Front Drive Motor " +
             // Relay
             // =================================
             //
@@ -275,6 +278,9 @@ public class Teleop {
     // ================================
     // Constants
     // ================================
+
+    private static final int GEAR_UP_SHIFT_BUTTON = 3;
+    private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
     // ================================
     // Variables
