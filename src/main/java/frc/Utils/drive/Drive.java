@@ -412,7 +412,7 @@ public class Drive {
     }
 
     /**
-     * Drives the robot with a omni-direct ional drive, with 3 separate raw values.
+     * Drives the robot with a omni-directional drive, with 3 separate raw values.
      * This DOES use deadbands and gear ratios.
      *
      * IF a Tank Transmission is input into Drive, it will use an arcade drive.

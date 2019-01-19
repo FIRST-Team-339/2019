@@ -34,76 +34,77 @@ package frc.robot;
 import frc.Hardware.Hardware;
 
 /**
- * An Autonomous class.
- * This class <b>beautifully</b> uses state machines in order to periodically
- * execute instructions during the Autonomous period.
- * 
- * This class contains all of the user code for the Autonomous part
- * of the
+ * An Autonomous class. This class <b>beautifully</b> uses state machines in
+ * order to periodically execute instructions during the Autonomous period.
+ *
+ * This class contains all of the user code for the Autonomous part of the
  * match, namely, the Init and Periodic code
- * 
- * 
+ *
+ *
  * @author Michael Andrzej Klaczynski
- * @written at the eleventh stroke of midnight, the 28th of January,
- *          Year of our LORD 2016. Rewritten ever thereafter.
+ * @written at the eleventh stroke of midnight, the 28th of January, Year of our
+ *          LORD 2016. Rewritten ever thereafter.
  *
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-public class Autonomous
-{
+public class Autonomous {
 
-/**
- * User Initialization code for autonomous mode should go here. Will run once
- * when the autonomous first starts, and will be followed immediately by
- * periodic().
- */
-public static void init ()
-{
-    // --------------------------------------
-    // reset the MotorSafetyHelpers for each
-    // of the drive motors
-    // --------------------------------------
-    // Hardware.leftDriveMotor.setSafetyEnabled(false);
-    // Hardware.rightDriveMotor.setSafetyEnabled(false);
+    /**
+     * User Initialization code for autonomous mode should go here. Will run once
+     * when the autonomous first starts, and will be followed immediately by
+     * periodic().
+     */
+    public static void init() {
+        // --------------------------------------
+        // reset the MotorSafetyHelpers for each
+        // of the drive motors
+        // --------------------------------------
+        // Hardware.leftDriveMotor.setSafetyEnabled(false);
+        // Hardware.rightDriveMotor.setSafetyEnabled(false);
 
-    Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightFrontDriveEncoder.reset();
+        // Hardware.leftFrontDriveEncoder.reset();
+        // Hardware.rightFrontDriveEncoder.reset();
 
-    if (Hardware.disableAutonomousSwitch.isOn() == true)
-        autoState = State.FINISH;
+        if (Hardware.levelStartSwitch.isOn() == true)
+            autoState = State.FINISH;
 
-} // end Init
+    } // end Init
 
-/**
- * State of autonomous as a whole; mainly for init, delay, finish, and choosing
- * which autonomous path is being used
- */
-public static enum State
-    {
-INIT, DELAY, CHOOSE_PATH, AUTOLINE, AUTOLINE_SCALE, AUTOLINE_EXCHANGE_L, AUTOLINE_EXCHANGE_R, CENTER_SWITCH, SWITCH_OR_SCALE_L, SWITCH_OR_SCALE_R, OFFSET_SWITCH, FINISH
+    /**
+     * State of autonomous as a whole; mainly for init, delay, finish, and choosing
+     * which autonomous path is being used
+     */
+    public static enum State {
+        INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH,
+        FINISH
     }
 
-public static enum Position
-    {
-LEFT, RIGHT, NULL
+    /**
+     * Starting position and which side of the field the robot is going to
+     */
+
+    public static enum Position {
+        LEFT, RIGHT, NULL
     }
 
-// variable that controls the state of autonomous as a whole (init, delay
-// which path is being used, etc.)
-public static State autoState = State.INIT;
+    public static enum Level {
+        LEVEL1, LEVEL2, Disable
+    }
 
-/**
- * User Periodic code for autonomous mode should go here. Will be called
- * periodically at a regular rate while the robot is in autonomous mode.
- *
- * @author Nathanial Lydick
- * @written Jan 13, 2015
- */
-public static void periodic ()
-{
-    switch (autoState)
-        {
+    // variable that controls the state of autonomous as a whole (init, delay
+    // which path is being used, etc.)
+    public static State autoState = State.INIT;
+
+    /**
+     * User Periodic code for autonomous mode should go here. Will be called
+     * periodically at a regular rate while the robot is in autonomous mode.
+     *
+     * @author Nathanial Lydick
+     * @written Jan 13, 2015
+     */
+    public static void periodic() {
+        switch (autoState) {
         case INIT:
 
             autoState = State.DELAY;
@@ -113,16 +114,31 @@ public static void periodic ()
             // Delay using the potentiometer, from 0 to 5 seconds
             // once finished, stop the timer and go to the next state
 
-            if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0,
-                    5.0))
-                {
+            if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0)) {
                 autoState = State.CHOOSE_PATH;
                 Hardware.autoTimer.stop();
                 break;
-                }
+            }
+            break;
+
+        case CROSS_AUTOLINE:
+
+            break;
+
+        case DEPOSIT_CARGO_HATCH:
+
+            break;
+
+        case DEPOSIT_ROCKET_HATCH:
+
+            break;
+
+        case DEPOSIT_SIDE_CARGO_HATCH:
+
             break;
 
         case FINISH:
+
             break;
 
         default:
@@ -130,12 +146,18 @@ public static void periodic ()
             break;
         }
 
-}
+    }
 
+    // ---------------------------------
+    // Methods
+    // ---------------------------------
 
-/*
- * ================================ Constants
- * ================================
- */
+    public void setMatchSettings() {
+
+    }
+
+    /*
+     * ================================ Constants ================================
+     */
 
 } // end class

@@ -67,14 +67,16 @@ public class Teleop {
         // ---------------------------------
         // Encoder resetting
         // ---------------------------------
-        Hardware.rightFrontDriveEncoder.reset();
-        Hardware.leftFrontDriveEncoder.reset();
+        // Hardware.rightFrontDriveEncoder.reset();
+        // Hardware.leftFrontDriveEncoder.reset();
 
         // ---------------------------------
         // setup motors
         // ---------------------------------
-        Hardware.rightDriveMotor.set(0);
-        Hardware.leftDriveMotor.set(0);
+        Hardware.rightFrontCANMotor.set(0);
+        Hardware.rightRearCANMotor.set(0);
+        Hardware.leftFrontCANMotor.set(0);
+        Hardware.leftRearCANMotor.set(0);
 
     } // end Init
 
@@ -92,6 +94,8 @@ public class Teleop {
     public static void periodic() {
 
         Hardware.telemetry.printToShuffleboard();
+
+        Hardware.telemetry.printToConsole();
 
         // =================================================================
         // OPERATOR CONTROLS
@@ -119,17 +123,10 @@ public class Teleop {
             // Motor
             // Prints the value of motors
             // =================================
-            System.out.println("Right Drive Motor " + Hardware.rightDriveMotor.get());
-            SmartDashboard.putNumber("R Drive Motor", Hardware.rightDriveMotor.get());
-            System.out.println("Left Drive Motor " + Hardware.leftDriveMotor.get());
-            SmartDashboard.putNumber("L Drive Motor", Hardware.leftDriveMotor.get());
-
-            // =================================
-            // CAN items
-            // prints value of the CAN controllers
-            // =================================
-            //
-            // =================================
+            // Hardware.rightFrontCANMotor.get());
+            // SmartDashboard.putNumber("Right Rear Drive Motor",
+            // Hardware.rightRearCANMotor.get());
+            // System.out.println("Left Front Drive Motor " +
             // Relay
             // =================================
             //
@@ -148,19 +145,23 @@ public class Teleop {
             // ---------------------------------
             // System.out.println("Left Front Encoder Inches = "
             // + Hardware.leftFrontDriveEncoder.getDistance());
-            SmartDashboard.putNumber("Left Front Encoder Inches", Hardware.leftFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Left Front Encoder Inches",
+            // Hardware.leftFrontDriveEncoder.getDistance());
 
             // System.out.println("Left Front Encoder Ticks "
             // + Hardware.leftFrontDriveEncoder.get());
-            SmartDashboard.putNumber("Left Front Encoder Ticks", Hardware.leftFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Left Front Encoder Ticks",
+            // Hardware.leftFrontDriveEncoder.get());
 
             // System.out.println("Right Front Inches = "
             // + Hardware.rightFrontDriveEncoder.getDistance());
-            SmartDashboard.putNumber("Right Front Encoder Inches", Hardware.rightFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Right Front Encoder Inches",
+            // Hardware.rightFrontDriveEncoder.getDistance());
 
             // System.out.println("Right Front Ticks "
             // + Hardware.rightFrontDriveEncoder.get());
-            SmartDashboard.putNumber("Right Front Encoder Ticks", Hardware.rightFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Right Front Encoder Ticks",
+            // Hardware.rightFrontDriveEncoder.get());
 
             // ---------------------------------
             // Red Light/IR Sensors

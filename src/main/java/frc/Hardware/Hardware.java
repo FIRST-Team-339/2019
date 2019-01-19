@@ -91,19 +91,19 @@ public class Hardware {
     // ------------------------------------
     // Talon classes
     // ------------------------------------
-    public static Talon rightDriveMotor = new Talon(2);
+    // public static Talon rightDriveMotor = new Talon(2);// on CAN now
 
-    public static Talon leftDriveMotor = new Talon(3);
+    // public static Talon leftDriveMotor = new Talon(3);// on CAN now
 
     // ------------------------------------
     // Victor Classes
     // ------------------------------------
 
-    // public static VictorSP liftingMotor = new VictorSP(0);
+    // public static VictorSP liftingMotor = new VictorSP(0);//on CAN now
 
-    public static VictorSP cubeIntakeMotor = new VictorSP(1);
+    public static VictorSP cubeIntakeMotor = new VictorSP(1);// left intake on CAN
 
-    public static VictorSP intakeDeployArm = new VictorSP(4);
+    public static VictorSP intakeDeployArm = new VictorSP(4); // hanging
 
     // ------------------------------------
     // Servo classes
@@ -133,7 +133,7 @@ public class Hardware {
     // Relay classes
     // ====================================
 
-    public static Relay ringLightRelay = new Relay(1);
+    public static Relay ringLightRelay = new Relay(0);
 
     // ====================================
     // Digital Inputs
@@ -146,6 +146,8 @@ public class Hardware {
     public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(25);
 
     public static DoubleThrowSwitch disableAutonomousSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
+
+    public static DoubleThrowSwitch levelStartSwitch = new DoubleThrowSwitch(18, 13); // false port numbers
 
     public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(1, 2, 3, 4, 5, 6);
 
@@ -160,9 +162,10 @@ public class Hardware {
 
     public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
-    public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
+    // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
 
-    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);
+    // public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
+    // 24);// being removed???
 
     // -----------------------
     // Wiring diagram
@@ -326,9 +329,9 @@ public class Hardware {
             // leftFrontDriveEncoder, rightFrontDriveEncoder,
             gyro);
 
-    public static DrivePID drivePID = new DrivePID(transmission,
-            // leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+    // public static DrivePID drivePID = new DrivePID(transmission,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 
     // -------------------
