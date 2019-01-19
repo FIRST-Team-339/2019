@@ -68,14 +68,14 @@ public class Teleop {
         // ---------------------------------
         // Encoder resetting
         // ---------------------------------
-        Hardware.rightFrontDriveEncoder.reset();
-        Hardware.leftFrontDriveEncoder.reset();
+        // Hardware.rightFrontDriveEncoder.reset();
+        // Hardware.leftFrontDriveEncoder.reset();
 
         // ---------------------------------
         // setup motors
         // ---------------------------------
-        Hardware.rightDriveMotor.set(0);
-        Hardware.leftDriveMotor.set(0);
+        // Hardware.rightDriveMotor.set(0);
+        // Hardware.leftDriveMotor.set(0);
 
     } // end Init
 
@@ -111,7 +111,7 @@ public class Teleop {
         }
         // turn on the ringlight
         if (Hardware.leftOperator.getRawButton(6)) {
-            // Hardware.axisCamera.setDigitalOutputValue(true);
+            Hardware.axisCamera.setDigitalOutputValue(true);
             Hardware.axisCamera.setRelayValue(true);
         }
         // save image
@@ -120,6 +120,8 @@ public class Teleop {
             Hardware.axisCamera.saveImage(ImageType.PROCESSED);
         }
 
+        Hardware.telemetry.printToShuffleboard();
+        Hardware.telemetry.printToConsole();
     } // end Periodic()
 
     public static void printStatements() {
@@ -133,10 +135,10 @@ public class Teleop {
             // Motor
             // Prints the value of motors
             // =================================
-            System.out.println("Right Drive Motor " + Hardware.rightDriveMotor.get());
-            SmartDashboard.putNumber("R Drive Motor", Hardware.rightDriveMotor.get());
-            System.out.println("Left Drive Motor " + Hardware.leftDriveMotor.get());
-            SmartDashboard.putNumber("L Drive Motor", Hardware.leftDriveMotor.get());
+            // System.out.println("Right Drive Motor " + Hardware.rightDriveMotor.get());
+            // SmartDashboard.putNumber("R Drive Motor", Hardware.rightDriveMotor.get());
+            // System.out.println("Left Drive Motor " + Hardware.leftDriveMotor.get());
+            // SmartDashboard.putNumber("L Drive Motor", //Hardware.leftDriveMotor.get());
 
             // =================================
             // CAN items
@@ -155,26 +157,31 @@ public class Teleop {
             // Switches
             // prints state of switches
             // ---------------------------------
-            SmartDashboard.putBoolean("Disable SW", Hardware.disableAutonomousSwitch.isOn());
+            // SmartDashboard.putBoolean("Disable SW",
+            // Hardware.disableAutonomousSwitch.isOn());
 
             // ---------------------------------
             // Encoders
             // ---------------------------------
             // System.out.println("Left Front Encoder Inches = "
             // + Hardware.leftFrontDriveEncoder.getDistance());
-            SmartDashboard.putNumber("Left Front Encoder Inches", Hardware.leftFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Left Front Encoder Inches",
+            // Hardware.leftFrontDriveEncoder.getDistance());
 
             // System.out.println("Left Front Encoder Ticks "
             // + Hardware.leftFrontDriveEncoder.get());
-            SmartDashboard.putNumber("Left Front Encoder Ticks", Hardware.leftFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Left Front Encoder Ticks",
+            // Hardware.leftFrontDriveEncoder.get());
 
             // System.out.println("Right Front Inches = "
             // + Hardware.rightFrontDriveEncoder.getDistance());
-            SmartDashboard.putNumber("Right Front Encoder Inches", Hardware.rightFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Right Front Encoder Inches",
+            // Hardware.rightFrontDriveEncoder.getDistance());
 
             // System.out.println("Right Front Ticks "
             // + Hardware.rightFrontDriveEncoder.get());
-            SmartDashboard.putNumber("Right Front Encoder Ticks", Hardware.rightFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Right Front Encoder Ticks",
+            // Hardware.rightFrontDriveEncoder.get());
 
             // ---------------------------------
             // Red Light/IR Sensors
