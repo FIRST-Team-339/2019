@@ -127,7 +127,7 @@ public class Hardware {
     public static WPI_TalonSRX leftFrontCANMotor = new WPI_TalonSRX(11);
 
     /** The right rear drive motor */
-    public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(12);
+    public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(15);
     // TODO - fix number
 
     /** The left rear drive motor */

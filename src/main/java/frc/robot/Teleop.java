@@ -53,11 +53,11 @@ public class Teleop {
      * @author Nathanial Lydick
      * @written Jan 13, 2015
      */
-    public static boolean hasDoneTheThing = false;
+    public static boolean hasDoneTheThing = true;
 
     public static void init() {
 
-        hasDoneTheThing = false;
+        hasDoneTheThing = true;
 
         LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -157,7 +157,8 @@ public class Teleop {
 
         // TODO untested code by Anna, Patrick, and Meghan Brown
         // This enables us to drive the robot with the joysticks
-        if (hasDoneTheThing)
+        if (hasDoneTheThing || Hardware.leftDriver.getY() > .1 || Hardware.leftDriver.getY() < -.1
+                || Hardware.rightDriver.getY() > .1 || Hardware.rightDriver.getY() < -.1)
             Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
         // Calls the shiftGears function from drive, so we can input the the gear shift
