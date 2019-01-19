@@ -123,7 +123,8 @@ public class Teleop {
 
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.printToConsole();
-        // TODO untested code by Anna, Patrick, Meghan Brown
+
+        // TODO untested code by Anna, Patrick, and Meghan Brown
         // This enables us to drive the robot with the joysticks
         Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
