@@ -70,7 +70,7 @@ public abstract class TransmissionBase {
             if (i % 2 == 0)
                 this.motors[i].set(leftVal);
             else
-                this.motors[i].set(rightVal);
+                this.motors[i].set(-rightVal);
     }
 
     /**

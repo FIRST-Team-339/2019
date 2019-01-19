@@ -167,7 +167,7 @@ public class Hardware {
 
     public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
-    // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
+    // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);\
 
     // public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
     // 24);// being removed???

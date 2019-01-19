@@ -53,8 +53,11 @@ public class Teleop {
      * @author Nathanial Lydick
      * @written Jan 13, 2015
      */
+    public static boolean hasDoneTheThing = false;
 
     public static void init() {
+
+        hasDoneTheThing = false;
 
         LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -110,6 +113,7 @@ public class Teleop {
      * @author Nathanial Lydick
      * @written Jan 13, 2015
      */
+
     public static void periodic() {
 
         Hardware.telemetry.printToShuffleboard();
@@ -121,17 +125,25 @@ public class Teleop {
 
         // Drive to the vision targets
         if (Hardware.leftOperator.getRawButton(4)) {
-            if (Hardware.driveWithCamera.driveToTarget(.5)) {
+            hasDoneTheThing = false;
+            System.out.println("Done the thing: " + hasDoneTheThing);
+        }
+
+        if (!hasDoneTheThing) {
+            // System.out.println("Done the thing: " + hasDoneTheThing);
+            if (Hardware.driveWithCamera.driveToTarget(.3)) {
                 System.out.println("Has aligned hopefully");
+                hasDoneTheThing = true;
             }
         }
         // check if we are getting blobs
         if (Hardware.leftOperator.getRawButton(5)) {
             System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
+
         }
         // turn on the ringlight
-        if (Hardware.leftOperator.getRawButton(6)) {
-            // Hardware.axisCamera.setDigitalOutputValue(true);
+        if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true) {
+            System.out.println("lets blind some wirers");
             Hardware.axisCamera.setRelayValue(true);
         }
         // save image
@@ -145,7 +157,8 @@ public class Teleop {
 
         // TODO untested code by Anna, Patrick, and Meghan Brown
         // This enables us to drive the robot with the joysticks
-        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        if (hasDoneTheThing)
+            Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
         // Calls the shiftGears function from drive, so we can input the the gear shift
         // buttons and it will shift gears if we need it to.
@@ -271,14 +284,17 @@ public class Teleop {
             // Joysticks
             // information about the joysticks
             // ---------------------------------
-            System.out.println("Right Driver Joystick " + Hardware.rightDriver.getY());
-            SmartDashboard.putNumber("R Driver Y Joy", Hardware.rightDriver.getY());
-            System.out.println("Left Driver Joystick " + Hardware.leftDriver.getY());
-            SmartDashboard.putNumber("L Driver Y Joy", Hardware.leftDriver.getY());
-            System.out.println("Right Operator Joystick " + Hardware.rightOperator.getY());
-            SmartDashboard.putNumber("R Operator Y Joy", Hardware.rightOperator.getY());
-            System.out.println("Left Operator Joystick " + Hardware.leftOperator.getY());
-            SmartDashboard.putNumber("L Operator Y Joy", Hardware.leftOperator.getY());
+            /*
+             * System.out.println("Right Driver Joystick " + Hardware.rightDriver.getY());
+             * SmartDashboard.putNumber("R Driver Y Joy", Hardware.rightDriver.getY());
+             * System.out.println("Left Driver Joystick " + Hardware.leftDriver.getY());
+             * SmartDashboard.putNumber("L Driver Y Joy", Hardware.leftDriver.getY());
+             * System.out.println("Right Operator Joystick " +
+             * Hardware.rightOperator.getY()); SmartDashboard.putNumber("R Operator Y Joy",
+             * Hardware.rightOperator.getY()); System.out.println("Left Operator Joystick "
+             * + Hardware.leftOperator.getY()); SmartDashboard.putNumber("L Operator Y Joy",
+             * Hardware.leftOperator.getY());
+             */
 
             // =================================
             // KILROY ANCILLARY ITEMS
