@@ -61,6 +61,25 @@ public class Teleop {
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.setTimeBetweenPrints(1000);
 
+        // sets the gear to 0 at the beginning.
+        Hardware.drive.setGear(0);
+
+        Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
+        Hardware.transmission.enableDeadband();
+
+        Hardware.rightFrontCANMotor.setInverted(true);
+        Hardware.rightRearCANMotor.setInverted(true);
+        Hardware.leftFrontCANMotor.setInverted(false);
+        Hardware.leftRearCANMotor.setInverted(false);
+
+        Hardware.transmission.setNumberOfGears(NUMBER_OF_GEARS);
+
+        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, FIRST_GEAR_RATIO);
+        Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, SECOND_GEAR_RATIO);
+
+        // third gear is set to the same ratio as the second, because it's all McGee's
+        // fault. He hardcoded 3 motors, and we only want two.
+
         // --------------------------------------
         // reset the MotorSafetyHelpers for each
         // of the drive motors
@@ -128,10 +147,12 @@ public class Teleop {
         // This enables us to drive the robot with the joysticks
         Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
-        // Calls the shiftGears function from drive, so we caan input the the gear shift
+        // Calls the shiftGears function from drive, so we can input the the gear shift
         // buttons and it will shift gears if we need it to.
-        Hardware.drive.shiftGears(Hardware.leftDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
                 Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+
+        System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
 
     } // end Periodic()
 
@@ -283,6 +304,15 @@ public class Teleop {
     private static final int GEAR_UP_SHIFT_BUTTON = 3;
     private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
+    // CANNOT BE ABOVE 3! OTHERWISE WE HAVE PROBLEMS! BLAME MCGEE!
+    private static final int NUMBER_OF_GEARS = 2;
+
+    private static final int FIRST_GEAR_NUMBER = 0;
+    private static final int SECOND_GEAR_NUMBER = 1;
+    private static final double FIRST_GEAR_RATIO = .4;
+    private static final double SECOND_GEAR_RATIO = .6;
+
+    private static final double DEADBAND_VALUE = .2;
     // ================================
     // Variables
     // ================================
