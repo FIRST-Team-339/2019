@@ -16,6 +16,7 @@ import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
+import frc.Hardware.Hardware;
 import edu.wpi.first.wpilibj.Relay;
 
 /**
@@ -607,7 +608,7 @@ public class VisionProcessor extends AutoGenVision {
      * @return Whether or not the camera can see any retro-reflective tape
      */
     public boolean hasBlobs() {
-        if (this.particleReports.length > 0)
+        if (/* this.particleReports.length > 0 */ !Hardware.axisCamera.filterContoursOutput().isEmpty())
             return true;
         return false;
     } // end hasBlobs()

@@ -53,14 +53,36 @@ public class Teleop {
      * @author Nathanial Lydick
      * @written Jan 13, 2015
      */
+    public static boolean hasDoneTheThing = true;
 
     public static void init() {
+
+        hasDoneTheThing = false;
 
         LiveWindow.disableTelemetry(Hardware.pdp);
 
         Hardware.telemetry.printToConsole();
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.setTimeBetweenPrints(1000);
+
+        // sets the gear to 0 at the beginning.
+        Hardware.drive.setGear(0);
+
+        Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
+        Hardware.transmission.enableDeadband();
+
+        Hardware.rightFrontCANMotor.setInverted(true);
+        Hardware.rightRearCANMotor.setInverted(true);
+        Hardware.leftFrontCANMotor.setInverted(false);
+        Hardware.leftRearCANMotor.setInverted(false);
+
+        Hardware.transmission.setNumberOfGears(NUMBER_OF_GEARS);
+
+        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, FIRST_GEAR_RATIO);
+        Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, SECOND_GEAR_RATIO);
+
+        // third gear is set to the same ratio as the second, because it's all McGee's
+        // fault. He hardcoded 3 motors, and we only want two.
 
         // --------------------------------------
         // reset the MotorSafetyHelpers for each
@@ -92,6 +114,7 @@ public class Teleop {
      * @author Nathanial Lydick
      * @written Jan 13, 2015
      */
+
     public static void periodic() {
 
         // =================================================================
@@ -109,17 +132,25 @@ public class Teleop {
 
         // Drive to the vision targets
         if (Hardware.leftOperator.getRawButton(4)) {
-            if (Hardware.driveWithCamera.driveToTarget(.5)) {
+            hasDoneTheThing = false;
+            System.out.println("Done the thing: " + hasDoneTheThing);
+        }
+
+        if (!hasDoneTheThing) {
+            // System.out.println("Done the thing: " + hasDoneTheThing);
+            if (Hardware.driveWithCamera.driveToTarget(.3)) {
                 System.out.println("Has aligned hopefully");
+                hasDoneTheThing = true;
             }
         }
         // check if we are getting blobs
         if (Hardware.leftOperator.getRawButton(5)) {
             System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
+
         }
         // turn on the ringlight
-        if (Hardware.leftOperator.getRawButton(6)) {
-            // Hardware.axisCamera.setDigitalOutputValue(true);
+        if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true) {
+            System.out.println("lets blind some wirers");
             Hardware.axisCamera.setRelayValue(true);
         }
         // save image
@@ -128,18 +159,20 @@ public class Teleop {
             Hardware.axisCamera.saveImage(ImageType.PROCESSED);
         }
 
-        // Hardware.telemetry.printToShuffleboard();
-        // Hardware.telemetry.printToConsole();
-        // TODO untested code by Anna, Patrick, Meghan Brown
-        // This enables us to drive the robot with the joysticks
-        // @ANE
-        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        Hardware.telemetry.printToShuffleboard();
+        Hardware.telemetry.printToConsole();
 
-        // Calls the shiftGears function from drive, so we caan input the the gear shift
+        // TODO untested code by Anna, Patrick, and Meghan Brown
+        // This enables us to drive the robot with the joysticks
+        if (hasDoneTheThing)
+            Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+
+        // Calls the shiftGears function from drive, so we can input the the gear shift
         // buttons and it will shift gears if we need it to.
-        // @ANE
-        // Hardware.drive.shiftGears(Hardware.leftDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-        // Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+
+        System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
 
     } // end Periodic()
 
@@ -258,14 +291,17 @@ public class Teleop {
             // Joysticks
             // information about the joysticks
             // ---------------------------------
-            System.out.println("Right Driver Joystick " + Hardware.rightDriver.getY());
-            SmartDashboard.putNumber("R Driver Y Joy", Hardware.rightDriver.getY());
-            System.out.println("Left Driver Joystick " + Hardware.leftDriver.getY());
-            SmartDashboard.putNumber("L Driver Y Joy", Hardware.leftDriver.getY());
-            System.out.println("Right Operator Joystick " + Hardware.rightOperator.getY());
-            SmartDashboard.putNumber("R Operator Y Joy", Hardware.rightOperator.getY());
-            System.out.println("Left Operator Joystick " + Hardware.leftOperator.getY());
-            SmartDashboard.putNumber("L Operator Y Joy", Hardware.leftOperator.getY());
+            /*
+             * System.out.println("Right Driver Joystick " + Hardware.rightDriver.getY());
+             * SmartDashboard.putNumber("R Driver Y Joy", Hardware.rightDriver.getY());
+             * System.out.println("Left Driver Joystick " + Hardware.leftDriver.getY());
+             * SmartDashboard.putNumber("L Driver Y Joy", Hardware.leftDriver.getY());
+             * System.out.println("Right Operator Joystick " +
+             * Hardware.rightOperator.getY()); SmartDashboard.putNumber("R Operator Y Joy",
+             * Hardware.rightOperator.getY()); System.out.println("Left Operator Joystick "
+             * + Hardware.leftOperator.getY()); SmartDashboard.putNumber("L Operator Y Joy",
+             * Hardware.leftOperator.getY());
+             */
 
             // =================================
             // KILROY ANCILLARY ITEMS
@@ -291,6 +327,15 @@ public class Teleop {
     private static final int GEAR_UP_SHIFT_BUTTON = 3;
     private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
+    // CANNOT BE ABOVE 3! OTHERWISE WE HAVE PROBLEMS! BLAME MCGEE!
+    private static final int NUMBER_OF_GEARS = 2;
+
+    private static final int FIRST_GEAR_NUMBER = 0;
+    private static final int SECOND_GEAR_NUMBER = 1;
+    private static final double FIRST_GEAR_RATIO = .4;
+    private static final double SECOND_GEAR_RATIO = .6;
+
+    private static final double DEADBAND_VALUE = .2;
     // ================================
     // Variables
     // ================================
