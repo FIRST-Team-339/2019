@@ -34,6 +34,8 @@ package frc.robot;
 import frc.Hardware.Hardware;
 import frc.Utils.*;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
+import frc.Utils.drive.Drive;
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
@@ -68,10 +70,11 @@ public class Autonomous {
         // Hardware.leftFrontDriveEncoder.reset();
         // Hardware.rightFrontDriveEncoder.reset();
 
-        if (Hardware.autoLevelSwitch.isOn() == true) {
-            autoLevel = Level.DISABLE;
-            autoState = State.FINISH;
-        }
+        // TODO @ANE uncomment
+        // if (Hardware.autoLevelSwitch.isOn() == true) {
+        // autoLevel = Level.DISABLE;
+        // autoState = State.FINISH;
+        // }
 
     } // end Init
 
@@ -128,11 +131,12 @@ public class Autonomous {
             // Delay using the potentiometer, from 0 to 5 seconds
             // once finished, stop the timer and go to the next state
 
-            if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0)) {
-                autoState = State.CHOOSE_PATH;
-                Hardware.autoTimer.stop();
-                break;
-            }
+            // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0)) {
+            System.out.println("CATS ARE AWESOME");
+            autoState = State.CHOOSE_PATH;
+            Hardware.autoTimer.stop();
+            // break;
+            // }
             break;
 
         case CHOOSE_PATH:
@@ -140,23 +144,31 @@ public class Autonomous {
             break;
 
         case CROSS_AUTOLINE:
-
+            if (crossAutoline() == true) {
+                autoState = State.FINISH;
+            }
             break;
 
         case DEPOSIT_CARGO_HATCH:
-
+            if (depositCargoHatch() == true) {
+                autoState = State.FINISH;
+            }
             break;
 
         case DEPOSIT_ROCKET_HATCH:
-
+            if (depositRocketHatch() == true) {
+                autoState = State.FINISH;
+            }
             break;
 
         case DEPOSIT_SIDE_CARGO_HATCH:
-
+            if (depositSideCargoHatch() == true) {
+                autoState = State.FINISH;
+            }
             break;
 
         case FINISH:
-
+            driverControl();
             break;
 
         default:
@@ -174,10 +186,31 @@ public class Autonomous {
      *
      */
     private static void choosePath() {
-        switch (Hardware.autoSixPosSwitch.getPosition()) {
-        case 1:
+        switch (4/** Hardware.autoSixPosSwitch.getPosition() */
+        ) {
+        case 0:
+            autoState = State.CROSS_AUTOLINE;
             break;
 
+        case 1:
+            autoState = State.DEPOSIT_CARGO_HATCH;
+            break;
+
+        case 2:
+            autoState = State.DEPOSIT_ROCKET_HATCH;
+            break;
+
+        case 3:
+            autoState = State.DEPOSIT_SIDE_CARGO_HATCH;
+            break;
+
+        case 4:
+
+        case 5:
+
+        default:
+            autoState = State.FINISH;
+            break;
         }
 
     }
@@ -209,9 +242,65 @@ public class Autonomous {
 
     }
 
-    // ======================================================================
+    // =====================================================================
     // Path Methods
-    // ======================================================================
+    // =====================================================================
+
+    private static boolean crossAutoline() {
+        if (autoLevel == Level.LEVEL_TWO) {
+            descendFromLevelTwo();
+        }
+        if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE, DRIVE_SPEED, ACCELERATION_TIME,
+                false) == true) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean depositCargoHatch() {
+        if (autoLevel == Level.LEVEL_TWO) {
+            descendFromLevelTwo();
+        }
+        return false;
+    }
+
+    private static boolean depositRocketHatch() {
+        if (autoLevel == Level.LEVEL_TWO) {
+            descendFromLevelTwo();
+        }
+        return false;
+    }
+
+    private static boolean depositSideCargoHatch() {
+        if (autoLevel == Level.LEVEL_TWO) {
+            descendFromLevelTwo();
+        }
+        return false;
+    }
+
+    private static void driverControl() {
+        // if (Hardware.leftDriver.getRawButton(5) == true) {
+        // Hardware.leftFrontCANMotor.set(.5);
+        // } else {
+        // Hardware.leftFrontCANMotor.set(0);
+        // }
+        Teleop.periodic();
+    }
+
+    private static boolean descendFromLevelTwo() {
+
+        descentTimer.start();
+        if (descentTimer.get() <= TIME_TO_DRIVE_OFF_PLATFORM) {
+            Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME, false);
+        } else {
+            Hardware.drive.stop();
+            descentTimer.stop();
+            descentTimer.reset();
+            return true;
+        }
+
+        return false;
+    }
 
     /*
      * ============================================================= Constants
@@ -225,4 +314,14 @@ public class Autonomous {
     public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
     public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
+
+    public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
+
+    public static final double DRIVE_SPEED = .4;
+
+    public static Timer descentTimer = new Timer();
+
+    public static final double TIME_TO_DRIVE_OFF_PLATFORM = 5.0;
+
+    public static final double ACCELERATION_TIME = .6;// not random number, pulled from 2018
 } // end class

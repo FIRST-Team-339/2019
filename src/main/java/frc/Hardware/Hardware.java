@@ -30,6 +30,7 @@ import frc.Utils.drive.DrivePID;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
+import frc.Utils.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -167,10 +168,9 @@ public class Hardware {
 
     public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
-    // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);\
+    public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
-    // public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
-    // 24);// being removed???
+    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);// being removed???
 
     // -----------------------
     // Wiring diagram
@@ -332,6 +332,7 @@ public class Hardware {
     // ------------------------------------
     // Drive system
     // ------------------------------------
+    // @ANE
     public static Drive drive = new Drive(transmission, leftFrontDriveEncoder, rightFrontDriveEncoder,
             // leftFrontDriveEncoder, rightFrontDriveEncoder,
             gyro);
@@ -348,5 +349,8 @@ public class Hardware {
     // -------------------
     // Assembly classes (e.g. forklift)
     // -------------------
+    public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder);
 
+    public static ClimbToLevelTwo climber = new ClimbToLevelTwo(armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
+            drive, lift);
 } // end class

@@ -17,7 +17,7 @@ public class Forklift {
     // Enums
 
     public enum ForkliftState {
-        MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION
+        MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
     }
 
     public enum ForkliftDirectionState {
@@ -210,6 +210,10 @@ public class Forklift {
             // Reset the direction for next move-to-position.
             forkliftDirection = ForkliftDirectionState.NEUTRAL;
             setLiftPositionInit = true;
+            break;
+
+        case STOP:
+            this.forkliftMotor.set(0.0);
             break;
         }
     }

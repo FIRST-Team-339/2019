@@ -187,8 +187,7 @@ public class Telemetry {
                 // ---------------------------------
                 // Encoders
                 // ---------------------------------
-                // System.out.println("Left Front Encoder Inches = "
-                // + Hardware.leftFrontDriveEncoder.getDistance());
+                System.out.println("Left Front Encoder Inches = " + Hardware.leftFrontDriveEncoder.getDistance());
                 //
                 //
                 // System.out.println("Left Front Encoder Ticks "

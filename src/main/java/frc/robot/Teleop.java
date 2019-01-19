@@ -61,6 +61,7 @@ public class Teleop {
 
         LiveWindow.disableTelemetry(Hardware.pdp);
 
+        Hardware.telemetry.printToConsole();
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.setTimeBetweenPrints(1000);
 
@@ -116,11 +117,17 @@ public class Teleop {
 
     public static void periodic() {
 
-        Hardware.telemetry.printToShuffleboard();
-
         // =================================================================
         // OPERATOR CONTROLS
         // =================================================================
+
+        if (Hardware.leftOperator.getRawButton(6) == true) {
+            // Hardware.rightRearCANMotor.set(.5);
+            // Hardware.climber.climb();
+        } else {
+            // Hardware.rightRearCANMotor.set(0.0);
+        }
+
         // TODO remove the next 3 functions once camera is tested
 
         // Drive to the vision targets
