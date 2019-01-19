@@ -42,236 +42,223 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-public class Teleop
-{
-/**
- * User Initialization code for teleop mode should go here. Will be called once
- * when the robot enters teleop mode.
- *
- * @author Nathanial Lydick
- * @written Jan 13, 2015
- */
+public class Teleop {
+    /**
+     * User Initialization code for teleop mode should go here. Will be called once
+     * when the robot enters teleop mode.
+     *
+     * @author Nathanial Lydick
+     * @written Jan 13, 2015
+     */
 
-public static void init ()
-{
+    public static void init() {
 
-    LiveWindow.disableTelemetry(Hardware.pdp);
+        LiveWindow.disableTelemetry(Hardware.pdp);
 
-    Hardware.telemetry.printToShuffleboard();
-    Hardware.telemetry.setTimeBetweenPrints(1000);
+        Hardware.telemetry.printToShuffleboard();
+        Hardware.telemetry.setTimeBetweenPrints(1000);
 
-    // --------------------------------------
-    // reset the MotorSafetyHelpers for each
-    // of the drive motors
-    // --------------------------------------
-
-    // ---------------------------------
-    // Encoder resetting
-    // ---------------------------------
-    Hardware.rightFrontDriveEncoder.reset();
-    Hardware.leftFrontDriveEncoder.reset();
-
-    // ---------------------------------
-    // setup motors
-    // ---------------------------------
-    Hardware.rightDriveMotor.set(0);
-    Hardware.leftDriveMotor.set(0);
-
-} // end Init
-
-// tune pid loop
-
-// private static boolean hasSeenTape = false;
-
-/**
- * User Periodic code for teleop mode should go here. Will be called
- * periodically at a regular rate while the robot is in teleop mode.
- *
- * @author Nathanial Lydick
- * @written Jan 13, 2015
- */
-public static void periodic ()
-{
-
-    Hardware.telemetry.printToShuffleboard();
-
-    // =================================================================
-    // OPERATOR CONTROLS
-    // =================================================================
-
-} // end Periodic()
-
-public static void printStatements ()
-{
-
-    if (Hardware.driverStation.isFMSAttached() == false)
-        {
-        // ==================================
-        // Scale Alignment
-        // ==================================
-
-        // =================================
-        // Motor
-        // Prints the value of motors
-        // =================================
-        System.out.println(
-                "Right Drive Motor " + Hardware.rightDriveMotor.get());
-        SmartDashboard.putNumber("R Drive Motor",
-                Hardware.rightDriveMotor.get());
-        System.out.println(
-                "Left Drive Motor " + Hardware.leftDriveMotor.get());
-        SmartDashboard.putNumber("L Drive Motor",
-                Hardware.leftDriveMotor.get());
-
-        // =================================
-        // CAN items
-        // prints value of the CAN controllers
-        // =================================
-        //
-        // =================================
-        // Relay
-        // =================================
-        //
-        // =================================
-        // // Digital Inputs
-        // =================================
-        //
-        // ---------------------------------
-        // Switches
-        // prints state of switches
-        // ---------------------------------
-        SmartDashboard.putBoolean("Disable SW",
-                Hardware.disableAutonomousSwitch.isOn());
+        // --------------------------------------
+        // reset the MotorSafetyHelpers for each
+        // of the drive motors
+        // --------------------------------------
 
         // ---------------------------------
-        // Encoders
+        // Encoder resetting
         // ---------------------------------
-        // System.out.println("Left Front Encoder Inches = "
-        // + Hardware.leftFrontDriveEncoder.getDistance());
-        SmartDashboard.putNumber("Left Front Encoder Inches",
-                Hardware.leftFrontDriveEncoder.getDistance());
-
-        // System.out.println("Left Front Encoder Ticks "
-        // + Hardware.leftFrontDriveEncoder.get());
-        SmartDashboard.putNumber("Left Front Encoder Ticks",
-                Hardware.leftFrontDriveEncoder.get());
-
-        // System.out.println("Right Front Inches = "
-        // + Hardware.rightFrontDriveEncoder.getDistance());
-        SmartDashboard.putNumber("Right Front Encoder Inches",
-                Hardware.rightFrontDriveEncoder.getDistance());
-
-        // System.out.println("Right Front Ticks "
-        // + Hardware.rightFrontDriveEncoder.get());
-        SmartDashboard.putNumber("Right Front Encoder Ticks",
-                Hardware.rightFrontDriveEncoder.get());
-
+        // Hardware.rightFrontDriveEncoder.reset();
+        // Hardware.leftFrontDriveEncoder.reset();
 
         // ---------------------------------
-        // Red Light/IR Sensors
-        // prints the state of the sensor
+        // setup motors
         // ---------------------------------
+        Hardware.rightFrontCANMotor.set(0);
+        Hardware.rightRearCANMotor.set(0);
+        Hardware.leftFrontCANMotor.set(0);
+        Hardware.leftRearCANMotor.set(0);
 
-        // =================================
-        // Pneumatics
-        // =================================
+    } // end Init
 
-        // ---------------------------------
-        // Compressor
-        // prints information on the compressor
-        // ---------------------------------
+    // tune pid loop
 
-        // ---------------------------------
-        // Solenoids
-        // ---------------------------------
+    // private static boolean hasSeenTape = false;
 
-        // Analogs
-        // =================================
+    /**
+     * User Periodic code for teleop mode should go here. Will be called
+     * periodically at a regular rate while the robot is in teleop mode.
+     *
+     * @author Nathanial Lydick
+     * @written Jan 13, 2015
+     */
+    public static void periodic() {
 
-        // ---------------------------------
-        // pots
-        // where the pot is turned to
-        // ---------------------------------
+        Hardware.telemetry.printToShuffleboard();
 
-        // ---------------------------------
-        // GYRO
-        // ---------------------------------
+        Hardware.telemetry.printToConsole();
 
-        // ---------------------------------
-        // Sonar/UltraSonic
-        // ---------------------------------
+        // =================================================================
+        // OPERATOR CONTROLS
+        // =================================================================
 
-        // =========================
-        // Servos
-        // =========================
+    } // end Periodic()
 
-        // =================================
-        // SPI Bus
-        // =================================
+    public static void printStatements() {
 
-        // -------------------------------------
-        // Analog Interfaces
-        // -------------------------------------
+        if (Hardware.driverStation.isFMSAttached() == false) {
+            // ==================================
+            // Scale Alignment
+            // ==================================
 
-        // =================================
-        // Connection Items
-        // =================================
+            // =================================
+            // Motor
+            // Prints the value of motors
+            // =================================
+            // System.out.println("Right Front Drive Motor " +
+            // Hardware.rightFrontCANMotor.get());
+            // SmartDashboard.putNumber("Right Rear Drive Motor",
+            // Hardware.rightRearCANMotor.get());
+            // System.out.println("Left Front Drive Motor " +
+            // Hardware.leftFrontCANMotor.get());
+            // SmartDashboard.putNumber("Left Rear Drive Motor",
+            // Hardware.leftRearCANMotor.get());
 
-        // =================================
-        // Cameras
-        // prints any camera information required
-        // =================================
+            // =================================
+            // CAN items
+            // prints value of the CAN controllers
+            // =================================
+            //
+            // =================================
+            // Relay
+            // =================================
+            //
+            // =================================
+            // // Digital Inputs
+            // =================================
+            //
+            // ---------------------------------
+            // Switches
+            // prints state of switches
+            // ---------------------------------
+            SmartDashboard.putBoolean("Disable SW", Hardware.disableAutonomousSwitch.isOn());
 
-        // =================================
-        // Driver station
-        // =================================
+            // ---------------------------------
+            // Encoders
+            // ---------------------------------
+            // System.out.println("Left Front Encoder Inches = "
+            // + Hardware.leftFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Left Front Encoder Inches",
+            // Hardware.leftFrontDriveEncoder.getDistance());
 
-        // ---------------------------------
-        // Joysticks
-        // information about the joysticks
-        // ---------------------------------
-        System.out.println(
-                "Right Driver Joystick " + Hardware.rightDriver.getY());
-        SmartDashboard.putNumber("R Driver Y Joy",
-                Hardware.rightDriver.getY());
-        System.out.println(
-                "Left Driver Joystick " + Hardware.leftDriver.getY());
-        SmartDashboard.putNumber("L Driver Y Joy",
-                Hardware.leftDriver.getY());
-        System.out.println(
-                "Right Operator Joystick "
-                        + Hardware.rightOperator.getY());
-        SmartDashboard.putNumber("R Operator Y Joy",
-                Hardware.rightOperator.getY());
-        System.out.println(
-                "Left Operator Joystick "
-                        + Hardware.leftOperator.getY());
-        SmartDashboard.putNumber("L Operator Y Joy",
-                Hardware.leftOperator.getY());
+            // System.out.println("Left Front Encoder Ticks "
+            // + Hardware.leftFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Left Front Encoder Ticks",
+            // Hardware.leftFrontDriveEncoder.get());
 
-        // =================================
-        // KILROY ANCILLARY ITEMS
-        // =================================
-        // ---------------------------------
-        // Gear number displayed to driver
-        // ---------------------------------
+            // System.out.println("Right Front Inches = "
+            // + Hardware.rightFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Right Front Encoder Inches",
+            // Hardware.rightFrontDriveEncoder.getDistance());
 
-        // ---------------------------------
-        // timers
-        // what time does the timer have now
-        // ---------------------------------
+            // System.out.println("Right Front Ticks "
+            // + Hardware.rightFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Right Front Encoder Ticks",
+            // Hardware.rightFrontDriveEncoder.get());
+
+            // ---------------------------------
+            // Red Light/IR Sensors
+            // prints the state of the sensor
+            // ---------------------------------
+
+            // =================================
+            // Pneumatics
+            // =================================
+
+            // ---------------------------------
+            // Compressor
+            // prints information on the compressor
+            // ---------------------------------
+
+            // ---------------------------------
+            // Solenoids
+            // ---------------------------------
+
+            // Analogs
+            // =================================
+
+            // ---------------------------------
+            // pots
+            // where the pot is turned to
+            // ---------------------------------
+
+            // ---------------------------------
+            // GYRO
+            // ---------------------------------
+
+            // ---------------------------------
+            // Sonar/UltraSonic
+            // ---------------------------------
+
+            // =========================
+            // Servos
+            // =========================
+
+            // =================================
+            // SPI Bus
+            // =================================
+
+            // -------------------------------------
+            // Analog Interfaces
+            // -------------------------------------
+
+            // =================================
+            // Connection Items
+            // =================================
+
+            // =================================
+            // Cameras
+            // prints any camera information required
+            // =================================
+
+            // =================================
+            // Driver station
+            // =================================
+
+            // ---------------------------------
+            // Joysticks
+            // information about the joysticks
+            // ---------------------------------
+            System.out.println("Right Driver Joystick " + Hardware.rightDriver.getY());
+            SmartDashboard.putNumber("R Driver Y Joy", Hardware.rightDriver.getY());
+            System.out.println("Left Driver Joystick " + Hardware.leftDriver.getY());
+            SmartDashboard.putNumber("L Driver Y Joy", Hardware.leftDriver.getY());
+            System.out.println("Right Operator Joystick " + Hardware.rightOperator.getY());
+            SmartDashboard.putNumber("R Operator Y Joy", Hardware.rightOperator.getY());
+            System.out.println("Left Operator Joystick " + Hardware.leftOperator.getY());
+            SmartDashboard.putNumber("L Operator Y Joy", Hardware.leftOperator.getY());
+
+            // =================================
+            // KILROY ANCILLARY ITEMS
+            // =================================
+            // ---------------------------------
+            // Gear number displayed to driver
+            // ---------------------------------
+
+            // ---------------------------------
+            // timers
+            // what time does the timer have now
+            // ---------------------------------
 
         }
 
-    SmartDashboard.updateValues();
-} // end printStatements()
+        SmartDashboard.updateValues();
+    } // end printStatements()
 
-// ================================
-// Constants
-// ================================
+    // ================================
+    // Constants
+    // ================================
 
-// ================================
-// Variables
-// ================================
+    // ================================
+    // Variables
+    // ================================
 
 } // end class
