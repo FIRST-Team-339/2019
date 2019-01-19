@@ -145,9 +145,9 @@ public class Hardware {
 
     public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(25);
 
-    public static DoubleThrowSwitch disableAutonomousSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
+    public static DoubleThrowSwitch autoPositionSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
 
-    public static DoubleThrowSwitch levelStartSwitch = new DoubleThrowSwitch(18, 13); // false port numbers
+    public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(18, 13); // false port numbers
 
     public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(1, 2, 3, 4, 5, 6);
 

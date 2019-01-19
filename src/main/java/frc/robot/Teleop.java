@@ -139,7 +139,7 @@ public class Teleop {
             // Switches
             // prints state of switches
             // ---------------------------------
-            SmartDashboard.putBoolean("Disable SW", Hardware.disableAutonomousSwitch.isOn());
+            SmartDashboard.putBoolean("Disable SW", Hardware.autoLevelSwitch.isOn());
 
             // ---------------------------------
             // Encoders

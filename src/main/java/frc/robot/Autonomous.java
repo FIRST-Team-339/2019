@@ -32,6 +32,8 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.Utils.*;
+import edu.wpi.first.wpilibj.Relay;
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
@@ -66,8 +68,10 @@ public class Autonomous {
         // Hardware.leftFrontDriveEncoder.reset();
         // Hardware.rightFrontDriveEncoder.reset();
 
-        if (Hardware.levelStartSwitch.isOn() == true)
+        if (Hardware.autoLevelSwitch.isOn() == true) {
+            autoLevel = Level.DISABLE;
             autoState = State.FINISH;
+        }
 
     } // end Init
 
@@ -85,16 +89,26 @@ public class Autonomous {
      */
 
     public static enum Position {
-        LEFT, RIGHT, NULL
+        LEFT, RIGHT, CENTER, NULL
     }
 
     public static enum Level {
-        LEVEL1, LEVEL2, Disable
+        LEVEL_ONE, LEVEL_TWO, DISABLE, NULL
     }
 
     // variable that controls the state of autonomous as a whole (init, delay
     // which path is being used, etc.)
     public static State autoState = State.INIT;
+
+    // variable that controls the starting position/side (Left, Right, or Center) of
+    // the robot
+
+    public static Position autoPosition = Position.NULL;
+
+    // variable that controls the level the robot is starting on (Level 1 or level 2
+    // or disabled)
+
+    public static Level autoLevel = Level.NULL;
 
     /**
      * User Periodic code for autonomous mode should go here. Will be called
@@ -106,7 +120,7 @@ public class Autonomous {
     public static void periodic() {
         switch (autoState) {
         case INIT:
-
+            setPositionAndLevel();
             autoState = State.DELAY;
             break;
         case DELAY:
@@ -119,6 +133,10 @@ public class Autonomous {
                 Hardware.autoTimer.stop();
                 break;
             }
+            break;
+
+        case CHOOSE_PATH:
+            choosePath();
             break;
 
         case CROSS_AUTOLINE:
@@ -152,12 +170,59 @@ public class Autonomous {
     // Methods
     // ---------------------------------
 
-    public void setMatchSettings() {
+    /**
+     *
+     */
+    private static void choosePath() {
+        switch (Hardware.autoSixPosSwitch.getPosition()) {
+        case 1:
+            break;
+
+        }
 
     }
 
+    /**
+     * sets the enums of both the autoPosition and autoLevel based on the
+     * coresponding switches
+     *
+     */
+    private static void setPositionAndLevel() {
+
+        // sets the autoPosition enum to the correct side based on the
+        // state of the autoPositionSwitch
+        if (Hardware.autoPositionSwitch.getPosition() == LEFT) {
+            autoPosition = Position.LEFT;
+        } else if (Hardware.autoPositionSwitch.getPosition() == RIGHT) {
+            autoPosition = Position.RIGHT;
+        } else if (Hardware.autoPositionSwitch.isOn() == true) {
+            autoPosition = Position.CENTER;
+        }
+
+        // sets the autoLevel enum to the correct level, or disabled, based on the state
+        // of the autoLevelSwitch
+        if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE) {
+            autoLevel = Level.LEVEL_ONE;
+        } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO) {
+            autoLevel = Level.LEVEL_TWO;
+        }
+
+    }
+
+    // ======================================================================
+    // Path Methods
+    // ======================================================================
+
     /*
-     * ================================ Constants ================================
+     * ============================================================= Constants
+     * =============================================================
      */
 
+    public static final Relay.Value LEFT = Relay.Value.kForward;
+
+    public static final Relay.Value RIGHT = Relay.Value.kReverse;
+
+    public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
+
+    public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 } // end class
