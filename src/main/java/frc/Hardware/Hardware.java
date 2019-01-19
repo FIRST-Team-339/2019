@@ -134,7 +134,7 @@ public class Hardware {
     // Relay classes
     // ====================================
 
-    public static Relay ringLightRelay = new Relay(0);
+    public static DigitalOutput ringLightRelay = new DigitalOutput(0);
 
     // ====================================
     // Digital Inputs
@@ -261,7 +261,8 @@ public class Hardware {
     // Axis/USB Camera class
     // -------------------------------------
 
-    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013);
+    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013,
+            ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
@@ -338,10 +339,9 @@ public class Hardware {
     // leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 
-
-    //TODO update with encoders once fixed
-    public static DriveWithCamera driveWithCamera = new DriveWithCamera(transmission, null,
-           null, frontUltraSonic, frontUltraSonic, gyro, axisCamera);
+    // TODO update with encoders once fixed
+    public static DriveWithCamera driveWithCamera = new DriveWithCamera(transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
 
     // -------------------
     // Assembly classes (e.g. forklift)

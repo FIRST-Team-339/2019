@@ -111,7 +111,7 @@ public class Teleop {
         }
         // turn on the ringlight
         if (Hardware.leftOperator.getRawButton(6)) {
-            Hardware.axisCamera.setDigitalOutputValue(true);
+            // Hardware.axisCamera.setDigitalOutputValue(true);
             Hardware.axisCamera.setRelayValue(true);
         }
         // save image
