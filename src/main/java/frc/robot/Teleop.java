@@ -32,6 +32,9 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.vision.VisionProcessor;
+import frc.vision.VisionProcessor.ImageType;
+import frc.Utils.drive.Drive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -72,10 +75,8 @@ public class Teleop {
         // ---------------------------------
         // setup motors
         // ---------------------------------
-        Hardware.rightFrontCANMotor.set(0);
-        Hardware.rightRearCANMotor.set(0);
-        Hardware.leftFrontCANMotor.set(0);
-        Hardware.leftRearCANMotor.set(0);
+        // Hardware.rightDriveMotor.set(0);
+        // Hardware.leftDriveMotor.set(0);
 
     } // end Init
 
@@ -94,11 +95,42 @@ public class Teleop {
 
         Hardware.telemetry.printToShuffleboard();
 
-        Hardware.telemetry.printToConsole();
-
         // =================================================================
         // OPERATOR CONTROLS
         // =================================================================
+        // TODO remove the next 3 functions once camera is tested
+
+        // Drive to the vision targets
+        if (Hardware.leftOperator.getRawButton(4)) {
+            if (Hardware.driveWithCamera.driveToTarget(.5)) {
+                System.out.println("Has aligned hopefully");
+            }
+        }
+        // check if we are getting blobs
+        if (Hardware.leftOperator.getRawButton(5)) {
+            System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
+        }
+        // turn on the ringlight
+        if (Hardware.leftOperator.getRawButton(6)) {
+            // Hardware.axisCamera.setDigitalOutputValue(true);
+            Hardware.axisCamera.setRelayValue(true);
+        }
+        // save image
+        if (Hardware.leftOperator.getRawButton(7)) {
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        }
+
+        Hardware.telemetry.printToShuffleboard();
+        Hardware.telemetry.printToConsole();
+        // TODO untested code by Anna, Patrick, Meghan Brown
+        // This enables us to drive the robot with the joysticks
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+
+        // Calls the shiftGears function from drive, so we caan input the the gear shift
+        // buttons and it will shift gears if we need it to.
+        Hardware.drive.shiftGears(Hardware.leftDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
     } // end Periodic()
 
@@ -113,21 +145,10 @@ public class Teleop {
             // Motor
             // Prints the value of motors
             // =================================
-            // System.out.println("Right Front Drive Motor " +
             // Hardware.rightFrontCANMotor.get());
             // SmartDashboard.putNumber("Right Rear Drive Motor",
             // Hardware.rightRearCANMotor.get());
             // System.out.println("Left Front Drive Motor " +
-            // Hardware.leftFrontCANMotor.get());
-            // SmartDashboard.putNumber("Left Rear Drive Motor",
-            // Hardware.leftRearCANMotor.get());
-
-            // =================================
-            // CAN items
-            // prints value of the CAN controllers
-            // =================================
-            //
-            // =================================
             // Relay
             // =================================
             //
@@ -139,6 +160,7 @@ public class Teleop {
             // Switches
             // prints state of switches
             // ---------------------------------
+
             SmartDashboard.putBoolean("Disable SW", Hardware.autoLevelSwitch.isOn());
 
             // ---------------------------------
@@ -256,6 +278,9 @@ public class Teleop {
     // ================================
     // Constants
     // ================================
+
+    private static final int GEAR_UP_SHIFT_BUTTON = 3;
+    private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
     // ================================
     // Variables

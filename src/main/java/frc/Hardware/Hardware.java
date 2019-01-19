@@ -14,6 +14,7 @@
 // ====================================================================
 package frc.Hardware;
 
+import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -61,11 +62,11 @@ public class Hardware {
     // ------------------------------------
     // Public Constants
     // ------------------------------------
-    public enum robotYear {
+    public enum RobotYear {
         KILROY2018, KILROY2019
     }
 
-    public robotYear whichRobot = robotYear.KILROY2018;
+    public RobotYear whichRobot = RobotYear.KILROY2018;
 
     // -------------------------------------
     // Private Constants
@@ -119,13 +120,17 @@ public class Hardware {
     public static WPI_TalonSRX liftMotorTwo = new WPI_TalonSRX(6);
     // CAN version
 
+    /** The right front drive motor */
     public static WPI_TalonSRX rightFrontCANMotor = new WPI_TalonSRX(14);
 
+    /** The left front drive motor */
     public static WPI_TalonSRX leftFrontCANMotor = new WPI_TalonSRX(11);
 
+    /** The right rear drive motor */
     public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(12);
     // TODO - fix number
 
+    /** The left rear drive motor */
     public static WPI_TalonSRX leftRearCANMotor = new WPI_TalonSRX(13);
     // TODO - fix number
 
@@ -133,7 +138,7 @@ public class Hardware {
     // Relay classes
     // ====================================
 
-    public static Relay ringLightRelay = new Relay(0);
+    public static DigitalOutput ringLightRelay = new DigitalOutput(0);
 
     // ====================================
     // Digital Inputs
@@ -158,11 +163,9 @@ public class Hardware {
     // ------------------------------------
     // Encoders
     // ------------------------------------
-    // public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(14,
-    // 15);
+    public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(14, 15);
 
-    // public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16,
-    // 17);
+    public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
     // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
 
@@ -260,7 +263,8 @@ public class Hardware {
     // Axis/USB Camera class
     // -------------------------------------
 
-    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013);
+    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013,
+            ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
@@ -327,15 +331,18 @@ public class Hardware {
     // ------------------------------------
     // Drive system
     // ------------------------------------
-    // public static Drive drive = new Drive(transmission, leftFrontDriveEncoder,
-    // rightFrontDriveEncoder,
-    // leftFrontDriveEncoder, rightFrontDriveEncoder,
-    // gyro);
+    public static Drive drive = new Drive(transmission, leftFrontDriveEncoder, rightFrontDriveEncoder,
+            // leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
 
     // public static DrivePID drivePID = new DrivePID(transmission,
     // leftFrontDriveEncoder, rightFrontDriveEncoder,
     // leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
+
+    // TODO update with encoders once fixed
+    public static DriveWithCamera driveWithCamera = new DriveWithCamera(transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
 
     // -------------------
     // Assembly classes (e.g. forklift)
