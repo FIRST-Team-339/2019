@@ -58,6 +58,7 @@ public class Teleop {
 
         LiveWindow.disableTelemetry(Hardware.pdp);
 
+        Hardware.telemetry.printToConsole();
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.setTimeBetweenPrints(1000);
 
@@ -93,11 +94,17 @@ public class Teleop {
      */
     public static void periodic() {
 
-        Hardware.telemetry.printToShuffleboard();
-
         // =================================================================
         // OPERATOR CONTROLS
         // =================================================================
+
+        if (Hardware.leftOperator.getRawButton(6) == true) {
+            // Hardware.rightRearCANMotor.set(.5);
+            // Hardware.climber.climb();
+        } else {
+            // Hardware.rightRearCANMotor.set(0.0);
+        }
+
         // TODO remove the next 3 functions once camera is tested
 
         // Drive to the vision targets
@@ -121,16 +128,18 @@ public class Teleop {
             Hardware.axisCamera.saveImage(ImageType.PROCESSED);
         }
 
-        Hardware.telemetry.printToShuffleboard();
-        Hardware.telemetry.printToConsole();
+        // Hardware.telemetry.printToShuffleboard();
+        // Hardware.telemetry.printToConsole();
         // TODO untested code by Anna, Patrick, Meghan Brown
         // This enables us to drive the robot with the joysticks
+        // @ANE
         Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
         // Calls the shiftGears function from drive, so we caan input the the gear shift
         // buttons and it will shift gears if we need it to.
-        Hardware.drive.shiftGears(Hardware.leftDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+        // @ANE
+        // Hardware.drive.shiftGears(Hardware.leftDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+        // Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
     } // end Periodic()
 

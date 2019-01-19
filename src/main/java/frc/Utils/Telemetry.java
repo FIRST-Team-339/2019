@@ -105,13 +105,17 @@ public class Telemetry {
                 // + Hardware.leftDriveMotor.get());
                 //
 
-                System.out.println("Right Front Drive Motor " + Hardware.rightFrontCANMotor.get());
+                // System.out.println("Right Front Drive Motor " +
+                // Hardware.rightFrontCANMotor.get());
 
-                System.out.println("Left Front Drive Motor " + Hardware.leftFrontCANMotor.get());
+                // System.out.println("Left Front Drive Motor " +
+                // Hardware.leftFrontCANMotor.get());
 
-                System.out.println("Right Rear Drive Motor " + Hardware.rightRearCANMotor.get());
+                // System.out.println("Right Rear Drive Motor " +
+                // Hardware.rightRearCANMotor.get());
 
-                System.out.println("Left Rear Drive Motor " + Hardware.leftRearCANMotor.get());
+                // System.out.println("Left Rear Drive Motor " +
+                // Hardware.leftRearCANMotor.get());
 
                 // =================================
                 // CAN items
@@ -183,8 +187,7 @@ public class Telemetry {
                 // ---------------------------------
                 // Encoders
                 // ---------------------------------
-                // System.out.println("Left Front Encoder Inches = "
-                // + Hardware.leftFrontDriveEncoder.getDistance());
+                System.out.println("Left Front Encoder Inches = " + Hardware.leftFrontDriveEncoder.getDistance());
                 //
                 //
                 // System.out.println("Left Front Encoder Ticks "
