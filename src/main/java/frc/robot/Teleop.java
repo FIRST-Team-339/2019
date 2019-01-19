@@ -53,7 +53,7 @@ public class Teleop {
      * @author Nathanial Lydick
      * @written Jan 13, 2015
      */
-    public static boolean hasDoneTheThing = false;
+    public static boolean hasDoneTheThing = true;
 
     public static void init() {
 
