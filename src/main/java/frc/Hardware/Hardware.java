@@ -61,11 +61,11 @@ public class Hardware {
     // ------------------------------------
     // Public Constants
     // ------------------------------------
-    public enum robotYear {
+    public enum RobotYear {
         KILROY2018, KILROY2019
     }
 
-    public robotYear whichRobot = robotYear.KILROY2018;
+    public RobotYear whichRobot = RobotYear.KILROY2018;
 
     // -------------------------------------
     // Private Constants
@@ -119,13 +119,17 @@ public class Hardware {
     public static WPI_TalonSRX liftMotorTwo = new WPI_TalonSRX(6);
     // CAN version
 
+    /** The right front drive motor */
     public static WPI_TalonSRX rightFrontCANMotor = new WPI_TalonSRX(14);
 
+    /** The left front drive motor */
     public static WPI_TalonSRX leftFrontCANMotor = new WPI_TalonSRX(11);
 
+    /** The right rear drive motor */
     public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(12);
     // TODO - fix number
 
+    /** The left rear drive motor */
     public static WPI_TalonSRX leftRearCANMotor = new WPI_TalonSRX(13);
     // TODO - fix number
 
