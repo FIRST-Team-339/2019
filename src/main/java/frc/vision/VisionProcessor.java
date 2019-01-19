@@ -23,9 +23,9 @@ import edu.wpi.first.wpilibj.Timer;
  * class, make sure to set the package name, the class name to
  * AutoGenVision.java
  * and the directory to the correct package.
- * 
+ *
  * NOTE: The GRIP project MUST end with a "filter contours" modifier
- * 
+ *
  * @author Ryan McGee
  * @written 6/22/17
  *
@@ -35,12 +35,12 @@ public class VisionProcessor extends AutoGenVision
 
 /**
  * A class that holds several statistics about particles.
- * 
+ *
  * The measures include:
  * area: The area, in pixels of the blob
  * boundingRect: The rectangle around the blob
  * center: the point of the center of the blob
- * 
+ *
  * @author Ryan McGee
  *
  */
@@ -64,7 +64,7 @@ public Point center = new Point(0, 0);
 
 /**
  * Compares the areas of the two ParticleReports
- * 
+ *
  * @param r1
  *            The first particle report in the comparison
  * @param r2
@@ -84,11 +84,11 @@ public int compare (ParticleReport r1, ParticleReport r2)
 /**
  * Compares the area of <b>this</b> ParticleReport to the area of the inputted
  * particle report
- * 
+ *
  * @param r
  *            The particle report whose area is being compared to <b>this</b>
  *            particle report's
- * 
+ *
  * @return
  *         the area of r - the area of <b>this</b>; positive value if r.area
  *         > this.area, 0 if they are equal, and a negative value if r.area <
@@ -104,7 +104,7 @@ public int compareTo (ParticleReport r)
 /**
  * The user must set which camera is connected for correct field of views and
  * focal lengths.
- * 
+ *
  * @author Ryan McGee
  *
  */
@@ -127,7 +127,7 @@ AXIS_M1013
 
 /**
  * A list of the different kind of images, for accessing the images directly.
- * 
+ *
  * @author Ryan McGee
  */
 public enum ImageType
@@ -177,7 +177,7 @@ private final int M1013_VERT_FOV = 51;
 
 // the first part of the path for images
 private final String IMAGE_BASIC_PATH = "/home/lvuser";
-        
+
 // the file path where we save the images we take
 private final String SAVE_IMAGE_PATH = IMAGE_BASIC_PATH + "/images";
 
@@ -210,7 +210,7 @@ private final Timer pictureTimer = new Timer();
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param ip
  *            the IP of the the axis camera (usually 10.3.39.11)
  * @param camera
@@ -247,7 +247,7 @@ public VisionProcessor (String ip, CameraModel camera)
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param ip
  *            the IP of the the axis camera (usually 10.3.39.11)
  * @param camera
@@ -255,7 +255,7 @@ public VisionProcessor (String ip, CameraModel camera)
  * @param ringlightRelay
  *            camera ringlight to pick up retro-reflective tape: this is the
  *            janky fix
- * 
+ *
  */
 public VisionProcessor (String ip, CameraModel camera,
         DigitalOutput ringlightRelay)
@@ -291,7 +291,7 @@ public VisionProcessor (String ip, CameraModel camera,
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param usbPort
  *            The USB camera port number. '0' for default.
  * @param camera
@@ -325,7 +325,7 @@ public VisionProcessor (int usbPort, CameraModel camera)
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param usbPort
  *            The USB camera port number. '0' for default.
  * @param camera
@@ -403,7 +403,7 @@ public void processImage ()
 
 /**
  * Sets the camera image settings for use in image processing.
- * 
+ *
  * @param exposure
  *            How much light will hit the sensor, in percentage.
  * @param whiteBalence
@@ -435,7 +435,7 @@ public void setDefaultCameraSettings ()
  * Saves an image to the roborio. This has a max of 26 images per type, before
  * it starts to overwrite.
  * The image will be saved to the SAVE_IMAGE_PATH defined above.
- * 
+ *
  * @param type
  *            What kind of image will be saved. If it is ImageType.RAW, then an
  *            image will be saved directly
@@ -452,25 +452,25 @@ public void saveImage (ImageType type)
 
     // Create the path the images will be saved in. If the path already
     // exists, do nothing.
-    
+
     try
         {
         // system command that creates the path the image will be saved in
-        
+
         Runtime.getRuntime()
                 .exec("mkdir -p " + SAVE_IMAGE_PATH + timeStamp);
 //      "echo $(ls -1rtd images*| head -n$(($(ls -1d images*| wc -l)-" + numImageFolders+"))) \\> temp.txt"
         Runtime.getRuntime()
                 .exec("ls -ld " + IMAGE_BASIC_PATH + "; sleep 30");
-       
+
 
         } // end try
     catch (IOException e)
         {
         e.printStackTrace();
         } // catch
-       
-    
+
+
     // grab the image
     Mat tempImage = new Mat();
 
@@ -547,7 +547,7 @@ private int processedImageNum = 0;
 /**
  * Saves an image once (and only once), no matter how long the button is pressed
  * down on the joystick.
- * 
+ *
  * @param button
  *            Whether or not the button is pressed
  * @param type
@@ -564,12 +564,12 @@ private boolean saveImageButtonState = false;
 
 /**
  * Takes a lit picture with the camera when the user presses a button
- * 
+ *
  * @param button
  *            1 (or multiple) joystick button values; recommended to use 2
  *            example parameter:
  *            joystick.getRawButton(x) && joystick.getRawButton(y)
- * 
+ *
  */
 public void takeLitPicture (boolean button)
 {
@@ -597,8 +597,8 @@ public void takeLitPicture (boolean button)
         if (this.pictureTimer.get() <= TAKE_PICTURE_DELAY
                 / 2.0)
             {
-            //TODO remove once tested
-            System.out.println("Lets blind some wirers");
+
+
             this.setRelayValue(true);
             }
         // if the timer expires, save the picture , reset booleans, turns off
@@ -627,7 +627,7 @@ private final double TAKE_PICTURE_DELAY = 1.0;
 
 /**
  * Gets the value of the ring light relay
- * 
+ *
  * @return the value of the camera ring light relay; see the get() function
  *         in the Relay class for more information
  */
@@ -638,7 +638,7 @@ public boolean getRelayValue ()
 
 /**
  * Gets the value of the ring light relay as a Digital Output
- * 
+ *
  * @return the value of the camera ring light relay; see the get() function
  *         in the Digital Output class for more information
  */
@@ -649,7 +649,7 @@ public boolean getDigitalOutputValue ()
 
 /**
  * Set the ring light to a value
- * 
+ *
  * @param ringLightValue
  *            use kForward or kReverse to set the ring light
  */
@@ -660,7 +660,7 @@ public void setRelayValue (boolean ringLightValue)
 
 /**
  * Set the ring light to a value
- * 
+ *
  * @param ringLightValue
  *            use true to turn the relay on
  */
@@ -671,7 +671,7 @@ public void setDigitalOutputValue (boolean ringLightValue)
 
 /**
  * Turns on the ring light
- * 
+ *
  * @param button
  *            1 (or multiple) joystick buttons
  */
@@ -710,7 +710,7 @@ public boolean hasBlobs ()
 
 /**
  * Gets a report of the index the user requests.
- * 
+ *
  * @param n
  *            The index of the size requested. 0 is the largest, and
  *            gradually gets smaller until the end of the array is reached.
@@ -730,7 +730,7 @@ public ParticleReport getNthSizeBlob (int n)
 /**
  * Takes the base OpenCV list of contours and changes the output to be easier to
  * work with.
- * 
+ *
  * @param contours
  *            The input from the base OpenCV contours output
  */
@@ -755,14 +755,14 @@ private void createParticleReports (List<MatOfPoint> contours)
 
 /**
  * TODO TEST THIS AND COMMENT SOME OF THE CALCULATIONS
- * 
+ *
  * Calculates the angle the target is at from the center line.
  * The formula can be cut into two easier sections, one for the focal
  * length and one for the angle.
- * 
+ *
  * Focal length (in pixels): Resolution / 2 x tan(FOV / 2)
  * Angle (in radians): arctan(distanceFromCenter / focalLength)
- * 
+ *
  * @param target
  *            The input: takes the Y axis from the center point.
  * @return the angle, in degrees. If the target is above the center line,
@@ -791,14 +791,14 @@ public double getPitchAngleDegrees (ParticleReport target)
 
 /**
  * TODO TEST THIS AND COMMENT SOME OF THE CALCULATIONS
- * 
+ *
  * Calculates the angle the target is at from the center line.
  * The formula can be cut into two easier sections, one for the focal
  * length and one for the angle.
- * 
+ *
  * Focal length (in pixels): Resolution / 2 x tan(FOV / 2)
  * Angle (in radians): arctan(distanceFromCenter / focalLength)
- * 
+ *
  * @param target
  *            The input: takes the X axis from the center point.
  * @return the angle, in degrees. If the target is to the right of the center

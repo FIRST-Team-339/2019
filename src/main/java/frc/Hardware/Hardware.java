@@ -14,6 +14,7 @@
 // ====================================================================
 package frc.Hardware;
 
+import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -330,6 +331,9 @@ public class Hardware {
             // leftFrontDriveEncoder, rightFrontDriveEncoder,
             leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
+
+    public static DriveWithCamera driveWithCamera = new DriveWithCamera(transmission, leftFrontDriveEncoder,
+            intakeDeployEncoder, frontUltraSonic, frontUltraSonic, gyro, axisCamera);
 
     // -------------------
     // Assembly classes (e.g. forklift)
