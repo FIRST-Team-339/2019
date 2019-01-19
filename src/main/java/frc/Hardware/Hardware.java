@@ -14,6 +14,7 @@
 // ====================================================================
 package frc.Hardware;
 
+import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -91,9 +92,9 @@ public class Hardware {
     // ------------------------------------
     // Talon classes
     // ------------------------------------
-    public static Talon rightDriveMotor = new Talon(2);// on CAN now
+    // public static Talon rightDriveMotor = new Talon(2);// on CAN now
 
-    public static Talon leftDriveMotor = new Talon(3);// on CAN now
+    // public static Talon leftDriveMotor = new Talon(3);// on CAN now
 
     // ------------------------------------
     // Victor Classes
@@ -137,7 +138,7 @@ public class Hardware {
     // Relay classes
     // ====================================
 
-    public static Relay ringLightRelay = new Relay(0);
+    public static DigitalOutput ringLightRelay = new DigitalOutput(0);
 
     // ====================================
     // Digital Inputs
@@ -150,6 +151,8 @@ public class Hardware {
     public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(25);
 
     public static DoubleThrowSwitch disableAutonomousSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
+
+    public static DoubleThrowSwitch levelStartSwitch = new DoubleThrowSwitch(18, 13); // false port numbers
 
     public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(1, 2, 3, 4, 5, 6);
 
@@ -164,9 +167,10 @@ public class Hardware {
 
     public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
-    public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
+    // public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
 
-    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);// being removed???
+    // public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
+    // 24);// being removed???
 
     // -----------------------
     // Wiring diagram
@@ -259,7 +263,8 @@ public class Hardware {
     // Axis/USB Camera class
     // -------------------------------------
 
-    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013);
+    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013,
+            ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
@@ -330,10 +335,14 @@ public class Hardware {
             // leftFrontDriveEncoder, rightFrontDriveEncoder,
             gyro);
 
-    public static DrivePID drivePID = new DrivePID(transmission,
-            // leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+    // public static DrivePID drivePID = new DrivePID(transmission,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
+
+    // TODO update with encoders once fixed
+    public static DriveWithCamera driveWithCamera = new DriveWithCamera(transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
 
     // -------------------
     // Assembly classes (e.g. forklift)
