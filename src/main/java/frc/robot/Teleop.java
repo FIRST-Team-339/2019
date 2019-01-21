@@ -123,56 +123,59 @@ public class Teleop {
 
         if (Hardware.leftOperator.getRawButton(6) == true) {
             // Hardware.rightRearCANMotor.set(.5);
-            // Hardware.climber.climb();
+            System.out.println("Trying to climb");
+            Hardware.climber.climb();
         } else {
-            // Hardware.rightRearCANMotor.set(0.0);
+            Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
         }
+        Hardware.climber.climbUpdate();
+        // @ANE
+        // // TODO remove the next 3 functions once camera is tested
 
-        // TODO remove the next 3 functions once camera is tested
+        // // Drive to the vision targets
+        // if (Hardware.leftOperator.getRawButton(4)) {
+        // hasDoneTheThing = false;
+        // System.out.println("Done the thing: " + hasDoneTheThing);
+        // }
 
-        // Drive to the vision targets
-        if (Hardware.leftOperator.getRawButton(4)) {
-            hasDoneTheThing = false;
-            System.out.println("Done the thing: " + hasDoneTheThing);
-        }
+        // if (!hasDoneTheThing) {
+        // // System.out.println("Done the thing: " + hasDoneTheThing);
+        // if (Hardware.driveWithCamera.driveToTarget(.3)) {
+        // System.out.println("Has aligned hopefully");
+        // hasDoneTheThing = true;
+        // }
+        // }
+        // // check if we are getting blobs
+        // if (Hardware.leftOperator.getRawButton(5)) {
+        // System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
 
-        if (!hasDoneTheThing) {
-            // System.out.println("Done the thing: " + hasDoneTheThing);
-            if (Hardware.driveWithCamera.driveToTarget(.3)) {
-                System.out.println("Has aligned hopefully");
-                hasDoneTheThing = true;
-            }
-        }
-        // check if we are getting blobs
-        if (Hardware.leftOperator.getRawButton(5)) {
-            System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
-
-        }
-        // turn on the ringlight
-        if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true) {
-            System.out.println("lets blind some wirers");
-            Hardware.axisCamera.setRelayValue(true);
-        }
-        // save image
-        if (Hardware.leftOperator.getRawButton(7)) {
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-        }
+        // }
+        // // turn on the ringlight
+        // if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true)
+        // {
+        // System.out.println("lets blind some wirers");
+        // Hardware.axisCamera.setRelayValue(true);
+        // }
+        // // save image
+        // if (Hardware.leftOperator.getRawButton(7)) {
+        // Hardware.axisCamera.saveImage(ImageType.RAW);
+        // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        // }
 
         Hardware.telemetry.printToShuffleboard();
         Hardware.telemetry.printToConsole();
 
         // TODO untested code by Anna, Patrick, and Meghan Brown
         // This enables us to drive the robot with the joysticks
-        if (hasDoneTheThing)
-            Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        // if (hasDoneTheThing)
+        // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
         // Calls the shiftGears function from drive, so we can input the the gear shift
         // buttons and it will shift gears if we need it to.
-        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+        // Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+        // Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
-        System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
+        // System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
 
     } // end Periodic()
 

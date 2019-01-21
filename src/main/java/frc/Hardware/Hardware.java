@@ -349,8 +349,8 @@ public class Hardware {
     // -------------------
     // Assembly classes (e.g. forklift)
     // -------------------
-    public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder);
+    public static Forklift forklift = new Forklift(liftMotorOne, liftingEncoder);
 
     public static ClimbToLevelTwo climber = new ClimbToLevelTwo(armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
-            drive, lift);
+            drive, forklift);
 } // end class
