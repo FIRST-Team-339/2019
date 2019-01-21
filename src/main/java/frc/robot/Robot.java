@@ -53,10 +53,10 @@ public class Robot extends TimedRobot {
         // -------------------------------------
         // Resets encoder values
         // -------------------------------------
-        Hardware.rightFrontDriveEncoder.setReverseDirection(false);
-        Hardware.leftFrontDriveEncoder.setReverseDirection(false);
-        Hardware.rightFrontDriveEncoder.reset();
-        Hardware.leftFrontDriveEncoder.reset();
+        // Hardware.rightFrontDriveEncoder.setReverseDirection(true);
+        // Hardware.leftFrontDriveEncoder.setReverseDirection(true);
+        // Hardware.rightFrontDriveEncoder.reset();
+        // Hardware.leftFrontDriveEncoder.reset();
 
         // --------------------------------------
         // reset the MotorSafetyHelpers for each

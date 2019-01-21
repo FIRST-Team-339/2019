@@ -14,6 +14,7 @@
 // ====================================================================
 package frc.Hardware;
 
+import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -29,6 +30,7 @@ import frc.Utils.drive.DrivePID;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
+import frc.Utils.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -61,11 +63,11 @@ public class Hardware {
     // ------------------------------------
     // Public Constants
     // ------------------------------------
-    public enum robotYear {
+    public enum RobotYear {
         KILROY2018, KILROY2019
     }
 
-    public robotYear whichRobot = robotYear.KILROY2018;
+    public RobotYear whichRobot = RobotYear.KILROY2018;
 
     // -------------------------------------
     // Private Constants
@@ -91,19 +93,19 @@ public class Hardware {
     // ------------------------------------
     // Talon classes
     // ------------------------------------
-    public static Talon rightDriveMotor = new Talon(2);
+    // public static Talon rightDriveMotor = new Talon(2);// on CAN now
 
-    public static Talon leftDriveMotor = new Talon(3);
+    // public static Talon leftDriveMotor = new Talon(3);// on CAN now
 
     // ------------------------------------
     // Victor Classes
     // ------------------------------------
 
-    // public static VictorSP liftingMotor = new VictorSP(0);
+    // public static VictorSP liftingMotor = new VictorSP(0);//on CAN now
 
-    public static VictorSP cubeIntakeMotor = new VictorSP(1);
+    public static VictorSP cubeIntakeMotor = new VictorSP(1);// left intake on CAN
 
-    public static VictorSP intakeDeployArm = new VictorSP(4);
+    public static VictorSP intakeDeployArm = new VictorSP(4); // hanging
 
     // ------------------------------------
     // Servo classes
@@ -119,13 +121,17 @@ public class Hardware {
     public static WPI_TalonSRX liftMotorTwo = new WPI_TalonSRX(6);
     // CAN version
 
+    /** The right front drive motor */
     public static WPI_TalonSRX rightFrontCANMotor = new WPI_TalonSRX(14);
 
+    /** The left front drive motor */
     public static WPI_TalonSRX leftFrontCANMotor = new WPI_TalonSRX(11);
 
-    public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(12);
+    /** The right rear drive motor */
+    public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(15);
     // TODO - fix number
 
+    /** The left rear drive motor */
     public static WPI_TalonSRX leftRearCANMotor = new WPI_TalonSRX(13);
     // TODO - fix number
 
@@ -133,7 +139,7 @@ public class Hardware {
     // Relay classes
     // ====================================
 
-    public static Relay ringLightRelay = new Relay(1);
+    public static DigitalOutput ringLightRelay = new DigitalOutput(0);
 
     // ====================================
     // Digital Inputs
@@ -145,7 +151,9 @@ public class Hardware {
 
     public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(25);
 
-    public static DoubleThrowSwitch disableAutonomousSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
+    public static DoubleThrowSwitch autoPositionSwitch = new DoubleThrowSwitch(leftAutoSwitch, rightAutoSwitch);
+
+    public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(18, 13); // false port numbers
 
     public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(1, 2, 3, 4, 5, 6);
 
@@ -160,9 +168,9 @@ public class Hardware {
 
     public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(16, 17);
 
-    public static KilroyEncoder liftingEncoder = new KilroyEncoder(18, 19);
+    public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
-    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);
+    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);// being removed???
 
     // -----------------------
     // Wiring diagram
@@ -255,12 +263,14 @@ public class Hardware {
     // Axis/USB Camera class
     // -------------------------------------
 
-    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013);
+    public static VisionProcessor axisCamera = new VisionProcessor("10.3.39.11", CameraModel.AXIS_M1013,
+            ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
     // USB camera it serves at the same time
     // -------------------------------------
+
     public static UsbCamera USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
     // -------------------------------------
@@ -322,17 +332,25 @@ public class Hardware {
     // ------------------------------------
     // Drive system
     // ------------------------------------
+    // @ANE
     public static Drive drive = new Drive(transmission, leftFrontDriveEncoder, rightFrontDriveEncoder,
             // leftFrontDriveEncoder, rightFrontDriveEncoder,
             gyro);
 
-    public static DrivePID drivePID = new DrivePID(transmission,
-            // leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+    // public static DrivePID drivePID = new DrivePID(transmission,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
     // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
+
+    // TODO update with encoders once fixed
+    public static DriveWithCamera driveWithCamera = new DriveWithCamera(transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
 
     // -------------------
     // Assembly classes (e.g. forklift)
     // -------------------
+    public static Forklift forklift = new Forklift(liftMotorOne, liftingEncoder);
 
+    public static ClimbToLevelTwo climber = new ClimbToLevelTwo(armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
+            drive, forklift);
 } // end class
