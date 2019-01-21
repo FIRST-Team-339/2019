@@ -71,18 +71,13 @@ public class Teleop {
         Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
         Hardware.transmission.enableDeadband();
 
-        Hardware.rightFrontCANMotor.setInverted(true);
-        Hardware.rightRearCANMotor.setInverted(true);
+        Hardware.rightFrontCANMotor.setInverted(false);
+        Hardware.rightRearCANMotor.setInverted(false);
         Hardware.leftFrontCANMotor.setInverted(false);
         Hardware.leftRearCANMotor.setInverted(false);
 
-        Hardware.transmission.setNumberOfGears(NUMBER_OF_GEARS);
-
         Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, FIRST_GEAR_RATIO);
         Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, SECOND_GEAR_RATIO);
-
-        // third gear is set to the same ratio as the second, because it's all McGee's
-        // fault. He hardcoded 3 motors, and we only want two.
 
         // --------------------------------------
         // reset the MotorSafetyHelpers for each
@@ -121,58 +116,53 @@ public class Teleop {
         // OPERATOR CONTROLS
         // =================================================================
 
-        if (Hardware.leftOperator.getRawButton(6) == true) {
-            // Hardware.rightRearCANMotor.set(.5);
-            // Hardware.climber.climb();
-        } else {
-            // Hardware.rightRearCANMotor.set(0.0);
-        }
+    // Conner McKevit's code; please label in the future. - Meghan
+    // TODO remove the next 3 functions once camera is tested
+        // if (Hardware.leftOperator.getRawButton(6) == true) {
+        //     // Hardware.rightRearCANMotor.set(.5);
+        //     // Hardware.climber.climb();
+        // } else {
+        //     // Hardware.rightRearCANMotor.set(0.0);
+        // }
 
-        // TODO remove the next 3 functions once camera is tested
+        // // Drive to the vision targets
+        // if (Hardware.leftOperator.getRawButton(4)) {
+        // hasDoneTheThing = false;
+        // System.out.println("Done the thing: " + hasDoneTheThing);
+        // }
 
-        // Drive to the vision targets
-        if (Hardware.leftOperator.getRawButton(4)) {
-            hasDoneTheThing = false;
-            System.out.println("Done the thing: " + hasDoneTheThing);
-        }
+        // if (!hasDoneTheThing) {
+        // // System.out.println("Done the thing: " + hasDoneTheThing);
+        // if (Hardware.driveWithCamera.driveToTarget(.3)) {
+        // System.out.println("Has aligned hopefully");
+        // hasDoneTheThing = true;
+        // }
+        // }
+        // // check if we are getting blobs
+        // if (Hardware.leftOperator.getRawButton(5)) {
+        // System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
 
-        if (!hasDoneTheThing) {
-            // System.out.println("Done the thing: " + hasDoneTheThing);
-            if (Hardware.driveWithCamera.driveToTarget(.3)) {
-                System.out.println("Has aligned hopefully");
-                hasDoneTheThing = true;
-            }
-        }
-        // check if we are getting blobs
-        if (Hardware.leftOperator.getRawButton(5)) {
-            System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
+        // }
+        // // turn on the ringlight
+        // if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true)
+        // {
+        // System.out.println("lets blind some wirers");
+        // Hardware.axisCamera.setRelayValue(true);
+        // }
+        // // save image
+        // if (Hardware.leftOperator.getRawButton(7)) {
+        // Hardware.axisCamera.saveImage(ImageType.RAW);
+        // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        // }
 
-        }
-        // turn on the ringlight
-        if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true) {
-            System.out.println("lets blind some wirers");
-            Hardware.axisCamera.setRelayValue(true);
-        }
-        // save image
-        if (Hardware.leftOperator.getRawButton(7)) {
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-        }
+        // Hardware.telemetry.printToShuffleboard();
+        // Hardware.telemetry.printToConsole();
 
-        Hardware.telemetry.printToShuffleboard();
-        Hardware.telemetry.printToConsole();
+        // if (hasDoneTheThing)
 
-        // TODO untested code by Anna, Patrick, and Meghan Brown
-        // This enables us to drive the robot with the joysticks
-        if (hasDoneTheThing)
-            Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        Teleop.teleopDrive();
 
-        // Calls the shiftGears function from drive, so we can input the the gear shift
-        // buttons and it will shift gears if we need it to.
-        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
-        System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
 
     } // end Periodic()
 
@@ -320,6 +310,28 @@ public class Teleop {
         SmartDashboard.updateValues();
     } // end printStatements()
 
+    /**
+     * Calls the shiftGears function from drive, so we can input the the gear shift
+     * buttons and it will shift gearsif we need it to.
+     *
+     * @author Anna, Meghan, and Patrick.
+     */
+    public static void teleopDrive()
+    {
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+
+
+        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+
+        //System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
+
+        //makes sure the gear never goes over 2
+        if (Hardware.drive.getCurrentGear() == MAX_GEAR_NUMBERS)
+        {
+            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+        }
+    }
+
     // ================================
     // Constants
     // ================================
@@ -327,13 +339,13 @@ public class Teleop {
     private static final int GEAR_UP_SHIFT_BUTTON = 3;
     private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
-    // CANNOT BE ABOVE 3! OTHERWISE WE HAVE PROBLEMS! BLAME MCGEE!
-    private static final int NUMBER_OF_GEARS = 2;
+    //The number of gears we want to not go over. There is no reason to make this more than 3 unless the code is fixed. Thanks McGee.
+    private static final int MAX_GEAR_NUMBERS = 2;
 
     private static final int FIRST_GEAR_NUMBER = 0;
     private static final int SECOND_GEAR_NUMBER = 1;
     private static final double FIRST_GEAR_RATIO = .4;
-    private static final double SECOND_GEAR_RATIO = .6;
+    private static final double SECOND_GEAR_RATIO = .7;
 
     private static final double DEADBAND_VALUE = .2;
     // ================================

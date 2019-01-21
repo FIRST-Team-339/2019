@@ -277,18 +277,17 @@ public abstract class TransmissionBase {
      * Adds one to the current gear of the robot, allowing the user to drive faster.
      */
 
-    // TODO fix McGee's code.
+    /*======================================================================
+    *To (Hopefully) fix McGee's code, uncomment the gearArrayInit method. Comment out the declaration that declares gearRatios with set values, and uncomment the declaration with no set values.
+    *=====================================================================*/
     // public void gearArrayInit(int numberOfGears)
     // {
-    // double[] gearRatios = numberOfGears;
+    //     double[] gearRatios;
+    //     gearRatios = new double[numberOfGears];
     // }
 
-    public void setNumberOfGears(int numberOfGears) {
-        maxGears = numberOfGears;
-    }
-
     public void upShift() {
-        if (currentGear < maxGears - 1)
+        if (currentGear < gearRatios.length - 1)
             currentGear++;
     }
 
@@ -339,8 +338,9 @@ public abstract class TransmissionBase {
     // The current stored transmission type
     TransmissionType type = null;
 
+
     private double[] gearRatios = { .6, .8, 1 };
-    // public static double[] gearRatios;
+    //public static double[] gearRatios;
 
     private final SpeedController[] motors;
 
