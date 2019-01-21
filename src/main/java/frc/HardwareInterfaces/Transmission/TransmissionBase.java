@@ -278,7 +278,7 @@ public abstract class TransmissionBase {
      */
 
     /*======================================================================
-    *To (Hopefully) fix McGee's code, uncomment the gearArrayInit method. Comment out the declaration that declares gearRatios with set values, and uncomment the declaration with no set values.
+    *To (Hopefully) fix McGee's code, uncomment the gearArrayInit method. Comment out the declaration that declares gearRatios with set values, and uncomment the declaration with no set values. THIS HAS NOT BEEN TESTED!!! There is a workaround in teleopDrive method, but this is a possible permanent fix.
     *=====================================================================*/
     // public void gearArrayInit(int numberOfGears)
     // {
