@@ -3,11 +3,17 @@ package frc.Utils;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.Utils.GamePieceManipulator.GamePiece;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * Class for controlling the Forklift on the robot. Gets information from, but
  * should be seperate from, the GamePieceManipulator object , in order for the
  * code to be kept modular
+ *
+ * Adapted for 2019 primarily by Cole
+ *
+ * Year created: 2019
+ *
  */
 public class Forklift {
 
@@ -66,7 +72,7 @@ public class Forklift {
 
     public final static double CARGO_SHIP_HATCH = 0;
 
-    private static final double MAX_HEIGHT = 69; // placeholder value from last year
+    private static final double MAX_HEIGHT = 40; // placeholder value from last year
 
     private final double DOWN_JOYSTICK_SCALAR = .55;
 
@@ -107,9 +113,10 @@ public class Forklift {
      * @param liftMotor
      * @param liftEncoder
      */
-    public Forklift(WPI_TalonSRX liftMotor, KilroyEncoder liftEncoder) {
+    public Forklift(WPI_TalonSRX liftMotor, KilroyEncoder liftEncoder, GamePieceManipulator gamePieceManipulator) {
         this.forkliftMotor = liftMotor;
         this.forkliftEncoder = liftEncoder;
+        this.manipulator = gamePieceManipulator;
     }
 
     // ===================
@@ -127,23 +134,41 @@ public class Forklift {
     }
 
     /**
-     * Moves the forklift up and down based on joystick input, for teleop.
+     * Moves the forklift up and down based on a Joystick's y axis
+     *
+     * Implements deadbands inside of this function, so no need to put any if
+     * statements around the call for this in Teleop
+     *
+     * @author Cole
+     *
+     * @param operator       - the Joystick that will control the forklift
+     * @param overrideButton - override button for the forklift
+     */
+    public void moveForkliftWithController(Joystick operator, boolean overrideButton) {
+        if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
+            this.moveForkliftAtSpeed(operator.getY(), overrideButton);
+
+    }
+
+    /**
+     * Moves the forklift up and down based on a speed
+     *
+     * Does not use deadbands. For that, use moveForkLiftWithController()
      *
      * @param overrideButton the button that, if helf, activates forklift override
      * @param speed          How fast the forklift should be moving, as a proportion
      *
      */
-    public void moveForkliftWithController(double speed, boolean overrideButton) {
+    private void moveForkliftAtSpeed(double speed, boolean overrideButton) {
 
-        // Override button, ignore encoder.
+        // if override button is pressed, ignore encoder.
         if (overrideButton == true) {
             this.forkliftTargetSpeed = speed;
             this.liftState = ForkliftState.MOVE_JOY;
         } else {
             // If we are past the max height or below the min
-            if ((speed > 0 && forkliftEncoder.getDistance() > currentForkliftMaxHeight)
-                    || (speed < 0 && forkliftEncoder.getDistance() < currentMinLiftPosition)
-                    || Math.abs(speed) < JOYSTICK_DEADBAND) {
+            if ((speed > 0 && this.getForkliftHeight() > currentForkliftMaxHeight)
+                    || (speed < 0 && this.getForkliftHeight() < currentMinLiftPosition)) {
                 this.liftState = ForkliftState.STAY_AT_POSITION;
                 return;
             }
@@ -164,6 +189,18 @@ public class Forklift {
      */
     public void setMaxLiftHeight(int inches) {
         this.currentForkliftMaxHeight = inches;
+    }
+
+    /**
+     * Button used
+     *
+     */
+    public void setLiftPositionByButton(double position, double forkliftSpeed, boolean button) {
+        if (button == true) {
+            forkliftTargetHeight = position;
+            forkliftTargetSpeed = Math.abs(forkliftSpeed);
+            liftState = ForkliftState.MOVING_TO_POSITION;
+        }
     }
 
     /**
@@ -251,17 +288,16 @@ public class Forklift {
 
             // Begins by stating whether we are increasing or decreasing
             if (forkliftDirection == ForkliftDirectionState.NEUTRAL) {
-                if (forkliftTargetHeight < forkliftEncoder.getDistance())
+                if (forkliftTargetHeight < this.getForkliftHeight())
                     forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
                 else
                     forkliftDirection = ForkliftDirectionState.MOVING_UP;
             }
 
             // Differentiate moving up from down
-            // TODO test scaleIR code
             if (forkliftDirection == ForkliftDirectionState.MOVING_UP) {
                 // If we have passed the value we wanted...
-                if (this.forkliftEncoder.getDistance() > forkliftTargetHeight) {
+                if (this.getForkliftHeight() > forkliftTargetHeight) {
                     liftState = ForkliftState.STAY_AT_POSITION;
                     // Reset the direction for next time.
                     forkliftDirection = ForkliftDirectionState.NEUTRAL;
@@ -273,16 +309,14 @@ public class Forklift {
 
             } else {
                 // If we have passed the value we wanted...
-                if (this.forkliftEncoder.getDistance() < forkliftTargetHeight) {
+                if (this.getForkliftHeight() < forkliftTargetHeight) {
                     liftState = ForkliftState.STAY_AT_POSITION;
                     // Reset the direction for next time.
                     forkliftDirection = ForkliftDirectionState.NEUTRAL;
                     break;
                 }
                 // we have NOT passed the value , keep going down.
-
                 this.forkliftMotor.set(-forkliftTargetSpeed);
-
             }
 
             break;
@@ -326,6 +360,14 @@ public class Forklift {
             this.forkliftMotor.set(0.0);
             break;
         }
+    }
+
+    public void printDebugInfo() {
+        System.out.println("FL Height: " + this.getForkliftHeight());
+        System.out.println("FL Encoder Ticks: " + this.forkliftEncoder.get());
+        System.out.println("FL Overall State: " + this.liftState);
+        System.out.println("FL Direction State: " + this.forkliftDirection);
+        System.out.println("FL setLiftPositionInit: " + setLiftPositionInit);
     }
 
 }

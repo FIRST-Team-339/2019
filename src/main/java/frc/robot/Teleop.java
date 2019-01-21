@@ -158,24 +158,27 @@ public class Teleop {
 
         // ----- Forklift controls -----
 
-        // Hardware.lift.moveForkliftWithController(Hardware.rightOperator.getY(),
-        // Hardware.rightOperator.getRawButton(5));
+        Hardware.lift.moveForkliftWithController(Hardware.rightOperator, Hardware.rightOperator.getRawButton(5));
 
-        // if (Hardware.rightOperator.getRawButton(6) == true)
-        // Hardware.lift.setLiftPosition(Forklift.TOP_ROCKET_CARGO,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-        // else if (Hardware.rightOperator.getRawButton(7) == true)
-        // Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_CARGO,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-        // else if (Hardware.rightOperator.getRawButton(1) == true)
-        // Hardware.lift.setLiftPosition(Forklift.TOP_ROCKET_HATCH,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-        // else if (Hardware.rightOperator.getRawButton(2) == true)
-        // Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_HATCH,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-        // else if (Hardware.rightOperator.getRawButton(3) == true)
-        // Hardware.lift.setLiftPosition(Forklift.LOWER_ROCKET_HATCH,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+        // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+        // Hardware.rightOperator.getRawButton(6));
+
+        // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+        // Hardware.rightOperator.getRawButton(7));
+
+        // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_HATCH,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+        // Hardware.rightOperator.getRawButton(2));
+
+        // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_HATCH,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+        // Hardware.rightOperator.getRawButton(3));
+
+        // Hardware.lift.setLiftPositionByButton(Forklift.LOWER_ROCKET_HATCH,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+        // Hardware.rightOperator.getRawButton(4));
 
         // =================================================================
         // Driver Controls
@@ -186,7 +189,8 @@ public class Teleop {
         // =================================================================
         // Update State Machines
         // =================================================================
-        // Hardware.lift.update();
+
+        Hardware.lift.update();
 
         // =================================================================
         // Telemetry

@@ -66,6 +66,9 @@ public class Robot extends TimedRobot {
         // -------------------------------------
         // Manually sets encoders Distance per Pulse
         // -------------------------------------
+
+        Hardware.liftingEncoder.setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
+
         Hardware.USBCam.setResolution(320, 240);
         Hardware.USBCam.setFPS(20);
         Hardware.USBCam.setPixelFormat(VideoMode.PixelFormat.kYUYV);
@@ -289,4 +292,11 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
     }
+
+    // ==========================================
+    // TUNEABLES
+    // ==========================================
+
+    // distance per pulse of the lifting encoder
+    private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 }
