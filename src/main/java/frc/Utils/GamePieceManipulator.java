@@ -2,12 +2,13 @@ package frc.Utils;
 
 public class GamePieceManipulator {
 
-    public enum GamePiece {
+    public static enum GamePiece {
         HATCH_PANEL, CARGO, NONE
     }
 
     // placeholder, will need to do something
-    public enum DeployState {
+    public static enum DeployState {
+
     }
 
     // placeholder function since Forklift will need to understand which piece
