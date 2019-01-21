@@ -50,6 +50,22 @@ public class Forklift {
 
     // Constants
 
+    public final static double TOP_ROCKET_CARGO = 69;
+
+    public final static double MIDDLE_ROCKET_CARGO = 26;
+
+    public final static double LOWER_ROCKET_CARGO = 0;
+
+    public final static double TOP_ROCKET_HATCH = 50;
+
+    public final static double MIDDLE_ROCKET_HATCH = 30;
+
+    public final static double LOWER_ROCKET_HATCH = 10;
+
+    public final static double CARGO_SHIP_CARGO = 0;
+
+    public final static double CARGO_SHIP_HATCH = 0;
+
     private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
     private final double DOWN_JOYSTICK_SCALAR = .55;
@@ -63,6 +79,9 @@ public class Forklift {
     private final double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
     private final double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
+
+    // for use in teleop when we are calling setLiftPosition(position, speed)
+    public static final double DEFAULT_TELEOP_BUTTON_SPEED = .6;
 
     // speed sent to the forklift motor to hold position when we do not
     // have any game piece

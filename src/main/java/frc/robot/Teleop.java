@@ -34,6 +34,7 @@ package frc.robot;
 import frc.Hardware.Hardware;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
+import frc.Utils.Forklift;
 import frc.Utils.drive.Drive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -121,46 +122,63 @@ public class Teleop {
         // OPERATOR CONTROLS
         // =================================================================
 
-        if (Hardware.leftOperator.getRawButton(6) == true) {
-            // Hardware.rightRearCANMotor.set(.5);
-            // Hardware.climber.climb();
-        } else {
-            // Hardware.rightRearCANMotor.set(0.0);
-        }
+        // if (Hardware.leftOperator.getRawButton(6) == true) {
+        // // Hardware.rightRearCANMotor.set(.5);
+        // // Hardware.climber.climb();
+        // } else {
+        // // Hardware.rightRearCANMotor.set(0.0);
+        // }
 
-        // TODO remove the next 3 functions once camera is tested
+        // // TODO remove the next 3 functions once camera is tested
 
-        // Drive to the vision targets
-        if (Hardware.leftOperator.getRawButton(4)) {
-            hasDoneTheThing = false;
-            System.out.println("Done the thing: " + hasDoneTheThing);
-        }
+        // // Drive to the vision targets
+        // if (Hardware.leftOperator.getRawButton(4)) {
+        // hasDoneTheThing = false;
+        // System.out.println("Done the thing: " + hasDoneTheThing);
+        // }
 
-        if (!hasDoneTheThing) {
-            // System.out.println("Done the thing: " + hasDoneTheThing);
-            if (Hardware.driveWithCamera.driveToTarget(.3)) {
-                System.out.println("Has aligned hopefully");
-                hasDoneTheThing = true;
-            }
-        }
-        // check if we are getting blobs
-        if (Hardware.leftOperator.getRawButton(5)) {
-            System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
+        // if (!hasDoneTheThing) {
+        // // System.out.println("Done the thing: " + hasDoneTheThing);
+        // if (Hardware.driveWithCamera.driveToTarget(.3)) {
+        // System.out.println("Has aligned hopefully");
+        // hasDoneTheThing = true;
+        // }
+        // }
+        // // check if we are getting blobs
+        // if (Hardware.leftOperator.getRawButton(5)) {
+        // System.out.println("Has Blobs?: " + Hardware.axisCamera.hasBlobs());
 
-        }
-        // turn on the ringlight
-        if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true) {
-            System.out.println("lets blind some wirers");
-            Hardware.axisCamera.setRelayValue(true);
-        }
-        // save image
-        if (Hardware.leftOperator.getRawButton(7)) {
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-        }
+        // }
+        // // turn on the ringlight
+        // if (Hardware.leftOperator.getRawButton(6) && Teleop.hasDoneTheThing == true)
+        // {
+        // System.out.println("lets blind some wirers");
+        // Hardware.axisCamera.setRelayValue(true);
+        // }
+        // // save image
+        // if (Hardware.leftOperator.getRawButton(7)) {
+        // Hardware.axisCamera.saveImage(ImageType.RAW);
+        // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        // }
 
-        Hardware.telemetry.printToShuffleboard();
-        Hardware.telemetry.printToConsole();
+        // ----- Forklift controls -----
+
+        Hardware.lift.moveForkliftWithController(Hardware.rightOperator.getY(), Hardware.rightOperator.getRawButton(5));
+
+        if (Hardware.rightOperator.getRawButton(6) == true)
+            Hardware.lift.setLiftPosition(Forklift.TOP_ROCKET_CARGO, Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+        else if (Hardware.rightOperator.getRawButton(7) == true)
+            Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_CARGO, Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+        else if (Hardware.rightOperator.getRawButton(1) == true)
+            Hardware.lift.setLiftPosition(Forklift.TOP_ROCKET_HATCH, Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+        else if (Hardware.rightOperator.getRawButton(2) == true)
+            Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_HATCH, Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+        else if (Hardware.rightOperator.getRawButton(3) == true)
+            Hardware.lift.setLiftPosition(Forklift.LOWER_ROCKET_HATCH, Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+
+        // =================================================================
+        // Driver Controls
+        // =================================================================
 
         // TODO untested code by Anna, Patrick, and Meghan Brown
         // This enables us to drive the robot with the joysticks
@@ -173,6 +191,18 @@ public class Teleop {
                 Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
         System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
+
+        // =================================================================
+        // Update State Machines
+        // =================================================================
+        Hardware.lift.update();
+
+        // =================================================================
+        // Telemetry
+        // =================================================================
+
+        Hardware.telemetry.printToShuffleboard();
+        Hardware.telemetry.printToConsole();
 
     } // end Periodic()
 
