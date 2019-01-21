@@ -311,8 +311,10 @@ public class Teleop {
     } // end printStatements()
 
     /**
+     * Calls drive's main drive function so the robot can drive using joysticks
+     *
      * Calls the shiftGears function from drive, so we can input the the gear shift
-     * buttons and it will shift gearsif we need it to.
+     * buttons and it will shift gears if we need it to.
      *
      * @author Anna, Meghan, and Patrick.
      */
@@ -323,10 +325,8 @@ public class Teleop {
 
         Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
-        //System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
-
         //makes sure the gear never goes over 2
-        if (Hardware.drive.getCurrentGear() == MAX_GEAR_NUMBERS)
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
         {
             Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
         }
