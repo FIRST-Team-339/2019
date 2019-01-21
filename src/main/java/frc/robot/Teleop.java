@@ -116,13 +116,13 @@ public class Teleop {
         // OPERATOR CONTROLS
         // =================================================================
 
-    // Conner McKevit's code; please label in the future. - Meghan
-    // TODO remove the next 3 functions once camera is tested
+        // Conner McKevit's code; please label in the future. - Meghan
+        // TODO remove the next 3 functions once camera is tested
         // if (Hardware.leftOperator.getRawButton(6) == true) {
-        //     // Hardware.rightRearCANMotor.set(.5);
-        //     // Hardware.climber.climb();
+        // // Hardware.rightRearCANMotor.set(.5);
+        // // Hardware.climber.climb();
         // } else {
-        //     // Hardware.rightRearCANMotor.set(0.0);
+        // // Hardware.rightRearCANMotor.set(0.0);
         // }
 
         // // Drive to the vision targets
@@ -161,8 +161,6 @@ public class Teleop {
         // if (hasDoneTheThing)
 
         Teleop.teleopDrive();
-
-
 
     } // end Periodic()
 
@@ -318,16 +316,14 @@ public class Teleop {
      *
      * @author Anna, Meghan, and Patrick.
      */
-    public static void teleopDrive()
-    {
+    public static void teleopDrive() {
         Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
+        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
-        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
-
-        //makes sure the gear never goes over 2
-        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
-        {
+        // makes sure the gear never goes over 2
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS) {
             Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
         }
     }
@@ -339,7 +335,8 @@ public class Teleop {
     private static final int GEAR_UP_SHIFT_BUTTON = 3;
     private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
-    //The number of gears we want to not go over. There is no reason to make this more than 3 unless the code is fixed. Thanks McGee.
+    // The number of gears we want to not go over. There is no reason to make this
+    // more than 3 unless the code is fixed. Thanks McGee.
     private static final int MAX_GEAR_NUMBERS = 2;
 
     private static final int FIRST_GEAR_NUMBER = 0;
