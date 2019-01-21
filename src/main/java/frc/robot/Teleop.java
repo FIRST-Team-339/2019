@@ -72,18 +72,13 @@ public class Teleop {
         Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
         Hardware.transmission.enableDeadband();
 
-        Hardware.rightFrontCANMotor.setInverted(true);
-        Hardware.rightRearCANMotor.setInverted(true);
+        Hardware.rightFrontCANMotor.setInverted(false);
+        Hardware.rightRearCANMotor.setInverted(false);
         Hardware.leftFrontCANMotor.setInverted(false);
         Hardware.leftRearCANMotor.setInverted(false);
 
-        Hardware.transmission.setNumberOfGears(NUMBER_OF_GEARS);
-
         Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, FIRST_GEAR_RATIO);
         Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, SECOND_GEAR_RATIO);
-
-        // third gear is set to the same ratio as the second, because it's all McGee's
-        // fault. He hardcoded 3 motors, and we only want two.
 
         // --------------------------------------
         // reset the MotorSafetyHelpers for each
@@ -180,17 +175,7 @@ public class Teleop {
         // Driver Controls
         // =================================================================
 
-        // TODO untested code by Anna, Patrick, and Meghan Brown
-        // This enables us to drive the robot with the joysticks
-        if (hasDoneTheThing)
-            Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-
-        // Calls the shiftGears function from drive, so we can input the the gear shift
-        // buttons and it will shift gears if we need it to.
-        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
-
-        System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
+        Teleop.teleopDrive();
 
         // =================================================================
         // Update State Machines
@@ -350,6 +335,26 @@ public class Teleop {
         SmartDashboard.updateValues();
     } // end printStatements()
 
+    /**
+     * Calls drive's main drive function so the robot can drive using joysticks
+     *
+     * Calls the shiftGears function from drive, so we can input the the gear shift
+     * buttons and it will shift gears if we need it to.
+     *
+     * @author Anna, Meghan, and Patrick.
+     */
+    public static void teleopDrive() {
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+
+        Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+                Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+
+        // makes sure the gear never goes over 2
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS) {
+            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+        }
+    }
+
     // ================================
     // Constants
     // ================================
@@ -357,13 +362,14 @@ public class Teleop {
     private static final int GEAR_UP_SHIFT_BUTTON = 3;
     private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
-    // CANNOT BE ABOVE 3! OTHERWISE WE HAVE PROBLEMS! BLAME MCGEE!
-    private static final int NUMBER_OF_GEARS = 2;
+    // The number of gears we want to not go over. There is no reason to make this
+    // more than 3 unless the code is fixed. Thanks McGee.
+    private static final int MAX_GEAR_NUMBERS = 2;
 
     private static final int FIRST_GEAR_NUMBER = 0;
     private static final int SECOND_GEAR_NUMBER = 1;
     private static final double FIRST_GEAR_RATIO = .4;
-    private static final double SECOND_GEAR_RATIO = .6;
+    private static final double SECOND_GEAR_RATIO = .7;
 
     private static final double DEADBAND_VALUE = .2;
     // ================================
