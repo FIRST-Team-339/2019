@@ -16,11 +16,11 @@ public class Forklift {
     // ==================
     // Enums
 
-    public enum ForkliftState {
+    public static enum ForkliftState {
         MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
     }
 
-    public enum ForkliftDirectionState {
+    public static enum ForkliftDirectionState {
         NEUTRAL, MOVING_DOWN, MOVING_UP
     }
 
@@ -38,7 +38,7 @@ public class Forklift {
 
     private double currentForkliftDownSpeed = 0;
 
-    private double currentForkliftMaxHeight = 0;
+    private double currentForkliftMaxHeight = MAX_HEIGHT;
 
     private double forkliftTargetHeight = 0.0;
 
@@ -50,7 +50,23 @@ public class Forklift {
 
     // Constants
 
-    private final double MAX_HEIGHT = 69; // placeholder value from last year
+    public final static double TOP_ROCKET_CARGO = 69;
+
+    public final static double MIDDLE_ROCKET_CARGO = 26;
+
+    public final static double LOWER_ROCKET_CARGO = 0;
+
+    public final static double TOP_ROCKET_HATCH = 50;
+
+    public final static double MIDDLE_ROCKET_HATCH = 30;
+
+    public final static double LOWER_ROCKET_HATCH = 10;
+
+    public final static double CARGO_SHIP_CARGO = 0;
+
+    public final static double CARGO_SHIP_HATCH = 0;
+
+    private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
     private final double DOWN_JOYSTICK_SCALAR = .55;
 
@@ -64,8 +80,19 @@ public class Forklift {
 
     private final double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
 
-    private final double STAY_UP_NO_PIECE_SPEED = 0.05; // -.15;
+    // for use in teleop when we are calling setLiftPosition(position, speed)
+    public static final double DEFAULT_TELEOP_BUTTON_SPEED = .6;
 
+    // speed sent to the forklift motor to hold position when we do not
+    // have any game piece
+    private final double STAY_UP_NO_PIECE = 0.05;
+
+    // speed sent to the forklift motor to hold position when we have a
+    // hatch
+    private final double STAY_UP_WITH_HATCH = .1;
+
+    // speed sent to the forklift motor to hold position when we have a
+    // cargo
     private final double STAY_UP_WITH_CARGO = .1;
 
     private static final double JOYSTICK_DEADBAND = .2;
@@ -89,9 +116,24 @@ public class Forklift {
     // ----- Methods -----
     // ===================
 
-    public void moveForkliftWithController(double speed, boolean overrideButton) {
+    /**
+     * Gets the value from the encoder, which is the absolute position above the
+     * ground.
+     *
+     * @return the height of the forklift, in inches
+     */
+    public double getForkliftHeight() {
+        return this.forkliftEncoder.getDistance();
+    }
 
-        this.currentForkliftDownSpeed = DOWN_JOYSTICK_SCALAR;
+    /**
+     * Moves the forklift up and down based on joystick input, for teleop.
+     *
+     * @param overrideButton the button that, if helf, activates forklift override
+     * @param speed          How fast the forklift should be moving, as a proportion
+     *
+     */
+    public void moveForkliftWithController(double speed, boolean overrideButton) {
 
         // Override button, ignore encoder.
         if (overrideButton == true) {
@@ -109,12 +151,57 @@ public class Forklift {
             if (speed > 0)
                 forkliftTargetSpeed = speed * UP_JOYSTICK_SCALAR;
             else
-                forkliftTargetSpeed = speed * currentForkliftDownSpeed;
+                forkliftTargetSpeed = speed * DOWN_JOYSTICK_SCALAR;
 
             this.liftState = ForkliftState.MOVE_JOY;
         }
     }
 
+    /**
+     * Sets the maximum height for the lift. Use only for demo mode.
+     *
+     * @param inches Maximum height, in inches.
+     */
+    public void setMaxLiftHeight(int inches) {
+        this.currentForkliftMaxHeight = inches;
+    }
+
+    /**
+     * Moves the arm to the the position input, FORKLIFT_MAX_HEIGHT being the top
+     * soft stop, and FORKLIFT_MIN_HEIGHT being the FORKLIFT_MIN_HEIGHT.
+     *
+     * Overloads the setLiftPosition, using the FORKLIFT_SPEED constants
+     *
+     * @param position The position the forklift will move to, in inches.
+     * @return true if the forklift is at or above the specified height, false if
+     *         still moving
+     */
+    public boolean setLiftPosition(double position) {
+        double defaultSpeed = 0.0;
+        // If the requested position is greater than the current position, set
+        // the
+        // state machine to go up.
+        if (this.getForkliftHeight() < position) {
+            defaultSpeed = DEFAULT_SPEED_UP;
+        }
+        // Else, we are going down.
+        else {
+            defaultSpeed = DEFAULT_SPEED_DOWN;
+        }
+
+        return setLiftPosition(position, defaultSpeed);
+    }
+
+    /**
+     * Moves the arm to the desired position, FORKLIFT_MIN_HEIGHT is the bottom,
+     * FORKLIFT_MAX_HEIGHT is the top
+     *
+     * @param position      The position that the forklift will be set to move to
+     * @param forkliftSpeed how fast the robot should move it's forklift (0.0 to
+     *                      1.0)
+     * @return true if the forklift is at or above the specified height, false if we
+     *         are still moving
+     */
     public boolean setLiftPosition(double position, double forkliftSpeed) {
         // Sets the target position and speed, enables "moving-to-position"
         // state.
@@ -135,6 +222,15 @@ public class Forklift {
         return false;
     }
 
+    /**
+     * For use in teleop and autonomous periodic.
+     *
+     * Any functions that move the lift will NOT WORK UNLESS this function is called
+     * as well.
+     *
+     * Runs the forklift movement code in the background, which allows multiple
+     * movements in autonomous state machines.
+     */
     public void update() {
         // Make sure the lift stays up to prevent bad things when folding the
         // deploy
@@ -201,10 +297,24 @@ public class Forklift {
             // print out we reached the default case (which we shouldn't
             // have),
             // then fall through to STAY_AT_POSITION
-            System.out.println("Reached default in the liftState switch in " + "forkliftUpdate in CubeManipulator");
+            System.out.println("Reached default in the liftState switch in " + "forkliftUpdate in Forklift");
         case STAY_AT_POSITION:
             // IF we have a cube, then send a constant voltage.
             switch (manipulator.hasWhichGamePiece()) {
+            case HATCH_PANEL:
+                this.forkliftMotor.set(STAY_UP_WITH_HATCH);
+                break;
+
+            case CARGO:
+                this.forkliftMotor.set(STAY_UP_WITH_CARGO);
+                break;
+
+            default:
+                System.out.println(
+                        "Reached default in the GamePiece switch in STAY_AY_POSITION in liftState switch in forkliftUpdate in Forklift");
+            case NONE:
+                this.forkliftMotor.set(STAY_UP_NO_PIECE);
+                break;
 
             }
             // Reset the direction for next move-to-position.
