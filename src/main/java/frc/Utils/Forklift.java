@@ -269,6 +269,8 @@ public class Forklift {
      * movements in autonomous state machines.
      */
     public void update() {
+
+        // this.printDebugInfo();
         // Make sure the lift stays up to prevent bad things when folding the
         // deploy
         if (manipulator.isDeployed() == false)

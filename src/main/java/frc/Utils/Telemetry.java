@@ -220,8 +220,6 @@ public class Telemetry {
                 // System.out.println("deploy Ticks "
                 // + Hardware.intakeDeployEncoder.get());
 
-                System.out.println();
-
                 // ---------------------------------
                 // Red Light/IR Sensors
                 // prints the state of the sensor

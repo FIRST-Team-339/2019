@@ -161,27 +161,12 @@ public class Teleop {
 
         // ----- Forklift controls -----
 
-        Hardware.lift.moveForkliftWithController(Hardware.rightOperator, Hardware.rightOperator.getRawButton(5));
+        // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+        // Hardware.rightOperator.getRawButton(5));
 
         // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
         // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
         // Hardware.rightOperator.getRawButton(6));
-
-        // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-        // Hardware.rightOperator.getRawButton(7));
-
-        // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_HATCH,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-        // Hardware.rightOperator.getRawButton(2));
-
-        // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_HATCH,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-        // Hardware.rightOperator.getRawButton(3));
-
-        // Hardware.lift.setLiftPositionByButton(Forklift.LOWER_ROCKET_HATCH,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-        // Hardware.rightOperator.getRawButton(4));
 
         // =================================================================
         // Driver Controls
