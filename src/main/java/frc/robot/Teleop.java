@@ -32,10 +32,6 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.vision.VisionProcessor;
-import frc.vision.VisionProcessor.ImageType;
-import frc.Utils.Forklift;
-import frc.Utils.drive.Drive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -59,8 +55,8 @@ public static boolean hasDoneTheThing = true;
 
 public static void init ()
 {
-
     hasDoneTheThing = false;
+
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -167,8 +163,10 @@ public static void periodic ()
 
     // ----- Forklift controls -----
 
+
     // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
     // Hardware.rightOperator.getRawButton(5));
+
 
     // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
