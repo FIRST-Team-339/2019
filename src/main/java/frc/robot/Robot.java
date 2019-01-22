@@ -66,9 +66,19 @@ public class Robot extends TimedRobot {
         // -------------------------------------
         // Manually sets encoders Distance per Pulse
         // -------------------------------------
+
+        // written by Meghan Brown 2019
+        // makes the camera work --- can we get this in colour somehow?
         Hardware.USBCam.setResolution(320, 240);
         Hardware.USBCam.setFPS(20);
         Hardware.USBCam.setPixelFormat(VideoMode.PixelFormat.kYUYV);
+        Hardware.USBCam.setWhiteBalanceManual(2500);
+
+        Hardware.USBCamII.setResolution(320, 240);
+        Hardware.USBCamII.setFPS(20);
+        Hardware.USBCamII.setPixelFormat(VideoMode.PixelFormat.kYUYV);
+        Hardware.USBCamII.setWhiteBalanceManual(2500);
+
         // Hardware.USBCamUp.setResolution(320, 240);
         // Hardware.USBCamUp.setFPS(20);
         // Hardware.USBCamUp.setPixelFormat(VideoMode.PixelFormat.kYUYV);

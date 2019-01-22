@@ -273,6 +273,8 @@ public class Hardware {
 
     public static UsbCamera USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
+    public static UsbCamera USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
+
     // -------------------------------------
     // declare the USB camera server and the
     // USB camera it serves at the same time
