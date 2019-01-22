@@ -187,7 +187,8 @@ public class Telemetry {
                 // ---------------------------------
                 // Encoders
                 // ---------------------------------
-                System.out.println("Left Front Encoder Inches = " + Hardware.leftFrontDriveEncoder.getDistance());
+                // System.out.println("Left Front Encoder Inches = " +
+                // Hardware.leftFrontDriveEncoder.getDistance());
                 //
                 //
                 // System.out.println("Left Front Encoder Ticks "
@@ -218,6 +219,8 @@ public class Telemetry {
 
                 // System.out.println("deploy Ticks "
                 // + Hardware.intakeDeployEncoder.get());
+
+                System.out.println();
 
                 // ---------------------------------
                 // Red Light/IR Sensors
@@ -405,23 +408,18 @@ public class Telemetry {
             // // ---------------------------------
             // // Encoders
             // // ---------------------------------
-            // SmartDashboard.putNumber("Left Front Encoder Inches",
-            // Hardware.leftFrontDriveEncoder.getDistance());
-            //
-            // SmartDashboard.putNumber("Left Front Encoder Ticks",
-            // Hardware.leftFrontDriveEncoder.get());
-            //
-            //
-            // SmartDashboard.putNumber("Right Front Encoder Inches",
-            // Hardware.rightFrontDriveEncoder.getDistance());
-            //
-            //
-            // SmartDashboard.putNumber("Right Front Encoder Ticks",
-            // Hardware.rightFrontDriveEncoder.get());
-            // //
-            // SmartDashboard.putNumber("Left Rear Encoder Inches",
-            // Hardware.leftRearDriveEncoder.getDistance());
-            //
+            SmartDashboard.putNumber("Left Front Encoder Inches", Hardware.leftFrontDriveEncoder.getDistance());
+
+            SmartDashboard.putNumber("Left Front Encoder Ticks", Hardware.leftFrontDriveEncoder.get());
+
+            SmartDashboard.putNumber("Right Front Encoder Inches", Hardware.rightFrontDriveEncoder.getDistance());
+
+            SmartDashboard.putNumber("Right Front Encoder Ticks", Hardware.rightFrontDriveEncoder.get());
+
+            SmartDashboard.putNumber("Liftig Encoder Inches", Hardware.liftingEncoder.getDistance());
+
+            SmartDashboard.putNumber("Lifting Encoder Ticks", Hardware.liftingEncoder.get());
+
             //
             //
             // // ---------------------------------

@@ -170,7 +170,8 @@ public class Hardware {
 
     public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
-    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);// being removed???
+    // being removed??? probably will be replaced by a potentiometer
+    public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23, 24);
 
     // -----------------------
     // Wiring diagram
@@ -349,7 +350,10 @@ public class Hardware {
     // -------------------
     // Assembly classes (e.g. forklift)
     // -------------------
-    public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder);
+
+    public static GamePieceManipulator manipulator = new GamePieceManipulator();
+
+    public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder, manipulator);
 
     public static ClimbToLevelTwo climber = new ClimbToLevelTwo(armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
             drive, lift);
