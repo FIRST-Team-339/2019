@@ -182,6 +182,7 @@ public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
         24);// being removed???
 
+
 // -----------------------
 // Wiring diagram
 // -----------------------
@@ -366,10 +367,14 @@ public static DriveWithCamera driveWithCamera = new DriveWithCamera(
 // -------------------
 // Assembly classes (e.g. forklift)
 // -------------------
-public static Forklift forklift = new Forklift(liftMotorOne,
-        liftingEncoder);
+
+public static GamePieceManipulator manipulator = new GamePieceManipulator();
+
+public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
+        manipulator);
 
 public static ClimbToLevelTwo climber = new ClimbToLevelTwo(
         armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
-        drive, forklift, frontUltraSonic);
+        drive, lift, frontUltraSonic);
+
 } // end class

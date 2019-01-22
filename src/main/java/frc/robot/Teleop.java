@@ -116,6 +116,9 @@ public static void init ()
  * @written Jan 13, 2015
  */
 
+
+
+
 public static void periodic ()
 {
 
@@ -125,17 +128,17 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    if (Hardware.leftOperator.getRawButton(6) == true)
-        {
-        // Hardware.rightRearCANMotor.set(.5);
-        System.out.println("Trying to climb");
-        // Hardware.climber.climb();
-        } else
-        {
-        // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-        }
+    // if (Hardware.leftOperator.getRawButton(6) == true)
+    // {
+    // // Hardware.rightRearCANMotor.set(.5);
+    // System.out.println("Trying to climb");
+    // // Hardware.climber.climb();
+    // } else
+    // {
+    // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
 
-    Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
+    // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
 
     // @ANE
 
@@ -251,6 +254,7 @@ public static void printStatements ()
         // =================================
         //
         // ---------------------------------
+
         // Switches
         // prints state of switches
         // ---------------------------------
@@ -374,7 +378,6 @@ public static void printStatements ()
         // timers
         // what time does the timer have now
         // ---------------------------------
-
         }
 
     SmartDashboard.updateValues();

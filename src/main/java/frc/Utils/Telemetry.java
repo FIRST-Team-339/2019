@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 
+
 public class Telemetry
 {
 /**
@@ -197,21 +198,73 @@ public void printToConsole ()
             // System.out.println(
             // "Demo swich isOn" + Hardware.demoModeSwitch.isOn());
 
-            // ---------------------------------
-            // Encoders
-            // ---------------------------------
-            // System.out.println("Left Front Encoder Inches = " +
-            // Hardware.leftFrontDriveEncoder.getDistance());
+            // // ---------------------------------
+            // // Encoders
+            // // ---------------------------------
+            SmartDashboard.putNumber("Left Front Encoder Inches",
+                    Hardware.leftFrontDriveEncoder.getDistance());
+
+            SmartDashboard.putNumber("Left Front Encoder Ticks",
+                    Hardware.leftFrontDriveEncoder.get());
+
+            SmartDashboard.putNumber("Right Front Encoder Inches",
+                    Hardware.rightFrontDriveEncoder.getDistance());
+
+            SmartDashboard.putNumber("Right Front Encoder Ticks",
+                    Hardware.rightFrontDriveEncoder.get());
+
+            SmartDashboard.putNumber("Liftig Encoder Inches",
+                    Hardware.liftingEncoder.getDistance());
+
+            SmartDashboard.putNumber("Lifting Encoder Ticks",
+                    Hardware.liftingEncoder.get());
 
             //
-            System.out.println("Left Front Encoder Ticks "
-                    + Hardware.leftFrontDriveEncoder.get());
-
-            // System.out.println("RF encoder type"
-            // + Hardware.rightFrontDriveEncoder.getSensorType());
-
-            // System.out.println("Right Front Inches = "
-            // + Hardware.rightFrontDriveEncoder.getDistance());
+            //
+            // // ---------------------------------
+            // // Red Light/IR Sensors
+            // // prints the state of the sensor
+            // // ---------------------------------
+            //
+            // // SmartDashboard.putBoolean("R Red Light",
+            // // Hardware.rightRedLight.isOn());
+            //
+            // // SmartDashboard.putBoolean("L Red Light",
+            // // Hardware.leftRedLight.isOn());
+            //
+            // SmartDashboard.putBoolean("Photo SW",
+            // Hardware.cubePhotoSwitch.isOn());
+            //
+            // SmartDashboard.putBoolean("IR is On",
+            // Hardware.armIR.isOn());
+            //
+            // SmartDashboard.putBoolean("Bottom RL: ",
+            // Hardware.redLight.isOn());
+            //
+            //
+            // // =================================
+            // // Pneumatics
+            // // =================================
+            //
+            // // ---------------------------------
+            // // Compressor
+            // // prints information on the compressor
+            // // ---------------------------------
+            //
+            // // ---------------------------------
+            // // Solenoids
+            // // ---------------------------------
+            //
+            // // Analogs
+            // // =================================
+            //
+            // // ---------------------------------
+            // // pots
+            // // where the pot is turned to
+            // // ---------------------------------
+            //
+            // SmartDashboard.putNumber("Delay Pot",
+            // Hardware.delayPot.get(0, 5));
             //
             System.out.println("Right Front Ticks "
                     + Hardware.rightFrontDriveEncoder.get());

@@ -64,6 +64,7 @@ public void robotInit ()
     Hardware.rightFrontDriveEncoder.setDistancePerPulse(0.0346);
     Hardware.intakeDeployEncoder
             .setDistancePerPulse(KILROY_XIX_DEPLOY_ENCODER_DPP);
+
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
     // of the drive motors
@@ -72,6 +73,9 @@ public void robotInit ()
     // -------------------------------------
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
+
+    Hardware.liftingEncoder
+            .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
     Hardware.USBCam.setResolution(320, 240);
     Hardware.USBCam.setFPS(20);
     Hardware.USBCam.setPixelFormat(VideoMode.PixelFormat.kYUYV);
@@ -81,6 +85,7 @@ public void robotInit ()
 
     Hardware.frontUltraSonic.setOffsetDistanceFromNearestBumper(
             KILROY_XIX_US_DISTANCE_FROM_BUMPER);
+
     // User code goes above here
     // =========================================================
     // ---------------------------------------
@@ -308,6 +313,15 @@ public void testInit ()
 public void testPeriodic ()
 {
 }
+
+
+
+// ==========================================
+// TUNEABLES
+// ==========================================
+
+// distance per pulse of the lifting encoder
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 
 private static final int KILROY_XIX_US_DISTANCE_FROM_BUMPER = 3;
 
