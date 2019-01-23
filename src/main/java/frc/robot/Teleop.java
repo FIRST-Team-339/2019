@@ -165,6 +165,7 @@ public static void periodic ()
         if (Hardware.driveWithCamera.driveToTarget(.4))
             {
             System.out.println("Has aligned hopefully");
+            Hardware.axisCamera.setRelayValue(false);
             hasDoneTheThing = true;
             }
         }
@@ -215,6 +216,8 @@ public static void periodic ()
         {
         Teleop.teleopDrive();
         hasDoneTheThing = true;
+        Hardware.axisCamera.setRelayValue(false);
+
         }
 
 

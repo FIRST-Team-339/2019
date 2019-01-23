@@ -1,3 +1,9 @@
+/*
+outline created for potential use in teleop assistance
+
+note to self: add override button to constructors
+*/
+
 package frc.Utils;
 
 import frc.Hardware.Hardware;

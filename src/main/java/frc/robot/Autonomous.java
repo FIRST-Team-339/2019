@@ -315,7 +315,7 @@ private static boolean depositRocketHatch ()
                 {
                 descendFromLevelTwo();
                 }
-            if (usingVision == true)
+            if (usingVision == true && Hardware.axisCamera.hasBlobs())
                 {
                 rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                 } else
@@ -330,10 +330,14 @@ private static boolean depositRocketHatch ()
         // DRIVE BY NONVISION
         // =================================================================
         case STRAIGHTEN_OUT_ON_WALL:
-        // if (dri)
-            {
 
-            }
+            if (usingVision == true && Hardware.axisCamera.hasBlobs())
+                {
+                // if (dri)
+                    {
+
+                    }
+                }
             break;
 
         case DRIVE_FORWARD_TO_TURN:
@@ -354,13 +358,20 @@ private static boolean depositRocketHatch ()
             break;
 
         // =================================================================
-        // DRIVE BY VISION CODE
+        // DRIVE BY VISION CODE this is where the cool kidz code
         // =================================================================
 
         case DRIVE_BY_CAMERA:
-
+            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())// TODO^^^^
+                                                                        // IR
+                {
+                Hardware.driveWithCamera
+                        .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
+                } else if (Hardware.armIR.get())
+                {
+                rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
+                }
             break;
-
         // =================================================================
         // END OF SEPCIALIZED DRIVING CODE
         // =================================================================
@@ -437,6 +448,8 @@ public static Timer descentTimer = new Timer();
  * =============================================================
  */
 
+
+
 public static final Relay.Value LEFT = Relay.Value.kForward;
 
 public static final Relay.Value RIGHT = Relay.Value.kReverse;
@@ -452,6 +465,8 @@ public static final double DRIVE_SPEED = .4;
 public static final double TIME_TO_DRIVE_OFF_PLATFORM = 5.0;
 
 public static final double ACCELERATION_TIME = .6;// not random number, pulled
-                                                  // from 2018
+// from 2018
+
+public static final double DRIVE_WITH_CAMERA_SPEED = .4;// TODO
 
 } // end class
