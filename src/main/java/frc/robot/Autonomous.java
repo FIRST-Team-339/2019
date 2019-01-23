@@ -33,6 +33,7 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.Utils.*;
+import javax.lang.model.util.ElementScanner6;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.drive.Drive;
@@ -210,6 +211,7 @@ private static void choosePath ()
             break;
 
         case 2:
+            rocketHatchState = RocketHatchState.DESCEND;
             autoState = State.DEPOSIT_ROCKET_HATCH;
             break;
 
@@ -291,13 +293,89 @@ private static boolean depositCargoHatch ()
     return false;
 }
 
+
+private static enum RocketHatchState
+    {
+STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, TURN_ALONG_FIELD_WALL, DRIVE_TO_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
+    }
+
+private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
+
 private static boolean depositRocketHatch ()
 {
-    if (autoLevel == Level.LEVEL_TWO)
+
+    switch (rocketHatchState)
         {
-        descendFromLevelTwo();
-        return true;
+        case STANDBY:
+
+            break;
+
+        case DESCEND:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                descendFromLevelTwo();
+                }
+            if (usingVision == true)
+                {
+                rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
+                } else
+                {
+                rocketHatchState = RocketHatchState.STRAIGHTEN_OUT_ON_WALL;
+                }
+            break;
+
+
+
+        // =================================================================
+        // DRIVE BY NONVISION
+        // =================================================================
+        case STRAIGHTEN_OUT_ON_WALL:
+        // if (dri)
+            {
+
+            }
+            break;
+
+        case DRIVE_FORWARD_TO_TURN:
+
+            break;
+
+        case TURN_TOWARDS_FIELD_WALL:
+
+            break;
+        case DRIVE_TOWARDS_FIELD_WALL:
+
+            break;
+        case TURN_ALONG_FIELD_WALL:
+
+            break;
+        case DRIVE_TO_TAPE:
+
+            break;
+
+        // =================================================================
+        // DRIVE BY VISION CODE
+        // =================================================================
+
+        case DRIVE_BY_CAMERA:
+
+            break;
+
+        // =================================================================
+        // END OF SEPCIALIZED DRIVING CODE
+        // =================================================================
+        case ALIGN_TO_ROCKET:
+
+            break;
+        case DEPOSIT_HATCH:
+
+            break;
+        case FINISH:
+            return true;
+        default:
+            break;
         }
+
     return false;
 }
 
@@ -344,8 +422,18 @@ private static boolean descendFromLevelTwo ()
     return false;
 }
 
+// =========================================================================
+// TUNEABLES
+// =========================================================================
+private static boolean usingVision = false;
+
+private static boolean descendInit = false;
+
+public static Timer descentTimer = new Timer();
+
 /*
- * ============================================================= Constants
+ * =============================================================
+ * Constants
  * =============================================================
  */
 
@@ -361,12 +449,9 @@ public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
 
 public static final double DRIVE_SPEED = .4;
 
-public static Timer descentTimer = new Timer();
-
 public static final double TIME_TO_DRIVE_OFF_PLATFORM = 5.0;
 
 public static final double ACCELERATION_TIME = .6;// not random number, pulled
                                                   // from 2018
 
-private static boolean descendInit = false;
 } // end class
