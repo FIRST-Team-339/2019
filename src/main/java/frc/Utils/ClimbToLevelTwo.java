@@ -75,7 +75,7 @@ public ClimbToLevelTwo (SingleSolenoid driveSolenoid,
 
 public void climbUpdate ()
 {
-    System.out.println(climbState);
+    // System.out.println(climbState);
 
     switch (climbState)
         {
@@ -286,7 +286,7 @@ private boolean lowerForkliftToPosition ()
 private boolean lowerArm ()
 {
     System.out.println("Trying to lower arm");
-    if (this.armEncoder.get() >= LOWERED_ARM_POSITION)
+    if (this.armEncoder.get() <= LOWERED_ARM_POSITION)
         {
         armMotor.set(LOWER_ARM_SPEED);
         } else
@@ -335,7 +335,7 @@ private boolean driveForward ()
 private boolean raiseArm ()
 {
     System.out.println("Trying to raise arm");
-    if (armEncoder.get() <= RAISED_ARM_POSITION)
+    if (armEncoder.get() >= RAISED_ARM_POSITION)
         {
         armMotor.set(RAISE_ARM_SPEED);
         } else
@@ -374,6 +374,7 @@ private void stop ()
 {
     System.out.println("Trying to stop");
     drive.stop();
+    armMotor.set(0.0);
     // lift.liftState = Forklift.ForkliftState.STOP;
     // driveSolenoid.set(RETRACT_WHEELS_POSITION);
     // drive.stop();
@@ -381,7 +382,7 @@ private void stop ()
 
 public void finishEarly ()
 {
-    climbState = climberState.STANDBY;
+    climbState = climberState.STOP;
 }
 
 // ---------------------------------------------
@@ -409,13 +410,13 @@ private static final int DISTANCE_TO_DRIVE_B4_RETRACTION = 200;
 
 private static final int DISTANCE_TO_FINISH_DRIVING = 20;
 
-private static final double LOWERED_ARM_POSITION = 10;
+private static final double LOWERED_ARM_POSITION = 180;
 
 private static final double LOWER_ARM_SPEED = -.4;
 
 private static final double ARM_HOLD_SPEED = 1.0;
 
-private static final double RAISED_ARM_POSITION = 100.0;
+private static final double RAISED_ARM_POSITION = 10.0;
 
 private static final double RAISE_ARM_SPEED = .7;
 
