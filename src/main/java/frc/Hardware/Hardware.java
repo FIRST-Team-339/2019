@@ -161,8 +161,8 @@ public static DoubleThrowSwitch autoPositionSwitch = new DoubleThrowSwitch(
 public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
         18, 13); // false port numbers
 
-public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
-        1, 2, 3, 4, 5, 6);
+// public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
+// 1, 2, 3, 4, 5, 6);
 
 // ------------------------------------
 // Gear Tooth Sensors
