@@ -182,6 +182,7 @@ public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
         24);// being removed???
 
+public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 
 // -----------------------
 // Wiring diagram
