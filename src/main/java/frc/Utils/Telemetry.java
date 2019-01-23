@@ -286,8 +286,8 @@ public void printToConsole ()
             System.out.println("deploy Ticks "
                     + Hardware.intakeDeployEncoder.get());
 
-            // System.out.println(
-            // "lift ticks " + Hardware.liftingEncoder.get());
+            System.out.println(
+                    "lift ticks " + Hardware.liftingEncoder.get());
 
             // ---------------------------------
             // Red Light/IR Sensors

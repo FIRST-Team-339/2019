@@ -409,7 +409,7 @@ private static void driverControl ()
     Teleop.periodic();
 }
 
-private static boolean descendFromLevelTwo ()
+public static boolean descendFromLevelTwo ()
 {
     if (descendInit == false)
         {

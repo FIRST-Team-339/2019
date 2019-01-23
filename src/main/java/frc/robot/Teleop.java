@@ -104,6 +104,7 @@ public static void init ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+
 } // end Init
 
 // tune pid loop
@@ -147,6 +148,12 @@ public static void periodic ()
     // Hardware.climber.finishEarly();
     // }
     // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
+
+
+    // if (Hardware.leftOperator.getRawButton(4) == true)
+    // {
+    // Autonomous.descendFromLevelTwo();
+    // }
 
     // @ANE
 
@@ -226,25 +233,15 @@ public static void periodic ()
     // =================================================================
     // Hardware.lift.update();
 
-    // =================================================================
-    // Telemetry
-    // =================================================================
+    // // =================================================================
+    // // Telemetry
+    // // =================================================================
 
     Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.printToConsole();
 
-    // TODO untested code by Anna, Patrick, and Meghan Brown
-    // This enables us to drive the robot with the joysticks
-    // if (hasDoneTheThing)
-    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-
-    // Calls the shiftGears function from drive, so we can input the the gear
-    // shift
-    // buttons and it will shift gears if we need it to.
-    // Hardware.drive.shiftGears(Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-    // Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
-
-    // System.out.println("Current Gear: " + Hardware.drive.getCurrentGear());
+    // TODO untested code by Anna, Patrick, and Meghan
+    // Teleop.teleopDrive();
 
 } // end Periodic()
 

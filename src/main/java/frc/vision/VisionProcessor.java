@@ -262,7 +262,6 @@ public VisionProcessor (String ip, CameraModel camera,
     this.camera = CameraServer.getInstance()
             .addAxisCamera("Vision Camera", ip);
 
-
     // Based on the selected camera type, set the field of views and focal
     // length.
     this.cameraModel = camera;
