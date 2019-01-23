@@ -124,7 +124,7 @@ public static void periodic ()
 {
 
     // UPDATES
-    // Hardware.climber.climbUpdate();
+    Hardware.climber.climbUpdate();
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -133,12 +133,16 @@ public static void periodic ()
     // {
     // // Hardware.rightRearCANMotor.set(.5);
     // System.out.println("Trying to climb");
-    // // Hardware.climber.climb();
+    // Hardware.climber.climb();
     // } else
     // {
-    // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
     // }
 
+    // if (Hardware.leftDriver.getRawButton(5) == true)
+    // {
+    // Hardware.climber.finishEarly();
+    // }
     // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
 
     // @ANE

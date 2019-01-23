@@ -128,8 +128,8 @@ public void printToConsole ()
             // System.out.println("Right Rear Drive Motor " +
             // Hardware.rightRearCANMotor.get());
 
-            System.out.println("Left Rear Drive Motor "
-                    + Hardware.leftRearCANMotor.get());
+            // System.out.println("Left Rear Drive Motor "
+            // + Hardware.leftRearCANMotor.get());
 
             // =================================
             // CAN items
@@ -266,8 +266,8 @@ public void printToConsole ()
             // SmartDashboard.putNumber("Delay Pot",
             // Hardware.delayPot.get(0, 5));
             //
-            System.out.println("Right Front Ticks "
-                    + Hardware.rightFrontDriveEncoder.get());
+            // System.out.println("Right Front Ticks "
+            // + Hardware.rightFrontDriveEncoder.get());
 
             // System.out.println("Left Rear Encoder Inches = "
             // + Hardware.leftRearDriveEncoder.getDistance());
@@ -286,8 +286,8 @@ public void printToConsole ()
             System.out.println("deploy Ticks "
                     + Hardware.intakeDeployEncoder.get());
 
-            System.out.println(
-                    "lift ticks " + Hardware.liftingEncoder.get());
+            // System.out.println(
+            // "lift ticks " + Hardware.liftingEncoder.get());
 
             // ---------------------------------
             // Red Light/IR Sensors
@@ -339,9 +339,9 @@ public void printToConsole ()
             // Sonar/UltraSonic
             // ---------------------------------
 
-            System.out.println(
-                    "Front UltraSonic " + Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper());
+            // System.out.println(
+            // "Front UltraSonic " + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
 
             //
 
