@@ -21,6 +21,7 @@ import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.KilroySPIGyro;
 import frc.HardwareInterfaces.LVMaxSonarEZ;
 import frc.HardwareInterfaces.LightSensor;
+import frc.HardwareInterfaces.MomentarySwitch;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
@@ -208,6 +209,8 @@ public static LightSensor armIR = new LightSensor(21);
 
 public static LightSensor redLight = new LightSensor(7);
 
+public static LightSensor testRedLight = new LightSensor(8);
+
 // ====================================
 // I2C Classes
 // ====================================
@@ -318,6 +321,8 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
+public static MomentarySwitch descendButton = new MomentarySwitch(
+        leftOperator, 5, false);
 
 // **********************************************************
 // Kilroy's Ancillary classes

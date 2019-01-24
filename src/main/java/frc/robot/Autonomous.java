@@ -398,27 +398,85 @@ private static void driverControl ()
     Teleop.periodic();
 }
 
+private static enum DescentState
+    {
+STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
+    }
+
+private static DescentState descentState = DescentState.STANDBY;
+
 public static boolean descendFromLevelTwo ()
 {
-    if (descendInit == false)
-        {
-        descentTimer.start();
-        descendInit = true;
-        }
 
-    if (descentTimer.get() <= TIME_TO_DRIVE_OFF_PLATFORM)
+    if (descentState == DescentState.STANDBY)
         {
-        Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
-                false);
-        } else
-        {
-        Hardware.drive.stop();
-        descentTimer.stop();
-        descentTimer.reset();
-        descendInit = false;
-        return true;
+        descentState = DescentState.INIT;
         }
+    // if (descendInit == false)
+    // {
+    // descentTimer.start();
+    // descendInit = true;
+    // }
 
+    // if (descentTimer.get() <= TIME_TO_DRIVE_OFF_PLATFORM)
+    // {
+    // Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
+    // false);
+    // } else
+    // {
+    // Hardware.drive.stop();
+    // descentTimer.stop();
+    // descentTimer.reset();
+    // descendInit = false;
+    // return true;
+    // }
+
+    // return false;
+    System.out.println(descentState);
+
+    switch (descentState)
+        {
+
+        case STANDBY:
+
+            break;
+        case INIT:
+            descentTimer.reset();
+            descentTimer.start();
+            descentState = DescentState.DRIVE_FAST;
+            break;
+
+        case DRIVE_FAST:
+            if (descentTimer.get() >= TIME_TO_DRIVE_OFF_PLATFORM)
+                {
+                Hardware.drive.stop();
+                descentTimer.stop();
+                descentState = DescentState.LANDING_SETUP;
+                } else
+                {
+                Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
+                        false);
+                }
+            break;
+
+        case LANDING_SETUP:
+
+            if (Hardware.testRedLight.isOn() == true)
+                {
+                descentState = DescentState.FINISH;
+                }
+
+            break;
+
+        case FINISH:
+            System.out.println(
+                    "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTT");
+            return true;
+
+        default:
+            break;
+
+        }
     return false;
 }
 
@@ -449,7 +507,7 @@ public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
 
 public static final double DRIVE_SPEED = .4;
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = 5.0;
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = 2.0;
 
 public static final double ACCELERATION_TIME = .6;// not random number, pulled
                                                   // from 2018

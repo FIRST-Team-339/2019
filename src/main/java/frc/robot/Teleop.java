@@ -80,6 +80,8 @@ public static void init ()
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
 
+    Hardware.intakeDeployEncoder.reset();
+
     Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
             FIRST_GEAR_RATIO);
     Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -123,33 +125,33 @@ public static void init ()
 public static void periodic ()
 {
 
-    // // UPDATES
-    // Hardware.climber.climbUpdate();
-    // // =================================================================
-    // // OPERATOR CONTROLS
-    // // =================================================================
+    // UPDATES
+    Hardware.climber.climbUpdate();
+    // =================================================================
+    // OPERATOR CONTROLS
+    // =================================================================
 
-    // if (Hardware.leftOperator.getRawButton(6) == true)
-    // {
-    // // Hardware.rightRearCANMotor.set(.5);
-    // System.out.println("Trying to climb");
-    // Hardware.climber.climb();
-    // } else
-    // {
-    // // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-    // }
+    if (Hardware.leftOperator.getRawButton(6) == true)
+        {
+        // Hardware.rightRearCANMotor.set(.5);
+        System.out.println("Trying to climb");
+        Hardware.climber.climb();
+        } else
+        {
+        // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        }
 
-    // if (Hardware.leftDriver.getRawButton(5) == true)
-    // {
-    // Hardware.climber.finishEarly();
-    // }
+    if (Hardware.leftDriver.getRawButton(5) == true)
+        {
+        Hardware.climber.finishEarly();
+        }
     // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
 
 
-    // if (Hardware.leftOperator.getRawButton(4) == true)
-    // {
-    // Autonomous.descendFromLevelTwo();
-    // }
+    if (Hardware.descendButton.isOnCheckNow() == true)
+        {
+        Autonomous.descendFromLevelTwo();
+        }
 
     // @ANE
 
