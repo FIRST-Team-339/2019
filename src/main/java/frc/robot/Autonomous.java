@@ -32,20 +32,23 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.Utils.*;
+import javax.lang.model.util.ElementScanner6;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Timer;
+import frc.Utils.drive.Drive;
 
 /**
- * An Autonomous class.
- * This class <b>beautifully</b> uses state machines in order to periodically
- * execute instructions during the Autonomous period.
- * 
- * This class contains all of the user code for the Autonomous part
- * of the
+ * An Autonomous class. This class <b>beautifully</b> uses state machines in
+ * order to periodically execute instructions during the Autonomous period.
+ *
+ * This class contains all of the user code for the Autonomous part of the
  * match, namely, the Init and Periodic code
- * 
- * 
+ *
+ *
  * @author Michael Andrzej Klaczynski
- * @written at the eleventh stroke of midnight, the 28th of January,
- *          Year of our LORD 2016. Rewritten ever thereafter.
+ * @written at the eleventh stroke of midnight, the 28th of January, Year of our
+ *          LORD 2016. Rewritten ever thereafter.
  *
  * @author Nathanial Lydick
  * @written Jan 13, 2015
@@ -67,11 +70,14 @@ public static void init ()
     // Hardware.leftDriveMotor.setSafetyEnabled(false);
     // Hardware.rightDriveMotor.setSafetyEnabled(false);
 
-    Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightFrontDriveEncoder.reset();
+    // Hardware.leftFrontDriveEncoder.reset();
+    // Hardware.rightFrontDriveEncoder.reset();
 
-    if (Hardware.disableAutonomousSwitch.isOn() == true)
-        autoState = State.FINISH;
+    // TODO @ANE uncomment
+    // if (Hardware.autoLevelSwitch.isOn() == true) {
+    // autoLevel = Level.DISABLE;
+    // autoState = State.FINISH;
+    // }
 
 } // end Init
 
@@ -81,17 +87,36 @@ public static void init ()
  */
 public static enum State
     {
-INIT, DELAY, CHOOSE_PATH, AUTOLINE, AUTOLINE_SCALE, AUTOLINE_EXCHANGE_L, AUTOLINE_EXCHANGE_R, CENTER_SWITCH, SWITCH_OR_SCALE_L, SWITCH_OR_SCALE_R, OFFSET_SWITCH, FINISH
+INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, FINISH
     }
+
+/**
+ * Starting position and which side of the field the robot is going to
+ */
 
 public static enum Position
     {
-LEFT, RIGHT, NULL
+LEFT, RIGHT, CENTER, NULL
+    }
+
+public static enum Level
+    {
+LEVEL_ONE, LEVEL_TWO, DISABLE, NULL
     }
 
 // variable that controls the state of autonomous as a whole (init, delay
 // which path is being used, etc.)
 public static State autoState = State.INIT;
+
+// variable that controls the starting position/side (Left, Right, or Center) of
+// the robot
+
+public static Position autoPosition = Position.NULL;
+
+// variable that controls the level the robot is starting on (Level 1 or level 2
+// or disabled)
+
+public static Level autoLevel = Level.NULL;
 
 /**
  * User Periodic code for autonomous mode should go here. Will be called
@@ -105,7 +130,7 @@ public static void periodic ()
     switch (autoState)
         {
         case INIT:
-
+            setPositionAndLevel();
             autoState = State.DELAY;
             break;
         case DELAY:
@@ -113,16 +138,49 @@ public static void periodic ()
             // Delay using the potentiometer, from 0 to 5 seconds
             // once finished, stop the timer and go to the next state
 
-            if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0,
-                    5.0))
+            // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
+            // {
+            System.out.println("CATS ARE AWESOME");
+            autoState = State.CHOOSE_PATH;
+            Hardware.autoTimer.stop();
+            // break;
+            // }
+            break;
+
+        case CHOOSE_PATH:
+            choosePath();
+            break;
+
+        case CROSS_AUTOLINE:
+            if (crossAutoline() == true)
                 {
-                autoState = State.CHOOSE_PATH;
-                Hardware.autoTimer.stop();
-                break;
+                autoState = State.FINISH;
+                }
+            break;
+
+        case DEPOSIT_STRAIGHT_CARGO_HATCH:
+            if (depositCargoHatch() == true)
+                {
+                autoState = State.FINISH;
+                }
+            break;
+
+        case DEPOSIT_ROCKET_HATCH:
+            if (depositRocketHatch() == true)
+                {
+                autoState = State.FINISH;
+                }
+            break;
+
+        case DEPOSIT_SIDE_CARGO_HATCH:
+            if (depositSideCargoHatch() == true)
+                {
+                autoState = State.FINISH;
                 }
             break;
 
         case FINISH:
+            driverControl();
             break;
 
         default:
@@ -132,10 +190,401 @@ public static void periodic ()
 
 }
 
+// ---------------------------------
+// Methods
+// ---------------------------------
+
+/**
+ *
+ */
+private static void choosePath ()
+{
+    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
+    )
+        {
+        case 0:
+            autoState = State.CROSS_AUTOLINE;
+            break;
+
+        case 1:
+            autoState = State.DEPOSIT_STRAIGHT_CARGO_HATCH;
+            break;
+
+        case 2:
+            rocketHatchState = RocketHatchState.DESCEND;
+            autoState = State.DEPOSIT_ROCKET_HATCH;
+            break;
+
+        case 3:
+            autoState = State.DEPOSIT_SIDE_CARGO_HATCH;
+            break;
+
+        case 4:
+
+        case 5:
+
+        default:
+            autoState = State.FINISH;
+            break;
+        }
+
+}
+
+/**
+ * sets the enums of both the autoPosition and autoLevel based on the
+ * coresponding switches
+ *
+ */
+private static void setPositionAndLevel ()
+{
+
+    // sets the autoPosition enum to the correct side based on the
+    // state of the autoPositionSwitch
+    if (Hardware.autoPositionSwitch.getPosition() == LEFT)
+        {
+        autoPosition = Position.LEFT;
+        } else if (Hardware.autoPositionSwitch.getPosition() == RIGHT)
+        {
+        autoPosition = Position.RIGHT;
+        } else if (Hardware.autoPositionSwitch.isOn() == true)
+        {
+        autoPosition = Position.CENTER;
+        }
+
+    // sets the autoLevel enum to the correct level, or disabled, based on the
+    // state
+    // of the autoLevelSwitch
+    if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE)
+        {
+        autoLevel = Level.LEVEL_ONE;
+        } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
+        {
+        autoLevel = Level.LEVEL_TWO;
+        }
+
+}
+
+// =====================================================================
+// Path Methods
+// =====================================================================
+
+private static boolean crossAutoline ()
+{
+    if (autoLevel == Level.LEVEL_TWO)
+        {
+        descendFromLevelTwo();
+        }
+    if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
+            DRIVE_SPEED, ACCELERATION_TIME,
+            false) == true)
+        {
+        return true;
+        }
+    return false;
+}
+
+
+private static enum DepositCargoHatchState
+    {
+INIT, DESCEND, ALIGN_TO_CARGO, DEPOSIT_CARGO
+    }
+
+private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
+
+private static boolean depositCargoHatch ()
+{
+    switch (depositCargoHatchState)
+        {
+        case INIT:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                depositCargoHatchState = DepositCargoHatchState.DESCEND;
+                } else
+                {
+
+                }
+            break;
+        case DESCEND:
+            if (descendFromLevelTwo())
+                {
+                if (usingVision)
+                    {
+
+                    } else
+                    {
+
+                    }
+                }
+            break;
+
+        case ALIGN_TO_CARGO:
+            break;
+        case DEPOSIT_CARGO:
+            break;
+
+        }
+
+
+
+
+    if (autoLevel == Level.LEVEL_TWO)
+        {
+        descendFromLevelTwo();
+        }
+
+    return false;
+}
+
+
+
+private static enum RocketHatchState
+    {
+STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, TURN_ALONG_FIELD_WALL, DRIVE_TO_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
+    }
+
+private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
+
+private static boolean depositRocketHatch ()
+{
+
+    switch (rocketHatchState)
+        {
+        case STANDBY:
+
+            break;
+
+        case DESCEND:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                descendFromLevelTwo();
+                }
+            if (usingVision == true && Hardware.axisCamera.hasBlobs())
+                {
+                rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
+                } else
+                {
+                rocketHatchState = RocketHatchState.STRAIGHTEN_OUT_ON_WALL;
+                }
+            break;
+
+
+
+        // =================================================================
+        // DRIVE BY NONVISION
+        // =================================================================
+        case STRAIGHTEN_OUT_ON_WALL:
+
+            if (usingVision == true && Hardware.axisCamera.hasBlobs())
+                {
+                // if (dri)
+                    {
+
+                    }
+                }
+            break;
+
+        case DRIVE_FORWARD_TO_TURN:
+
+            break;
+
+        case TURN_TOWARDS_FIELD_WALL:
+
+            break;
+        case DRIVE_TOWARDS_FIELD_WALL:
+
+            break;
+        case TURN_ALONG_FIELD_WALL:
+
+            break;
+        case DRIVE_TO_TAPE:
+
+            break;
+
+        // =================================================================
+        // DRIVE BY VISION CODE this is where the cool kidz code
+        // =================================================================
+
+        case DRIVE_BY_CAMERA:
+            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())// TODO^^^^
+                                                                        // IR
+                {
+                Hardware.driveWithCamera
+                        .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
+                } else if (Hardware.armIR.get())
+                {
+                rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
+                }
+            break;
+        // =================================================================
+        // END OF SEPCIALIZED DRIVING CODE
+        // =================================================================
+        case ALIGN_TO_ROCKET:
+
+            break;
+        case DEPOSIT_HATCH:
+
+            break;
+        case FINISH:
+            return true;
+        default:
+            break;
+        }
+
+    return false;
+}
+
+/** Enum for representing the states used in the depositSideCargoHatch path */
+private static enum SideCargoHatchState
+    {
+INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE
+    } // and we need to deploy the manipulator somewhere in here
+
+/**
+ * Variable for keeping track of the state used in the depositSideCargoHatch
+ * path
+ */
+private static SideCargoHatchState sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
+
+private static boolean depositSideCargoHatch ()
+{
+    switch (sideCargoHatchState)
+        {
+        case INIT:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+
+                }
+            break;
+        }
+    return false;
+}
+
+private static void driverControl ()
+{
+    // if (Hardware.leftDriver.getRawButton(5) == true) {
+    // Hardware.leftFrontCANMotor.set(.5);
+    // } else {
+    // Hardware.leftFrontCANMotor.set(0);
+    // }
+    Teleop.periodic();
+}
+
+private static enum DescentState
+    {
+STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
+    }
+
+private static DescentState descentState = DescentState.STANDBY;
+
+public static boolean descendFromLevelTwo ()
+{
+
+    if (descentState == DescentState.STANDBY)
+        {
+        descentState = DescentState.INIT;
+        }
+    // if (descendInit == false)
+    // {
+    // descentTimer.start();
+    // descendInit = true;
+    // }
+
+    // if (descentTimer.get() <= TIME_TO_DRIVE_OFF_PLATFORM)
+    // {
+    // Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
+    // false);
+    // } else
+    // {
+    // Hardware.drive.stop();
+    // descentTimer.stop();
+    // descentTimer.reset();
+    // descendInit = false;
+    // return true;
+    // }
+
+    // return false;
+    System.out.println(descentState);
+
+    switch (descentState)
+        {
+
+        case STANDBY:
+
+            break;
+        case INIT:
+            descentTimer.reset();
+            descentTimer.start();
+            descentState = DescentState.DRIVE_FAST;
+            break;
+
+        case DRIVE_FAST:
+            if (descentTimer.get() >= TIME_TO_DRIVE_OFF_PLATFORM)
+                {
+                Hardware.drive.stop();
+                descentTimer.stop();
+                descentState = DescentState.LANDING_SETUP;
+                } else
+                {
+                Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
+                        false);
+                }
+            break;
+
+        case LANDING_SETUP:
+
+            if (Hardware.testRedLight.isOn() == true)
+                {
+                descentState = DescentState.FINISH;
+                }
+
+            break;
+
+        case FINISH:
+            System.out.println(
+                    "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTT");
+            return true;
+
+        default:
+            break;
+
+        }
+    return false;
+}
+
+// =========================================================================
+// TUNEABLES
+// =========================================================================
+private static boolean usingVision = false;
+
+private static boolean descendInit = false;
+
+public static Timer descentTimer = new Timer();
 
 /*
- * ================================ Constants
- * ================================
+ * =============================================================
+ * Constants
+ * =============================================================
  */
+
+
+
+public static final Relay.Value LEFT = Relay.Value.kForward;
+
+public static final Relay.Value RIGHT = Relay.Value.kReverse;
+
+public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
+
+public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
+
+public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
+
+public static final double DRIVE_SPEED = .4;
+
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = 2.0;
+
+public static final double ACCELERATION_TIME = .6;// not random number, pulled
+// from 2018
+
+public static final double DRIVE_WITH_CAMERA_SPEED = .4;// TODO
 
 } // end class

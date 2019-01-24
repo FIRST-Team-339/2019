@@ -44,12 +44,12 @@ public void process (Mat source0)
     // Step RGB_Threshold0:
     Mat rgbThresholdInput = source0;
     double[] rgbThresholdRed =
-        {0.0, 0.0};
+        {10.0, 229.0};
     double[] rgbThresholdGreen =
-        {34, 255.0};
+        {39.0, 255.0};
 
     double[] rgbThresholdBlue =
-        {0.0, 0.0};
+        {0.0, 50.0};
 
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen,
             rgbThresholdBlue, rgbThresholdOutput);
@@ -62,11 +62,12 @@ public void process (Mat source0)
 
     // Step Filter_Contours0:
     ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-    double filterContoursMinArea = 80.0;
+    // previously 80
+    double filterContoursMinArea = 0.0;
     double filterContoursMinPerimeter = 0;
     double filterContoursMinWidth = 0;
     double filterContoursMaxWidth = 1000;
-    double filterContoursMinHeight = 0;
+    double filterContoursMinHeight = 8;// 0.0
     double filterContoursMaxHeight = 1000;
     double[] filterContoursSolidity =
         {0, 100};
@@ -75,18 +76,18 @@ public void process (Mat source0)
     double filterContoursMinRatio = 0;
     double filterContoursMaxRatio = 1000;
     filterContours(filterContoursContours, filterContoursMinArea,
-            filterContoursMinPerimeter, filterContoursMinWidth,
-            filterContoursMaxWidth, filterContoursMinHeight,
-            filterContoursMaxHeight, filterContoursSolidity,
-            filterContoursMaxVertices, filterContoursMinVertices,
-            filterContoursMinRatio, filterContoursMaxRatio,
-            filterContoursOutput);
+            filterContoursMinPerimeter,
+            filterContoursMinWidth, filterContoursMaxWidth,
+            filterContoursMinHeight, filterContoursMaxHeight,
+            filterContoursSolidity, filterContoursMaxVertices,
+            filterContoursMinVertices, filterContoursMinRatio,
+            filterContoursMaxRatio, filterContoursOutput);
 
 }
 
 /**
  * This method is a generated getter for the output of a RGB_Threshold.
- * 
+ *
  * @return Mat output from RGB_Threshold.
  */
 public Mat rgbThresholdOutput ()
@@ -96,7 +97,7 @@ public Mat rgbThresholdOutput ()
 
 /**
  * This method is a generated getter for the output of a Find_Contours.
- * 
+ *
  * @return ArrayList<MatOfPoint> output from Find_Contours.
  */
 public ArrayList<MatOfPoint> findContoursOutput ()
@@ -106,7 +107,7 @@ public ArrayList<MatOfPoint> findContoursOutput ()
 
 /**
  * This method is a generated getter for the output of a Filter_Contours.
- * 
+ *
  * @return ArrayList<MatOfPoint> output from Filter_Contours.
  */
 public ArrayList<MatOfPoint> filterContoursOutput ()
@@ -114,24 +115,22 @@ public ArrayList<MatOfPoint> filterContoursOutput ()
     return filterContoursOutput;
 }
 
-
 /**
  * Segment an image based on color ranges.
- * 
+ *
  * @param input
- *            The image on which to perform the RGB threshold.
+ *                   The image on which to perform the RGB threshold.
  * @param red
- *            The min and max red.
+ *                   The min and max red.
  * @param green
- *            The min and max green.
+ *                   The min and max green.
  * @param blue
- *            The min and max blue.
+ *                   The min and max blue.
  * @param output
- *            The image in which to store the output.
+ *                   The image in which to store the output.
  */
 private void rgbThreshold (Mat input, double[] red, double[] green,
-        double[] blue,
-        Mat out)
+        double[] blue, Mat out)
 {
     Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2RGB);
     Core.inRange(out, new Scalar(red[0], green[0], blue[0]),
@@ -141,15 +140,15 @@ private void rgbThreshold (Mat input, double[] red, double[] green,
 /**
  * Sets the values of pixels in a binary image to their distance to the nearest
  * black pixel.
- * 
+ *
  * @param input
- *            The image on which to perform the Distance Transform.
+ *                     The image on which to perform the Distance Transform.
  * @param type
- *            The Transform.
+ *                     The Transform.
  * @param maskSize
- *            the size of the mask.
+ *                     the size of the mask.
  * @param output
- *            The image in which to store the output.
+ *                     The image in which to store the output.
  */
 private void findContours (Mat input, boolean externalOnly,
         List<MatOfPoint> contours)
@@ -160,8 +159,7 @@ private void findContours (Mat input, boolean externalOnly,
     if (externalOnly)
         {
         mode = Imgproc.RETR_EXTERNAL;
-        }
-    else
+        } else
         {
         mode = Imgproc.RETR_LIST;
         }
@@ -169,43 +167,43 @@ private void findContours (Mat input, boolean externalOnly,
     Imgproc.findContours(input, contours, hierarchy, mode, method);
 }
 
-
 /**
  * Filters out contours that do not meet certain criteria.
- * 
+ *
  * @param inputContours
- *            is the input list of contours
+ *                           is the input list of contours
  * @param output
- *            is the the output list of contours
+ *                           is the the output list of contours
  * @param minArea
- *            is the minimum area of a contour that will be kept
+ *                           is the minimum area of a contour that will be kept
  * @param minPerimeter
- *            is the minimum perimeter of a contour that will be kept
+ *                           is the minimum perimeter of a contour that will be
+ *                           kept
  * @param minWidth
- *            minimum width of a contour
+ *                           minimum width of a contour
  * @param maxWidth
- *            maximum width
+ *                           maximum width
  * @param minHeight
- *            minimum height
+ *                           minimum height
  * @param maxHeight
- *            maximimum height
+ *                           maximimum height
  * @param Solidity
- *            the minimum and maximum solidity of a contour
+ *                           the minimum and maximum solidity of a contour
  * @param minVertexCount
- *            minimum vertex Count of the contours
+ *                           minimum vertex Count of the contours
  * @param maxVertexCount
- *            maximum vertex Count
+ *                           maximum vertex Count
  * @param minRatio
- *            minimum ratio of width to height
+ *                           minimum ratio of width to height
  * @param maxRatio
- *            maximum ratio of width to height
+ *                           maximum ratio of width to height
  */
 private void filterContours (List<MatOfPoint> inputContours,
-        double minArea,
-        double minPerimeter, double minWidth, double maxWidth,
-        double minHeight, double maxHeight, double[] solidity,
-        double maxVertexCount, double minVertexCount, double minRatio,
-        double maxRatio, List<MatOfPoint> output)
+        double minArea, double minPerimeter, double minWidth,
+        double maxWidth, double minHeight, double maxHeight,
+        double[] solidity, double maxVertexCount,
+        double minVertexCount, double minRatio, double maxRatio,
+        List<MatOfPoint> output)
 {
     final MatOfInt hull = new MatOfInt();
     output.clear();
@@ -247,8 +245,4 @@ private void filterContours (List<MatOfPoint> inputContours,
         }
 }
 
-
-
-
 }
-

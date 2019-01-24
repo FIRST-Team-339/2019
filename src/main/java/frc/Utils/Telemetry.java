@@ -4,19 +4,19 @@ import frc.Hardware.Hardware;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Dedicated to printing information to both
- * Console and Smartdashboard
- * 
+ * Dedicated to printing information to both Console and Smartdashboard
+ *
  * @author Craig Kimball
  * @written 6/7/2018
  *
  */
 
+
 public class Telemetry
 {
 /**
  * constructor for
- * 
+ *
  */
 public Telemetry ()
 {
@@ -27,7 +27,7 @@ public Telemetry ()
 /**
  * creates the Telemetry object. Used for the set function of the
  * timeBetweenPrints
- * 
+ *
  * @param newTimeBetweenPrints
  */
 public Telemetry (double newTimeBetweenPrints)
@@ -38,7 +38,7 @@ public Telemetry (double newTimeBetweenPrints)
 
 /**
  * Returns last time print statements were printed
- * 
+ *
  * @return lastTimePrinted
  */
 private double getLastTimePrinted ()
@@ -48,7 +48,7 @@ private double getLastTimePrinted ()
 
 /**
  * function dedicated to returning the current time between prints
- * 
+ *
  * @return timeBetweenPrints
  */
 public double getTimeBetweenPrints ()
@@ -71,7 +71,7 @@ private void init ()
 
 /**
  * @param newLastTimePrinted
- *            sets lastTimePrinted to what you want
+ *                               sets lastTimePrinted to what you want
  * @return
  */
 private double setLastTimePrinted (double newLastTimePrinted)
@@ -81,9 +81,8 @@ private double setLastTimePrinted (double newLastTimePrinted)
 }
 
 /**
- * function dedicated to setting a new value for time between each
- * print
- * 
+ * function dedicated to setting a new value for time between each print
+ *
  * @param newTimeBetweenPrints
  * @return
  */
@@ -95,18 +94,17 @@ public double setTimeBetweenPrints (double newTimeBetweenPrints)
 
 /**
  * prints to console
- * 
+ *
  */
 public void printToConsole ()
 {
     // clock determining change
 
-    if ((System.currentTimeMillis()
-            - lastTimePrinted) >= this.getTimeBetweenPrints())
+    if ((System.currentTimeMillis() - lastTimePrinted) >= this
+            .getTimeBetweenPrints())
         {
         if (Hardware.driverStation.isFMSAttached() == false)
             {
-
 
             // =================================
             // Motor
@@ -121,15 +119,17 @@ public void printToConsole ()
             // + Hardware.leftDriveMotor.get());
             //
 
+            // System.out.println("Right Front Drive Motor " +
+            // Hardware.rightFrontCANMotor.get());
 
-            // System.out.println(
-            // "Right Drive Motor "
-            // + Hardware.rightFrontCANMotor.get());
+            // System.out.println("Left Front Drive Motor " +
+            // Hardware.leftFrontCANMotor.get());
 
-            // System.out.println(
-            // "Left Drive Motor "
-            // + Hardware.leftFrontCANMotor.get());
+            // System.out.println("Right Rear Drive Motor " +
+            // Hardware.rightRearCANMotor.get());
 
+            // System.out.println("Left Rear Drive Motor "
+            // + Hardware.leftRearCANMotor.get());
 
             // =================================
             // CAN items
@@ -177,7 +177,6 @@ public void printToConsole ()
             // "Disable = on");
             // }
 
-
             // if (Hardware.leftAutoSwitch.isOn() == false)
             // System.out.println(
             // "Left = off");
@@ -193,29 +192,79 @@ public void printToConsole ()
             // System.out.println(
             // "Right = on");
 
-
-
             // System.out.println("6 pos = "
             // + Hardware.autoSixPosSwitch.getPosition());
 
             // System.out.println(
             // "Demo swich isOn" + Hardware.demoModeSwitch.isOn());
 
-            // ---------------------------------
-            // Encoders
-            // ---------------------------------
-            // System.out.println("Left Front Encoder Inches = "
-            // + Hardware.leftFrontDriveEncoder.getDistance());
+            // // ---------------------------------
+            // // Encoders
+            // // ---------------------------------
+            SmartDashboard.putNumber("Left Front Encoder Inches",
+                    Hardware.leftFrontDriveEncoder.getDistance());
+
+            SmartDashboard.putNumber("Left Front Encoder Ticks",
+                    Hardware.leftFrontDriveEncoder.get());
+
+            SmartDashboard.putNumber("Right Front Encoder Inches",
+                    Hardware.rightFrontDriveEncoder.getDistance());
+
+            SmartDashboard.putNumber("Right Front Encoder Ticks",
+                    Hardware.rightFrontDriveEncoder.get());
+
+            SmartDashboard.putNumber("Liftig Encoder Inches",
+                    Hardware.liftingEncoder.getDistance());
+
+            SmartDashboard.putNumber("Lifting Encoder Ticks",
+                    Hardware.liftingEncoder.get());
+
             //
             //
-            // System.out.println("Left Front Encoder Ticks "
-            // + Hardware.leftFrontDriveEncoder.get());
-
-            // System.out.println("RF encoder type"
-            // + Hardware.rightFrontDriveEncoder.getSensorType());
-
-            // System.out.println("Right Front Inches = "
-            // + Hardware.rightFrontDriveEncoder.getDistance());
+            // // ---------------------------------
+            // // Red Light/IR Sensors
+            // // prints the state of the sensor
+            // // ---------------------------------
+            //
+            // // SmartDashboard.putBoolean("R Red Light",
+            // // Hardware.rightRedLight.isOn());
+            //
+            // // SmartDashboard.putBoolean("L Red Light",
+            // // Hardware.leftRedLight.isOn());
+            //
+            // SmartDashboard.putBoolean("Photo SW",
+            // Hardware.cubePhotoSwitch.isOn());
+            //
+            // SmartDashboard.putBoolean("IR is On",
+            // Hardware.armIR.isOn());
+            //
+            // SmartDashboard.putBoolean("Bottom RL: ",
+            // Hardware.redLight.isOn());
+            //
+            //
+            // // =================================
+            // // Pneumatics
+            // // =================================
+            //
+            // // ---------------------------------
+            // // Compressor
+            // // prints information on the compressor
+            // // ---------------------------------
+            //
+            // // ---------------------------------
+            // // Solenoids
+            // // ---------------------------------
+            //
+            // // Analogs
+            // // =================================
+            //
+            // // ---------------------------------
+            // // pots
+            // // where the pot is turned to
+            // // ---------------------------------
+            //
+            // SmartDashboard.putNumber("Delay Pot",
+            // Hardware.delayPot.get(0, 5));
             //
             // System.out.println("Right Front Ticks "
             // + Hardware.rightFrontDriveEncoder.get());
@@ -234,9 +283,11 @@ public void printToConsole ()
             // System.out.println("Right Rear Ticks "
             // + Hardware.rightRearDriveEncoder.get());
 
-
             // System.out.println("deploy Ticks "
             // + Hardware.intakeDeployEncoder.get());
+
+            // System.out.println(
+            // "lift ticks " + Hardware.liftingEncoder.get());
 
             // ---------------------------------
             // Red Light/IR Sensors
@@ -274,7 +325,6 @@ public void printToConsole ()
             // System.out
             // .println("Delay Pot " + Hardware.delayPot.get(0, 5));
 
-
             // ---------------------------------
             // GYRO
             // ---------------------------------
@@ -285,16 +335,15 @@ public void printToConsole ()
             // System.out.println("Gyro: " + Hardware.gyro.getAngle());
             // SmartDashboard.putNumber("Gyro", Hardware.gyro.getAngle());
 
-
             // ---------------------------------
             // Sonar/UltraSonic
             // ---------------------------------
 
-            // System.out.println("Front UltraSonic "
-            // + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+            // System.out.println(
+            // "Front UltraSonic " + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
 
             //
-
 
             // System.out.println("Rear UltraSonic "
             // + Hardware.rearUltraSonic.getDistanceFromNearestBumper());
@@ -302,7 +351,6 @@ public void printToConsole ()
             // =========================
             // Servos
             // =========================
-
 
             // =================================
             // SPI Bus
@@ -354,13 +402,10 @@ public void printToConsole ()
             // System.out.println(
             // "Gear = " + Hardware.transmission.getCurrentGear() + 1);
 
-
             // ---------------------------------
             // timers
             // what time does the timer have now
             // ---------------------------------
-
-
 
             }
 
@@ -372,14 +417,14 @@ public void printToConsole ()
 
 /**
  * prints to shuffleboard / smartboard
- * 
+ *
  */
 public void printToShuffleboard ()
 {
     // clock determining change
 
-    if ((System.currentTimeMillis()
-            - lastTimePrinted) >= this.getTimeBetweenPrints())
+    if ((System.currentTimeMillis() - lastTimePrinted) >= this
+            .getTimeBetweenPrints())
         {
         // // ==================================
         // // Scale Alignment
@@ -437,21 +482,25 @@ public void printToShuffleboard ()
         // SmartDashboard.putNumber("Left Front Encoder Inches",
         // Hardware.leftFrontDriveEncoder.getDistance());
         //
-        SmartDashboard.putNumber("Left Front Encoder Ticks",
-                Hardware.leftFrontDriveEncoder.get());
+        // SmartDashboard.putNumber("Left Front Encoder Ticks",
+        // Hardware.leftFrontDriveEncoder.get());
         //
         //
         // SmartDashboard.putNumber("Right Front Encoder Inches",
         // Hardware.rightFrontDriveEncoder.getDistance());
         //
         //
-        SmartDashboard.putNumber("Right Front Encoder Ticks",
-                Hardware.rightFrontDriveEncoder.get());
-        // //
+        // SmartDashboard.putNumber("Right Front Encoder Ticks",
+        // Hardware.rightFrontDriveEncoder.get());
+        //
         // SmartDashboard.putNumber("Left Rear Encoder Inches",
         // Hardware.leftRearDriveEncoder.getDistance());
         //
-        //
+        // SmartDashboard.putNumber("Lifting Encoder Ticks",
+        // Hardware.liftingEncoder.get());
+
+        // SmartDashboard.putNumber("Lifting Encoder Inches",
+        // Hardware.liftingEncoder.getDistance());
         //
         // // ---------------------------------
         // // Red Light/IR Sensors
@@ -508,7 +557,6 @@ public void printToShuffleboard ()
 
         // SmartDashboard.putNumber("Gyro", Hardware.gyro.getAngle());
 
-
         // // ---------------------------------
         // // Sonar/UltraSonic
         // // ---------------------------------
@@ -561,6 +609,13 @@ public void printToShuffleboard ()
         // Hardware.driveWithCamera.getCameraCenterValue());
 
         // =================================
+        // Forklift
+        // =================================
+
+        // SmartDashboard.putNumber("Forklift Height",
+        // Hardware.lift.getForkliftHeight());
+
+        // =================================
         // Driver station
         // =================================
 
@@ -601,8 +656,6 @@ public void printToShuffleboard ()
         // during
         // matches
         // ---------------------------------
-
-
 
         SmartDashboard.updateValues();
         }

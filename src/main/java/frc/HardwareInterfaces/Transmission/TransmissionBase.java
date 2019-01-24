@@ -3,9 +3,9 @@ package frc.HardwareInterfaces.Transmission;
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
- * Contains necessary functions that must be included in
- * each transmission type class created.
- * 
+ * Contains necessary functions that must be included in each transmission type
+ * class created.
+ *
  * @author Ryan McGee
  * @written 7/17/2017
  */
@@ -15,7 +15,7 @@ public abstract class TransmissionBase
 /**
  * Creates the TransmissionBase object with a 2 wheel drive system. Should only
  * be created by sub classes, hence the abstract label.
- * 
+ *
  * @param leftMotor
  * @param rightMotor
  */
@@ -30,7 +30,7 @@ public TransmissionBase (SpeedController leftMotor,
 /**
  * Creates the TransmissionBase object. Should only be called by any subclasses,
  * hence the abstract label.
- * 
+ *
  * @param leftRear
  * @param rightRear
  * @param leftFront
@@ -68,11 +68,11 @@ public void downShift ()
 /**
  * Drives the transmission based on a Tank drive system, but without gear ratios
  * or joystick deadbands. Use for autonomous purposes.
- * 
+ *
  * @param leftVal
- *            The left value of the robot, in percentage (-1.0 to 1.0)
+ *                     The left value of the robot, in percentage (-1.0 to 1.0)
  * @param rightVal
- *            The right value of the robot, in percentage (-1.0 to 1.0)
+ *                     The right value of the robot, in percentage (-1.0 to 1.0)
  */
 public void driveRaw (double leftVal, double rightVal)
 {
@@ -80,21 +80,22 @@ public void driveRaw (double leftVal, double rightVal)
         if (i % 2 == 0)
             this.motors[i].set(leftVal);
         else
-            this.motors[i].set(rightVal);
+            this.motors[i].set(-rightVal);
 }
 
 /**
- * Drives the robot based on raw inputs, for autonomous uses.
- * Also, can use a correction PID loop for rotation, if that is enabled.
- * (Functionality overridden in MecanumTransmission class)
- * 
+ * Drives the robot based on raw inputs, for autonomous uses. Also, can use a
+ * correction PID loop for rotation, if that is enabled. (Functionality
+ * overridden in MecanumTransmission class)
+ *
  * @param magnitude
- *            How fast the robot will travel (0.0 to 1.0)
+ *                      How fast the robot will travel (0.0 to 1.0)
  * @param direction
- *            In which direction, laterally, will the robot travel (degrees,
- *            -180 to 180. 0 is forward.)
+ *                      In which direction, laterally, will the robot travel
+ *                      (degrees, -180 to 180. 0 is forward.)
  * @param rotation
- *            How much the robot should be turning (left,(-1.0) to right,(1.0)
+ *                      How much the robot should be turning (left,(-1.0) to
+ *                      right,(1.0)
  */
 public void driveRaw (double magnitude, double direction,
         double rotation)
@@ -131,8 +132,7 @@ public int getCurrentGear ()
 }
 
 /**
- * @return
- *         The percentage corresponding to the current gear
+ * @return The percentage corresponding to the current gear
  */
 public double getCurrentGearRatio ()
 {
@@ -141,7 +141,7 @@ public double getCurrentGearRatio ()
 
 /**
  * @param position
- *            which corner the motor is in
+ *                     which corner the motor is in
  * @return the motor controller object
  */
 public SpeedController getSpeedController (MotorPosition position)
@@ -175,22 +175,17 @@ public TransmissionType getType ()
 }
 
 /**
- * Uses the formula for mapping one set of values to the other:
- * y = mx + b
- * 
- * m = 1 / (1 - deadband)
- * b = deadband * -m
- * x = joystick input
- * y = motor output
- * 
- * Therefore,
- * motor output = (1 / (1 - deadband)) * joystick input
- * + (1 - (1 / (1 - deadband)))
- * 
- * If this equation does not make much sense, try graphing it first
- * as the original x = y, and then the scaled output starting at the
- * deadband, and use the slope formula.
- * 
+ * Uses the formula for mapping one set of values to the other: y = mx + b
+ *
+ * m = 1 / (1 - deadband) b = deadband * -m x = joystick input y = motor output
+ *
+ * Therefore, motor output = (1 / (1 - deadband)) * joystick input + (1 - (1 /
+ * (1 - deadband)))
+ *
+ * If this equation does not make much sense, try graphing it first as the
+ * original x = y, and then the scaled output starting at the deadband, and use
+ * the slope formula.
+ *
  * @param input
  * @return The scaled value, if between -1 and -deadband or deadband and 1, or 0
  *         if between -deadband and deadband.
@@ -213,9 +208,9 @@ public double scaleJoystickForDeadband (double input)
  * Sets every gear ratio. Make sure that the lowest gear starts at 0, and the
  * highest gear is at the max, to make sure the up-shifting and down-shifting
  * works properly.
- * 
+ *
  * @param ratios
- *            Percent multiplied by the transmission.drive functions
+ *                   Percent multiplied by the transmission.drive functions
  */
 public void setAllGearPercentages (double... ratios)
 {
@@ -223,13 +218,12 @@ public void setAllGearPercentages (double... ratios)
 }
 
 /**
- * TODO Test gear system
- * Sets the current gear for the robot. This will change the maximum
- * speed of the robot for precise aiming/driving.
- * 
+ * TODO Test gear system Sets the current gear for the robot. This will change
+ * the maximum speed of the robot for precise aiming/driving.
+ *
  * @param gear
- *            The requested gear number. If outside the range, it will do
- *            nothing.
+ *                 The requested gear number. If outside the range, it will do
+ *                 nothing.
  */
 public void setGear (int gear)
 {
@@ -239,11 +233,11 @@ public void setGear (int gear)
 
 /**
  * Sets the percent multiplied by Transmission.
- * 
+ *
  * @param gear
- *            Which gear should be changed: 0 is lowest, increasing.
+ *                  Which gear should be changed: 0 is lowest, increasing.
  * @param value
- *            Percent decimal form: between 0 and 1.0
+ *                  Percent decimal form: between 0 and 1.0
  */
 public void setGearPercentage (int gear, double value)
 {
@@ -254,12 +248,11 @@ public void setGearPercentage (int gear, double value)
 }
 
 /**
- * TODO test deadbands
- * Sets the minimum value the joysticks must output in order for the robot to
- * start moving.
- * 
+ * TODO test deadbands Sets the minimum value the joysticks must output in order
+ * for the robot to start moving.
+ *
  * @param deadband
- *            Percentage value, ranging from 0.0 to 1.0, in decimals.
+ *                     Percentage value, ranging from 0.0 to 1.0, in decimals.
  */
 public void setJoystickDeadband (double deadband)
 {
@@ -269,9 +262,9 @@ public void setJoystickDeadband (double deadband)
 
 /**
  * Sets the maximum gear to the value input.
- * 
+ *
  * @param value
- *            Percent (0.0 to 1.0)
+ *                  Percent (0.0 to 1.0)
  */
 public void setMaxGearPercentage (double value)
 {
@@ -280,7 +273,7 @@ public void setMaxGearPercentage (double value)
 
 /**
  * Sets the robot to the maximum gear available
- * 
+ *
  */
 public void setToMaxGear ()
 {
@@ -288,13 +281,15 @@ public void setToMaxGear ()
 }
 
 /**
- * Shift gears using a up-shift and down-shift button.
- * Also makes sure that holding the button will not trigger multiple shifts.
- * 
+ * Shift gears using a up-shift and down-shift button. Also makes sure that
+ * holding the button will not trigger multiple shifts.
+ *
  * @param upShiftButton
- *            The button that should change to the next higher gear
+ *                            The button that should change to the next higher
+ *                            gear
  * @param downShiftButton
- *            The button that should change to the next lowest gear
+ *                            The button that should change to the next lowest
+ *                            gear
  */
 public void shiftGears (boolean upShiftButton, boolean downShiftButton)
 {
@@ -303,10 +298,11 @@ public void shiftGears (boolean upShiftButton, boolean downShiftButton)
     if (downShiftButton && !downShiftButtonStatus)
         {
         downShift();
-        }
-    else if (upShiftButton && !upShiftButtonStatus)
+
+        } else if (upShiftButton && !upShiftButtonStatus)
         {
         upShift();
+
         }
 
     upShiftButtonStatus = upShiftButton;
@@ -325,6 +321,21 @@ public void stop ()
 /**
  * Adds one to the current gear of the robot, allowing the user to drive faster.
  */
+
+/*
+ * ======================================================================
+ * To (Hopefully) fix McGee's code, uncomment the gearArrayInit method. Comment
+ * out the declaration that declares gearRatios with set values, and uncomment
+ * the declaration with no set values. THIS HAS NOT BEEN TESTED!!! There is a
+ * workaround in teleopDrive method, but this is a possible permanent fix.
+ * =====================================================================
+ */
+// public void gearArrayInit(int numberOfGears)
+// {
+// double[] gearRatios;
+// gearRatios = new double[numberOfGears];
+// }
+
 public void upShift ()
 {
     if (currentGear < gearRatios.length - 1)
@@ -335,7 +346,7 @@ public void upShift ()
 
 /**
  * Describes which corner a motor is in when identifying it.
- * 
+ *
  * @author Ryan McGee
  */
 public enum MotorPosition
@@ -358,7 +369,7 @@ ALL
 
 /**
  * The current types of transmissions available.
- * 
+ *
  * @author Ryan McGee
  *
  */
@@ -369,9 +380,9 @@ public enum TransmissionType
  */
 TANK,
 /**
- * Omni-Directional Style of drive train
- * Mecanum / Holonomic or Swerve Drive where each motor is independent,
- * and enables the robot to move laterally, forwards/backwards, and rotate.
+ * Omni-Directional Style of drive train Mecanum / Holonomic or Swerve Drive
+ * where each motor is independent, and enables the robot to move laterally,
+ * forwards/backwards, and rotate.
  */
 OMNI_DIR
     }
@@ -380,13 +391,19 @@ OMNI_DIR
 // The current stored transmission type
 TransmissionType type = null;
 
+
 private double[] gearRatios =
     {.6, .8, 1};
+// public static double[] gearRatios;
 
 private final SpeedController[] motors;
 
 // Will default to the highest gear available
 private int currentGear = 0;
+
+private int numberOfGears = 2;
+
+private int maxGears = 2;
 
 private boolean upShiftButtonStatus = false;
 

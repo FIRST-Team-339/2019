@@ -16,16 +16,17 @@ import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
+import frc.Hardware.Hardware;
+import edu.wpi.first.wpilibj.Relay;
 
 /**
- * This class contains vision code that uses OpenCV and the auto-generated
- * code from the program GRIP. To properly set up GRIP to work with this
- * class, make sure to set the package name, the class name to
- * AutoGenVision.java
- * and the directory to the correct package.
- * 
+ * This class contains vision code that uses OpenCV and the auto-generated code
+ * from the program GRIP. To properly set up GRIP to work with this class, make
+ * sure to set the package name, the class name to AutoGenVision.java and the
+ * directory to the correct package.
+ *
  * NOTE: The GRIP project MUST end with a "filter contours" modifier
- * 
+ *
  * @author Ryan McGee
  * @written 6/22/17
  *
@@ -35,12 +36,10 @@ public class VisionProcessor extends AutoGenVision
 
 /**
  * A class that holds several statistics about particles.
- * 
- * The measures include:
- * area: The area, in pixels of the blob
- * boundingRect: The rectangle around the blob
- * center: the point of the center of the blob
- * 
+ *
+ * The measures include: area: The area, in pixels of the blob boundingRect: The
+ * rectangle around the blob center: the point of the center of the blob
+ *
  * @author Ryan McGee
  *
  */
@@ -64,15 +63,13 @@ public Point center = new Point(0, 0);
 
 /**
  * Compares the areas of the two ParticleReports
- * 
+ *
  * @param r1
- *            The first particle report in the comparison
+ *               The first particle report in the comparison
  * @param r2
- *            The second particle report in the comparison
- * @return
- *         the area of r1 - the area of r2; positive value if r1.area
- *         > r2.area, 0 if they are equal, and a negative value if r1.area <
- *         r2.area
+ *               The second particle report in the comparison
+ * @return the area of r1 - the area of r2; positive value if r1.area > r2.area,
+ *         0 if they are equal, and a negative value if r1.area < r2.area
  */
 @Override
 public int compare (ParticleReport r1, ParticleReport r2)
@@ -80,18 +77,16 @@ public int compare (ParticleReport r1, ParticleReport r2)
     return (int) (r1.area - r2.area);
 } // end compare()
 
-
 /**
  * Compares the area of <b>this</b> ParticleReport to the area of the inputted
  * particle report
- * 
+ *
  * @param r
- *            The particle report whose area is being compared to <b>this</b>
- *            particle report's
- * 
- * @return
- *         the area of r - the area of <b>this</b>; positive value if r.area
- *         > this.area, 0 if they are equal, and a negative value if r.area <
+ *              The particle report whose area is being compared to <b>this</b>
+ *              particle report's
+ *
+ * @return the area of r - the area of <b>this</b>; positive value if r.area >
+ *         this.area, 0 if they are equal, and a negative value if r.area <
  *         this.area
  */
 @Override
@@ -104,7 +99,7 @@ public int compareTo (ParticleReport r)
 /**
  * The user must set which camera is connected for correct field of views and
  * focal lengths.
- * 
+ *
  * @author Ryan McGee
  *
  */
@@ -124,10 +119,9 @@ AXIS_M1011,
 AXIS_M1013
     } // end enum CameraModel
 
-
 /**
  * A list of the different kind of images, for accessing the images directly.
- * 
+ *
  * @author Ryan McGee
  */
 public enum ImageType
@@ -177,7 +171,7 @@ private final int M1013_VERT_FOV = 51;
 
 // the first part of the path for images
 private final String IMAGE_BASIC_PATH = "/home/lvuser";
-        
+
 // the file path where we save the images we take
 private final String SAVE_IMAGE_PATH = IMAGE_BASIC_PATH + "/images";
 
@@ -210,11 +204,11 @@ private final Timer pictureTimer = new Timer();
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param ip
- *            the IP of the the axis camera (usually 10.3.39.11)
+ *                   the IP of the the axis camera (usually 10.3.39.11)
  * @param camera
- *            the brand / model of the camera
+ *                   the brand / model of the camera
  */
 public VisionProcessor (String ip, CameraModel camera)
 {
@@ -222,6 +216,8 @@ public VisionProcessor (String ip, CameraModel camera)
     // stream.
     this.camera = CameraServer.getInstance()
             .addAxisCamera("Vision Camera", ip);
+
+
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -247,16 +243,18 @@ public VisionProcessor (String ip, CameraModel camera)
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param ip
- *            the IP of the the axis camera (usually 10.3.39.11)
+ *                           the IP of the the axis camera (usually 10.3.39.11)
  * @param camera
- *            the brand / model of the camera
+ *                           the brand / model of the camera
  * @param ringlightRelay
- *            camera ringlight to pick up retro-reflective tape: this is the
- *            janky fix
- * 
+ *                           camera ringlight to pick up retro-reflective tape:
+ *                           this
+ *                           is the janky fix
+ *
  */
+
 public VisionProcessor (String ip, CameraModel camera,
         DigitalOutput ringlightRelay)
 {
@@ -264,6 +262,7 @@ public VisionProcessor (String ip, CameraModel camera,
     // stream.
     this.camera = CameraServer.getInstance()
             .addAxisCamera("Vision Camera", ip);
+
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -291,11 +290,11 @@ public VisionProcessor (String ip, CameraModel camera,
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param usbPort
- *            The USB camera port number. '0' for default.
+ *                    The USB camera port number. '0' for default.
  * @param camera
- *            the brand / model of the camera
+ *                    the brand / model of the camera
  */
 public VisionProcessor (int usbPort, CameraModel camera)
 {
@@ -325,13 +324,13 @@ public VisionProcessor (int usbPort, CameraModel camera)
 
 /**
  * Creates the object and starts the camera server
- * 
+ *
  * @param usbPort
- *            The USB camera port number. '0' for default.
+ *                           The USB camera port number. '0' for default.
  * @param camera
- *            the brand / model of the camera
+ *                           the brand / model of the camera
  * @param ringlightRelay
- *            camera ringlight to pick up retro-reflective tape
+ *                           camera ringlight to pick up retro-reflective tape
  */
 public VisionProcessor (int usbPort, CameraModel camera,
         DigitalOutput ringlightRelay)
@@ -361,7 +360,6 @@ public VisionProcessor (int usbPort, CameraModel camera,
     this.pictureTimer.reset();
 } // end VisionProcessor()
 
-
 // ==========================END INIT===================================
 
 /**
@@ -373,6 +371,8 @@ public void processImage ()
     // If the error code is not 0, then there is no error.
     long errorCode = CameraServer.getInstance()
             .getVideo("Vision Camera").grabFrame(image);
+
+
 
     if (image.empty() == true)
         {
@@ -403,14 +403,16 @@ public void processImage ()
 
 /**
  * Sets the camera image settings for use in image processing.
- * 
+ *
  * @param exposure
- *            How much light will hit the sensor, in percentage.
+ *                         How much light will hit the sensor, in percentage.
  * @param whiteBalence
- *            The white balence of the camera. Constants are found in the
- *            VideoCamera class
+ *                         The white balence of the camera. Constants are found
+ *                         in
+ *                         the VideoCamera class
  * @param brightness
- *            How bright the image is in post processing, in percentage.
+ *                         How bright the image is in post processing, in
+ *                         percentage.
  */
 public void setCameraSettings (int exposure, int whiteBalence,
         int brightness)
@@ -433,44 +435,42 @@ public void setDefaultCameraSettings ()
 
 /**
  * Saves an image to the roborio. This has a max of 26 images per type, before
- * it starts to overwrite.
- * The image will be saved to the SAVE_IMAGE_PATH defined above.
- * 
+ * it starts to overwrite. The image will be saved to the SAVE_IMAGE_PATH
+ * defined above.
+ *
  * @param type
- *            What kind of image will be saved. If it is ImageType.RAW, then an
- *            image will be saved directly
- *            from the camera. if ImageType.PROCESSED is chosen, then the robot
- *            will save the image after it
- *            has gone through the filters.
+ *                 What kind of image will be saved. If it is ImageType.RAW,
+ *                 then an
+ *                 image will be saved directly from the camera. if
+ *                 ImageType.PROCESSED is chosen, then the robot will save the
+ *                 image
+ *                 after it has gone through the filters.
  */
-
 
 public void saveImage (ImageType type)
 {
     String fileName = "";
 
-
     // Create the path the images will be saved in. If the path already
     // exists, do nothing.
-    
+
     try
         {
         // system command that creates the path the image will be saved in
-        
+
         Runtime.getRuntime()
                 .exec("mkdir -p " + SAVE_IMAGE_PATH + timeStamp);
-//      "echo $(ls -1rtd images*| head -n$(($(ls -1d images*| wc -l)-" + numImageFolders+"))) \\> temp.txt"
+        // "echo $(ls -1rtd images*| head -n$(($(ls -1d images*| wc -l)-" +
+        // numImageFolders+"))) \\> temp.txt"
         Runtime.getRuntime()
                 .exec("ls -ld " + IMAGE_BASIC_PATH + "; sleep 30");
-       
 
         } // end try
     catch (IOException e)
         {
         e.printStackTrace();
         } // catch
-       
-    
+
     // grab the image
     Mat tempImage = new Mat();
 
@@ -498,7 +498,6 @@ public void saveImage (ImageType type)
             System.out.println("Photo taken");
 
             }
-
 
         }
 
@@ -529,7 +528,7 @@ public void saveImage (ImageType type)
                     "Failed to save image: Image type not recognized.");
             break;
         } // switch
-    // Save the image to the folder specified with the name specified
+          // Save the image to the folder specified with the name specified
 
     // TODO this is what is printing Cole's problem
 
@@ -547,11 +546,12 @@ private int processedImageNum = 0;
 /**
  * Saves an image once (and only once), no matter how long the button is pressed
  * down on the joystick.
- * 
+ *
  * @param button
- *            Whether or not the button is pressed
+ *                   Whether or not the button is pressed
  * @param type
- *            What kind of image should be saved to the RoboRIO's storage.
+ *                   What kind of image should be saved to the RoboRIO's
+ *                   storage.
  */
 public void saveImageSafely (boolean button, ImageType type)
 {
@@ -564,18 +564,18 @@ private boolean saveImageButtonState = false;
 
 /**
  * Takes a lit picture with the camera when the user presses a button
- * 
+ *
  * @param button
- *            1 (or multiple) joystick button values; recommended to use 2
- *            example parameter:
- *            joystick.getRawButton(x) && joystick.getRawButton(y)
- * 
+ *                   1 (or multiple) joystick button values; recommended to use
+ *                   2
+ *                   example parameter: joystick.getRawButton(x) &&
+ *                   joystick.getRawButton(y)
+ *
  */
 public void takeLitPicture (boolean button)
 {
     // Start the timer if the button is pressed
-    if (button == true
-            && pictureTakenByButton == false
+    if (button == true && pictureTakenByButton == false
             && takePictureByButton == false)
         {
         this.takePictureByButton = true;
@@ -594,11 +594,9 @@ public void takeLitPicture (boolean button)
         {
 
         // turns on the ring light
-        if (this.pictureTimer.get() <= TAKE_PICTURE_DELAY
-                / 2.0)
+        if (this.pictureTimer.get() <= TAKE_PICTURE_DELAY / 2.0)
             {
-            //TODO remove once tested
-            System.out.println("Lets blind some wirers");
+
             this.setRelayValue(true);
             }
         // if the timer expires, save the picture , reset booleans, turns off
@@ -627,9 +625,9 @@ private final double TAKE_PICTURE_DELAY = 1.0;
 
 /**
  * Gets the value of the ring light relay
- * 
- * @return the value of the camera ring light relay; see the get() function
- *         in the Relay class for more information
+ *
+ * @return the value of the camera ring light relay; see the get() function in
+ *         the Relay class for more information
  */
 public boolean getRelayValue ()
 {
@@ -638,9 +636,9 @@ public boolean getRelayValue ()
 
 /**
  * Gets the value of the ring light relay as a Digital Output
- * 
- * @return the value of the camera ring light relay; see the get() function
- *         in the Digital Output class for more information
+ *
+ * @return the value of the camera ring light relay; see the get() function in
+ *         the Digital Output class for more information
  */
 public boolean getDigitalOutputValue ()
 {
@@ -649,9 +647,9 @@ public boolean getDigitalOutputValue ()
 
 /**
  * Set the ring light to a value
- * 
+ *
  * @param ringLightValue
- *            use kForward or kReverse to set the ring light
+ *                           use kForward or kReverse to set the ring light
  */
 public void setRelayValue (boolean ringLightValue)
 {
@@ -660,9 +658,9 @@ public void setRelayValue (boolean ringLightValue)
 
 /**
  * Set the ring light to a value
- * 
+ *
  * @param ringLightValue
- *            use true to turn the relay on
+ *                           use true to turn the relay on
  */
 public void setDigitalOutputValue (boolean ringLightValue)
 {
@@ -671,9 +669,9 @@ public void setDigitalOutputValue (boolean ringLightValue)
 
 /**
  * Turns on the ring light
- * 
+ *
  * @param button
- *            1 (or multiple) joystick buttons
+ *                   1 (or multiple) joystick buttons
  */
 public void turnRingLightOn (boolean button)
 {
@@ -685,13 +683,13 @@ public void turnRingLightOn (boolean button)
 
 // =====================USER ACCESSABLE METHODS========================
 /*
- * Any methods that will allow the user to directly access raw data outside
- * the class will be stored below.
+ * Any methods that will allow the user to directly access raw data outside the
+ * class will be stored below.
  */
 
 /**
- * @return the list of blobs generated after processing the image, in
- *         descending order of size.
+ * @return the list of blobs generated after processing the image, in descending
+ *         order of size.
  */
 public ParticleReport[] getParticleReports ()
 {
@@ -703,17 +701,18 @@ public ParticleReport[] getParticleReports ()
  */
 public boolean hasBlobs ()
 {
-    if (this.particleReports.length > 0)
+    if (/* this.particleReports.length > 0 */ !Hardware.axisCamera
+            .filterContoursOutput().isEmpty())
         return true;
     return false;
 } // end hasBlobs()
 
 /**
  * Gets a report of the index the user requests.
- * 
+ *
  * @param n
- *            The index of the size requested. 0 is the largest, and
- *            gradually gets smaller until the end of the array is reached.
+ *              The index of the size requested. 0 is the largest, and gradually
+ *              gets smaller until the end of the array is reached.
  * @return The blob thats the Nth largest in the particleReports array.
  */
 public ParticleReport getNthSizeBlob (int n)
@@ -730,9 +729,9 @@ public ParticleReport getNthSizeBlob (int n)
 /**
  * Takes the base OpenCV list of contours and changes the output to be easier to
  * work with.
- * 
+ *
  * @param contours
- *            The input from the base OpenCV contours output
+ *                     The input from the base OpenCV contours output
  */
 private void createParticleReports (List<MatOfPoint> contours)
 {
@@ -755,19 +754,18 @@ private void createParticleReports (List<MatOfPoint> contours)
 
 /**
  * TODO TEST THIS AND COMMENT SOME OF THE CALCULATIONS
- * 
- * Calculates the angle the target is at from the center line.
- * The formula can be cut into two easier sections, one for the focal
- * length and one for the angle.
- * 
- * Focal length (in pixels): Resolution / 2 x tan(FOV / 2)
- * Angle (in radians): arctan(distanceFromCenter / focalLength)
- * 
+ *
+ * Calculates the angle the target is at from the center line. The formula can
+ * be cut into two easier sections, one for the focal length and one for the
+ * angle.
+ *
+ * Focal length (in pixels): Resolution / 2 x tan(FOV / 2) Angle (in radians):
+ * arctan(distanceFromCenter / focalLength)
+ *
  * @param target
- *            The input: takes the Y axis from the center point.
- * @return the angle, in degrees. If the target is above the center line,
- *         it will show positive. If it is below the line, it will show
- *         negative.
+ *                   The input: takes the Y axis from the center point.
+ * @return the angle, in degrees. If the target is above the center line, it
+ *         will show positive. If it is below the line, it will show negative.
  */
 public double getPitchAngleDegrees (ParticleReport target)
 {
@@ -791,19 +789,19 @@ public double getPitchAngleDegrees (ParticleReport target)
 
 /**
  * TODO TEST THIS AND COMMENT SOME OF THE CALCULATIONS
- * 
- * Calculates the angle the target is at from the center line.
- * The formula can be cut into two easier sections, one for the focal
- * length and one for the angle.
- * 
- * Focal length (in pixels): Resolution / 2 x tan(FOV / 2)
- * Angle (in radians): arctan(distanceFromCenter / focalLength)
- * 
+ *
+ * Calculates the angle the target is at from the center line. The formula can
+ * be cut into two easier sections, one for the focal length and one for the
+ * angle.
+ *
+ * Focal length (in pixels): Resolution / 2 x tan(FOV / 2) Angle (in radians):
+ * arctan(distanceFromCenter / focalLength)
+ *
  * @param target
- *            The input: takes the X axis from the center point.
+ *                   The input: takes the X axis from the center point.
  * @return the angle, in degrees. If the target is to the right of the center
- *         line,
- *         it will show positive. If it is to the left, it will show negative.
+ *         line, it will show positive. If it is to the left, it will show
+ *         negative.
  */
 public double getYawAngleDegrees (ParticleReport target)
 {
@@ -829,7 +827,6 @@ public double getYawAngleDegrees (ParticleReport target)
 // Max number of processed images allowed on the roboRIO
 // -------------------------------------
 private final int maxProcessedImagesAllowedToCollect = 25;
-
 
 // -------------------------------------
 // Max number of raw images allowed on the roboRIO
