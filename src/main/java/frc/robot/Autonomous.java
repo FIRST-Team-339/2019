@@ -87,7 +87,7 @@ public static void init ()
  */
 public static enum State
     {
-INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, FINISH
+INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, FINISH
     }
 
 /**
@@ -158,8 +158,8 @@ public static void periodic ()
                 }
             break;
 
-        case DEPOSIT_CARGO_HATCH:
-            if (depositCargoHatch() == true)
+        case DEPOSIT_STRAIGHT_CARGO_HATCH:
+            if (depositStraightCargoHatch() == true)
                 {
                 autoState = State.FINISH;
                 }
@@ -207,7 +207,7 @@ private static void choosePath ()
             break;
 
         case 1:
-            autoState = State.DEPOSIT_CARGO_HATCH;
+            autoState = State.DEPOSIT_STRAIGHT_CARGO_HATCH;
             break;
 
         case 2:
@@ -283,7 +283,7 @@ private static boolean crossAutoline ()
     return false;
 }
 
-private static boolean depositCargoHatch ()
+private static boolean depositStraightCargoHatch ()
 {
     if (autoLevel == Level.LEVEL_TWO)
         {
@@ -379,11 +379,28 @@ private static boolean depositRocketHatch ()
     return false;
 }
 
+/** Enum for representing the states used in the depositSideCargoHatch path */
+private static enum SideCargoHatchState
+    {
+INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE
+    } // and we need to deploy the manipulator somewhere in here
+
+/**
+ * Variable for keeping track of the state used in the depositSideCargoHatch
+ * path
+ */
+private static SideCargoHatchState sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
+
 private static boolean depositSideCargoHatch ()
 {
-    if (autoLevel == Level.LEVEL_TWO)
+    switch (sideCargoHatchState)
         {
-        descendFromLevelTwo();
+        case INIT:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+
+                }
+            break;
         }
     return false;
 }

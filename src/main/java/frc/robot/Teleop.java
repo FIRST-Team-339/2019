@@ -188,12 +188,16 @@ public static void periodic ()
 
     // ----- Forklift controls -----
 
-    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator.getY(),
+    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
     // Hardware.rightOperator.getRawButton(5));
 
-    // if (Hardware.rightOperator.getRawButton(6) == true)
-    // Hardware.lift.setLiftPosition(Forklift.TOP_ROCKET_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+    // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.rightOperator.getRawButton(6));
+
+    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.rightOperator.getRawButton(7));
     // else if (Hardware.rightOperator.getRawButton(7) == true)
     // Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
@@ -216,7 +220,7 @@ public static void periodic ()
     // =================================================================
     // Update State Machines
     // =================================================================
-    // Hardware.lift.update();
+    Hardware.lift.update();
 
     // // =================================================================
     // // Telemetry

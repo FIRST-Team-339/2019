@@ -492,11 +492,15 @@ public void printToShuffleboard ()
         //
         // SmartDashboard.putNumber("Right Front Encoder Ticks",
         // Hardware.rightFrontDriveEncoder.get());
-        // //
+        //
         // SmartDashboard.putNumber("Left Rear Encoder Inches",
         // Hardware.leftRearDriveEncoder.getDistance());
         //
-        //
+        // SmartDashboard.putNumber("Lifting Encoder Ticks",
+        // Hardware.liftingEncoder.get());
+
+        // SmartDashboard.putNumber("Lifting Encoder Inches",
+        // Hardware.liftingEncoder.getDistance());
         //
         // // ---------------------------------
         // // Red Light/IR Sensors
@@ -603,6 +607,13 @@ public void printToShuffleboard ()
         // Hardware.driveWithCamera.getCameraCenterValue());
         // SmartDashboard.putNumber("Camera Center",
         // Hardware.driveWithCamera.getCameraCenterValue());
+
+        // =================================
+        // Forklift
+        // =================================
+
+        // SmartDashboard.putNumber("Forklift Height",
+        // Hardware.lift.getForkliftHeight());
 
         // =================================
         // Driver station
