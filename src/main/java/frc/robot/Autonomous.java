@@ -87,7 +87,7 @@ public static void init ()
  */
 public static enum State
     {
-INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, FINISH
+INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, FINISH
     }
 
 /**
@@ -158,7 +158,7 @@ public static void periodic ()
                 }
             break;
 
-        case DEPOSIT_CARGO_HATCH:
+        case DEPOSIT_STRAIGHT_CARGO_HATCH:
             if (depositCargoHatch() == true)
                 {
                 autoState = State.FINISH;
@@ -207,7 +207,7 @@ private static void choosePath ()
             break;
 
         case 1:
-            autoState = State.DEPOSIT_CARGO_HATCH;
+            autoState = State.DEPOSIT_STRAIGHT_CARGO_HATCH;
             break;
 
         case 2:
@@ -283,8 +283,50 @@ private static boolean crossAutoline ()
     return false;
 }
 
+
+private static enum DepositCargoHatchState
+    {
+INIT, DESCEND, ALIGN_TO_CARGO, DEPOSIT_CARGO
+    }
+
+private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
+
 private static boolean depositCargoHatch ()
 {
+    switch (depositCargoHatchState)
+        {
+        case INIT:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                depositCargoHatchState = DepositCargoHatchState.DESCEND;
+                } else
+                {
+
+                }
+            break;
+        case DESCEND:
+            if (descendFromLevelTwo())
+                {
+                if (usingVision)
+                    {
+
+                    } else
+                    {
+
+                    }
+                }
+            break;
+
+        case ALIGN_TO_CARGO:
+            break;
+        case DEPOSIT_CARGO:
+            break;
+
+        }
+
+
+
+
     if (autoLevel == Level.LEVEL_TWO)
         {
         descendFromLevelTwo();
@@ -292,6 +334,7 @@ private static boolean depositCargoHatch ()
 
     return false;
 }
+
 
 
 private static enum RocketHatchState
@@ -315,7 +358,7 @@ private static boolean depositRocketHatch ()
                 {
                 descendFromLevelTwo();
                 }
-            if (usingVision == true)
+            if (usingVision == true && Hardware.axisCamera.hasBlobs())
                 {
                 rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                 } else
@@ -330,10 +373,14 @@ private static boolean depositRocketHatch ()
         // DRIVE BY NONVISION
         // =================================================================
         case STRAIGHTEN_OUT_ON_WALL:
-        // if (dri)
-            {
 
-            }
+            if (usingVision == true && Hardware.axisCamera.hasBlobs())
+                {
+                // if (dri)
+                    {
+
+                    }
+                }
             break;
 
         case DRIVE_FORWARD_TO_TURN:
@@ -354,13 +401,20 @@ private static boolean depositRocketHatch ()
             break;
 
         // =================================================================
-        // DRIVE BY VISION CODE
+        // DRIVE BY VISION CODE this is where the cool kidz code
         // =================================================================
 
         case DRIVE_BY_CAMERA:
-
+            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())// TODO^^^^
+                                                                        // IR
+                {
+                Hardware.driveWithCamera
+                        .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
+                } else if (Hardware.armIR.get())
+                {
+                rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
+                }
             break;
-
         // =================================================================
         // END OF SEPCIALIZED DRIVING CODE
         // =================================================================
@@ -379,11 +433,28 @@ private static boolean depositRocketHatch ()
     return false;
 }
 
+/** Enum for representing the states used in the depositSideCargoHatch path */
+private static enum SideCargoHatchState
+    {
+INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE
+    } // and we need to deploy the manipulator somewhere in here
+
+/**
+ * Variable for keeping track of the state used in the depositSideCargoHatch
+ * path
+ */
+private static SideCargoHatchState sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
+
 private static boolean depositSideCargoHatch ()
 {
-    if (autoLevel == Level.LEVEL_TWO)
+    switch (sideCargoHatchState)
         {
-        descendFromLevelTwo();
+        case INIT:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+
+                }
+            break;
         }
     return false;
 }
@@ -495,6 +566,8 @@ public static Timer descentTimer = new Timer();
  * =============================================================
  */
 
+
+
 public static final Relay.Value LEFT = Relay.Value.kForward;
 
 public static final Relay.Value RIGHT = Relay.Value.kReverse;
@@ -510,6 +583,8 @@ public static final double DRIVE_SPEED = .4;
 public static final double TIME_TO_DRIVE_OFF_PLATFORM = 2.0;
 
 public static final double ACCELERATION_TIME = .6;// not random number, pulled
-                                                  // from 2018
+// from 2018
+
+public static final double DRIVE_WITH_CAMERA_SPEED = .4;// TODO
 
 } // end class
