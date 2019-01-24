@@ -283,8 +283,8 @@ public void printToConsole ()
             // System.out.println("Right Rear Ticks "
             // + Hardware.rightRearDriveEncoder.get());
 
-            System.out.println("deploy Ticks "
-                    + Hardware.intakeDeployEncoder.get());
+            // System.out.println("deploy Ticks "
+            // + Hardware.intakeDeployEncoder.get());
 
             // System.out.println(
             // "lift ticks " + Hardware.liftingEncoder.get());

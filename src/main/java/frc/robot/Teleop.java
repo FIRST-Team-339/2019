@@ -125,33 +125,33 @@ public static void init ()
 public static void periodic ()
 {
 
-    // UPDATES
-    Hardware.climber.climbUpdate();
-    // =================================================================
-    // OPERATOR CONTROLS
-    // =================================================================
+    // // UPDATES
+    // Hardware.climber.climbUpdate();
+    // // =================================================================
+    // // OPERATOR CONTROLS
+    // // =================================================================
 
-    if (Hardware.leftOperator.getRawButton(6) == true)
-        {
-        // Hardware.rightRearCANMotor.set(.5);
-        System.out.println("Trying to climb");
-        Hardware.climber.climb();
-        } else
-        {
-        // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-        }
+    // if (Hardware.leftOperator.getRawButton(6) == true)
+    // {
+    // // Hardware.rightRearCANMotor.set(.5);
+    // System.out.println("Trying to climb");
+    // Hardware.climber.climb();
+    // } else
+    // {
+    // // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
 
-    if (Hardware.leftDriver.getRawButton(5) == true)
-        {
-        Hardware.climber.finishEarly();
-        }
-    // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
+    // if (Hardware.leftDriver.getRawButton(5) == true)
+    // {
+    // Hardware.climber.finishEarly();
+    // }
+    // // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
 
 
-    if (Hardware.descendButton.isOnCheckNow() == true)
-        {
-        Autonomous.descendFromLevelTwo();
-        }
+    // if (Hardware.descendButton.isOnCheckNow() == true)
+    // {
+    // Autonomous.descendFromLevelTwo();
+    // }
 
     // @ANE
 
