@@ -213,7 +213,7 @@ public boolean driveToTarget (double speed)
             // adjust speed so that motors never reverse
             if (motorspeed - DRIVE_CORRECTION <= 0)
                 {
-                slowestSpeed = 0;
+                slowestSpeed = 0.1;
                 } else
                 {
                 slowestSpeed = motorspeed - DRIVE_CORRECTION;
@@ -489,6 +489,6 @@ private final double SLOW_MODIFIER = .7;
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .2;
+private final double DRIVE_CORRECTION = .15;
 
 }

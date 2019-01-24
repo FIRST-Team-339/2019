@@ -254,6 +254,7 @@ public VisionProcessor (String ip, CameraModel camera)
  *                           is the janky fix
  *
  */
+
 public VisionProcessor (String ip, CameraModel camera,
         DigitalOutput ringlightRelay)
 {
@@ -261,6 +262,7 @@ public VisionProcessor (String ip, CameraModel camera,
     // stream.
     this.camera = CameraServer.getInstance()
             .addAxisCamera("Vision Camera", ip);
+
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -369,6 +371,8 @@ public void processImage ()
     // If the error code is not 0, then there is no error.
     long errorCode = CameraServer.getInstance()
             .getVideo("Vision Camera").grabFrame(image);
+
+
 
     if (image.empty() == true)
         {

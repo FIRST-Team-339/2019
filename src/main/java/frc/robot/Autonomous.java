@@ -283,8 +283,49 @@ private static boolean crossAutoline ()
     return false;
 }
 
+private static enum DepositCargoHatchState
+    {
+INIT, DESCEND, ALIGN_TO_CARGO, DEPOSIT_CARGO
+    }
+
+private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
+
 private static boolean depositCargoHatch ()
 {
+    switch (depositCargoHatchState)
+        {
+        case INIT:
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                depositCargoHatchState = DepositCargoHatchState.DESCEND;
+                } else
+                {
+
+                }
+            break;
+        case DESCEND:
+            if (descendFromLevelTwo())
+                {
+                if (usingVision)
+                    {
+
+                    } else
+                    {
+
+                    }
+                }
+            break;
+
+        case ALIGN_TO_CARGO:
+            break;
+        case DEPOSIT_CARGO:
+            break;
+
+        }
+
+
+
+
     if (autoLevel == Level.LEVEL_TWO)
         {
         descendFromLevelTwo();
@@ -292,6 +333,7 @@ private static boolean depositCargoHatch ()
 
     return false;
 }
+
 
 
 private static enum RocketHatchState

@@ -1,8 +1,8 @@
 /*
-outline created for potential use in teleop assistance
-
-note to self: add override button to constructors
-*/
+ * outline created for potential use in teleop assistance
+ *
+ * note to self: add override button to constructors
+ */
 
 package frc.Utils;
 
@@ -44,28 +44,12 @@ public AlignToDeposit (DriveWithCamera driveWithCamera, Drive drive,
 
 }
 
-public AlignToDeposit (DriveWithCamera driveWithCamera, Drive drive,
-        UltraSonic frontUltraSonic,
-        KilroyEncoder leftFrontDriveEncoder,
-        KilroyEncoder rightFrontDriveEncoder)
+public boolean alignToDeposit (int override, boolean usingCamera)
 {
-    this.driveWithCamera = driveWithCamera;
-    this.drive = drive;
-    this.frontUltraSonic = frontUltraSonic;
-    this.leftFrontDriveEncoder = leftFrontDriveEncoder;
-    this.rightFrontDriveEncoder = rightFrontDriveEncoder;
-
-}
-
-public boolean alignToDeposit (int override)
-{
-
-
-
     switch (state)
         {
         case INIT:
-            if (USING_CAMERA)
+            if (usingCamera)
                 {
                 state = AlignToDepositState.ALIGN_BY_CAMERA;
                 } else
@@ -81,23 +65,13 @@ public boolean alignToDeposit (int override)
                 }
             break;
         case ALIGN_BY_TAPE:
-            // alignByTape();
-            state = AlignToDepositState.LIFT_MANIPULATOR;
-            break;
-        case LIFT_MANIPULATOR:
-            // LiftArm();
-            state = AlignToDepositState.DRIVE;
-            break;
-        case DRIVE:
-            double distance = 0;// TODO make calcs
-
-            this.drive.driveStraightInches(distance, .2, .1, true);
-            state = AlignToDepositState.SCORE;
-            break;
-        case SCORE:
+            // AlignWithTape();
+            state = AlignToDepositState.STOP;
             break;
 
         case STOP:
+            // set stuff to stop
+
             break;
         }
 
@@ -108,12 +82,12 @@ AlignToDepositState state = AlignToDepositState.INIT;
 
 public enum AlignToDepositState
     {
-INIT, ALIGN_BY_CAMERA, ALIGN_BY_TAPE, LIFT_MANIPULATOR, DRIVE, SCORE, STOP
+INIT, ALIGN_BY_CAMERA, ALIGN_BY_TAPE, STOP
     }
 
 private final double ALIGN_BY_CAMERA_SPEED = .3;
 
-private final boolean USING_CAMERA = true;
+
 
 private final double DISTANCE_AWAY_FROM_DEPOSIT = 10; // TODO
 
