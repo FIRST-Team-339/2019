@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import frc.Hardware.Hardware;
 
 /**
  * A sensor class that is able to use both CAN features and DIO features
@@ -24,6 +25,17 @@ private BaseMotorController canSensor = null;
 private CANSparkMax canEncoder = null;
 
 private final SensorType type;
+
+/**
+ * REV_CAN sets saved position equal to the position of the encoder. So that the
+ * savedPosition can be subtracted from the position to create a sudo "reset".
+ * Every instance of getPosition() has savedPosition being subtracted from it to
+ * create this reset().
+ * The reason for this is that SparkMax encoder does not have an internal reset
+ * of the encoder value
+ */
+private double savedPosition = 0;
+
 
 /**
  * Create the KilroyEncoder object with a digital i/o encoder. Methods in this
@@ -87,7 +99,7 @@ public KilroyEncoder (CANSparkMax canMotorController,
  * how much a shaft it is connecting to has rotated. Each pulse is known as a
  * "tick".
  *
- * @return the number of pulses that has taken place since last reset.
+ * @return the number of pulses that has taken place since last reset().
  */
 public int get ()
 {
@@ -105,12 +117,16 @@ public int get ()
             // sparkTicksPerRevolution is the number we multi the value of
             // revolutions by to
             // get a larger integer imitating ticks
+            // getPosition - savedPosition --- Reference reset() function
             if (canEncoder.getInverted() == true)
+                {
                 return -(int) (this.sparkTicksPerRevolution
-                        * canEncoder.getEncoder().getPosition());
-
+                        * (canEncoder.getEncoder().getPosition()
+                                - savedPosition));
+                }
             return (int) (this.sparkTicksPerRevolution
-                    * canEncoder.getEncoder().getPosition());
+                    * (canEncoder.getEncoder().getPosition()
+                            - savedPosition));
 
         default:
             return 0;
@@ -121,6 +137,7 @@ public int get ()
  * When we want to measure distance based on the encoder, we multiply by a
  * scalar set earlier (usually during initialization), that translates rotation
  * into linear movement.
+ * case REV_CAN getPosition - savedPosition --- Reference reset() function
  *
  * @return how far the encoder has traveled based on a scalar.
  */
@@ -135,9 +152,11 @@ public double getDistance ()
         case REV_CAN:
             if (canEncoder.getInverted() == true)
                 return -distancePerTick
-                        * canEncoder.getEncoder().getPosition();
+                        * (canEncoder.getEncoder().getPosition()
+                                - savedPosition);
             return distancePerTick
-                    * canEncoder.getEncoder().getPosition();
+                    * (canEncoder.getEncoder().getPosition()
+                            - savedPosition);
         default:
             return this.get();
         }
@@ -275,6 +294,15 @@ public int setTicksPerRevolution (int ticksPerRevolution)
 /**
  * Sets any outstanding/stored values to 0.
  */
+
+/**
+ * REV_CAN sets saved position equal to the position of the encoder. So that the
+ * savedPosition can be subtracted from the position to create a sudo "reset".
+ * Every instance of getPosition() has savedPosition being subtracted from it to
+ * create this reset().
+ * The reason for this is that SparkMax encoder does not have an internal reset
+ * of the encoder value
+ */
 public void reset ()
 {
     switch (type)
@@ -286,7 +314,7 @@ public void reset ()
             dioSensor.reset();
             break;
         case REV_CAN:
-            // this dosent work yet but go here when it does
+            savedPosition = canEncoder.getEncoder().getPosition();
         default:
             return;
         }
@@ -350,7 +378,7 @@ D_IO,
 REV_CAN
     }
 
-// varialbe at which rotational meausurements of the Spark Max is translated to
+// variable at which rotational measurements of the Spark Max is translated to
 // "ticks" (not really ticks)
 private int sparkTicksPerRevolution = 1;
 
