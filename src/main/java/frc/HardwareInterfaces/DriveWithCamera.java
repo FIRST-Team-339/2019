@@ -234,7 +234,7 @@ public boolean driveToTarget (double speed)
             System.out.println("motor speed: " + motorspeed);
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (centerX > SWITCH_CAMERA_CENTER)
+            if (centerX > SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
@@ -245,7 +245,7 @@ public boolean driveToTarget (double speed)
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-            else if (centerX < SWITCH_CAMERA_CENTER)
+            else if (centerX < SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
                 {
                 // the switch's center is too far left, drive faster on the
                 // right
@@ -467,28 +467,28 @@ public double getCameraCenterValue ()
 // ================VISION CONSTANTS================
 // the distance in inches in which we drive the robot straight using the
 // ultrasonic
-private final double CAMERA_NO_LONGER_WORKS = 25;// 36
+private final double CAMERA_NO_LONGER_WORKS = 25;
 
 // The minimum encoder distance we must drive before we enable the ultrasonic
 private final double ENCODER_MIN_DISTANCE = 50; // inches
 // 38 + 50;
 
 // the number in pixels that the center we are looking for can be off
-private final double CAMERA_DEADBAND = 7;
+private final double CAMERA_DEADBAND = 10;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 27;
+private final double DISTANCE_FROM_WALL_TO_STOP = 28;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW1 = 50;
+private final double DISTANCE_FROM_WALL_TO_SLOW1 = 70;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW2 = 36;
+private final double DISTANCE_FROM_WALL_TO_SLOW2 = 45;
 
-private final double SLOW_MODIFIER = .7;
+private final double SLOW_MODIFIER = .65;
 // 20 + 50;
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .15;
+private final double DRIVE_CORRECTION = .2;
 
 }

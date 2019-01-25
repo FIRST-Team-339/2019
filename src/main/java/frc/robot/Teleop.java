@@ -127,10 +127,6 @@ public static void init ()
 public static void periodic ()
 {
 
-
-
-    // UPDATES
-    Hardware.climber.climbUpdate();
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -161,83 +157,68 @@ public static void periodic ()
 
     // // TODO remove the next 3 functions once camera is tested
 
-    // // Drive to the vision targets
-    // if (Hardware.leftOperator.getRawButton(4))
-    // {
-    // hasDoneTheThing = false;
-    // System.out.println("Done the thing: " + hasDoneTheThing);
-    // }
+    // Drive to the vision targets
+    if (Hardware.leftOperator.getRawButton(4))
+        {
+        hasDoneTheThing = false;
+        System.out.println("Done the thing: " + hasDoneTheThing);
+        }
 
-    // if (!hasDoneTheThing)
-    // {
+    if (!hasDoneTheThing)
+        {
 
-    // if (Hardware.driveWithCamera.driveToTarget(.4))
-    // {
-    // System.out.println("Has aligned hopefully");
-    // Hardware.axisCamera.setRelayValue(false);
-    // hasDoneTheThing = true;
-    // }
-    // }
-    // // turn on the ringlight
-    // if (Hardware.leftOperator.getRawButton(6)
-    // && Teleop.hasDoneTheThing == true)
-    // {
-    // System.out.println("lets blind some wirers");
-    // Hardware.axisCamera.setRelayValue(true);
-    // }
-    // // save image
-    // if (Hardware.leftOperator.getRawButton(7))
-    // {
-    // Hardware.axisCamera.saveImage(ImageType.RAW);
-    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-    // }
+        if (Hardware.driveWithCamera.driveToTarget(.38))
+            {
+            System.out.println("Has aligned hopefully");
+            Hardware.axisCamera.setRelayValue(false);
+            hasDoneTheThing = true;
+            }
+        }
+    // turn on the ringlight
+    if (Hardware.leftOperator.getRawButton(6)
+            && Teleop.hasDoneTheThing == true)
+        {
+        System.out.println("lets blind some wirers");
+        Hardware.axisCamera.setRelayValue(true);
+        }
+    // save image
+    if (Hardware.leftOperator.getRawButton(7))
+        {
+        Hardware.axisCamera.saveImage(ImageType.RAW);
+        Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        }
 
     // ----- Forklift controls -----
 
-    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-    // Hardware.rightOperator.getRawButton(5));
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.rightOperator.getRawButton(6));
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.rightOperator.getRawButton(5));
 
     // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.rightOperator.getRawButton(7));
-    // else if (Hardware.rightOperator.getRawButton(7) == true)
-    // Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-    // else if (Hardware.rightOperator.getRawButton(1) == true)
-    // Hardware.lift.setLiftPosition(Forklift.TOP_ROCKET_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-    // else if (Hardware.rightOperator.getRawButton(2) == true)
-    // Hardware.lift.setLiftPosition(Forklift.MIDDLE_ROCKET_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
-    // else if (Hardware.rightOperator.getRawButton(3) == true)
-    // Hardware.lift.setLiftPosition(Forklift.LOWER_ROCKET_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED);
+    // Hardware.rightOperator.getRawButton(6));
+
 
     // =================================================================
     // Driver Controls
     // =================================================================
     // @ANE
 
-    // if (Hardware.leftDriver.getY() > DEADBAND_VALUE
-    // || Hardware.leftDriver.getY() < -DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() > DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
-    // {
-    // Teleop.teleopDrive();
-    // hasDoneTheThing = true;
-    // Hardware.axisCamera.setRelayValue(false);
+    if (Hardware.leftDriver.getY() > DEADBAND_VALUE
+            || Hardware.leftDriver.getY() < -DEADBAND_VALUE
+            || Hardware.rightDriver.getY() > DEADBAND_VALUE
+            || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
+        {
+        Teleop.teleopDrive();
+        hasDoneTheThing = true;
+        Hardware.axisCamera.setRelayValue(false);
 
-    // }
-
+        }
 
     // =================================================================
     // Update State Machines
     // =================================================================
     Hardware.lift.update();
+    Hardware.climber.climbUpdate();
 
     // // =================================================================
     // // Telemetry
