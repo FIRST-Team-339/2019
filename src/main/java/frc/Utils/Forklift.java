@@ -2,8 +2,9 @@ package frc.Utils;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.HardwareInterfaces.KilroyEncoder;
-import frc.Utils.GamePieceManipulator.GamePiece;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * Class for controlling the Forklift on the robot. Gets information from, but
@@ -76,7 +77,7 @@ public final static double CARGO_SHIP_CARGO = 0;
 
 public final static double CARGO_SHIP_HATCH = 0;
 
-private static final double MAX_HEIGHT = 40; // placeholder value from last year
+private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
 private final double DOWN_JOYSTICK_SCALAR = .55;
 
@@ -221,13 +222,24 @@ public void setMaxLiftHeight (int inches)
 public void setLiftPositionByButton (double position,
         double forkliftSpeed, boolean button)
 {
-    if (button == true)
+    // if the button is being held down and was not being held down before
+    if (button == true && setLiftPositionPreviousButtonValue == false)
         {
+        // tell the forklift state machine we want to move to a particular
+        // position
         forkliftTargetHeight = position;
         forkliftTargetSpeed = Math.abs(forkliftSpeed);
         liftState = ForkliftState.MOVING_TO_POSITION;
         }
+    // update value of the setLiftPositionPreviousButtonValue variable
+    setLiftPositionPreviousButtonValue = button;
 }
+
+// not an actual momentary switch object, but a boolean used to the same effect
+// used to keep the setLiftPositionByButton method from trying to set the
+// forklift height multiple times in a row when the forklift height is near the
+// height
+private boolean setLiftPositionPreviousButtonValue = false;
 
 /**
  * Moves the arm to the the position input, FORKLIFT_MAX_HEIGHT being the top
@@ -306,7 +318,6 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
  */
 public void update ()
 {
-
     // this.printDebugInfo();
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
@@ -413,13 +424,14 @@ public void update ()
 
 public void printDebugInfo ()
 {
-    System.out.println("FL Height: " + this.getForkliftHeight());
-    System.out
-            .println("FL Encoder Ticks: " + this.forkliftEncoder.get());
-    System.out.println("FL Overall State: " + this.liftState);
-    System.out.println("FL Direction State: " + this.forkliftDirection);
-    System.out
-            .println("FL setLiftPositionInit: " + setLiftPositionInit);
+    SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
+    SmartDashboard.putNumber("FL Encoder Ticks: ",
+            this.forkliftEncoder.get());
+    SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
+    SmartDashboard.putString("FL Direction State: ",
+            "" + this.forkliftDirection);
+    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+            setLiftPositionInit);
 }
 
 }
