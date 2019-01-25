@@ -21,6 +21,7 @@ import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.KilroySPIGyro;
 import frc.HardwareInterfaces.LVMaxSonarEZ;
 import frc.HardwareInterfaces.LightSensor;
+import frc.HardwareInterfaces.MomentarySwitch;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
@@ -179,8 +180,9 @@ public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(
 
 public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
-public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(23,
-        24);// being removed???
+public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(1,
+        2);// 23,
+// 24);// being removed???
 
 public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 
@@ -208,6 +210,8 @@ public static LightSensor armIR = new LightSensor(21);
 // TODO check port for 2018 robot
 
 public static LightSensor redLight = new LightSensor(7);
+
+public static LightSensor testRedLight = new LightSensor(8);
 
 // ====================================
 // I2C Classes
@@ -281,6 +285,8 @@ public static VisionProcessor axisCamera = new VisionProcessor(
         "10.3.39.11", CameraModel.AXIS_M1013,
         ringLightRelay);
 
+
+
 // -------------------------------------
 // declare the USB camera server and the
 // USB camera it serves at the same time
@@ -319,6 +325,8 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
+public static MomentarySwitch descendButton = new MomentarySwitch(
+        leftOperator, 5, false);
 
 // **********************************************************
 // Kilroy's Ancillary classes

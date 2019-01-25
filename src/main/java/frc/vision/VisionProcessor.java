@@ -215,7 +215,10 @@ public VisionProcessor (String ip, CameraModel camera)
     // Adds the camera to the cscore CameraServer, in order to grab the
     // stream.
     this.camera = CameraServer.getInstance()
-            .addAxisCamera("Vision Camera", ip);
+            .addAxisCamera("axis-camera", ip);
+    // originally named Vision Camera
+
+
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -252,14 +255,15 @@ public VisionProcessor (String ip, CameraModel camera)
  *                           is the janky fix
  *
  */
+
 public VisionProcessor (String ip, CameraModel camera,
         DigitalOutput ringlightRelay)
 {
     // Adds the camera to the cscore CameraServer, in order to grab the
     // stream.
     this.camera = CameraServer.getInstance()
-            .addAxisCamera("Vision Camera", ip);
-    CameraServer.getInstance().startAutomaticCapture(2);
+            .addAxisCamera("axis-camera", ip);
+
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -298,7 +302,7 @@ public VisionProcessor (int usbPort, CameraModel camera)
     // Adds the camera to the cscore CameraServer, in order to grab the
     // stream.
     this.camera = CameraServer.getInstance()
-            .startAutomaticCapture("Vision Camera", usbPort);
+            .startAutomaticCapture("axis-camera", usbPort);
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -335,7 +339,7 @@ public VisionProcessor (int usbPort, CameraModel camera,
     // Adds the camera to the cscore CameraServer, in order to grab the
     // stream.
     this.camera = CameraServer.getInstance()
-            .startAutomaticCapture("Vision Camera", usbPort);
+            .startAutomaticCapture("axis-camera", usbPort);
 
     // Based on the selected camera type, set the field of views and focal
     // length.
@@ -367,7 +371,9 @@ public void processImage ()
     // Gets the error code while getting the new image from the camera.
     // If the error code is not 0, then there is no error.
     long errorCode = CameraServer.getInstance()
-            .getVideo("Vision Camera").grabFrame(image);
+            .getVideo("axis-camera").grabFrame(image);
+
+
 
     if (image.empty() == true)
         {
@@ -473,13 +479,13 @@ public void saveImage (ImageType type)
     // maybe check to see if we have an image first before using this
     // test if we are getting an image, and then try putting it in a loop
     // until we get one
-    CameraServer.getInstance().getVideo("Vision Camera")
+    CameraServer.getInstance().getVideo("axis-camera")
             .grabFrame(tempImage);
 
     if (tempImage.empty() == true)
         {
         // redo taking photo
-        CameraServer.getInstance().getVideo("Vision Camera")
+        CameraServer.getInstance().getVideo("axis-camera")
                 .grabFrame(tempImage);
         // this is a temporary test {Craig}
 

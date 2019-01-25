@@ -201,23 +201,23 @@ public void printToConsole ()
             // // ---------------------------------
             // // Encoders
             // // ---------------------------------
-            SmartDashboard.putNumber("Left Front Encoder Inches",
-                    Hardware.leftFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Left Front Encoder Inches",
+            // Hardware.leftFrontDriveEncoder.getDistance());
 
-            SmartDashboard.putNumber("Left Front Encoder Ticks",
-                    Hardware.leftFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Left Front Encoder Ticks",
+            // Hardware.leftFrontDriveEncoder.get());
 
-            SmartDashboard.putNumber("Right Front Encoder Inches",
-                    Hardware.rightFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Right Front Encoder Inches",
+            // Hardware.rightFrontDriveEncoder.getDistance());
 
-            SmartDashboard.putNumber("Right Front Encoder Ticks",
-                    Hardware.rightFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Right Front Encoder Ticks",
+            // Hardware.rightFrontDriveEncoder.get());
 
-            SmartDashboard.putNumber("Liftig Encoder Inches",
-                    Hardware.liftingEncoder.getDistance());
+            // SmartDashboard.putNumber("Liftig Encoder Inches",
+            // Hardware.liftingEncoder.getDistance());
 
-            SmartDashboard.putNumber("Lifting Encoder Ticks",
-                    Hardware.liftingEncoder.get());
+            // SmartDashboard.putNumber("Lifting Encoder Ticks",
+            // Hardware.liftingEncoder.get());
 
             //
             //
@@ -286,8 +286,8 @@ public void printToConsole ()
             System.out.println("deploy Ticks "
                     + Hardware.intakeDeployEncoder.get());
 
-            System.out.println(
-                    "lift ticks " + Hardware.liftingEncoder.get());
+            // System.out.println(
+            // "lift ticks " + Hardware.liftingEncoder.get());
 
             // ---------------------------------
             // Red Light/IR Sensors
@@ -492,11 +492,15 @@ public void printToShuffleboard ()
         //
         // SmartDashboard.putNumber("Right Front Encoder Ticks",
         // Hardware.rightFrontDriveEncoder.get());
-        // //
+        //
         // SmartDashboard.putNumber("Left Rear Encoder Inches",
         // Hardware.leftRearDriveEncoder.getDistance());
         //
-        //
+        // SmartDashboard.putNumber("Lifting Encoder Ticks",
+        // Hardware.liftingEncoder.get());
+
+        // SmartDashboard.putNumber("Lifting Encoder Inches",
+        // Hardware.liftingEncoder.getDistance());
         //
         // // ---------------------------------
         // // Red Light/IR Sensors
@@ -603,6 +607,13 @@ public void printToShuffleboard ()
         // Hardware.driveWithCamera.getCameraCenterValue());
         // SmartDashboard.putNumber("Camera Center",
         // Hardware.driveWithCamera.getCameraCenterValue());
+
+        // =================================
+        // Forklift
+        // =================================
+
+        // SmartDashboard.putNumber("Forklift Height",
+        // Hardware.lift.getForkliftHeight());
 
         // =================================
         // Driver station

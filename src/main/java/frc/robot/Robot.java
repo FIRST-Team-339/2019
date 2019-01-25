@@ -58,8 +58,11 @@ public void robotInit ()
     // -------------------------------------
     // Hardware.rightFrontDriveEncoder.setReverseDirection(true);
     // Hardware.leftFrontDriveEncoder.setReverseDirection(true);
-    // Hardware.rightFrontDriveEncoder.reset();
-    // Hardware.leftFrontDriveEncoder.reset();
+    Hardware.liftingEncoder.setReverseDirection(true);
+
+    Hardware.rightFrontDriveEncoder.reset();
+    Hardware.leftFrontDriveEncoder.reset();
+    Hardware.liftingEncoder.reset();
 
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
@@ -69,6 +72,9 @@ public void robotInit ()
     // -------------------------------------
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
+
+    Hardware.liftingEncoder
+            .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
 
     // written by Meghan Brown 2019
     // makes the camera work --- can we get this in colour somehow?
@@ -312,5 +318,12 @@ public void testInit ()
 @Override
 public void testPeriodic ()
 {
-}
+} // end testPeriodic
+
+// ==========================================
+// TUNEABLES
+// ==========================================
+
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+
 }
