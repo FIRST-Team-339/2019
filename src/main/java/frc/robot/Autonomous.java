@@ -127,6 +127,12 @@ public static Level autoLevel = Level.NULL;
  */
 public static void periodic ()
 {
+    if (Hardware.rightDriver.getRawButton(11)
+            && Hardware.leftDriver.getRawButton(11))
+        {
+        autoState = State.FINISH;
+        }
+
     switch (autoState)
         {
         case INIT:
@@ -511,7 +517,7 @@ private static boolean depositRocketHatch ()
 /** Enum for representing the states used in the depositSideCargoHatch path */
 private static enum SideCargoHatchState
     {
-INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE
+INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
     } // and we need to deploy the manipulator somewhere in here
 
 /**
@@ -526,9 +532,35 @@ private static boolean depositSideCargoHatch ()
         {
         case INIT:
             if (autoLevel == Level.LEVEL_TWO)
-                {
-
-                }
+                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
+            else
+                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1;
+            break;
+        case LEAVE_LEVEL_2:
+            // if(descendFromLevelTwo() == )
+            break;
+        case LEAVE_LEVEL_1:
+            break;
+        case DRIVE_1:
+            break;
+        case TURN_1:
+            break;
+        case DRIVE_2:
+            break;
+        case TURN_2:
+            break;
+        case DRIVE_TO_TAPE:
+            break;
+        case DRIVE_AFTER_TAPE:
+            break;
+        case TURN_AFTER_TAPE:
+            break;
+        case DRIVE_TO_CARGO_SHIP:
+            break;
+        case SCORE:
+            break;
+        default:
+        case FINISHED:
             break;
         }
     return false;

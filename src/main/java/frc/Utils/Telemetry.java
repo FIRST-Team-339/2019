@@ -201,23 +201,23 @@ public void printToConsole ()
             // // ---------------------------------
             // // Encoders
             // // ---------------------------------
-            SmartDashboard.putNumber("Left Front Encoder Inches",
-                    Hardware.leftFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Left Front Encoder Inches",
+            // Hardware.leftFrontDriveEncoder.getDistance());
 
-            SmartDashboard.putNumber("Left Front Encoder Ticks",
-                    Hardware.leftFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Left Front Encoder Ticks",
+            // Hardware.leftFrontDriveEncoder.get());
 
-            SmartDashboard.putNumber("Right Front Encoder Inches",
-                    Hardware.rightFrontDriveEncoder.getDistance());
+            // SmartDashboard.putNumber("Right Front Encoder Inches",
+            // Hardware.rightFrontDriveEncoder.getDistance());
 
-            SmartDashboard.putNumber("Right Front Encoder Ticks",
-                    Hardware.rightFrontDriveEncoder.get());
+            // SmartDashboard.putNumber("Right Front Encoder Ticks",
+            // Hardware.rightFrontDriveEncoder.get());
 
-            SmartDashboard.putNumber("Liftig Encoder Inches",
-                    Hardware.liftingEncoder.getDistance());
+            // SmartDashboard.putNumber("Liftig Encoder Inches",
+            // Hardware.liftingEncoder.getDistance());
 
-            SmartDashboard.putNumber("Lifting Encoder Ticks",
-                    Hardware.liftingEncoder.get());
+            // SmartDashboard.putNumber("Lifting Encoder Ticks",
+            // Hardware.liftingEncoder.get());
 
             //
             //
