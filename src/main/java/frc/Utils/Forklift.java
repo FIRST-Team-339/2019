@@ -51,8 +51,12 @@ private double currentForkliftDownSpeed = 0;
 
 private double currentForkliftMaxHeight = MAX_HEIGHT;
 
+// used by the MOVING_TO_POSITION state in the state machine to determine what
+// position to move to
 private double forkliftTargetHeight = 0.0;
 
+// used by the MOVING_TO_POSITION state in the state machine to determine what
+// speed to move at
 private double forkliftTargetSpeed = 0.0;
 
 private double currentMinLiftPosition = 0;
