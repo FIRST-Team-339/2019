@@ -157,36 +157,36 @@ public static void periodic ()
 
     // // TODO remove the next 3 functions once camera is tested
 
-    // // Drive to the vision targets
-    // if (Hardware.leftOperator.getRawButton(4))
-    // {
-    // hasDoneTheThing = false;
-    // System.out.println("Done the thing: " + hasDoneTheThing);
-    // }
+    // Drive to the vision targets
+    if (Hardware.leftOperator.getRawButton(4))
+        {
+        hasDoneTheThing = false;
+        System.out.println("Done the thing: " + hasDoneTheThing);
+        }
 
-    // if (!hasDoneTheThing)
-    // {
+    if (!hasDoneTheThing)
+        {
 
-    // if (Hardware.driveWithCamera.driveToTarget(.4))
-    // {
-    // System.out.println("Has aligned hopefully");
-    // Hardware.axisCamera.setRelayValue(false);
-    // hasDoneTheThing = true;
-    // }
-    // }
-    // // turn on the ringlight
-    // if (Hardware.leftOperator.getRawButton(6)
-    // && Teleop.hasDoneTheThing == true)
-    // {
-    // System.out.println("lets blind some wirers");
-    // Hardware.axisCamera.setRelayValue(true);
-    // }
-    // // save image
-    // if (Hardware.leftOperator.getRawButton(7))
-    // {
-    // Hardware.axisCamera.saveImage(ImageType.RAW);
-    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-    // }
+        if (Hardware.driveWithCamera.driveToTarget(.38))
+            {
+            System.out.println("Has aligned hopefully");
+            Hardware.axisCamera.setRelayValue(false);
+            hasDoneTheThing = true;
+            }
+        }
+    // turn on the ringlight
+    if (Hardware.leftOperator.getRawButton(6)
+            && Teleop.hasDoneTheThing == true)
+        {
+        System.out.println("lets blind some wirers");
+        Hardware.axisCamera.setRelayValue(true);
+        }
+    // save image
+    if (Hardware.leftOperator.getRawButton(7))
+        {
+        Hardware.axisCamera.saveImage(ImageType.RAW);
+        Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        }
 
     // ----- Forklift controls -----
 
@@ -203,16 +203,16 @@ public static void periodic ()
     // =================================================================
     // @ANE
 
-    // if (Hardware.leftDriver.getY() > DEADBAND_VALUE
-    // || Hardware.leftDriver.getY() < -DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() > DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
-    // {
-    // Teleop.teleopDrive();
-    // hasDoneTheThing = true;
-    // Hardware.axisCamera.setRelayValue(false);
+    if (Hardware.leftDriver.getY() > DEADBAND_VALUE
+            || Hardware.leftDriver.getY() < -DEADBAND_VALUE
+            || Hardware.rightDriver.getY() > DEADBAND_VALUE
+            || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
+        {
+        Teleop.teleopDrive();
+        hasDoneTheThing = true;
+        Hardware.axisCamera.setRelayValue(false);
 
-    // }
+        }
 
     // =================================================================
     // Update State Machines
