@@ -127,6 +127,12 @@ public static Level autoLevel = Level.NULL;
  */
 public static void periodic ()
 {
+    if (Hardware.rightDriver.getRawButton(11)
+            && Hardware.leftDriver.getRawButton(11))
+        {
+        autoState = State.FINISH;
+        }
+
     switch (autoState)
         {
         case INIT:
