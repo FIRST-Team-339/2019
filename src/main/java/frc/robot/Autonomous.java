@@ -33,7 +33,6 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.Utils.*;
-import static org.junit.Assume.assumeTrue;
 import javax.lang.model.util.ElementScanner6;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
@@ -340,7 +339,7 @@ private static boolean depositCargoHatch ()
 
 private static enum RocketHatchState
     {
-STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
+STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_ROCKET_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
     }
 
 private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
@@ -348,6 +347,10 @@ private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
 private static boolean depositRocketHatch ()
 {
 
+    if (rocketHatchState == rocketHatchState.STANDBY)
+        {
+        rocketHatchState = RocketHatchState.DESCEND;
+        }
     switch (rocketHatchState)
         {
         case STANDBY:
@@ -381,12 +384,9 @@ private static boolean depositRocketHatch ()
 
             if (autoTimer.get() >= TIME_TO_STRAIGHTEN_OUT_ON_WALL)
                 {
-                // if (Hardware.drive.drive(DRIVE_SPEED,
-                // DISTANCE_TO_CROSS_AUTOLINE,
-                // ACCELERATION_TIME) = true)
-                    {
-
-                    }
+                Hardware.drive.stop();
+                autoTimer.stop();
+                rocketHatchState = RocketHatchState.DRIVE_FORWARD_TO_TURN;
                 }
             break;
 
@@ -394,7 +394,7 @@ private static boolean depositRocketHatch ()
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TO_FIRST_TURN, DRIVE_SPEED,
                     ACCELERATION_TIME, true) == true)
-                {// meow
+                {
                 rocketHatchState = RocketHatchState.TURN_TOWARDS_FIELD_WALL;
                 }
             break;
@@ -403,7 +403,7 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT && Hardware.drive
                     .turnDegrees(TURN_RIGHT90, TURN_SPEED,
-                            ACCELERATION_TIME, descendInit))
+                            ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
@@ -411,7 +411,7 @@ private static boolean depositRocketHatch ()
             else if (autoPosition == Position.LEFT
                     && Hardware.drive
                             .turnDegrees(TURN_LEFT90, TURN_SPEED,
-                                    ACCELERATION_TIME, descendInit))
+                                    ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
@@ -433,7 +433,7 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT && Hardware.drive
                     .turnDegrees(TURN_LEFT90, TURN_SPEED,
-                            ACCELERATION_TIME, descendInit))
+                            ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
                 }
@@ -441,23 +441,30 @@ private static boolean depositRocketHatch ()
             else if (autoPosition == Position.LEFT
                     && Hardware.drive
                             .turnDegrees(TURN_RIGHT90, TURN_SPEED,
-                                    ACCELERATION_TIME, descendInit))
+                                    ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
                 }
             break;
 
         case ALIGN_PERPENDICULAR_TO_TAPE:
+            // if (alignPerpemdicularToTape() == true)
+            // {
+            // rocketHatchState = RocketHatchState.DRIVE_TO_TAPE;
+            // }
 
             break;
 
-        case DRIVE_TO_TAPE:
+        case DRIVE_TO_ROCKET_TAPE:
         // if (redlight1 == true || redlight2 == true || redlight3 == true ||
         // redlight4 == true ||redlight5 == true)
             {
+            rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
+            }
+        // else
+            {
             Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
                     false);
-            rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
             }
 
             break;
