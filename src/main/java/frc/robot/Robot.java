@@ -72,7 +72,10 @@ public void robotInit ()
     // -------------------------------------
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
-
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
 
@@ -323,6 +326,8 @@ public void testPeriodic ()
 // ==========================================
 // TUNEABLES
 // ==========================================
+
+private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 
