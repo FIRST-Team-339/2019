@@ -19,98 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Forklift
 {
 
-// ==================
-// ----- Fields -----
-// ==================
-// Enums
-
-public static enum ForkliftState
-    {
-MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
-    }
-
-public static enum ForkliftDirectionState
-    {
-NEUTRAL, MOVING_DOWN, MOVING_UP
-    }
-
-public ForkliftState liftState = ForkliftState.STAY_AT_POSITION;
-
-// Hardware
-private WPI_TalonSRX forkliftMotor;
-
-private KilroyEncoder forkliftEncoder;
-
-private GamePieceManipulator manipulator;
-
-// Variables
-
-private boolean setLiftPositionInit = true;
-
-private double currentForkliftDownSpeed = 0;
-
-private double currentForkliftMaxHeight = MAX_HEIGHT;
-
-// used by the MOVING_TO_POSITION state in the state machine to determine what
-// position to move to
-private double forkliftTargetHeight = 0.0;
-
-// used by the MOVING_TO_POSITION state in the state machine to determine what
-// speed to move at
-private double forkliftTargetSpeed = 0.0;
-
-private double currentMinLiftPosition = 0;
-
-private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRAL;
-
-// Constants
-
-public final static double TOP_ROCKET_CARGO = 69;
-
-public final static double MIDDLE_ROCKET_CARGO = 26;
-
-public final static double LOWER_ROCKET_CARGO = 0;
-
-public final static double TOP_ROCKET_HATCH = 50;
-
-public final static double MIDDLE_ROCKET_HATCH = 30;
-
-public final static double LOWER_ROCKET_HATCH = 10;
-
-public final static double CARGO_SHIP_CARGO = 0;
-
-public final static double CARGO_SHIP_HATCH = 0;
-
-private static final double MAX_HEIGHT = 69; // placeholder value from last year
-
-private final double DOWN_JOYSTICK_SCALAR = .55;
-
-private final double UP_JOYSTICK_SCALAR = 1.0;
-
-private final double NO_PIECE_MIN_HEIGHT = 0;
-
-private final double DEPLOY_FOLDED_MIN_HEIGHT = 15;
-
-private final double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
-
-private final double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
-
-// for use in teleop when we are calling setLiftPosition(position, speed)
-public static final double DEFAULT_TELEOP_BUTTON_SPEED = .6;
-
-// speed sent to the forklift motor to hold position when we do not
-// have any game piece
-private final double STAY_UP_NO_PIECE = 0.05;
-
-// speed sent to the forklift motor to hold position when we have a
-// hatch
-private final double STAY_UP_WITH_HATCH = .1;
-
-// speed sent to the forklift motor to hold position when we have a
-// cargo
-private final double STAY_UP_WITH_CARGO = .1;
-
-private static final double JOYSTICK_DEADBAND = .2;
 
 // ========================
 // ----- Constructors -----
@@ -437,5 +345,134 @@ public void printDebugInfo ()
     SmartDashboard.putBoolean("FL setLiftPositionInit: ",
             setLiftPositionInit);
 }
+
+// ==================
+// ----- Fields -----
+// ==================
+// Enums
+
+public static enum ForkliftState
+    {
+MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
+    }
+
+public static enum ForkliftDirectionState
+    {
+NEUTRAL, MOVING_DOWN, MOVING_UP
+    }
+
+public ForkliftState liftState = ForkliftState.STAY_AT_POSITION;
+
+// Hardware
+private WPI_TalonSRX forkliftMotor;
+
+private KilroyEncoder forkliftEncoder;
+
+private GamePieceManipulator manipulator;
+
+// Variables
+
+private boolean setLiftPositionInit = true;
+
+private double currentForkliftDownSpeed = 0;
+
+private double currentForkliftMaxHeight = MAX_HEIGHT;
+
+// used by the MOVING_TO_POSITION state in the state machine to determine what
+// position to move to
+private double forkliftTargetHeight = 0.0;
+
+// used by the MOVING_TO_POSITION state in the state machine to determine what
+// speed to move at
+private double forkliftTargetSpeed = 0.0;
+
+private double currentMinLiftPosition = 0;
+
+private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRAL;
+
+// Constants
+
+public final static double TOP_ROCKET_CARGO = 69;
+
+public final static double MIDDLE_ROCKET_CARGO = 26;
+
+public final static double LOWER_ROCKET_CARGO = 0;
+
+public final static double TOP_ROCKET_HATCH = 50;
+
+public final static double MIDDLE_ROCKET_HATCH = 30;
+
+public final static double LOWER_ROCKET_HATCH = 10;
+
+public final static double CARGO_SHIP_CARGO = 0;
+
+public final static double CARGO_SHIP_HATCH = 0;
+
+private static final double MAX_HEIGHT = 69; // placeholder value from last year
+
+private final double DOWN_JOYSTICK_SCALAR = .55;
+
+private final double UP_JOYSTICK_SCALAR = 1.0;
+
+private final double NO_PIECE_MIN_HEIGHT = 0;
+
+private final double DEPLOY_FOLDED_MIN_HEIGHT = 15;
+
+private final double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
+
+private final double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
+
+// for use in teleop when we are calling setLiftPosition(position, speed)
+public static final double DEFAULT_TELEOP_BUTTON_SPEED = .6;
+
+// speed sent to the forklift motor to hold position when we do not
+// have any game piece
+private final double STAY_UP_NO_PIECE = 0.05;
+
+// speed sent to the forklift motor to hold position when we have a
+// hatch
+private final double STAY_UP_WITH_HATCH = .1;
+
+// speed sent to the forklift motor to hold position when we have a
+// cargo
+private final double STAY_UP_WITH_CARGO = .1;
+
+private static final double JOYSTICK_DEADBAND = .2;
+
+
+/**
+ * ROCKET information from the game manual.
+ * __________________________________________________________________________
+ * CARGO PORTS
+ * The center of the bottommost port is 2'3.5" (two feet and 3 and a half
+ * inches) from the carpet.
+ * The center of the middle port is 4'7.5" (four feet and 7 and a half
+ * inches)
+ * from the carpet.
+ * THe center of the topmost port is 6'11.5" (six feet and 11 and a half
+ * inches)
+ * from the carpet.
+ * __________________________________________________________________________
+ * HATCH OPENINGS
+ * The center of the lowest hatch opening is 1'7" (one foot and seven
+ * inches) from
+ * the carpet.
+ * The center of the middle hatch opening is 3'11" (three feet and eleven
+ * inches)
+ * from the carpet.
+ * The center of the topmost hatch opening is 6'3" (six feet and three
+ * inches)
+ * from the carpet.
+ * _________________________________________________________________________
+ * CARGO SHUTTLE information from the game manual.
+ * The center of the shuttle opening(above the hatch) for the cargo is
+ * 3'3.75" (three feet and three and three-fourths inches) from the carpet.
+ * The center of the hatch opening is 1'7" (one foot and seven inches) from
+ * the carpet.
+ * _________________________________________________________________________
+ * SOURCES:
+ * ROCKET information at page 17 of the game manual (21 of the pdf)
+ * CARGO SHUTTLE information at page 21 of the game manual (25 of the pdf)
+ */
 
 }
