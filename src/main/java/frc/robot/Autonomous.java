@@ -32,11 +32,12 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.LightSensor;
 import frc.Utils.*;
-import javax.lang.model.util.ElementScanner6;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.drive.Drive;
+import frc.HardwareInterfaces.KilroySPIGyro;
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
@@ -480,7 +481,7 @@ private static boolean depositRocketHatch ()
         // =================================================================
 
         case DRIVE_BY_CAMERA:
-            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())
+            if (Hardware.axisCamera.hasBlobs())
                 {
                 Hardware.driveWithCamera
                         .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
@@ -516,7 +517,7 @@ private static boolean depositRocketHatch ()
 /** Enum for representing the states used in the depositSideCargoHatch path */
 private static enum SideCargoHatchState
     {
-INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1_AFTER_2, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
+INIT, LEAVE_LEVEL_2, TURN_AFTER_LEVEL_2_DROP, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
     } // and we need to deploy the manipulator somewhere in here
 
 /**
@@ -538,12 +539,17 @@ private static boolean depositSideCargoHatch ()
         case LEAVE_LEVEL_2:
             if (descendFromLevelTwo() == true)
                 {
-                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_AFTER_2;
+                sideCargoHatchState = SideCargoHatchState.TURN_AFTER_LEVEL_2_DROP;
                 }
             break;
-        case LEAVE_LEVEL_1_AFTER_2:
+        case TURN_AFTER_LEVEL_2_DROP:
+
             break;
         case LEAVE_LEVEL_1_ONLY:
+            if (driveOffStraightLevel1() == true)
+                {
+                sideCargoHatchState = SideCargoHatchState.DRIVE_1;
+                }
             break;
         case DRIVE_1:
             break;
@@ -565,6 +571,7 @@ private static boolean depositSideCargoHatch ()
             break;
         default:
         case FINISHED:
+
             break;
         }
     return false;
@@ -586,6 +593,41 @@ STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
     }
 
 private static DescentState descentState = DescentState.STANDBY;
+
+// TODO placeholder
+public static boolean reorientAfterLevel2Drop()
+{
+
+    return false;
+}
+public static boolean driveOffStraightLevel1 ()
+{
+    return driveOffStraightLevel1(Hardware.leftBackIR,
+            Hardware.rightBackIR, Hardware.drive);
+}
+
+// TODO this needs to be tested
+public static boolean driveOffStraightLevel1 (LightSensor backIR1,
+        LightSensor backIR2, Drive drive)
+{
+    double driveSpeed = .7; // arbitrary number to be tested
+    // for now, we are not using the gyro
+    boolean usingGyro = USING_GYRO_FOR_DRIVE_STARIGHT;
+
+    if (backIR1.isOn() == true || backIR2.isOn() == true)
+        {
+        drive.driveStraight(driveSpeed, ACCELERATION_TIME,
+                usingGyro);
+        return false;
+        } else
+        {
+        drive.stop();
+        return true;
+        }
+}
+
+
+
 
 public static boolean descendFromLevelTwo ()
 {
@@ -677,8 +719,6 @@ public static Timer descentTimer = new Timer();
  * =============================================================
  */
 
-
-
 public static final Relay.Value LEFT = Relay.Value.kForward;
 
 public static final Relay.Value RIGHT = Relay.Value.kReverse;
@@ -697,8 +737,15 @@ public static final double TIME_TO_DRIVE_OFF_PLATFORM = 2.0;
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
 
-public static final double ACCELERATION_TIME = .6;// not random number, pulled
-// from 2018
+// whether or not, by default, we are using the gyro for driveStraight
+// in our autonomous code
+public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
+
+/**
+ * Acceleration time that we generally pass into the drive class's driveStraight
+ * function; .6 is the value we used for 2018's robot
+ */
+public static final double ACCELERATION_TIME = .6;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .38;// TODO
 

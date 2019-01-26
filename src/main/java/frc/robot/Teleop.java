@@ -193,9 +193,18 @@ public static void periodic ()
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.rightOperator.getRawButton(5));
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
+    // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
     // Hardware.rightOperator.getRawButton(6));
+
+    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.rightOperator.getRawButton(7));
+
+    // if (Hardware.rightOperator.getRawButton())
+    // {
+
+
 
 
     // =================================================================
@@ -207,11 +216,11 @@ public static void periodic ()
             || Hardware.leftDriver.getY() < -DEADBAND_VALUE
             || Hardware.rightDriver.getY() > DEADBAND_VALUE
             || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
+
         {
         Teleop.teleopDrive();
         hasDoneTheThing = true;
         Hardware.axisCamera.setRelayValue(false);
-
         }
 
     // =================================================================

@@ -73,8 +73,12 @@ public void robotInit ()
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
 
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
     Hardware.liftingEncoder
-            .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
+            .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
     // written by Meghan Brown 2019
     // makes the camera work --- can we get this in colour somehow?
@@ -324,6 +328,10 @@ public void testPeriodic ()
 // TUNEABLES
 // ==========================================
 
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+// Distance per pulse for the drive encoders on Kilroy XIX
+private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
+
+// Distance per pulse for the lift encoders on Kilroy XIX
+private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
 }

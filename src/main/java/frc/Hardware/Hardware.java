@@ -173,10 +173,10 @@ public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
 // Encoders
 // ------------------------------------
 public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(
-        14, 15);
+        4, 5);
 
 public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(
-        16, 17);
+        6, 7);
 
 public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
@@ -184,7 +184,7 @@ public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(1,
         2);// 23,
 // 24);// being removed???
 
-public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
+// public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 
 // -----------------------
 // Wiring diagram
@@ -209,9 +209,16 @@ public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 public static LightSensor armIR = new LightSensor(21);
 // TODO check port for 2018 robot
 
-public static LightSensor redLight = new LightSensor(7);
+// public static LightSensor redLight = new LightSensor(7);
 
 public static LightSensor testRedLight = new LightSensor(8);
+
+// TODO add the correct port numbers once this is added to the robot
+// the IR on the back left part of the robot
+public static LightSensor leftBackIR = null;
+
+// the IR on the back right part of the robot
+public static LightSensor rightBackIR = null;
 
 // ====================================
 // I2C Classes

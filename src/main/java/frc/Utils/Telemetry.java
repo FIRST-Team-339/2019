@@ -465,20 +465,20 @@ public void printToShuffleboard ()
         // // prints state of switches
         // // ---------------------------------
         //
-        // // SmartDashboard.putBoolean("Disable SW",
-        // // Hardware.disableAutonomousSwitch.isOn());
+        // SmartDashboard.putBoolean("Disable SW",
+        // Hardware.disableAutonomousSwitch.isOn());
         //
-        // // SmartDashboard.putBoolean("L Auto SW",
-        // // Hardware.leftAutoSwitch.isOn());
-        // //
-        // //
-        // // SmartDashboard.putBoolean("R Auto SW",
-        // // Hardware.rightAutoSwitch.isOn());
+        // SmartDashboard.putBoolean("L Auto SW",
+        // Hardware.leftAutoSwitch.isOn());
         //
         //
-        // // ---------------------------------
-        // // Encoders
-        // // ---------------------------------
+        // SmartDashboard.putBoolean("R Auto SW",
+        // Hardware.rightAutoSwitch.isOn());
+        //
+        //
+        // ---------------------------------
+        // Encoders
+        // ---------------------------------
         // SmartDashboard.putNumber("Left Front Encoder Inches",
         // Hardware.leftFrontDriveEncoder.getDistance());
         //
@@ -547,9 +547,9 @@ public void printToShuffleboard ()
         // SmartDashboard.putNumber("Delay Pot",
         // Hardware.delayPot.get(0, 5));
         //
-        // // ---------------------------------
-        // // GYRO
-        // // ---------------------------------
+        // ---------------------------------
+        // GYRO
+        // ---------------------------------
         //
         //
         // SmartDashboard.putNumber("AnalogGyro",
@@ -557,28 +557,28 @@ public void printToShuffleboard ()
 
         // SmartDashboard.putNumber("Gyro", Hardware.gyro.getAngle());
 
-        // // ---------------------------------
-        // // Sonar/UltraSonic
-        // // ---------------------------------
-        // // SmartDashboard.putNumber("Rear Ultrasonic distance",
-        // // Hardware.rearUltraSonic.getDistanceFromNearestBumper());
+        // ---------------------------------
+        // Sonar/UltraSonic
+        // ---------------------------------
+        // SmartDashboard.putNumber("Rear Ultrasonic distance",
+        // Hardware.rearUltraSonic.getDistanceFromNearestBumper());
         //
         //
         // SmartDashboard.putNumber("Front Ultrasonic",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
-        // //
-        // // SmartDashboard.putNumber("Front Ultrasonic Raw",
-        // // Hardware.frontUltraSonic.getRefinedDistanceValue());
-        // //
-        // // SmartDashboard.putNumber("Front ultrasonic bumper",
-        // // Hardware.frontUltraSonic
-        // // .getOffsetDistanceFromNearestBumper());
         //
-        // // SmartDashboard.putNumber("Rear Ultrasonic",
-        // // Hardware.rearUltraSonic.getDistanceFromNearestBumper());
-        // // SmartDashboard.putNumber("Rear Ultrasonic Raw",
-        // // Hardware.rearUltraSonic.getRefinedDistanceValue());
+        // SmartDashboard.putNumber("Front Ultrasonic Raw",
+        // Hardware.frontUltraSonic.getRefinedDistanceValue());
+        //
+        // SmartDashboard.putNumber("Front ultrasonic bumper",
+        // Hardware.frontUltraSonic
+        // .getOffsetDistanceFromNearestBumper());
+        //
+        // SmartDashboard.putNumber("Rear Ultrasonic",
+        // Hardware.rearUltraSonic.getDistanceFromNearestBumper());
+        // SmartDashboard.putNumber("Rear Ultrasonic Raw",
+        // Hardware.rearUltraSonic.getRefinedDistanceValue());
         //
         // =================================
         // SPI Bus
@@ -612,8 +612,8 @@ public void printToShuffleboard ()
         // Forklift
         // =================================
 
-        // SmartDashboard.putNumber("Forklift Height",
-        // Hardware.lift.getForkliftHeight());
+        SmartDashboard.putNumber("Forklift Height",
+                Hardware.lift.getForkliftHeight());
 
         // =================================
         // Driver station
