@@ -480,11 +480,11 @@ private static boolean depositRocketHatch ()
         // =================================================================
 
         case DRIVE_BY_CAMERA:
-            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())
+            if (Hardware.axisCamera.hasBlobs())
                 {
                 Hardware.driveWithCamera
                         .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
-                } else if (Hardware.armIR.get())
+                } else
                 {
                 rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
                 }
