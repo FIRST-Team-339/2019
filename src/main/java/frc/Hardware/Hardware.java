@@ -33,6 +33,8 @@ import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.cscore.CameraServerJNI;
+import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -173,10 +175,10 @@ public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
 // Encoders
 // ------------------------------------
 public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(
-        14, 15);
+        4, 5);
 
 public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(
-        16, 17);
+        6, 7);
 
 public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
@@ -184,7 +186,7 @@ public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(1,
         2);// 23,
            // 24);// being removed???
 
-public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
+// public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 
 // -----------------------
 // Wiring diagram
@@ -209,7 +211,7 @@ public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 public static LightSensor armIR = new LightSensor(21);
 // TODO check port for 2018 robot
 
-public static LightSensor redLight = new LightSensor(7);
+// public static LightSensor redLight = new LightSensor(7);
 
 public static LightSensor testRedLight = new LightSensor(8);
 
@@ -284,6 +286,8 @@ public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 public static VisionProcessor axisCamera = new VisionProcessor(
         "10.3.39.11", CameraModel.AXIS_M1013,
         ringLightRelay);
+
+
 
 
 
@@ -366,9 +370,9 @@ public static Drive drive = new Drive(transmission,
         // leftFrontDriveEncoder, rightFrontDriveEncoder,
         gyro);
 
-// public static DrivePID drivePID = new DrivePID(transmission,
-// leftFrontDriveEncoder, rightFrontDriveEncoder,
-// leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+public static DrivePID drivePID = new DrivePID(transmission,
+        leftFrontDriveEncoder, rightFrontDriveEncoder,
+        leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
 // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 
 // TODO update with encoders once fixed

@@ -263,8 +263,7 @@ public VisionProcessor (String ip, CameraModel camera,
     // stream.
     this.camera = CameraServer.getInstance()
             .addAxisCamera("axis-camera", ip);
-    CameraServer.getInstance().putVideo("axis-camera", M1011_HORIZ_FOV,
-            M1011_VERT_FOV);
+
 
 
     // Based on the selected camera type, set the field of views and focal
