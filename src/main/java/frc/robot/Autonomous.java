@@ -146,7 +146,7 @@ public static void periodic ()
 
             // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
             // {
-            System.out.println("CATS ARE AWESOME");
+            System.out.println("CATS ARE AWESOME, BUT DOGS ARE BETTER");
             autoState = State.CHOOSE_PATH;
             Hardware.autoTimer.stop();
             // break;
@@ -476,12 +476,11 @@ private static boolean depositRocketHatch ()
             break;
 
         // =================================================================
-        // DRIVE BY VISION CODE this is where the lame kidz code
+        // DRIVE BY VISION CODE this is where the cool kidz code
         // =================================================================
 
         case DRIVE_BY_CAMERA:
-            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())// TODO^^^^
-                                                                        // IR
+            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())
                 {
                 Hardware.driveWithCamera
                         .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
@@ -696,7 +695,7 @@ public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
 public static final double ACCELERATION_TIME = .6;// not random number, pulled
 // from 2018
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .4;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .38;// TODO
 
 public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN = 23;
 
