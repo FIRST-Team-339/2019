@@ -266,7 +266,7 @@ private static void setPositionAndLevel ()
         autoLevel = Level.LEVEL_ONE;
         } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
         {
-        autoLevel = Level.LEVEL_ONE;// TWO TODO
+        autoLevel = Level.LEVEL_TWO;// TWO TODO
         }
 
 }
