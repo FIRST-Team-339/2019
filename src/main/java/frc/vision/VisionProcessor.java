@@ -265,6 +265,7 @@ public VisionProcessor (String ip, CameraModel camera,
             .addAxisCamera("axis-camera", ip);
 
 
+
     // Based on the selected camera type, set the field of views and focal
     // length.
     this.cameraModel = camera;

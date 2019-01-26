@@ -1,14 +1,14 @@
 package frc.HardwareInterfaces;
 
 import frc.Hardware.Hardware;
-import frc.HardwareInterfaces.Transmission.MecanumTransmission;
-import frc.HardwareInterfaces.Transmission.TankTransmission;
+// import frc.HardwareInterfaces.Transmission.MecanumTransmission;
+// import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.HardwareInterfaces.Transmission.TransmissionBase;
-import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
+// import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
-import frc.vision.VisionProcessor.ImageType;
-import edu.wpi.cscore.AxisCamera;
+// import frc.vision.VisionProcessor.ImageType;
+// import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GyroBase;
 
@@ -21,23 +21,24 @@ import edu.wpi.first.wpilibj.GyroBase;
 public class DriveWithCamera extends Drive
 {
 
-private TankTransmission tankTransmission = null;
+// private TankTransmission tankTransmission = null;
 
-private MecanumTransmission mecanumTransmission = null;
+// private MecanumTransmission mecanumTransmission = null;
 
-private KilroyEncoder leftFrontEncoder = null, rightFrontEncoder = null,
-        leftRearEncoder = null,
-        rightRearEncoder = null;
+// private KilroyEncoder leftFrontEncoder = null;
+// private KilroyEncoder rightFrontEncoder = null;
+// private KilroyEncoder leftRearEncoder = null;
+// private KilroyEncoder rightRearEncoder = null;
 
 private UltraSonic frontUltrasonic = null;
 
-private UltraSonic rearUltrasonic = null;
+// private UltraSonic rearUltrasonic = null;
 
-private GyroBase gyro = null;
+// private GyroBase gyro = null;
 
 private VisionProcessor visionProcessor = null;
 
-private final TransmissionType transmissionType;
+// private final TransmissionType transmissionType;
 
 /**
  * Creates the drive with camera object. If a sensor listed is not used (except
@@ -73,12 +74,12 @@ public DriveWithCamera (TransmissionBase transmission,
             leftRearEncoder, rightRearEncoder, gyro);
 
     this.visionProcessor = visionProcessor;
-    this.transmissionType = transmission.getType();
-    this.leftFrontEncoder = leftFrontEncoder;
-    this.rightFrontEncoder = rightFrontEncoder;
-    this.leftRearEncoder = leftRearEncoder;
-    this.rightRearEncoder = rightRearEncoder;
-    this.gyro = gyro;
+    // this.transmissionType = transmission.getType();
+    // this.leftFrontEncoder = leftFrontEncoder;
+    // this.rightFrontEncoder = rightFrontEncoder;
+    // this.leftRearEncoder = leftRearEncoder;
+    // this.rightRearEncoder = rightRearEncoder;
+    // this.gyro = gyro;
 
 }
 
@@ -110,12 +111,12 @@ public DriveWithCamera (TransmissionBase transmission,
     super(transmission, leftEncoder, rightEncoder, gyro);
 
     this.frontUltrasonic = frontUltrasonic;
-    this.rearUltrasonic = rearUltrasonic;
+    // this.rearUltrasonic = rearUltrasonic;
     this.visionProcessor = visionProcessor;
-    this.transmissionType = transmission.getType();
-    this.leftRearEncoder = leftEncoder;
-    this.rightRearEncoder = rightEncoder;
-    this.gyro = gyro;
+    // this.transmissionType = transmission.getType();
+    // this.leftRearEncoder = leftEncoder;
+    // this.rightRearEncoder = rightEncoder;
+    // this.gyro = gyro;
 }
 
 /**
@@ -149,27 +150,25 @@ public DriveWithCamera (TransmissionBase transmission,
     super(transmission, leftEncoder, rightEncoder, gyro);
 
     this.frontUltrasonic = frontUltrasonic;
-    this.rearUltrasonic = rearUltrasonic;
+    // this.rearUltrasonic = rearUltrasonic;
     this.visionProcessor = visionProcessor;
-    this.transmissionType = transmission.getType();
-    this.leftRearEncoder = leftEncoder;
-    this.rightRearEncoder = rightEncoder;
-    this.gyro = gyro;
+    // this.transmissionType = transmission.getType();
+    // this.leftRearEncoder = leftEncoder;
+    // this.rightRearEncoder = rightEncoder;
+    // this.gyro = gyro;
 }
 
 /**
  * Drives using the camera until it hits CAMERA_NO_LONGER_WORKS inches, where it
- * then drives using the ultrasonic
+ * then drives using the ultrasonic until the stopping distance
  *
  * Multiply the compensationFactor by speed to determine what values we are
  * sending to the motor controller
  *
- * @param compensationFactor
- *                               have the compensation factor greater than 1 and
- *                               less than 1.8
+ * 
  * @param speed
- *                               have the speed greater than 0 and less than 1
- * @return true if the robot has driven all the way to the front of the scale,
+ *                  have the speed greater than 0 and less than 1
+ * @return true if the robot has driven all the way to the front of the target,
  *         and false if it hasn't
  */
 public boolean driveToTarget (double speed)
@@ -299,7 +298,7 @@ public boolean driveToTarget (double speed)
 
 private DriveWithCameraState state = DriveWithCameraState.INIT;
 
-private boolean takePicture = false;
+// private boolean takePicture = false;
 
 private enum DriveWithCameraState
     {
@@ -422,7 +421,7 @@ public void visionTest (double compensationFactor, double speed)
         }
 }
 
-private int currentPictureIteration = 0;
+// private int currentPictureIteration = 0;
 
 /**
  * Gets the center x value of of the vision targets (average of the x values of
@@ -470,7 +469,7 @@ public double getCameraCenterValue ()
 private final double CAMERA_NO_LONGER_WORKS = 25;
 
 // The minimum encoder distance we must drive before we enable the ultrasonic
-private final double ENCODER_MIN_DISTANCE = 50; // inches
+// private final double ENCODER_MIN_DISTANCE = 50; // inches
 // 38 + 50;
 
 // the number in pixels that the center we are looking for can be off

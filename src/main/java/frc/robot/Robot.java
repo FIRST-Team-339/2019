@@ -64,6 +64,8 @@ public void robotInit ()
     Hardware.leftFrontDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
+
+
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
     // of the drive motors
@@ -78,7 +80,7 @@ public void robotInit ()
             .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
 
     Hardware.liftingEncoder
-            .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
+            .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
     // written by Meghan Brown 2019
     // makes the camera work --- can we get this in colour somehow?
@@ -328,7 +330,9 @@ public void testPeriodic ()
 // TUNEABLES
 // ==========================================
 
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+
+
+private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 

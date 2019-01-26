@@ -36,6 +36,8 @@ import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
 import frc.Utils.Forklift;
 import frc.Utils.drive.Drive;
+// import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
+import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -159,7 +161,7 @@ public static void periodic ()
 
     // // TODO remove the next 3 functions once camera is tested
 
-    // // Drive to the vision targets
+    // Drive to the vision targets
     // if (Hardware.leftOperator.getRawButton(4))
     // {
     // hasDoneTheThing = false;
@@ -195,9 +197,18 @@ public static void periodic ()
     // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
     // Hardware.rightOperator.getRawButton(5));
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
+    // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
     // Hardware.rightOperator.getRawButton(6));
+
+    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.rightOperator.getRawButton(7));
+
+    // if (Hardware.rightOperator.getRawButton())
+    // {
+
+
 
 
     // =================================================================

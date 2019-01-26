@@ -32,11 +32,13 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.LightSensor;
 import frc.Utils.*;
-import javax.lang.model.util.ElementScanner6;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.drive.Drive;
+import frc.Utils.drive.DrivePID;
+import frc.Utils.drive.Drive.BrakeType;
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
@@ -146,7 +148,7 @@ public static void periodic ()
 
             // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
             // {
-            System.out.println("CATS ARE AWESOME");
+            System.out.println("CATS ARE AWESOME, BUT DOGS ARE BETTER");
             autoState = State.CHOOSE_PATH;
             Hardware.autoTimer.stop();
             // break;
@@ -172,6 +174,7 @@ public static void periodic ()
             break;
 
         case DEPOSIT_ROCKET_HATCH:
+            System.out.println("rocket hatch");
             if (depositRocketHatch() == true)
                 {
                 autoState = State.FINISH;
@@ -265,7 +268,7 @@ private static void setPositionAndLevel ()
         autoLevel = Level.LEVEL_ONE;
         } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
         {
-        autoLevel = Level.LEVEL_TWO;
+        autoLevel = Level.LEVEL_ONE;// TWO TODO
         }
 
 }
@@ -350,10 +353,19 @@ STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FI
 
 private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
 
+
+// states for the camera nested switch statement
+private static enum DriveWithCameraStates
+    {
+INIT, DRIVE, TURN_RIGHT, TURN_LEFT, ALIGN
+    }
+
+private static DriveWithCameraStates driveWithCameraStates = DriveWithCameraStates.INIT;
+
 private static boolean depositRocketHatch ()
 {
 
-    if (rocketHatchState == rocketHatchState.STANDBY)
+    if (rocketHatchState == RocketHatchState.STANDBY)
         {
         rocketHatchState = RocketHatchState.DESCEND;
         }
@@ -364,15 +376,17 @@ private static boolean depositRocketHatch ()
             break;
 
         case DESCEND:
+
             if (autoLevel == Level.LEVEL_TWO)
                 {
                 descendFromLevelTwo();
                 }
-            if (usingVision == true && Hardware.axisCamera.hasBlobs())
+            if (usingVision == true)
                 {
                 rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                 } else
                 {
+                Hardware.axisCamera.setRelayValue(false);
                 autoTimer.reset();
                 autoTimer.start();
                 Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
@@ -476,19 +490,63 @@ private static boolean depositRocketHatch ()
             break;
 
         // =================================================================
-        // DRIVE BY VISION CODE this is where the lame kidz code
+        // DRIVE BY VISION CODE this is where the cool kidz code
         // =================================================================
 
+
         case DRIVE_BY_CAMERA:
-            if (Hardware.axisCamera.hasBlobs() && !Hardware.armIR.get())// TODO^^^^
-                                                                        // IR
+
+            System.out.println("camera state" + driveWithCameraStates);
+            switch (driveWithCameraStates)
                 {
-                Hardware.driveWithCamera
-                        .driveToTarget(DRIVE_WITH_CAMERA_SPEED);
-                } else if (Hardware.armIR.get())
-                {
-                rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
+                case INIT:
+                    System.out.println("the cool kidz code");
+                    // about to do the thing ;)
+                    driveWithCameraStates = DriveWithCameraStates.DRIVE;
+                    break;
+                case DRIVE:
+                    if (Hardware.drive.driveStraightInches(
+                            DISTANCE_TO_CROSS_AUTOLINE, DRIVE_SPEED,
+                            ACCELERATION_TIME,
+                            USING_GYRO))
+                        {
+                        if (true/* autoPosition == autoPosition.RIGHT */)
+                            {
+                            driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
+                            } else
+                            {
+                            driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                            }
+                        }
+                    break;
+                case TURN_RIGHT:
+                    System.out.println(
+                            "encoders" + Hardware.gyro.getAngle());
+                    if (Hardware.drive.turnDegrees(
+                            TURN_FOR_CAMERA_DEGREES, DRIVE_SPEED, .6,
+                            true))
+                        {
+                        driveWithCameraStates = DriveWithCameraStates.ALIGN;
+                        }
+                    break;
+                case TURN_LEFT:
+                    if (Hardware.drive
+                            .turnDegrees(-TURN_FOR_CAMERA_DEGREES, .5,
+                                    .5, true))
+                        {
+                        driveWithCameraStates = DriveWithCameraStates.ALIGN;
+                        }
+                    break;
+                case ALIGN:
+                    if (Hardware.driveWithCamera
+                            .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
+                        {
+                        rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                        }
+
+                    break;
                 }
+
             break;
         // =================================================================
         // END OF SEPCIALIZED DRIVING CODE
@@ -514,10 +572,13 @@ private static boolean depositRocketHatch ()
     return false;
 }
 
+
+
+
 /** Enum for representing the states used in the depositSideCargoHatch path */
 private static enum SideCargoHatchState
     {
-INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
+INIT, LEAVE_LEVEL_2, TURN_AFTER_LEVEL_2_DROP, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
     } // and we need to deploy the manipulator somewhere in here
 
 /**
@@ -534,12 +595,22 @@ private static boolean depositSideCargoHatch ()
             if (autoLevel == Level.LEVEL_TWO)
                 sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
             else
-                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1;
+                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_ONLY;
             break;
         case LEAVE_LEVEL_2:
-            // if(descendFromLevelTwo() == )
+            if (descendFromLevelTwo() == true)
+                {
+                sideCargoHatchState = SideCargoHatchState.TURN_AFTER_LEVEL_2_DROP;
+                }
             break;
-        case LEAVE_LEVEL_1:
+        case TURN_AFTER_LEVEL_2_DROP:
+
+            break;
+        case LEAVE_LEVEL_1_ONLY:
+            if (driveOffStraightLevel1() == true)
+                {
+                sideCargoHatchState = SideCargoHatchState.DRIVE_1;
+                }
             break;
         case DRIVE_1:
             break;
@@ -561,6 +632,7 @@ private static boolean depositSideCargoHatch ()
             break;
         default:
         case FINISHED:
+
             break;
         }
     return false;
@@ -584,6 +656,42 @@ STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
     }
 
 private static DescentState descentState = DescentState.STANDBY;
+
+// TODO placeholder
+public static boolean reorientAfterLevel2Drop ()
+{
+
+    return false;
+}
+
+public static boolean driveOffStraightLevel1 ()
+{
+    return driveOffStraightLevel1(Hardware.leftBackIR,
+            Hardware.rightBackIR, Hardware.drive);
+}
+
+// TODO this needs to be tested
+public static boolean driveOffStraightLevel1 (LightSensor backIR1,
+        LightSensor backIR2, Drive drive)
+{
+    double driveSpeed = .7; // arbitrary number to be tested
+    // for now, we are not using the gyro
+    boolean usingGyro = USING_GYRO_FOR_DRIVE_STARIGHT;
+
+    if (backIR1.isOn() == true || backIR2.isOn() == true)
+        {
+        drive.driveStraight(driveSpeed, ACCELERATION_TIME,
+                usingGyro);
+        return false;
+        } else
+        {
+        drive.stop();
+        return true;
+        }
+}
+
+
+
 
 public static boolean descendFromLevelTwo ()
 {
@@ -663,7 +771,7 @@ public static boolean descendFromLevelTwo ()
 // =========================================================================
 // TUNEABLES
 // =========================================================================
-private static boolean usingVision = false;
+private static boolean usingVision = true;
 
 private static boolean descendInit = false;
 
@@ -674,8 +782,6 @@ public static Timer descentTimer = new Timer();
  * Constants
  * =============================================================
  */
-
-
 
 public static final Relay.Value LEFT = Relay.Value.kForward;
 
@@ -695,10 +801,19 @@ public static final double TIME_TO_DRIVE_OFF_PLATFORM = 2.0;
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
 
-public static final double ACCELERATION_TIME = .6;// not random number, pulled
-// from 2018
+// whether or not, by default, we are using the gyro for driveStraight
+// in our autonomous code
+public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .4;// TODO
+/**
+ * Acceleration time that we generally pass into the drive class's driveStraight
+ * function; .6 is the value we used for 2018's robot
+ */
+public static final double ACCELERATION_TIME = .6;
+
+public static final double DRIVE_WITH_CAMERA_SPEED = .38;// TODO
+
+public static final int TURN_FOR_CAMERA_DEGREES = 44;
 
 public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN = 23;
 
@@ -709,6 +824,8 @@ public static final int TURN_RIGHT90 = 90;
 public static final int TURN_LEFT90 = -90;
 
 public static final double TURN_SPEED = .4;
+
+public static final boolean USING_GYRO = true;
 
 public static Timer autoTimer = new Timer();
 
