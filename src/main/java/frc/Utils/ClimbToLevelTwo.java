@@ -1,7 +1,5 @@
 package frc.Utils;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.HardwareInterfaces.KilroyEncoder;

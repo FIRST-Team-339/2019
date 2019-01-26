@@ -1,9 +1,7 @@
 package frc.Utils;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
-import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.LightSensor;

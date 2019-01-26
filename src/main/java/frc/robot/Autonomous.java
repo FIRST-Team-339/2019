@@ -33,12 +33,10 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.LightSensor;
-import frc.Utils.*;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.drive.Drive;
-import frc.Utils.drive.DrivePID;
-import frc.Utils.drive.Drive.BrakeType;
+
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in

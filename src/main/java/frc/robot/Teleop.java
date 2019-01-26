@@ -32,13 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.vision.VisionProcessor;
-import frc.vision.VisionProcessor.ImageType;
-import frc.Utils.Forklift;
-import frc.Utils.drive.Drive;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
-import edu.wpi.cscore.AxisCamera;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
