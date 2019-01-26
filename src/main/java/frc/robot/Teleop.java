@@ -72,7 +72,7 @@ public static void init ()
     Hardware.telemetry.setTimeBetweenPrints(1000);
 
     // sets the gear to 0 at the beginning.
-    Hardware.drive.setGear(0);
+    // Hardware.drive.setGear(0);
 
     Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
     Hardware.transmission.enableDeadband();
@@ -84,10 +84,10 @@ public static void init ()
 
     Hardware.intakeDeployEncoder.reset();
 
-    Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-            FIRST_GEAR_RATIO);
-    Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-            SECOND_GEAR_RATIO);
+    // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+    // FIRST_GEAR_RATIO);
+    // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+    // SECOND_GEAR_RATIO);
 
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
@@ -145,7 +145,9 @@ public static void periodic ()
     // {
     // Hardware.climber.finishEarly();
     // }
-    // // Hardware.intakeDeployArm.set(Hardware.leftOperator.getY());
+    Hardware.manipulator.moveArmByJoystick();
+
+    Hardware.manipulator.spinRollers();
 
 
     // if (Hardware.descendButton.isOnCheckNow() == true)
@@ -157,41 +159,41 @@ public static void periodic ()
 
     // // TODO remove the next 3 functions once camera is tested
 
-    // Drive to the vision targets
-    if (Hardware.leftOperator.getRawButton(4))
-        {
-        hasDoneTheThing = false;
-        System.out.println("Done the thing: " + hasDoneTheThing);
-        }
+    // // Drive to the vision targets
+    // if (Hardware.leftOperator.getRawButton(4))
+    // {
+    // hasDoneTheThing = false;
+    // System.out.println("Done the thing: " + hasDoneTheThing);
+    // }
 
-    if (!hasDoneTheThing)
-        {
+    // if (!hasDoneTheThing)
+    // {
 
-        if (Hardware.driveWithCamera.driveToTarget(.38))
-            {
-            System.out.println("Has aligned hopefully");
-            Hardware.axisCamera.setRelayValue(false);
-            hasDoneTheThing = true;
-            }
-        }
-    // turn on the ringlight
-    if (Hardware.leftOperator.getRawButton(6)
-            && Teleop.hasDoneTheThing == true)
-        {
-        System.out.println("lets blind some wirers");
-        Hardware.axisCamera.setRelayValue(true);
-        }
-    // save image
-    if (Hardware.leftOperator.getRawButton(7))
-        {
-        Hardware.axisCamera.saveImage(ImageType.RAW);
-        Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-        }
+    // if (Hardware.driveWithCamera.driveToTarget(.38))
+    // {
+    // System.out.println("Has aligned hopefully");
+    // Hardware.axisCamera.setRelayValue(false);
+    // hasDoneTheThing = true;
+    // }
+    // }
+    // // turn on the ringlight
+    // if (Hardware.leftOperator.getRawButton(6)
+    // && Teleop.hasDoneTheThing == true)
+    // {
+    // System.out.println("lets blind some wirers");
+    // Hardware.axisCamera.setRelayValue(true);
+    // }
+    // // save image
+    // if (Hardware.leftOperator.getRawButton(7))
+    // {
+    // Hardware.axisCamera.saveImage(ImageType.RAW);
+    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+    // }
 
     // ----- Forklift controls -----
 
-    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-            Hardware.rightOperator.getRawButton(5));
+    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+    // Hardware.rightOperator.getRawButton(5));
 
     // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
@@ -203,22 +205,22 @@ public static void periodic ()
     // =================================================================
     // @ANE
 
-    if (Hardware.leftDriver.getY() > DEADBAND_VALUE
-            || Hardware.leftDriver.getY() < -DEADBAND_VALUE
-            || Hardware.rightDriver.getY() > DEADBAND_VALUE
-            || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
-        {
-        Teleop.teleopDrive();
-        hasDoneTheThing = true;
-        Hardware.axisCamera.setRelayValue(false);
+    // if (Hardware.leftDriver.getY() > DEADBAND_VALUE
+    // || Hardware.leftDriver.getY() < -DEADBAND_VALUE
+    // || Hardware.rightDriver.getY() > DEADBAND_VALUE
+    // || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
+    // {
+    // Teleop.teleopDrive();
+    // hasDoneTheThing = true;
+    // Hardware.axisCamera.setRelayValue(false);
 
-        }
+    // }
 
     // =================================================================
     // Update State Machines
     // =================================================================
-    Hardware.lift.update();
-    Hardware.climber.climbUpdate();
+    // Hardware.lift.update();
+    // Hardware.climber.climbUpdate();
 
     // // =================================================================
     // // Telemetry
@@ -262,8 +264,8 @@ public static void printStatements ()
         // prints state of switches
         // ---------------------------------
 
-        SmartDashboard.putBoolean("Disable SW",
-                Hardware.autoLevelSwitch.isOn());
+        // SmartDashboard.putBoolean("Disable SW",
+        // Hardware.autoLevelSwitch.isOn());
 
         // ---------------------------------
         // Encoders
@@ -396,17 +398,17 @@ public static void printStatements ()
  */
 public static void teleopDrive ()
 {
-    Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
-    Hardware.drive.shiftGears(
-            Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-            Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+    // Hardware.drive.shiftGears(
+    // Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+    // Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
-    // makes sure the gear never goes over 2
-    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
-        {
-        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        }
+    // // makes sure the gear never goes over 2
+    // if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+    // {
+    // Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+    // }
 }
 
 // ================================

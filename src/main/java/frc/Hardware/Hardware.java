@@ -98,13 +98,15 @@ public static boolean demoMode = false;
 
 // public static Talon leftDriveMotor = new Talon(3);// on CAN now
 
+
 // ------------------------------------
 // Victor Classes
 // ------------------------------------
 
 // public static VictorSP liftingMotor = new VictorSP(0);//on CAN now
 
-public static VictorSP cubeIntakeMotor = new VictorSP(1);// left intake on CAN
+// public static VictorSP armRollers = new VictorSP(1);// left intake on CAN
+// formerly cubeIntakeMotor
 
 public static VictorSP intakeDeployArm = new VictorSP(4); // hanging
 
@@ -138,6 +140,8 @@ public static WPI_TalonSRX rightRearCANMotor = new WPI_TalonSRX(15);
 public static WPI_TalonSRX leftRearCANMotor = new WPI_TalonSRX(13);
 // TODO - fix number
 
+public static WPI_TalonSRX armRoller = new WPI_TalonSRX(10);// fix CANID
+
 // ====================================
 // Relay classes
 // ====================================
@@ -163,7 +167,7 @@ public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
         18, 13); // false port numbers
 
 // public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
-// 1, 2, 3, 4, 5, 6);
+// 13, 14, 15, 16, 17, 18);
 
 // ------------------------------------
 // Gear Tooth Sensors
@@ -173,10 +177,10 @@ public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
 // Encoders
 // ------------------------------------
 public static KilroyEncoder leftFrontDriveEncoder = new KilroyEncoder(
-        14, 15);
+        4, 5);
 
 public static KilroyEncoder rightFrontDriveEncoder = new KilroyEncoder(
-        16, 17);
+        6, 7);
 
 public static KilroyEncoder liftingEncoder = new KilroyEncoder(10, 11);
 
@@ -208,9 +212,11 @@ public static KilroyEncoder intakeDeployEncoder = new KilroyEncoder(1,
 public static LightSensor armIR = new LightSensor(21);
 // TODO check port for 2018 robot
 
-public static LightSensor redLight = new LightSensor(7);
+// public static LightSensor redLight = new LightSensor(7);
 
 public static LightSensor testRedLight = new LightSensor(8);
+
+// public static LightSensor photoSwitch = new LightSensor(9);//take out
 
 // ====================================
 // I2C Classes
@@ -258,6 +264,8 @@ public static DoubleSolenoid armIntakeSolenoid = new DoubleSolenoid(0,
 // --------------------------------------
 public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
         300);
+
+// public static RobotPotentiometer armPot = new RobotPotentiometer(n, 270);
 
 // -------------------------------------
 // Sonar/Ultrasonic
@@ -379,7 +387,11 @@ public static DriveWithCamera driveWithCamera = new DriveWithCamera(
 // Assembly classes (e.g. forklift)
 // -------------------
 
-public static GamePieceManipulator manipulator = new GamePieceManipulator();
+public static GamePieceManipulator manipulator = new GamePieceManipulator(
+        intakeDeployArm, intakeDeployEncoder/* armEncoder */,
+        armRoller,
+        null/* photoSwitch */, leftOperator,
+        rightOperator);
 
 public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
         manipulator);

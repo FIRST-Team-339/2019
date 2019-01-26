@@ -568,11 +568,13 @@ private static boolean depositSideCargoHatch ()
 
 private static void driverControl ()
 {
-    // if (Hardware.leftDriver.getRawButton(5) == true) {
-    // Hardware.leftFrontCANMotor.set(.5);
-    // } else {
-    // Hardware.leftFrontCANMotor.set(0);
-    // }
+    if (Hardware.leftDriver.getRawButton(5) == true)
+        {
+        Hardware.leftFrontCANMotor.set(.5);
+        } else
+        {
+        Hardware.leftFrontCANMotor.set(0);
+        }
     Teleop.periodic();
 }
 
