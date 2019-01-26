@@ -353,7 +353,7 @@ private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
 private static boolean depositRocketHatch ()
 {
 
-    if (rocketHatchState == rocketHatchState.STANDBY)
+    if (rocketHatchState == RocketHatchState.STANDBY)
         {
         rocketHatchState = RocketHatchState.DESCEND;
         }
@@ -517,7 +517,7 @@ private static boolean depositRocketHatch ()
 /** Enum for representing the states used in the depositSideCargoHatch path */
 private static enum SideCargoHatchState
     {
-INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
+INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1_AFTER_2, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
     } // and we need to deploy the manipulator somewhere in here
 
 /**
@@ -534,12 +534,17 @@ private static boolean depositSideCargoHatch ()
             if (autoLevel == Level.LEVEL_TWO)
                 sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
             else
-                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1;
+                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_ONLY;
             break;
         case LEAVE_LEVEL_2:
-            // if(descendFromLevelTwo() == )
+            if (descendFromLevelTwo() == true)
+                {
+                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_AFTER_2;
+                }
             break;
-        case LEAVE_LEVEL_1:
+        case LEAVE_LEVEL_1_AFTER_2:
+            break;
+        case LEAVE_LEVEL_1_ONLY:
             break;
         case DRIVE_1:
             break;
