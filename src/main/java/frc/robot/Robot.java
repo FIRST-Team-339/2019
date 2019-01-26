@@ -64,6 +64,8 @@ public void robotInit ()
     Hardware.leftFrontDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
+
+
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
     // of the drive motors
@@ -72,10 +74,9 @@ public void robotInit ()
     // -------------------------------------
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
-
-    Hardware.leftFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
     Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
+    Hardware.leftFrontDriveEncoder
             .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
@@ -328,10 +329,10 @@ public void testPeriodic ()
 // TUNEABLES
 // ==========================================
 
-// Distance per pulse for the drive encoders on Kilroy XIX
-private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
-// Distance per pulse for the lift encoders on Kilroy XIX
+
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
+
+private static final double KILROY_XIX_DRIVE_ENCODER_DPP = .0346;
 
 }

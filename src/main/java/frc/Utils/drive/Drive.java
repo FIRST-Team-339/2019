@@ -1117,6 +1117,8 @@ public void setBrakeDeadband (int ticks, BrakeType type)
         }
 }
 
+
+
 /**
  *
  *
@@ -1556,10 +1558,14 @@ public boolean turnDegrees (int degrees, double speed,
     if (turnDegreesInit == true)
         {
         if (usingGyro)
+            {
             this.gyro.reset();
-        else
+            turnDegreesInit = false;
+            } else
+            {
             this.resetEncoders();
-        turnDegreesInit = false;
+            turnDegreesInit = false;
+            }
         }
 
     // If either sensor has reached the target position, then stop motors
