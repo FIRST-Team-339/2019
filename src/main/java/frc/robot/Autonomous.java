@@ -268,7 +268,7 @@ private static void setPositionAndLevel ()
         autoLevel = Level.LEVEL_ONE;
         } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
         {
-        autoLevel = Level.LEVEL_TWO;// TWO TODO
+        autoLevel = Level.LEVEL_ONE;// TWO TODO
         }
 
 }
@@ -295,7 +295,7 @@ private static boolean crossAutoline ()
 
 private static enum DepositCargoHatchState
     {
-INIT, DESCEND, ALIGN_TO_CARGO, DEPOSIT_CARGO
+INIT, DESCEND, TURN_1, DRIVE_1, TURN_2, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO
     }
 
 private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
@@ -316,31 +316,56 @@ private static boolean depositCargoHatch ()
         case DESCEND:
             if (descendFromLevelTwo())
                 {
-                if (usingVision)
+                if (usingVisionOnStraight)
                     {
-
+                    depositCargoHatchState = DepositCargoHatchState.ALIGN_TO_CARGO;
                     } else
                     {
-
+                    depositCargoHatchState = DepositCargoHatchState.TURN_1;
                     }
                 }
             break;
+        case TURN_1:
+            // if (Hardware.drive.turnDegrees(X, DRIVE_SPEED,
+            // ACCELERATION_TIME,
+            // USING_GYRO))
+            // {
+            // depositCargoHatchState = DepositCargoHatchState.DRIVE_1;
+            // }
+            break;
+        case DRIVE_1:
+            // if(Hardware.drive.driveStraightInches(X,DRIVE_SPEED,ACCELERATION_TIME
+            // , USING_GYRO))
+            // {
+            // depositCargoHatchState = DepositCargoHatchState.TURN_2;
+            // }
+            break;
+        case TURN_2:
+            // if (Hardware.drive.turnDegrees(X, DRIVE_SPEED,
+            // ACCELERATION_TIME,
+            // USING_GYRO))
+            // {
+            // depositCargoHatchState = DepositCargoHatchState.DRIVE_2;
+            // }
+            break;
+        case DRIVE_2:
+            // if(Hardware.drive.driveStraightInches(X,DRIVE_SPEED,ACCELERATION_TIME
+            // , USING_GYRO))
+            // {
+            // depositCargoHatchState = DepositCargoHatchState.DEPOSIT_CARGO;
+            // }
 
+            break;
         case ALIGN_TO_CARGO:
+            // maybe use vision
             break;
         case DEPOSIT_CARGO:
+            // if(depositTheThing)
+            // {
+            // return true;
+            // }
             break;
-
         }
-
-
-
-
-    if (autoLevel == Level.LEVEL_TWO)
-        {
-        descendFromLevelTwo();
-        }
-
     return false;
 }
 
@@ -771,7 +796,11 @@ public static boolean descendFromLevelTwo ()
 // =========================================================================
 // TUNEABLES
 // =========================================================================
+// use vision for rocket autopath
 private static boolean usingVision = true;
+
+// use vision for the put hatch straght auto path
+private static boolean usingVisionOnStraight = false;
 
 private static boolean descendInit = false;
 
