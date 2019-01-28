@@ -17,7 +17,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Hardware.Hardware;
-import edu.wpi.first.wpilibj.Relay;
+
 
 /**
  * This class contains vision code that uses OpenCV and the auto-generated code
