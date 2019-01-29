@@ -215,7 +215,7 @@ public static void periodic ()
     // // Telemetry
     // // =================================================================
 
-    System.out.println(Hardware.gyro.getAngle());
+    // System.out.println(Hardware.gyro.getAngle());
     // System.out.println(Hardware.gyro.isGyroConnected());
     // System.out.println(Hardware.gyro.hasGyro);
 
