@@ -127,20 +127,20 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    if (Hardware.leftDriver.getRawButton(5) == true)
-        {
-        Autonomous.descendFromLevelTwo();
-        System.out
-                .println("HELP WE'VE FALLEN AND WE CAN'T GET BACK UP");
-        } else if (Hardware.rightDriver.getRawButton(5) == true)
-        {
-        Hardware.climber.climb();
-        }
+    // if (Hardware.leftDriver.getRawButton(5) == true)
+    // {
+    // Autonomous.descendFromLevelTwo();
+    // System.out
+    // .println("HELP WE'VE FALLEN AND WE CAN'T GET BACK UP");
+    // } else if (Hardware.rightDriver.getRawButton(5) == true)
+    // {
+    // Hardware.climber.climb();
+    // }
 
-    if (Hardware.leftDriver.getRawButton(3) == true)
-        {
-        Autonomous.descentState = Autonomous.DescentState.STANDBY;
-        }
+    // if (Hardware.leftDriver.getRawButton(3) == true)
+    // {
+    // Autonomous.descentState = Autonomous.DescentState.STANDBY;
+    // }
 
     // if (Hardware.leftOperator.getRawButton(6) == true)
     // {
@@ -156,9 +156,9 @@ public static void periodic ()
     // {
     // Hardware.climber.finishEarly();
     // }
-    Hardware.manipulator.moveArmByJoystick();
+    // Hardware.manipulator.moveArmByJoystick();
 
-    Hardware.manipulator.spinRollers();
+    // Hardware.manipulator.spinRollers();
 
 
     // if (Hardware.descendButton.isOnCheckNow() == true)
@@ -240,7 +240,7 @@ public static void periodic ()
     // Update State Machines
     // =================================================================
     // Hardware.lift.update();
-    Hardware.climber.climbUpdate();
+    // Hardware.climber.climbUpdate();
 
     // // =================================================================
     // // Telemetry
