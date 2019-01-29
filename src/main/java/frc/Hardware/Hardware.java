@@ -293,6 +293,7 @@ public static LVMaxSonarEZ frontUltraSonic = new LVMaxSonarEZ(3);
 // exception is probably because there is not a gyro on the robot, and passing
 // in a false will tell the robot we do not have a gyro without requiring us to
 // comment out the gyro declaration.
+
 public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 
 

@@ -923,7 +923,7 @@ public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
 
 public static final double DRIVE_SPEED = .4;
 
-public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;s
+public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;
 
 public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
 
