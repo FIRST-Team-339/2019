@@ -148,7 +148,7 @@ public static void periodic ()
 
             // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
             // {
-            System.out.println("DOGS ARE AWESOME, BUT CATS ARE BETTER");
+            System.out.println("DOGS ARE AWESOME AND CATS ARE NOT");
             autoState = State.CHOOSE_PATH;
             Hardware.autoTimer.stop();
             // break;
