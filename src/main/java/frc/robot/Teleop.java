@@ -188,54 +188,52 @@ public static void periodic ()
     // }
 
 
-    // ----- Forklift controls -----
 
-    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-    // Hardware.rightOperator.getRawButton(5));
+    // Hardware.lift.moveForkliftWit
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+
+    // Hardware.lift.setLiftPositionByButton(Fo
+
     // Hardware.rightOperator.getRawButton(6));
 
 
 
-    // =================================================================
-    // Driver Controls
+
+
     // =================================================================
     // @ANE
 
-    // if (Hardware.leftDriver.getY() > DEADBAND_VALUE
-    // || Hardware.leftDriver.getY() < -DEADBAND_VALUE
+    // if (
+
     // || Hardware.rightDriver.getY() > DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
+    // || Hardware.rightDriver.getY() < -DEADBAND_VALU
     // {
     // Teleop.teleopDrive();
-    // hasDoneTheThing = true;
-    // Hardware.axisCamera.setRelayValue(false);
+    // h
+    // Hardware.axisCamera.s
 
     // }
 
-    // =================================================================
-    // Update State Machines
+    // =
+
     // =================================================================
     Hardware.lift.update();
     // Hardware.climber.climbUpdate();
 
-    // // =================================================================
-    // // Telemetry
+    // // ============================
+
     // // =================================================================
 
     // System.out.println(Hardware.gyro.getAngle());
-    // System.out.println(Hardware.gyro.isGyroConnected());
+
     // System.out.println(Hardware.gyro.hasGyro);
 
     Hardware.telemetry.printToShuffleboard();
-    Hardware.telemetry.printToConsole();
 
-    // TODO untested code by Anna, Patrick, and Meghan.
-    // Teleop.teleopDrive();
+    // TODO untested code by Anna, Patri
 
-} // end Periodic()
+}
+// end Periodic()
 
 public static void printStatements ()
 {
