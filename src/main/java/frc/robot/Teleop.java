@@ -36,6 +36,7 @@ import frc.vision.VisionProcessor.ImageType;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.Utils.Forklift;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -135,16 +136,17 @@ public static void periodic ()
     // Hardware.climber.climb();
     // } else
     // {
-    // // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
     // }
 
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Hardware.climber.finishEarly();
     // }
-    Hardware.manipulator.moveArmByJoystick();
 
-    Hardware.manipulator.spinRollers();
+    // TODO manipulator has been changed and is not tested
+    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
+    // Hardware.manipulator.spinRollers(/*add buttons*/);
 
 
     // if (Hardware.descendButton.isOnCheckNow() == true)
@@ -170,14 +172,6 @@ public static void periodic ()
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
     // Hardware.rightOperator.getRawButton(6));
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.rightOperator.getRawButton(7));
-
-    // if (Hardware.rightOperator.getRawButton())
-    // {
-
-
 
 
     // =================================================================
@@ -199,17 +193,21 @@ public static void periodic ()
     // =================================================================
     // Update State Machines
     // =================================================================
-    // Hardware.lift.update();
+    Hardware.lift.update();
     // Hardware.climber.climbUpdate();
 
     // // =================================================================
     // // Telemetry
     // // =================================================================
 
+    System.out.println(Hardware.gyro.getAngle());
+    // System.out.println(Hardware.gyro.isGyroConnected());
+    // System.out.println(Hardware.gyro.hasGyro);
+
     Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.printToConsole();
 
-    // TODO untested code by Anna, Patrick, and Meghan
+    // TODO untested code by Anna, Patrick, and Meghan.
     // Teleop.teleopDrive();
 
 } // end Periodic()
@@ -415,5 +413,6 @@ private static final double DEADBAND_VALUE = .2;
 // ================================
 // Variables
 // ================================
+
 
 } // end class

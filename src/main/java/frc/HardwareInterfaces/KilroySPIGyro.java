@@ -29,7 +29,7 @@ public class KilroySPIGyro extends GyroBase
 {
 private final ADXRS450_Gyro gyro;
 
-private boolean hasGyro;
+public boolean hasGyro;
 
 /**
  * Creates the Gyro object. If we input that the gyro is not connected, then do
@@ -101,6 +101,11 @@ public double getAngle ()
     // return the angle of the gyro in degrees
     return this.gyro.getAngle();
 
+}
+
+public boolean isGyroConnected ()
+{
+    return this.gyro.isConnected();
 }
 
 /**

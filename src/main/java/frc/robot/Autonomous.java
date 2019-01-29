@@ -146,7 +146,7 @@ public static void periodic ()
 
             // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
             // {
-            System.out.println("CATS ARE AWESOME, BUT DOGS ARE BETTER");
+            System.out.println("CATS ARE OK-ISH, BUT DOGS ARE AWESOME");
             autoState = State.CHOOSE_PATH;
             Hardware.autoTimer.stop();
             // break;
@@ -206,7 +206,7 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
+    switch (0/** Hardware.autoSixPosSwitch.getPosition() */
     )
         {
         case 0:
@@ -227,9 +227,10 @@ private static void choosePath ()
             break;
 
         case 4:
+            break;
 
         case 5:
-
+            break;
         default:
             autoState = State.FINISH;
             break;
@@ -244,7 +245,7 @@ private static void choosePath ()
  */
 private static void setPositionAndLevel ()
 {
-
+    autoLevel = Level.LEVEL_ONE;
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
     if (Hardware.autoPositionSwitch.getPosition() == LEFT)
@@ -261,9 +262,11 @@ private static void setPositionAndLevel ()
     // sets the autoLevel enum to the correct level, or disabled, based on the
     // state
     // of the autoLevelSwitch
+    // temporary test manual code; Meghan Brown and Guido Visioni; 26 January
+    // 2018
     if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE)
         {
-        autoLevel = Level.LEVEL_ONE;
+        crossAutoline();
         } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
         {
         autoLevel = Level.LEVEL_ONE;// TWO TODO
@@ -277,6 +280,22 @@ private static void setPositionAndLevel ()
 
 private static boolean crossAutoline ()
 {
+    if (autoLevel == Level.LEVEL_ONE)
+        {
+        // I hope this makes basic cross autoline work - Meghan Brown
+        // 28 January 2019
+        /*
+         * if (!Hardware.drive.driveStraightInches(
+         * DISTANCE_TO_CROSS_AUTOLINE,
+         * DRIVE_SPEED, ACCELERATION_TIME, true))
+         * {
+         * return true;
+         * }
+         */
+        // TODO come back and test; MB
+        driveOffStraightLevel1();
+        System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+        }
     if (autoLevel == Level.LEVEL_TWO)
         {
         descendFromLevelTwo();
