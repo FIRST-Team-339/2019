@@ -44,12 +44,12 @@ public void process (Mat source0)
     // Step RGB_Threshold0:
     Mat rgbThresholdInput = source0;
     double[] rgbThresholdRed =
-        {10.0, 229.0};
+        {0.0, 0.0};
     double[] rgbThresholdGreen =
-        {39.0, 255.0};
+        {50.0, 255.0};
 
     double[] rgbThresholdBlue =
-        {0.0, 50.0};
+        {0.0, 0};
 
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen,
             rgbThresholdBlue, rgbThresholdOutput);

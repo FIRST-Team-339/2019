@@ -32,6 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.vision.VisionProcessor.ImageType;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -153,38 +154,12 @@ public static void periodic ()
 
     // @ANE
 
-    // // TODO remove the next 3 functions once camera is tested
-
-    // Drive to the vision targets
-    // if (Hardware.leftOperator.getRawButton(4))
-    // {
-    // hasDoneTheThing = false;
-    // System.out.println("Done the thing: " + hasDoneTheThing);
-    // }
-
-    // if (!hasDoneTheThing)
-    // {
-
-    // if (Hardware.driveWithCamera.driveToTarget(.38))
-    // {
-    // System.out.println("Has aligned hopefully");
-    // Hardware.axisCamera.setRelayValue(false);
-    // hasDoneTheThing = true;
-    // }
-    // }
-    // // turn on the ringlight
-    // if (Hardware.leftOperator.getRawButton(6)
-    // && Teleop.hasDoneTheThing == true)
-    // {
-    // System.out.println("lets blind some wirers");
-    // Hardware.axisCamera.setRelayValue(true);
-    // }
-    // // save image
-    // if (Hardware.leftOperator.getRawButton(7))
-    // {
-    // Hardware.axisCamera.saveImage(ImageType.RAW);
-    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-    // }
+    // save image
+    if (Hardware.leftOperator.getRawButton(7))
+        {
+        Hardware.axisCamera.saveImage(ImageType.RAW);
+        Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+        }
 
     // ----- Forklift controls -----
 

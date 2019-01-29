@@ -7,6 +7,7 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 // import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
+import frc.vision.VisionProcessor.ImageType;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -165,7 +166,7 @@ public DriveWithCamera (TransmissionBase transmission,
  * Multiply the compensationFactor by speed to determine what values we are
  * sending to the motor controller
  *
- * 
+ *
  * @param speed
  *                  have the speed greater than 0 and less than 1
  * @return true if the robot has driven all the way to the front of the target,
@@ -178,8 +179,8 @@ public boolean driveToTarget (double speed)
         {
         case INIT:
             this.visionProcessor.setRelayValue(true);
-            // visionProcessor.saveImage(ImageType.RAW);
-            // visionProcessor.saveImage(ImageType.PROCESSED);
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
 
             // this.resetEncoders();
             double motorspeed = speed;
@@ -212,7 +213,7 @@ public boolean driveToTarget (double speed)
             // adjust speed so that motors never reverse
             if (motorspeed - DRIVE_CORRECTION <= 0)
                 {
-                slowestSpeed = 0.1;
+                slowestSpeed = 0.05;
                 } else
                 {
                 slowestSpeed = motorspeed - DRIVE_CORRECTION;
@@ -278,8 +279,8 @@ public boolean driveToTarget (double speed)
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
                 {
 
-                // visionProcessor.saveImage(ImageType.RAW);
-                // visionProcessor.saveImage(ImageType.PROCESSED);
+                visionProcessor.saveImage(ImageType.RAW);
+                visionProcessor.saveImage(ImageType.PROCESSED);
                 state = DriveWithCameraState.STOP;
                 }
 
