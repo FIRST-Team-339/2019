@@ -28,6 +28,7 @@ import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.Telemetry;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
+import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
@@ -44,6 +45,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -285,6 +287,8 @@ public static LVMaxSonarEZ frontUltraSonic = new LVMaxSonarEZ(3);
 // -------------------------------------
 public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 
+
+
 // **********************************************************
 // roboRIO CONNECTIONS CLASSES
 // **********************************************************
@@ -295,6 +299,7 @@ public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 public static VisionProcessor axisCamera = new VisionProcessor(
         "10.3.39.11", CameraModel.AXIS_M1013,
         ringLightRelay);
+
 
 
 
