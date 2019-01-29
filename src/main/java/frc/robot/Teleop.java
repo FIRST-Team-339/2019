@@ -231,10 +231,14 @@ public static void periodic ()
     // // Telemetry
     // // =================================================================
 
+    System.out.println(Hardware.gyro.getAngle());
+    // System.out.println(Hardware.gyro.isGyroConnected());
+    // System.out.println(Hardware.gyro.hasGyro);
+
     Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.printToConsole();
 
-    // TODO untested code by Anna, Patrick, and Meghan
+    // TODO untested code by Anna, Patrick, and Meghan.
     // Teleop.teleopDrive();
 
 } // end Periodic()
