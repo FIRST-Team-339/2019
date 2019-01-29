@@ -283,8 +283,8 @@ public void printToConsole ()
             // System.out.println("Right Rear Ticks "
             // + Hardware.rightRearDriveEncoder.get());
 
-            System.out.println("deploy Ticks "
-                    + Hardware.intakeDeployEncoder.get());
+            // System.out.println("deploy Ticks "
+            // + Hardware.intakeDeployEncoder.get());
 
             // System.out.println(
             // "lift ticks " + Hardware.liftingEncoder.get());
@@ -339,9 +339,9 @@ public void printToConsole ()
             // Sonar/UltraSonic
             // ---------------------------------
 
-            // System.out.println(
-            // "Front UltraSonic " + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
+            System.out.println(
+                    "Front UltraSonic " + Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper());
 
             //
 

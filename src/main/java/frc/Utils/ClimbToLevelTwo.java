@@ -1,5 +1,6 @@
 package frc.Utils;
 
+import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -98,6 +99,7 @@ public void climbUpdate ()
                 {
                 climbTimer.stop();
                 prevState = climberState.DELAY_ONE;
+                Hardware.intakeDeployEncoder.reset();
                 climbState = climberState.LOWER_ARM;
                 }
             break;
@@ -166,6 +168,7 @@ public void climbUpdate ()
                 {
                 climbTimer.stop();
                 prevState = climberState.DELAY_FIVE;
+                Hardware.intakeDeployEncoder.reset();
                 climbState = climberState.RAISE_ARM;
                 }
             break;
@@ -354,11 +357,11 @@ private boolean retractWheels ()
 
 private boolean finishDriving ()
 {
-    System.out.println("Trying to finish driving");
+    //System.out.println("Trying to finish driving");
     if (this.ultraSonic
             .getDistanceFromNearestBumper() >= DISTANCE_B4_STOPPING)
         {
-        this.drive.driveStraight(SPEED_TO_DRIVE_UP, .6, false);
+        this.drive.driveStraight(SPEED_TO_FINISH_DRIVING, .6, false);
         return false;
         } else
         {
@@ -383,6 +386,11 @@ public void finishEarly ()
     climbState = climberState.STOP;
 }
 
+
+// =======================================================================
+//
+//
+
 // ---------------------------------------------
 // Constants
 // ---------------------------------------------
@@ -400,38 +408,40 @@ private static final boolean LOWER_WHEELS_POSITION = true;
 
 private static final boolean RETRACT_WHEELS_POSITION = false;
 
-private static final double SPEED_TO_DRIVE_UP = .5;
+private static final double SPEED_TO_DRIVE_UP = .4;
+
+private static final double SPEED_TO_FINISH_DRIVING = .4;
 
 private static boolean timerInit = false;
 
-private static final int DISTANCE_TO_DRIVE_B4_RETRACTION = 200;
+private static final int DISTANCE_TO_DRIVE_B4_RETRACTION = 20;
 
 private static final int DISTANCE_TO_FINISH_DRIVING = 20;
 
-private static final double LOWERED_ARM_POSITION = 40;
+private static final double LOWERED_ARM_POSITION = 200;
 
 private static final double LOWER_ARM_SPEED = -.4;
 
 private static final double ARM_HOLD_SPEED = 1.0;
 
-private static final double RAISED_ARM_POSITION = 20.0;
+private static final double RAISED_ARM_POSITION = -100.0;
 
 private static final double RAISE_ARM_SPEED = .7;
 
-private static final double DELAY_ONE_TIME = 0.5;
+private static final double DELAY_ONE_TIME = 0.0;
 
-private static final double DELAY_TWO_TIME = 0.5;
+private static final double DELAY_TWO_TIME = 0.0;
 
-private static final double DELAY_THREE_TIME = 0.5;
+private static final double DELAY_THREE_TIME = 1.0;
 
-private static final double DELAY_FOUR_TIME = 0.5;
+private static final double DELAY_FOUR_TIME = 0.0;
 
-private static final double DELAY_FIVE_TIME = 0.5;
+private static final double DELAY_FIVE_TIME = 0.0;
 
-private static final double DELAY_SIX_TIME = 0.5;
+private static final double DELAY_SIX_TIME = 0.0;
 
-private static final double DELAY_SEVEN_TIME = 0.5;
+private static final double DELAY_SEVEN_TIME = 1.0;
 
-private static final int DISTANCE_B4_STOPPING = 20;
+private static final int DISTANCE_B4_STOPPING = 10;
 
 }

@@ -146,7 +146,7 @@ public static void periodic ()
 
             // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
             // {
-            System.out.println("CATS ARE AWESOME, BUT DOGS ARE BETTER");
+            System.out.println("DOGS ARE AWESOME, BUT CATS ARE BETTER");
             autoState = State.CHOOSE_PATH;
             Hardware.autoTimer.stop();
             // break;
@@ -206,7 +206,7 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
+    switch (0/** Hardware.autoSixPosSwitch.getPosition() */
     )
         {
         case 0:
@@ -269,6 +269,12 @@ private static void setPositionAndLevel ()
         autoLevel = Level.LEVEL_TWO;// TWO TODO
         }
 
+
+
+    // TEMP CODE FOR TEST PURPOSES ONLY
+
+    autoLevel = Level.LEVEL_ONE;
+    autoPosition = Position.RIGHT;
 }
 
 // =====================================================================
@@ -285,6 +291,7 @@ private static boolean crossAutoline ()
             DRIVE_SPEED, ACCELERATION_TIME,
             false) == true)
         {
+        Hardware.drive.stop();
         return true;
         }
     return false;
@@ -648,12 +655,12 @@ private static void driverControl ()
     Teleop.periodic();
 }
 
-private static enum DescentState
+public static enum DescentState
     {
 STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
     }
 
-private static DescentState descentState = DescentState.STANDBY;
+public static DescentState descentState = DescentState.STANDBY;
 
 // TODO placeholder
 public static boolean reorientAfterLevel2Drop ()
@@ -719,6 +726,7 @@ public static boolean descendFromLevelTwo ()
 
     // return false;
     System.out.println(descentState);
+    System.out.println(descentTimer.get());
 
     switch (descentState)
         {
@@ -740,8 +748,9 @@ public static boolean descendFromLevelTwo ()
                 descentState = DescentState.LANDING_SETUP;
                 } else
                 {
-                Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
-                        false);
+                // Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
+                // false);
+                Hardware.transmission.driveRaw(1.0, 1.0);
                 }
             break;
 
@@ -795,7 +804,7 @@ public static final double DRIVE_SPEED = .4;
 
 public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = 2.0;
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = 1.0;
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
 
