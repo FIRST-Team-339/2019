@@ -1,16 +1,19 @@
 package frc.vision;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.HashMap;
+import org.opencv.core.*;
+import org.opencv.core.Core.*;
+import org.opencv.features2d.FeatureDetector;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.*;
+import org.opencv.objdetect.*;
 
 /**
  * AutoGenVision class.
@@ -28,6 +31,8 @@ private Mat rgbThresholdOutput = new Mat();
 
 private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 
+private ArrayList<MatOfPoint> convexHullsOutput = new ArrayList<MatOfPoint>();
+
 private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
 static
@@ -44,13 +49,11 @@ public void process (Mat source0)
     // Step RGB_Threshold0:
     Mat rgbThresholdInput = source0;
     double[] rgbThresholdRed =
-        {0.0, 0.0};
+        {0.0, 100.52047781569965};
     double[] rgbThresholdGreen =
-        {50.0, 255.0};
-
+        {38.98381294964029, 255.0};
     double[] rgbThresholdBlue =
-        {0.0, 0};
-
+        {0.0, 0.0};
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen,
             rgbThresholdBlue, rgbThresholdOutput);
 
@@ -60,14 +63,17 @@ public void process (Mat source0)
     findContours(findContoursInput, findContoursExternalOnly,
             findContoursOutput);
 
+    // Step Convex_Hulls0:
+    ArrayList<MatOfPoint> convexHullsContours = findContoursOutput;
+    convexHulls(convexHullsContours, convexHullsOutput);
+
     // Step Filter_Contours0:
-    ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-    // previously 80
-    double filterContoursMinArea = 0.0;
+    ArrayList<MatOfPoint> filterContoursContours = convexHullsOutput;
+    double filterContoursMinArea = 0;
     double filterContoursMinPerimeter = 0;
-    double filterContoursMinWidth = 0;
+    double filterContoursMinWidth = 8.0;
     double filterContoursMaxWidth = 1000;
-    double filterContoursMinHeight = 8;// 0.0
+    double filterContoursMinHeight = 0;
     double filterContoursMaxHeight = 1000;
     double[] filterContoursSolidity =
         {0, 100};
@@ -76,12 +82,12 @@ public void process (Mat source0)
     double filterContoursMinRatio = 0;
     double filterContoursMaxRatio = 1000;
     filterContours(filterContoursContours, filterContoursMinArea,
-            filterContoursMinPerimeter,
-            filterContoursMinWidth, filterContoursMaxWidth,
-            filterContoursMinHeight, filterContoursMaxHeight,
-            filterContoursSolidity, filterContoursMaxVertices,
-            filterContoursMinVertices, filterContoursMinRatio,
-            filterContoursMaxRatio, filterContoursOutput);
+            filterContoursMinPerimeter, filterContoursMinWidth,
+            filterContoursMaxWidth, filterContoursMinHeight,
+            filterContoursMaxHeight, filterContoursSolidity,
+            filterContoursMaxVertices, filterContoursMinVertices,
+            filterContoursMinRatio, filterContoursMaxRatio,
+            filterContoursOutput);
 
 }
 
@@ -106,6 +112,16 @@ public ArrayList<MatOfPoint> findContoursOutput ()
 }
 
 /**
+ * This method is a generated getter for the output of a Convex_Hulls.
+ *
+ * @return ArrayList<MatOfPoint> output from Convex_Hulls.
+ */
+public ArrayList<MatOfPoint> convexHullsOutput ()
+{
+    return convexHullsOutput;
+}
+
+/**
  * This method is a generated getter for the output of a Filter_Contours.
  *
  * @return ArrayList<MatOfPoint> output from Filter_Contours.
@@ -114,6 +130,7 @@ public ArrayList<MatOfPoint> filterContoursOutput ()
 {
     return filterContoursOutput;
 }
+
 
 /**
  * Segment an image based on color ranges.
@@ -130,7 +147,8 @@ public ArrayList<MatOfPoint> filterContoursOutput ()
  *                   The image in which to store the output.
  */
 private void rgbThreshold (Mat input, double[] red, double[] green,
-        double[] blue, Mat out)
+        double[] blue,
+        Mat out)
 {
     Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2RGB);
     Core.inRange(out, new Scalar(red[0], green[0], blue[0]),
@@ -168,6 +186,37 @@ private void findContours (Mat input, boolean externalOnly,
 }
 
 /**
+ * Compute the convex hulls of contours.
+ *
+ * @param inputContours
+ *                           The contours on which to perform the operation.
+ * @param outputContours
+ *                           The contours where the output will be stored.
+ */
+private void convexHulls (List<MatOfPoint> inputContours,
+        ArrayList<MatOfPoint> outputContours)
+{
+    final MatOfInt hull = new MatOfInt();
+    outputContours.clear();
+    for (int i = 0; i < inputContours.size(); i++)
+        {
+        final MatOfPoint contour = inputContours.get(i);
+        final MatOfPoint mopHull = new MatOfPoint();
+        Imgproc.convexHull(contour, hull);
+        mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
+        for (int j = 0; j < hull.size().height; j++)
+            {
+            int index = (int) hull.get(j, 0)[0];
+            double[] point = new double[]
+                {contour.get(index, 0)[0], contour.get(index, 0)[1]};
+            mopHull.put(j, 0, point);
+            }
+        outputContours.add(mopHull);
+        }
+}
+
+
+/**
  * Filters out contours that do not meet certain criteria.
  *
  * @param inputContours
@@ -199,11 +248,11 @@ private void findContours (Mat input, boolean externalOnly,
  *                           maximum ratio of width to height
  */
 private void filterContours (List<MatOfPoint> inputContours,
-        double minArea, double minPerimeter, double minWidth,
-        double maxWidth, double minHeight, double maxHeight,
-        double[] solidity, double maxVertexCount,
-        double minVertexCount, double minRatio, double maxRatio,
-        List<MatOfPoint> output)
+        double minArea,
+        double minPerimeter, double minWidth, double maxWidth,
+        double minHeight, double maxHeight, double[] solidity,
+        double maxVertexCount, double minVertexCount, double minRatio,
+        double maxRatio, List<MatOfPoint> output)
 {
     final MatOfInt hull = new MatOfInt();
     output.clear();
@@ -244,5 +293,8 @@ private void filterContours (List<MatOfPoint> inputContours,
         output.add(contour);
         }
 }
+
+
+
 
 }

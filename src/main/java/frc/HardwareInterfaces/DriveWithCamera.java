@@ -179,8 +179,8 @@ public boolean driveToTarget (double speed)
         {
         case INIT:
             this.visionProcessor.setRelayValue(true);
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
+            // visionProcessor.saveImage(ImageType.RAW);
+            // visionProcessor.saveImage(ImageType.PROCESSED);
 
             // this.resetEncoders();
             double motorspeed = speed;
@@ -224,14 +224,7 @@ public boolean driveToTarget (double speed)
             // turns on the ring light
             this.visionProcessor.setDigitalOutputValue(true);
 
-            System.out.println("blob center: " + centerX);
-            System.out
-                    .println("camera center: " + SWITCH_CAMERA_CENTER);
-            System.out.println("right side motor speed: "
-                    + Hardware.rightFrontCANMotor.get());
-            System.out.println("left side motor speed: "
-                    + Hardware.leftFrontCANMotor.get());
-            System.out.println("motor speed: " + motorspeed);
+
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
             if (centerX > SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
@@ -269,9 +262,8 @@ public boolean driveToTarget (double speed)
             break;
         case DRIVE_WITH_US:
 
-            // TODO once encoders fixed
-            this.getTransmission().driveRaw(.2, .2);
-            // driveStraight(speed, 0, true);
+
+            driveStraight(speed, 0, true);
 
             // take a picture when we start to drive with ultrasonic
 

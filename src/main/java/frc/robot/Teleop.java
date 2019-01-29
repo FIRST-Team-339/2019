@@ -82,6 +82,7 @@ public static void init ()
 
     Hardware.intakeDeployEncoder.reset();
 
+    Hardware.gyro.reset();
     // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
     // FIRST_GEAR_RATIO);
     // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -125,6 +126,8 @@ public static void init ()
 public static void periodic ()
 {
 
+    System.out.println(
+            Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -173,11 +176,17 @@ public static void periodic ()
     // @ANE
 
     // save image
+    // if (Hardware.leftOperator.getRawButton(6))
+    // {
+    // Hardware.axisCamera.setRelayValue(true);
+    // }
+
     // if (Hardware.leftOperator.getRawButton(7))
     // {
     // Hardware.axisCamera.saveImage(ImageType.RAW);
     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
     // }
+
 
     // ----- Forklift controls -----
 
