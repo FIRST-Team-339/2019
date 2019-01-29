@@ -612,8 +612,8 @@ public void printToShuffleboard ()
         // Forklift
         // =================================
 
-        SmartDashboard.putNumber("Forklift Height",
-                Hardware.lift.getForkliftHeight());
+        // SmartDashboard.putNumber("Forklift Height",
+        // Hardware.lift.getForkliftHeight());
 
         // =================================
         // Driver station

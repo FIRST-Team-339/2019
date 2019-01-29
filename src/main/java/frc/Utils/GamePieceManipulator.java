@@ -20,10 +20,6 @@ private KilroyEncoder armEncoder = null;
 
 private LightSensor photoSwitch = null;
 
-private Joystick leftOperator = null;
-
-private Joystick rightOperator = null;
-
 private boolean depositInit = false;
 
 
@@ -32,15 +28,12 @@ private boolean depositInit = false;
  */
 public GamePieceManipulator (SpeedController armMotor,
         RobotPotentiometer armPot, SpeedController armRollers,
-        LightSensor photoSwitch, Joystick leftOperator,
-        Joystick rightOperator)
+        LightSensor photoSwitch)
 {
     this.armMotor = armMotor;
     this.armPot = armPot;
     this.armRollers = armRollers;
     this.photoSwitch = photoSwitch;
-    this.leftOperator = leftOperator;
-    this.rightOperator = rightOperator;
 }
 
 /**
@@ -48,15 +41,12 @@ public GamePieceManipulator (SpeedController armMotor,
  */
 public GamePieceManipulator (SpeedController armMotor,
         KilroyEncoder armEncoder, SpeedController armRollers,
-        LightSensor photoSwitch, Joystick leftOperator,
-        Joystick rightOperator)
+        LightSensor photoSwitch)
 {
     this.armMotor = armMotor;
     this.armEncoder = armEncoder;
     this.armRollers = armRollers;
     this.photoSwitch = photoSwitch;
-    this.leftOperator = leftOperator;
-    this.rightOperator = rightOperator;
 }
 
 public static enum GamePiece
@@ -92,12 +82,12 @@ public boolean isDeployed ()
  * call during teleop to move the arm up and down based on the joystick controls
  */
 
-public void moveArmByJoystick ()
+public void moveArmByJoystick (Joystick armJoystick)
 {
     // if ((getCurrentArmPosition() < MAX_ARM_POSITION)
     // && (getCurrentArmPosition() > MIN_ARM_POSITION))
         {
-        armMotor.set(rightOperator.getY());
+        armMotor.set(armJoystick.getY());
         }
 }
 
@@ -127,13 +117,14 @@ public void moveArmToPosition (int targetPosition)
 // =========================================================================
 // roller methods
 // =========================================================================
-public void spinRollers ()
+public void spinRollers (boolean inputButtonValue,
+        boolean outputButtonValue)
 {
-    if (rightOperator.getTrigger() == true)
+    if (inputButtonValue == true)
     // && photoSwitch.get() == false)
         {
         armRollers.set(INPUT_ROLLER_SPEED);
-        } else if (rightOperator.getRawButton(2) == true)
+        } else if (outputButtonValue == true)
         {
         armRollers.set(OUTPUT_ROLLER_SPEED);
         } else

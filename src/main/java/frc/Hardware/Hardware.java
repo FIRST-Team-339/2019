@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -335,6 +336,13 @@ public static Joystick leftOperator = new Joystick(2);
 public static Joystick rightOperator = new Joystick(3);
 
 // ------------------------------------
+// Buttons classes
+// ------------------------------------
+
+// public static JoystickButton rightOperatorTrigger = new JoystickButton(
+// rightOperator, 1);
+
+// ------------------------------------
 // Momentary Switches
 // ------------------------------------
 public static MomentarySwitch descendButton = new MomentarySwitch(
@@ -395,8 +403,7 @@ public static DriveWithCamera driveWithCamera = new DriveWithCamera(
 public static GamePieceManipulator manipulator = new GamePieceManipulator(
         intakeDeployArm, intakeDeployEncoder/* armEncoder */,
         armRoller,
-        null/* photoSwitch */, leftOperator,
-        rightOperator);
+        null/* photoSwitch */);
 
 public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
         manipulator);
