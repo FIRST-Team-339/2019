@@ -81,6 +81,8 @@ public static void init ()
 
 } // end Init
 
+
+
 /**
  * State of autonomous as a whole; mainly for init, delay, finish, and choosing
  * which autonomous path is being used
@@ -304,7 +306,7 @@ private static boolean crossAutoline ()
         }
     if (autoLevel == Level.LEVEL_TWO)
         {
-        descendFromLevelTwo();
+        descendFromLevelTwo(usingAlignByWall);
         }
     if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
             DRIVE_SPEED, ACCELERATION_TIME,
@@ -338,7 +340,7 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case DESCEND:
-            if (descendFromLevelTwo())
+            if (descendFromLevelTwo(usingAlignByWall))
                 {
                 if (usingVisionOnStraight)
                     {
@@ -428,7 +430,7 @@ private static boolean depositRocketHatch ()
 
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                descendFromLevelTwo();
+                descendFromLevelTwo(usingAlignByWall);
                 }
             if (usingVision == true)
                 {
@@ -647,7 +649,7 @@ private static boolean depositSideCargoHatch ()
                 sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_ONLY;
             break;
         case LEAVE_LEVEL_2:
-            if (descendFromLevelTwo() == true)
+            if (descendFromLevelTwo(usingAlignByWall) == true)
                 {
                 sideCargoHatchState = SideCargoHatchState.TURN_AFTER_LEVEL_2_DROP;
                 }
@@ -701,7 +703,7 @@ private static void driverControl ()
 
 public static enum DescentState
     {
-STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
+STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, FINISH
     }
 
 public static DescentState descentState = DescentState.STANDBY;
@@ -742,7 +744,7 @@ public static boolean driveOffStraightLevel1 (LightSensor backIR1,
 
 
 
-public static boolean descendFromLevelTwo ()
+public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 {
 
     if (descentState == DescentState.STANDBY)
@@ -794,17 +796,43 @@ public static boolean descendFromLevelTwo ()
                 {
                 // Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
                 // false);
-                Hardware.transmission.driveRaw(1.0, 1.0);
+                Hardware.transmission.driveRaw(
+                        SPEED_TO_DRIVE_OFF_PLATFORM,
+                        SPEED_TO_DRIVE_OFF_PLATFORM);
                 }
             break;
 
         case LANDING_SETUP:
 
-            if (Hardware.testRedLight.isOn() == true)
+            if (Hardware.testRedLight.isOn() == true
+                    && usingAlignByWall == true)
+                {
+                descentState = DescentState.BACKWARDS_TIMER_INIT;
+                } else if (Hardware.testRedLight.isOn()
+                        && usingAlignByWall == false)
                 {
                 descentState = DescentState.FINISH;
                 }
 
+            break;
+
+        case BACKWARDS_TIMER_INIT:
+            descentTimer.reset();
+            descentTimer.start();
+            descentState = DescentState.DRIVE_BACKWARDS_TO_ALIGN;
+            break;
+
+        case DRIVE_BACKWARDS_TO_ALIGN:
+            if (descentTimer.get() >= TIME_TO_DRIVE_BACKWARDS_TO_ALIGN)
+                {
+                descentTimer.stop();
+                Hardware.drive.stop();
+                descentState = DescentState.FINISH;
+                } else
+                {
+                Hardware.transmission.driveRaw(DRIVE_BACKWARDS_SPEED,
+                        DRIVE_BACKWARDS_SPEED);
+                }
             break;
 
         case FINISH:
@@ -824,6 +852,8 @@ public static boolean descendFromLevelTwo ()
 // =========================================================================
 // use vision for rocket autopath
 private static boolean usingVision = true;
+
+private static boolean usingAlignByWall = true;
 
 // use vision for the put hatch straght auto path
 private static boolean usingVisionOnStraight = false;
@@ -856,11 +886,17 @@ public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
 
 public static final double DRIVE_SPEED = .4;
 
+public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;
+
 public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
+
+public static final double DRIVE_BACKWARDS_SPEED = -.5;
 
 public static final double TIME_TO_DRIVE_OFF_PLATFORM = 1.0;
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
+
+public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .5;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
