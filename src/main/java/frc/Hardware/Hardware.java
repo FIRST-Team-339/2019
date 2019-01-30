@@ -352,9 +352,41 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 // Buttons classes
 // ------------------------------------
+// ----- Left Operator -----
 
-// public static JoystickButton rightOperatorTrigger = new JoystickButton(
-// rightOperator, 1);
+// left trigger
+public static JoystickButton intakeTrigger = new JoystickButton(
+        leftOperator, 1);
+
+public static JoystickButton outtakeButton = new JoystickButton(
+        leftOperator, 2);
+
+public static JoystickButton intakeOverride = new JoystickButton(
+        leftOperator, 3);
+
+public static JoystickButton deployOverride = new JoystickButton(
+        leftOperator, 5);
+
+public static JoystickButton cargoShipCargoHeight = new JoystickButton(
+        leftOperator, 6);
+
+public static JoystickButton cargoShipHatchHeight = new JoystickButton(
+        leftOperator, 7);
+
+// ----- Right Operator -----
+
+public static JoystickButton chooseCargoRocketHeights = new JoystickButton(
+        rightOperator, 4);
+
+public static JoystickButton forkliftOverride = new JoystickButton(
+        rightOperator, 5);
+
+public static JoystickButton nextHighestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 6);
+
+public static JoystickButton nextLowestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 7);
+
 
 // ------------------------------------
 // Momentary Switches

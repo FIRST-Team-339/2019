@@ -126,8 +126,8 @@ public static void init ()
 public static void periodic ()
 {
 
-    System.out.println(
-            Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+    // System.out.println(
+    // Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -187,15 +187,21 @@ public static void periodic ()
     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
     // }
 
+    // Forklifts
 
+    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+    // Hardware.forkliftOverride.get());
 
-    // Hardware.lift.moveForkliftWit
+    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_HATCH,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextHighestForkliftTargetHeight.get());
 
+    // // Manipulator
 
-    // Hardware.lift.setLiftPositionByButton(Fo
-
-    // Hardware.rightOperator.getRawButton(6));
-
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 
@@ -218,6 +224,7 @@ public static void periodic ()
 
     // =================================================================
     Hardware.lift.update();
+    Hardware.manipulator.masterUpdate();
     // Hardware.climber.climbUpdate();
 
     // // ============================
@@ -229,8 +236,6 @@ public static void periodic ()
     // System.out.println(Hardware.gyro.hasGyro);
 
     Hardware.telemetry.printToShuffleboard();
-
-    // TODO untested code by Anna, Patri
 
 }
 // end Periodic()
