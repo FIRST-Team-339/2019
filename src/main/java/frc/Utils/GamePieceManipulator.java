@@ -105,7 +105,8 @@ public void moveArmByJoystick (Joystick armJoystick)
     // if ((getCurrentArmPosition() < MAX_ARM_POSITION)
     // && (getCurrentArmPosition() > MIN_ARM_POSITION))
         {
-
+        // TODO change to use the state machine
+        this.armMotor.set(armJoystick.getY());
         }
 }
 
