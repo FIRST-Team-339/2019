@@ -166,13 +166,13 @@ public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(
 public static DoubleThrowSwitch autoPositionSwitch = new DoubleThrowSwitch(
         leftAutoSwitch, rightAutoSwitch);
 
-public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
-        18, 13); // false port numbers
+// public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
+// 18, 13); // false port numbers
 
 // TODO check with wirers if the full functionality of the switch is working
 // 29 January 2019
-public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
-        13, 14, 15, 16, 17, 18);
+// public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
+// 13, 14, 15, 16, 17, 18);
 
 // ------------------------------------
 // Gear Tooth Sensors
@@ -286,7 +286,7 @@ public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
 // -------------------------------------
 // Sonar/Ultrasonic
 // -------------------------------------
-public static HRLVMaxSonarEZ frontUltraSonic = new HRLVMaxSonarEZ(3);
+public static LVMaxSonarEZ frontUltraSonic = new LVMaxSonarEZ(3);
 
 // =====================================
 // SPI Bus
