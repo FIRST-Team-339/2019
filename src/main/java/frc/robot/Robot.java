@@ -47,9 +47,13 @@ public void robotInit ()
     // =========================================================
     // User code goes below here
     // =========================================================
+    Hardware.initialize();
+
 
     Hardware.gyro.calibrate();
     Hardware.gyro.reset();
+
+
     // -----------
     // --------------------------
     // -
