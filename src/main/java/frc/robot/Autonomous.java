@@ -206,8 +206,7 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (0/** Hardware.autoSixPosSwitch.getPosition() */
-    )
+    switch (Hardware.autoSixPosSwitch.getPosition())
         {
         case 0:
             autoState = State.CROSS_AUTOLINE;
@@ -245,7 +244,8 @@ private static void choosePath ()
  */
 private static void setPositionAndLevel ()
 {
-    autoLevel = Level.LEVEL_ONE;
+    // autoLevel = Level.LEVEL_ONE;
+    // (only needed if not testing the physical switch)
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
     if (Hardware.autoPositionSwitch.getPosition() == LEFT)
@@ -299,20 +299,22 @@ private static boolean crossAutoline ()
          * }
          */
         // TODO come back and test; MB
-        driveOffStraightLevel1();
+        // driveOffStraightLevel1();
+        if (Hardware.drive.driveStraightInches(
+                DISTANCE_TO_CROSS_AUTOLINE,
+                DRIVE_SPEED, ACCELERATION_TIME,
+                false) == true)
+            {
+            Hardware.drive.stop();
+            return true;
+            }
         System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
         }
     if (autoLevel == Level.LEVEL_TWO)
         {
         descendFromLevelTwo();
         }
-    if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
-            DRIVE_SPEED, ACCELERATION_TIME,
-            false) == true)
-        {
-        Hardware.drive.stop();
-        return true;
-        }
+
     return false;
 }
 
@@ -655,12 +657,15 @@ private static boolean depositSideCargoHatch ()
         case TURN_AFTER_LEVEL_2_DROP:
 
             break;
-        case LEAVE_LEVEL_1_ONLY:
-            if (driveOffStraightLevel1() == true)
-                {
-                sideCargoHatchState = SideCargoHatchState.DRIVE_1;
-                }
-            break;
+        /*
+         * case LEAVE_LEVEL_1_ONLY:
+         * // TODO: set this to a different Level1 method
+         * if (driveOffStraightLevel1() == true)
+         * {
+         * sideCargoHatchState = SideCargoHatchState.DRIVE_1;
+         * }
+         * break;
+         */
         case DRIVE_1:
             break;
         case TURN_1:
@@ -713,31 +718,34 @@ public static boolean reorientAfterLevel2Drop ()
     return false;
 }
 
-public static boolean driveOffStraightLevel1 ()
-{
-    return driveOffStraightLevel1(Hardware.leftBackIR,
-            Hardware.rightBackIR, Hardware.drive);
-}
-
-// TODO this needs to be tested
-public static boolean driveOffStraightLevel1 (LightSensor backIR1,
-        LightSensor backIR2, Drive drive)
-{
-    double driveSpeed = .7; // arbitrary number to be tested
-    // for now, we are not using the gyro
-    boolean usingGyro = USING_GYRO_FOR_DRIVE_STARIGHT;
-
-    if (backIR1.isOn() == true || backIR2.isOn() == true)
-        {
-        drive.driveStraight(driveSpeed, ACCELERATION_TIME,
-                usingGyro);
-        return false;
-        } else
-        {
-        drive.stop();
-        return true;
-        }
-}
+// Cole wrote this method, January 2019
+/*
+ * public static boolean driveOffStraightLevel1 ()
+ * {
+ * return driveOffStraightLevel1(Hardware.leftBackIR,
+ * Hardware.rightBackIR, Hardware.drive);
+ * }
+ *
+ * // TODO this needs to be tested
+ * public static boolean driveOffStraightLevel1 (LightSensor backIR1,
+ * LightSensor backIR2, Drive drive)
+ * {
+ * double driveSpeed = .7; // arbitrary number to be tested
+ * // for now, we are not using the gyro
+ * boolean usingGyro = USING_GYRO_FOR_DRIVE_STARIGHT;
+ *
+ * if (backIR1.isOn() == true || backIR2.isOn() == true)
+ * {
+ * drive.driveStraight(driveSpeed, ACCELERATION_TIME,
+ * usingGyro);
+ * return false;
+ * } else
+ * {
+ * drive.stop();
+ * return true;
+ * }
+ * }
+ */
 
 
 
@@ -809,7 +817,7 @@ public static boolean descendFromLevelTwo ()
 
         case FINISH:
             System.out.println(
-                    "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTT");
+                    "YOTE!");
             return true;
 
         default:
