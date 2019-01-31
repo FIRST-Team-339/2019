@@ -165,8 +165,10 @@ public static DoubleThrowSwitch autoPositionSwitch = new DoubleThrowSwitch(
 public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
         18, 13); // false port numbers
 
-// public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
-// 13, 14, 15, 16, 17, 18);
+// TODO check with wirers if the full functionality of the switch is working
+// 29 January 2019
+public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
+        13, 14, 15, 16, 17, 18);
 
 // ------------------------------------
 // Gear Tooth Sensors
@@ -274,7 +276,8 @@ public static DoubleSolenoid armIntakeSolenoid = new DoubleSolenoid(0,
 public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
         300);
 
-// public static RobotPotentiometer armPot = new RobotPotentiometer(n, 270);
+// public static RobotPotentiometer armPot = new RobotPotentiometer(n,
+// 270);
 
 // -------------------------------------
 // Sonar/Ultrasonic
@@ -352,9 +355,41 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 // Buttons classes
 // ------------------------------------
+// ----- Left Operator -----
 
-// public static JoystickButton rightOperatorTrigger = new JoystickButton(
-// rightOperator, 1);
+// left trigger
+public static JoystickButton intakeTrigger = new JoystickButton(
+        leftOperator, 1);
+
+public static JoystickButton outtakeButton = new JoystickButton(
+        leftOperator, 2);
+
+public static JoystickButton intakeOverride = new JoystickButton(
+        leftOperator, 3);
+
+public static JoystickButton deployOverride = new JoystickButton(
+        leftOperator, 5);
+
+public static JoystickButton cargoShipCargoHeight = new JoystickButton(
+        leftOperator, 6);
+
+public static JoystickButton cargoShipHatchHeight = new JoystickButton(
+        leftOperator, 7);
+
+// ----- Right Operator -----
+
+public static JoystickButton chooseCargoRocketHeights = new JoystickButton(
+        rightOperator, 4);
+
+public static JoystickButton forkliftOverride = new JoystickButton(
+        rightOperator, 5);
+
+public static JoystickButton nextHighestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 6);
+
+public static JoystickButton nextLowestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 7);
+
 
 // ------------------------------------
 // Momentary Switches
@@ -425,5 +460,15 @@ public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
 public static ClimbToLevelTwo climber = new ClimbToLevelTwo(
         armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
         drive, lift, frontUltraSonic);
+
+// ====================================
+// Methods
+// ====================================
+
+public static void initialize ()
+{
+
+}
+
 
 } // end class

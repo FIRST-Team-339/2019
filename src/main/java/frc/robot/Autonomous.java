@@ -111,7 +111,7 @@ public static State autoState = State.INIT;
 // variable that controls the starting position/side (Left, Right, or Center) of
 // the robot
 
-public static Position autoPosition = Position.RIGHT;// null
+public static Position autoPosition = Position.NULL;
 
 // variable that controls the level the robot is starting on (Level 1 or level 2
 // or disabled)
@@ -245,7 +245,8 @@ private static void choosePath ()
  */
 private static void setPositionAndLevel ()
 {
-    autoLevel = Level.LEVEL_ONE;
+    // autoLevel = Level.LEVEL_ONE;
+    // (only needed if not testing the physical switch)
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
     if (Hardware.autoPositionSwitch.getPosition() == LEFT)
@@ -278,6 +279,8 @@ private static void setPositionAndLevel ()
     autoPosition = Position.RIGHT;
 }
 
+
+
 // =====================================================================
 // Path Methods
 // =====================================================================
@@ -289,11 +292,23 @@ private static boolean crossAutoline ()
         // I hope this makes basic cross autoline work - Meghan Brown
         // 28 January 2019
         /*
-         * if (!Hardware.drive.driveStraightInches( DISTANCE_TO_CROSS_AUTOLINE,
-         * DRIVE_SPEED, ACCELERATION_TIME, true)) { return true; }
+         * if (!Hardware.drive.driveStraightInches(
+         * DISTANCE_TO_CROSS_AUTOLINE,
+         * DRIVE_SPEED, ACCELERATION_TIME, true))
+         * {
+         * return true;
+         * }
          */
         // TODO come back and test; MB
-        driveOffStraightLevel1();
+        // driveOffStraightLevel1();
+        if (Hardware.drive.driveStraightInches(
+                DISTANCE_TO_CROSS_AUTOLINE,
+                DRIVE_SPEED, ACCELERATION_TIME,
+                false) == true)
+            {
+            Hardware.drive.stop();
+            return true;
+            }
         System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
         }
     if (autoLevel == Level.LEVEL_TWO)
@@ -720,24 +735,20 @@ public static enum DescentState
 STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, FINISH
     }
 
-public static DescentState descentState = DescentState.STANDBY;
 
-// TODO placeholder
-public static boolean reorientAfterLevel2Drop ()
-{
+// Cole wrote this method, January 2019
 
-    return false;
-}
+
 
 public static boolean driveOffStraightLevel1 ()
 {
-    // TODO uncomment
-    // return driveOffStraightLevel1(Hardware.leftBackIR,
-    // Hardware.rightBackIR, Hardware.drive);
-    return false;
+    return driveOffStraightLevel1(Hardware.leftBackIR,
+            Hardware.rightBackIR, Hardware.drive);
 }
 
 // TODO this needs to be tested
+
+
 public static boolean driveOffStraightLevel1 (LightSensor backIR1,
         LightSensor backIR2, Drive drive)
 {
@@ -747,13 +758,26 @@ public static boolean driveOffStraightLevel1 (LightSensor backIR1,
 
     if (backIR1.isOn() == true || backIR2.isOn() == true)
         {
-        drive.driveStraight(driveSpeed, ACCELERATION_TIME, usingGyro);
+        drive.driveStraight(driveSpeed, ACCELERATION_TIME,
+                usingGyro);
         return false;
         } else
         {
         drive.stop();
         return true;
         }
+}
+
+
+
+
+public static DescentState descentState = DescentState.STANDBY;
+
+// TODO placeholder
+public static boolean reorientAfterLevel2Drop ()
+{
+
+    return false;
 }
 
 public static boolean descendFromLevelTwo (boolean usingAlignByWall)
