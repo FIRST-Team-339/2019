@@ -82,6 +82,7 @@ public static void init ()
 
     Hardware.intakeDeployEncoder.reset();
 
+    Hardware.gyro.reset();
     // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
     // FIRST_GEAR_RATIO);
     // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -125,15 +126,18 @@ public static void init ()
 public static void periodic ()
 {
 
+    // System.out.println(
+    // Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
 
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
-    // Autonomous.descendFromLevelTwo();
+    // Autonomous.descendFromLevelTwo(true);
     // System.out
-    // .println("HELP WE'VE FALLEN AND WE CAN'T GET BACK UP");
+    // .println(
+    // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
     // } else if (Hardware.rightDriver.getRawButton(5) == true)
     // {
     // Hardware.climber.climb();
@@ -172,60 +176,69 @@ public static void periodic ()
     // @ANE
 
     // save image
-    if (Hardware.leftOperator.getRawButton(7))
-        {
-        Hardware.axisCamera.saveImage(ImageType.RAW);
-        Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-        }
+    // if (Hardware.leftOperator.getRawButton(6))
+    // {
+    // Hardware.axisCamera.setRelayValue(true);
+    // }
 
-    // ----- Forklift controls -----
+    // if (Hardware.leftOperator.getRawButton(7))
+    // {
+    // Hardware.axisCamera.saveImage(ImageType.RAW);
+    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+    // }
+
+    // Forklifts
 
     // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-    // Hardware.rightOperator.getRawButton(5));
+    // Hardware.forkliftOverride.get());
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.TOP_ROCKET_CARGO,
+    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_HATCH,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.rightOperator.getRawButton(6));
+    // Hardware.nextHighestForkliftTargetHeight.get());
+
+    // // Manipulator
+
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 
-    // =================================================================
-    // Driver Controls
+
     // =================================================================
     // @ANE
 
-    // if (Hardware.leftDriver.getY() > DEADBAND_VALUE
-    // || Hardware.leftDriver.getY() < -DEADBAND_VALUE
+    // if (
+
     // || Hardware.rightDriver.getY() > DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() < -DEADBAND_VALUE)
+    // || Hardware.rightDriver.getY() < -DEADBAND_VALU
     // {
     // Teleop.teleopDrive();
-    // hasDoneTheThing = true;
-    // Hardware.axisCamera.setRelayValue(false);
+    // h
+    // Hardware.axisCamera.s
 
     // }
 
-    // =================================================================
-    // Update State Machines
+    // =
+
     // =================================================================
     Hardware.lift.update();
+    Hardware.manipulator.masterUpdate();
     // Hardware.climber.climbUpdate();
 
-    // // =================================================================
-    // // Telemetry
+    // // ============================
+
     // // =================================================================
 
-    System.out.println(Hardware.gyro.getAngle());
-    // System.out.println(Hardware.gyro.isGyroConnected());
+    // System.out.println(Hardware.gyro.getAngle());
+
     // System.out.println(Hardware.gyro.hasGyro);
 
     Hardware.telemetry.printToShuffleboard();
-    Hardware.telemetry.printToConsole();
 
-    // TODO untested code by Anna, Patrick, and Meghan.
-    // Teleop.teleopDrive();
-
-} // end Periodic()
+}
+// end Periodic()
 
 public static void printStatements ()
 {

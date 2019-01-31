@@ -37,7 +37,6 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.drive.Drive;
 
-
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
  * order to periodically execute instructions during the Autonomous period.
@@ -72,6 +71,7 @@ public static void init ()
 
     // Hardware.leftFrontDriveEncoder.reset();
     // Hardware.rightFrontDriveEncoder.reset();
+    Hardware.gyro.reset();
 
     // TODO @ANE uncomment
     // if (Hardware.autoLevelSwitch.isOn() == true) {
@@ -146,7 +146,7 @@ public static void periodic ()
 
             // if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0, 5.0))
             // {
-            System.out.println("DOGS ARE AWESOME, BUT CATS ARE BETTER");
+            System.out.println("DOGS ARE AWESOME AND CATS ARE NOT");
             autoState = State.CHOOSE_PATH;
             Hardware.autoTimer.stop();
             // break;
@@ -206,7 +206,8 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (Hardware.autoSixPosSwitch.getPosition())
+    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
+    )
         {
         case 0:
             autoState = State.CROSS_AUTOLINE;
@@ -272,13 +273,13 @@ private static void setPositionAndLevel ()
         autoLevel = Level.LEVEL_ONE;// TWO TODO
         }
 
-
-
     // TEMP CODE FOR TEST PURPOSES ONLY
 
     autoLevel = Level.LEVEL_ONE;
     autoPosition = Position.RIGHT;
 }
+
+
 
 // =====================================================================
 // Path Methods
@@ -312,16 +313,21 @@ private static boolean crossAutoline ()
         }
     if (autoLevel == Level.LEVEL_TWO)
         {
-        descendFromLevelTwo();
+        descendFromLevelTwo(usingAlignByWall);
         }
-
+    if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
+            DRIVE_SPEED, ACCELERATION_TIME,
+            false) == true)
+        {
+        Hardware.drive.stop();
+        return true;
+        }
     return false;
 }
 
-
 private static enum DepositCargoHatchState
     {
-INIT, DESCEND, TURN_1, DRIVE_1, TURN_2, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO
+INIT, DESCEND, TURN_1_RIGHT_SIDE, TURN_1_LEFT_SIDE, DRIVE_1, TURN_2_RIGHT_SIDE, TURN_2_LEFT_SIDE, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO
     }
 
 private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
@@ -331,28 +337,41 @@ private static boolean depositCargoHatch ()
     switch (depositCargoHatchState)
         {
         case INIT:
+            // if on level two decend, turn base on start position
             if (autoLevel == Level.LEVEL_TWO)
                 {
                 depositCargoHatchState = DepositCargoHatchState.DESCEND;
+                } else if (autoPosition == Position.RIGHT)
+                {
+                depositCargoHatchState = DepositCargoHatchState.TURN_1_RIGHT_SIDE;
                 } else
                 {
-
+                depositCargoHatchState = DepositCargoHatchState.TURN_1_LEFT_SIDE;
                 }
             break;
         case DESCEND:
-            if (descendFromLevelTwo())
+            if (descendFromLevelTwo(usingAlignByWall))
                 {
-                if (usingVisionOnStraight)
+                // turn based on start position
+                if (autoPosition == Position.RIGHT)
                     {
-                    depositCargoHatchState = DepositCargoHatchState.ALIGN_TO_CARGO;
+                    depositCargoHatchState = DepositCargoHatchState.TURN_1_RIGHT_SIDE;
                     } else
                     {
-                    depositCargoHatchState = DepositCargoHatchState.TURN_1;
+                    depositCargoHatchState = DepositCargoHatchState.TURN_1_LEFT_SIDE;
                     }
                 }
             break;
-        case TURN_1:
-            if (Hardware.drive.turnDegrees(-TURN_90, DRIVE_SPEED))
+        case TURN_1_RIGHT_SIDE:
+            if (Hardware.drive.turnDegrees(-TURN_90, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                depositCargoHatchState = DepositCargoHatchState.DRIVE_1;
+                }
+            break;
+        case TURN_1_LEFT_SIDE:
+            if (Hardware.drive.turnDegrees(TURN_90, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.DRIVE_1;
                 }
@@ -360,15 +379,28 @@ private static boolean depositCargoHatch ()
         case DRIVE_1:
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_1, DRIVE_SPEED,
-                    ACCELERATION_TIME, USING_GYRO))
-                {
-                depositCargoHatchState = DepositCargoHatchState.TURN_2;
-                }
-            break;
-        case TURN_2:
-            if (Hardware.drive.turnDegrees(TURN_90, DRIVE_SPEED,
                     ACCELERATION_TIME,
                     USING_GYRO))
+                {
+                if (autoPosition == Position.RIGHT)
+                    {
+                    depositCargoHatchState = DepositCargoHatchState.TURN_2_RIGHT_SIDE;
+                    } else
+                    {
+                    depositCargoHatchState = DepositCargoHatchState.TURN_2_LEFT_SIDE;
+                    }
+                }
+            break;
+        case TURN_2_RIGHT_SIDE:
+            if (Hardware.drive.turnDegrees(TURN_90, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                depositCargoHatchState = DepositCargoHatchState.DRIVE_2;
+                }
+            break;
+        case TURN_2_LEFT_SIDE:
+            if (Hardware.drive.turnDegrees(-TURN_90, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.DRIVE_2;
                 }
@@ -376,26 +408,30 @@ private static boolean depositCargoHatch ()
         case DRIVE_2:
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
-                    ACCELERATION_TIME, USING_GYRO))
+                    ACCELERATION_TIME,
+                    USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.DEPOSIT_CARGO;
                 }
 
             break;
         case ALIGN_TO_CARGO:
-            // maybe use vision
+            // maybe align with vision
+            if (Hardware.driveWithCamera
+                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
+                {
+                depositCargoHatchState = DepositCargoHatchState.DEPOSIT_CARGO;
+                }
             break;
         case DEPOSIT_CARGO:
-            // if(depositTheThing)
-            // {
-            // return true;
-            // }
+            if (Hardware.manipulator.depositHatch())
+                {
+                return true;
+                }
             break;
         }
     return false;
 }
-
-
 
 private static enum RocketHatchState
     {
@@ -403,7 +439,6 @@ STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FI
     }
 
 private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
-
 
 // states for the camera nested switch statement
 private static enum DriveWithCameraStates
@@ -430,7 +465,7 @@ private static boolean depositRocketHatch ()
 
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                descendFromLevelTwo();
+                descendFromLevelTwo(usingAlignByWall);
                 }
             if (usingVision == true)
                 {
@@ -445,8 +480,6 @@ private static boolean depositRocketHatch ()
                 rocketHatchState = RocketHatchState.STRAIGHTEN_OUT_ON_WALL;
                 }
             break;
-
-
 
         // =================================================================
         // DRIVE BY NONVISION this is where the smart kids code
@@ -464,7 +497,8 @@ private static boolean depositRocketHatch ()
         case DRIVE_FORWARD_TO_TURN:
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TO_FIRST_TURN, DRIVE_SPEED,
-                    ACCELERATION_TIME, true) == true)
+                    ACCELERATION_TIME,
+                    true) == true)
                 {
                 rocketHatchState = RocketHatchState.TURN_TOWARDS_FIELD_WALL;
                 }
@@ -472,17 +506,16 @@ private static boolean depositRocketHatch ()
 
         case TURN_TOWARDS_FIELD_WALL:
             // turn for if we are on the right side of the field
-            if (autoPosition == Position.RIGHT && Hardware.drive
-                    .turnDegrees(TURN_RIGHT90, TURN_SPEED,
-                            ACCELERATION_TIME, true))
+            if (autoPosition == Position.RIGHT
+                    && Hardware.drive.turnDegrees(TURN_RIGHT90,
+                            TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
-                    && Hardware.drive
-                            .turnDegrees(TURN_LEFT90, TURN_SPEED,
-                                    ACCELERATION_TIME, true))
+                    && Hardware.drive.turnDegrees(TURN_LEFT90,
+                            TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
@@ -502,17 +535,16 @@ private static boolean depositRocketHatch ()
             break;
         case TURN_ALONG_FIELD_WALL:
             // turn for if we are on the right side of the field
-            if (autoPosition == Position.RIGHT && Hardware.drive
-                    .turnDegrees(TURN_LEFT90, TURN_SPEED,
-                            ACCELERATION_TIME, false))
+            if (autoPosition == Position.RIGHT
+                    && Hardware.drive.turnDegrees(TURN_LEFT90,
+                            TURN_SPEED, ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
-                    && Hardware.drive
-                            .turnDegrees(TURN_RIGHT90, TURN_SPEED,
-                                    ACCELERATION_TIME, false))
+                    && Hardware.drive.turnDegrees(TURN_RIGHT90,
+                            TURN_SPEED, ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
                 }
@@ -544,7 +576,6 @@ private static boolean depositRocketHatch ()
         // DRIVE BY VISION CODE this is where the cool kidz code
         // =================================================================
 
-
         case DRIVE_BY_CAMERA:
             // TODO replace magic numbers with constants
             System.out.println("camera state" + driveWithCameraStates);
@@ -558,9 +589,9 @@ private static boolean depositRocketHatch ()
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
                             DISTANCE_TO_CROSS_AUTOLINE, .6,
-                            ACCELERATION_TIME,
-                            USING_GYRO))
+                            ACCELERATION_TIME, USING_GYRO))
                         {
+                        // turn right or left base on start position
                         if (true/* autoPosition == autoPosition.RIGHT */)
                             {
                             driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
@@ -571,24 +602,25 @@ private static boolean depositRocketHatch ()
                         }
                     break;
                 case TURN_RIGHT:
-                    // System.out.println(
-                    // "encoders" + Hardware.gyro.getAngle());
+                    System.out.println(
+                            "gyro angle" + Hardware.gyro.getAngle());
                     if (Hardware.drive.turnDegrees(
-                            TURN_FOR_CAMERA_DEGREES, .2, 1,
-                            false))
+                            TURN_FOR_CAMERA_DEGREES, .2, .2,
+                            USING_GYRO))
                         {
                         driveWithCameraStates = DriveWithCameraStates.ALIGN;
                         }
                     break;
                 case TURN_LEFT:
-                    if (Hardware.drive
-                            .turnDegrees(-TURN_FOR_CAMERA_DEGREES, .2,
-                                    1, false))
+                    if (Hardware.drive.turnDegrees(
+                            -TURN_FOR_CAMERA_DEGREES, .2, .2,
+                            USING_GYRO))
                         {
                         driveWithCameraStates = DriveWithCameraStates.ALIGN;
                         }
                     break;
                 case ALIGN:
+                    // align with the camera
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
@@ -623,9 +655,6 @@ private static boolean depositRocketHatch ()
     return false;
 }
 
-
-
-
 /** Enum for representing the states used in the depositSideCargoHatch path */
 private static enum SideCargoHatchState
     {
@@ -649,7 +678,7 @@ private static boolean depositSideCargoHatch ()
                 sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_ONLY;
             break;
         case LEAVE_LEVEL_2:
-            if (descendFromLevelTwo() == true)
+            if (descendFromLevelTwo(usingAlignByWall) == true)
                 {
                 sideCargoHatchState = SideCargoHatchState.TURN_AFTER_LEVEL_2_DROP;
                 }
@@ -657,15 +686,12 @@ private static boolean depositSideCargoHatch ()
         case TURN_AFTER_LEVEL_2_DROP:
 
             break;
-        /*
-         * case LEAVE_LEVEL_1_ONLY:
-         * // TODO: set this to a different Level1 method
-         * if (driveOffStraightLevel1() == true)
-         * {
-         * sideCargoHatchState = SideCargoHatchState.DRIVE_1;
-         * }
-         * break;
-         */
+        case LEAVE_LEVEL_1_ONLY:
+            if (driveOffStraightLevel1() == true)
+                {
+                sideCargoHatchState = SideCargoHatchState.DRIVE_1;
+                }
+            break;
         case DRIVE_1:
             break;
         case TURN_1:
@@ -706,8 +732,44 @@ private static void driverControl ()
 
 public static enum DescentState
     {
-STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, FINISH
+STANDBY, INIT, DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, FINISH
     }
+
+
+// Cole wrote this method, January 2019
+
+
+
+public static boolean driveOffStraightLevel1 ()
+{
+    return driveOffStraightLevel1(Hardware.leftBackIR,
+            Hardware.rightBackIR, Hardware.drive);
+}
+
+// TODO this needs to be tested
+
+
+public static boolean driveOffStraightLevel1 (LightSensor backIR1,
+        LightSensor backIR2, Drive drive)
+{
+    double driveSpeed = .7; // arbitrary number to be tested
+    // for now, we are not using the gyro
+    boolean usingGyro = USING_GYRO_FOR_DRIVE_STARIGHT;
+
+    if (backIR1.isOn() == true || backIR2.isOn() == true)
+        {
+        drive.driveStraight(driveSpeed, ACCELERATION_TIME,
+                usingGyro);
+        return false;
+        } else
+        {
+        drive.stop();
+        return true;
+        }
+}
+
+
+
 
 public static DescentState descentState = DescentState.STANDBY;
 
@@ -718,39 +780,7 @@ public static boolean reorientAfterLevel2Drop ()
     return false;
 }
 
-// Cole wrote this method, January 2019
-/*
- * public static boolean driveOffStraightLevel1 ()
- * {
- * return driveOffStraightLevel1(Hardware.leftBackIR,
- * Hardware.rightBackIR, Hardware.drive);
- * }
- *
- * // TODO this needs to be tested
- * public static boolean driveOffStraightLevel1 (LightSensor backIR1,
- * LightSensor backIR2, Drive drive)
- * {
- * double driveSpeed = .7; // arbitrary number to be tested
- * // for now, we are not using the gyro
- * boolean usingGyro = USING_GYRO_FOR_DRIVE_STARIGHT;
- *
- * if (backIR1.isOn() == true || backIR2.isOn() == true)
- * {
- * drive.driveStraight(driveSpeed, ACCELERATION_TIME,
- * usingGyro);
- * return false;
- * } else
- * {
- * drive.stop();
- * return true;
- * }
- * }
- */
-
-
-
-
-public static boolean descendFromLevelTwo ()
+public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 {
 
     if (descentState == DescentState.STANDBY)
@@ -802,22 +832,48 @@ public static boolean descendFromLevelTwo ()
                 {
                 // Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
                 // false);
-                Hardware.transmission.driveRaw(1.0, 1.0);
+                Hardware.transmission.driveRaw(
+                        SPEED_TO_DRIVE_OFF_PLATFORM,
+                        SPEED_TO_DRIVE_OFF_PLATFORM);
                 }
             break;
 
         case LANDING_SETUP:
 
-            if (Hardware.testRedLight.isOn() == true)
+            if (Hardware.testRedLight.isOn() == true
+                    && usingAlignByWall == true)
+                {
+                descentState = DescentState.BACKWARDS_TIMER_INIT;
+                } else if (Hardware.testRedLight.isOn()
+                        && usingAlignByWall == false)
                 {
                 descentState = DescentState.FINISH;
                 }
 
             break;
 
+        case BACKWARDS_TIMER_INIT:
+            descentTimer.reset();
+            descentTimer.start();
+            descentState = DescentState.DRIVE_BACKWARDS_TO_ALIGN;
+            break;
+
+        case DRIVE_BACKWARDS_TO_ALIGN:
+            if (descentTimer.get() >= TIME_TO_DRIVE_BACKWARDS_TO_ALIGN)
+                {
+                descentTimer.stop();
+                Hardware.drive.stop();
+                descentState = DescentState.FINISH;
+                } else
+                {
+                Hardware.transmission.driveRaw(DRIVE_BACKWARDS_SPEED,
+                        DRIVE_BACKWARDS_SPEED);
+                }
+            break;
+
         case FINISH:
             System.out.println(
-                    "YOTE!");
+                    "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTT");
             return true;
 
         default:
@@ -833,6 +889,8 @@ public static boolean descendFromLevelTwo ()
 // use vision for rocket autopath
 private static boolean usingVision = true;
 
+private static boolean usingAlignByWall = true;
+
 // use vision for the put hatch straght auto path
 private static boolean usingVisionOnStraight = false;
 
@@ -841,8 +899,7 @@ private static boolean descendInit = false;
 public static Timer descentTimer = new Timer();
 
 /*
- * =============================================================
- * Constants
+ * ============================================================= Constants
  * =============================================================
  */
 
@@ -864,11 +921,17 @@ public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
 
 public static final double DRIVE_SPEED = .4;
 
+public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;
+
 public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
+
+public static final double DRIVE_BACKWARDS_SPEED = -.5;
 
 public static final double TIME_TO_DRIVE_OFF_PLATFORM = 1.0;
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
+
+public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .5;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
@@ -894,7 +957,7 @@ public static final int TURN_LEFT90 = -90;
 
 public static final double TURN_SPEED = .4;
 
-public static final boolean USING_GYRO = true;
+public static final boolean USING_GYRO = false;
 
 public static Timer autoTimer = new Timer();
 

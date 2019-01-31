@@ -28,6 +28,7 @@ import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.Telemetry;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
+import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
@@ -44,6 +45,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -219,6 +221,9 @@ public static LightSensor testRedLight = new LightSensor(8);
 // public static LightSensor photoSwitch = new LightSensor(9);//take out
 // TODO add the correct port numbers once this is added to the robot
 // the IR on the back left part of the robot
+// TODO, also in case you did not null, DO NOT CALL THE leftBackIR AND
+// rightBackIR BECAUSE THEY ARE SET TO null (we do not currently have them on
+// the robot)
 public static LightSensor leftBackIR = null;
 
 // the IR on the back right part of the robot
@@ -285,7 +290,15 @@ public static LVMaxSonarEZ frontUltraSonic = new LVMaxSonarEZ(3);
 // -------------------------------------
 // Analog Interfaces
 // -------------------------------------
+// if you are getting a null pointer exception from the gyro, try setting the
+// parameter you are passing into this delcaration to false. The null pointer
+// exception is probably because there is not a gyro on the robot, and passing
+// in a false will tell the robot we do not have a gyro without requiring us to
+// comment out the gyro declaration.
+
 public static KilroySPIGyro gyro = new KilroySPIGyro(true);
+
+
 
 // **********************************************************
 // roboRIO CONNECTIONS CLASSES
@@ -297,6 +310,7 @@ public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 public static VisionProcessor axisCamera = new VisionProcessor(
         "10.3.39.11", CameraModel.AXIS_M1013,
         ringLightRelay);
+
 
 
 
@@ -340,9 +354,41 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 // Buttons classes
 // ------------------------------------
+// ----- Left Operator -----
 
-// public static JoystickButton rightOperatorTrigger = new JoystickButton(
-// rightOperator, 1);
+// left trigger
+public static JoystickButton intakeTrigger = new JoystickButton(
+        leftOperator, 1);
+
+public static JoystickButton outtakeButton = new JoystickButton(
+        leftOperator, 2);
+
+public static JoystickButton intakeOverride = new JoystickButton(
+        leftOperator, 3);
+
+public static JoystickButton deployOverride = new JoystickButton(
+        leftOperator, 5);
+
+public static JoystickButton cargoShipCargoHeight = new JoystickButton(
+        leftOperator, 6);
+
+public static JoystickButton cargoShipHatchHeight = new JoystickButton(
+        leftOperator, 7);
+
+// ----- Right Operator -----
+
+public static JoystickButton chooseCargoRocketHeights = new JoystickButton(
+        rightOperator, 4);
+
+public static JoystickButton forkliftOverride = new JoystickButton(
+        rightOperator, 5);
+
+public static JoystickButton nextHighestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 6);
+
+public static JoystickButton nextLowestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 7);
+
 
 // ------------------------------------
 // Momentary Switches
