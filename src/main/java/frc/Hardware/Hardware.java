@@ -7,7 +7,7 @@
 // MODIFIED BY:
 // ABSTRACT:
 // This file contains all of the global definitions for the
-// hardware objects in the system
+// hardware objects in the systemr
 //
 // NOTE: Please do not release this code without permission from
 // Team 339.
@@ -29,6 +29,7 @@ import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.Telemetry;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
+import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
@@ -41,10 +42,12 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -63,10 +66,10 @@ public class Hardware
 // ------------------------------------
 public enum RobotYear
     {
-KILROY2018, KILROY2019
+KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public RobotYear whichRobot = RobotYear.KILROY2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -144,7 +147,9 @@ public static WPI_TalonSRX armRoller = new WPI_TalonSRX(10);// fix CANID
 // Relay classes
 // ====================================
 
-public static DigitalOutput ringLightRelay = new DigitalOutput(0);
+// public static DigitalOutput ringLightRelay = new DigitalOutput(0);
+
+public static Relay ringLightRelay = new Relay(0);
 
 // ====================================
 // Digital Inputs
@@ -161,9 +166,11 @@ public static SingleThrowSwitch rightAutoSwitch = new SingleThrowSwitch(
 public static DoubleThrowSwitch autoPositionSwitch = new DoubleThrowSwitch(
         leftAutoSwitch, rightAutoSwitch);
 
-public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
-        18, 13); // false port numbers
+// public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
+// 18, 13); // false port numbers
 
+// TODO check with wirers if the full functionality of the switch is working
+// 29 January 2019
 // public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
 // 13, 14, 15, 16, 17, 18);
 
@@ -218,6 +225,9 @@ public static LightSensor testRedLight = new LightSensor(8);
 // public static LightSensor photoSwitch = new LightSensor(9);//take out
 // TODO add the correct port numbers once this is added to the robot
 // the IR on the back left part of the robot
+// TODO, also in case you did not null, DO NOT CALL THE leftBackIR AND
+// rightBackIR BECAUSE THEY ARE SET TO null (we do not currently have them on
+// the robot)
 public static LightSensor leftBackIR = null;
 
 // the IR on the back right part of the robot
@@ -270,7 +280,8 @@ public static DoubleSolenoid armIntakeSolenoid = new DoubleSolenoid(0,
 public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
         300);
 
-// public static RobotPotentiometer armPot = new RobotPotentiometer(n, 270);
+// public static RobotPotentiometer armPot = new RobotPotentiometer(n,
+// 270);
 
 // -------------------------------------
 // Sonar/Ultrasonic
@@ -284,7 +295,15 @@ public static HRLVMaxSonarEZ frontUltraSonic = new HRLVMaxSonarEZ(0);
 // -------------------------------------
 // Analog Interfaces
 // -------------------------------------
-public static KilroySPIGyro gyro = new KilroySPIGyro(true);
+// if you are getting a null pointer exception from the gyro, try setting the
+// parameter you are passing into this declaration to false. The null pointer
+// exception is probably because there is not a gyro on the robot, and passing
+// in a false will tell the robot we do not have a gyro without requiring us to
+// comment out the gyro declaration.
+
+public static KilroySPIGyro gyro;
+
+
 
 // **********************************************************
 // roboRIO CONNECTIONS CLASSES
@@ -296,10 +315,6 @@ public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 public static VisionProcessor axisCamera = new VisionProcessor(
         "10.3.39.11", CameraModel.AXIS_M1013,
         ringLightRelay);
-
-
-
-
 
 // -------------------------------------
 // declare the USB camera server and the
@@ -339,15 +354,50 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 // Buttons classes
 // ------------------------------------
+// ----- Left Operator -----
 
-// public static JoystickButton rightOperatorTrigger = new JoystickButton(
-// rightOperator, 1);
+// left trigger
+public static JoystickButton intakeTrigger = new JoystickButton(
+        leftOperator, 1);
+
+public static JoystickButton outtakeButton = new JoystickButton(
+        leftOperator, 2);
+
+public static JoystickButton intakeOverride = new JoystickButton(
+        leftOperator, 3);
+
+public static JoystickButton deployOverride = new JoystickButton(
+        leftOperator, 5);
+
+public static JoystickButton cargoShipCargoHeight = new JoystickButton(
+        leftOperator, 6);
+
+public static JoystickButton cargoShipHatchHeight = new JoystickButton(
+        leftOperator, 7);
+
+// ----- Right Operator -----
+
+public static JoystickButton chooseCargoRocketHeights = new JoystickButton(
+        rightOperator, 4);
+
+public static JoystickButton forkliftOverride = new JoystickButton(
+        rightOperator, 5);
+
+public static JoystickButton nextHighestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 6);
+
+public static JoystickButton nextLowestForkliftTargetHeight = new JoystickButton(
+        rightOperator, 7);
+
 
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
 public static MomentarySwitch descendButton = new MomentarySwitch(
         leftOperator, 5, false);
+
+public static MomentarySwitch ringLightButton = new MomentarySwitch(
+        leftOperator, 6, false);
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -390,8 +440,8 @@ public static Drive drive = new Drive(transmission,
 public static DrivePID drivePID = new DrivePID(transmission,
         leftFrontDriveEncoder, rightFrontDriveEncoder,
         leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
-// TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 
+// TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 // TODO update with encoders once fixed
 public static DriveWithCamera driveWithCamera = new DriveWithCamera(
         transmission, null, null, frontUltraSonic,
@@ -412,5 +462,30 @@ public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
 public static ClimbToLevelTwo climber = new ClimbToLevelTwo(
         armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
         drive, lift, frontUltraSonic);
+
+// ====================================
+// Methods
+// ====================================
+
+public static void initialize ()
+{
+    switch (whichRobot)
+        {
+        default:
+        case KILROY_2018:
+            // System.out.println("Hardware initilization KILROY_2018");
+            gyro = new KilroySPIGyro(true);
+            break;
+
+        case KILROY_2019:
+            // TODO add stuff to new robot
+            break;
+        case TEST_BOARD:
+            // System.out.println("Hardware initilization TEST_BOARD");
+            gyro = new KilroySPIGyro(true);
+            break;
+        }
+}
+
 
 } // end class

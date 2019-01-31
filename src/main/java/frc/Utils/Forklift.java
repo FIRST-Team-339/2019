@@ -5,7 +5,6 @@ import frc.HardwareInterfaces.KilroyEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 /**
  * Class for controlling the Forklift on the robot. Gets information from, but
  * should be seperate from, the GamePieceManipulator object , in order for the
@@ -28,7 +27,12 @@ public class Forklift
  * Constructor for Forklift
  *
  * @param liftMotor
+ *                                 whichever motor is moving the forklift up and
+ *                                 down
  * @param liftEncoder
+ *                                 the encoder attached to the liftMotor
+ * @param gamePieceManipulator
+ *
  */
 public Forklift (WPI_TalonSRX liftMotor, KilroyEncoder liftEncoder,
         GamePieceManipulator gamePieceManipulator)
@@ -43,8 +47,11 @@ public Forklift (WPI_TalonSRX liftMotor, KilroyEncoder liftEncoder,
 // ===================
 
 /**
- * Gets the value from the encoder, which is the absolute position above the
- * ground.
+ * Gets the forklift encoder's value, scaled to inches based on what the
+ * distance per pulse was set (should have been set in robot init). This
+ * corresponds to high the forklift is compared to where it started when the
+ * robot was initialized (the encodershould be reset to 0 during
+ * initialization).
  *
  * @return the height of the forklift, in inches
  */
@@ -69,13 +76,17 @@ public double getForkliftHeight ()
 public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
+
     if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
         this.moveForkliftAtSpeed(operator.getY(), overrideButton);
 
 }
 
 /**
- * Moves the forklift up and down based on a speed
+ * Moves the forklift up and down based on a speed, and scales the speed as
+ * appropriate depending on if the forklift is moving up or down (motors are
+ * given less power when the forklift is moving down because it is being helped
+ * by gravity)
  *
  * Does not use deadbands. For that, use moveForkLiftWithController()
  *
@@ -84,7 +95,9 @@ public void moveForkliftWithController (Joystick operator,
  *                           override
  * @param speed
  *                           How fast the forklift should be moving, as a
- *                           proportion
+ *                           proportion. Positive values correspond to moving
+ *                           the forklift up, negative to moving the forklift
+ *                           down.
  *
  */
 private void moveForkliftAtSpeed (double speed, boolean overrideButton)
@@ -94,19 +107,25 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
     if (overrideButton == true)
         {
         this.forkliftTargetSpeed = speed;
+        // force the lift state to be move by joysticks
         this.liftState = ForkliftState.MOVE_JOY;
         } else
         {
-        // If we are past the max height or below the min
+        // If we are trying to move up and past the max height, or trying to
+        // move down and below the min height, tell the forklift to stay where
+        // it is
         if ((speed > 0
                 && this.getForkliftHeight() > currentForkliftMaxHeight)
                 || (speed < 0 && this
                         .getForkliftHeight() < currentMinLiftPosition))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
+            // return so we exit the method and do not accidentally set
+            // liftState to MOVE_JOY
             return;
             }
-        // Move the forklift the desired speed
+        // Move the forklift the desired speed; the DOWN_JOYSTICK_SCALAR should
+        // usually be less than the UP_JOYSTICK_SCALAR because
         if (speed > 0)
             forkliftTargetSpeed = speed * UP_JOYSTICK_SCALAR;
         else
@@ -128,7 +147,23 @@ public void setMaxLiftHeight (int inches)
 }
 
 /**
- * Button used
+ * Method for setting a forklift to a preset height using a button.
+ * For use in teleop. The button just needs to be preseed once (not held)
+ * and the forklift state machine will start moving to the necessary height.
+ * This can be interruted at any time by moving the joysticks past their
+ * deadzones (cuasing joystick control to take over).
+ *
+ * This should be called directly as is in teleop and does not need to
+ * be surrounded by any if statements
+ *
+ *
+ * @param position
+ *                          - the height we are moving the forklift to
+ * @param forkliftSpeed
+ *                          - the desired speed we will move to position at
+ * @param button
+ *                          - the value of the button we are using (whether
+ *                          or not it is pressed)
  *
  */
 public void setLiftPositionByButton (double position,
@@ -147,7 +182,7 @@ public void setLiftPositionByButton (double position,
     setLiftPositionPreviousButtonValue = button;
 }
 
-// not an actual momentary switch object, but a boolean used to the same effect
+// not an actual momentary switch object, but a boolean used to the same effect;
 // used to keep the setLiftPositionByButton method from trying to set the
 // forklift height multiple times in a row when the forklift height is near the
 // height
@@ -158,6 +193,9 @@ private boolean setLiftPositionPreviousButtonValue = false;
  * soft stop, and FORKLIFT_MIN_HEIGHT being the FORKLIFT_MIN_HEIGHT.
  *
  * Overloads the setLiftPosition, using the FORKLIFT_SPEED constants
+ *
+ * Should be used in autonomous only, not in teleop. For use in teleop,
+ * use setLiftPositionByButton.
  *
  * @param position
  *                     The position the forklift will move to, in inches.
@@ -186,6 +224,9 @@ public boolean setLiftPosition (double position)
 /**
  * Moves the arm to the desired position, FORKLIFT_MIN_HEIGHT is the bottom,
  * FORKLIFT_MAX_HEIGHT is the top
+ *
+ * Should be used in autonomous only, not in teleop. For use in teleop,
+ * use setLiftPositionByButton.
  *
  * @param position
  *                          The position that the forklift will be set to move
@@ -242,7 +283,7 @@ public void update ()
     switch (liftState)
         {
         case MOVING_TO_POSITION:
-            // Make sure we don't move past the MAX or MIN position
+            // Make sure we are not trying to move past the MAX or MIN position
             if ((this.forkliftTargetHeight > currentForkliftMaxHeight)
                     || (this.forkliftTargetHeight < currentMinLiftPosition))
                 {
@@ -292,8 +333,10 @@ public void update ()
         case MOVE_JOY:
             setLiftPositionInit = true;
             this.forkliftMotor.set(forkliftTargetSpeed);
-            // IF we are no longer holding the joystick, then it will
-            // automatically stay at position.
+            // If we are no longer holding the joystick, then it will
+            // automatically stay at position. If we are holding the joysticks,
+            // then other functions will set liftState back to MOVE_JOY before
+            // we get back here
             liftState = ForkliftState.STAY_AT_POSITION;
             break;
         default:
@@ -304,7 +347,9 @@ public void update ()
                     "Reached default in the liftState switch in "
                             + "forkliftUpdate in Forklift");
         case STAY_AT_POSITION:
-            // IF we have a cube, then send a constant voltage.
+            // Depending on what piece the manipulator has, send the appropriate
+            // value to the motor so the forklift does not slide down due to
+            // gravity
             switch (manipulator.hasWhichGamePiece())
                 {
                 case HATCH_PANEL:
@@ -334,6 +379,8 @@ public void update ()
         }
 }
 
+// Useful forklift infromation that can be sent to smart dashboard when we are
+// testing
 public void printDebugInfo ()
 {
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
@@ -351,17 +398,24 @@ public void printDebugInfo ()
 // ==================
 // Enums
 
+// enum for defining the overall states of the forklift
 public static enum ForkliftState
     {
 MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
     }
 
+// enum for holding which way the forklift needs to move.
 public static enum ForkliftDirectionState
     {
 NEUTRAL, MOVING_DOWN, MOVING_UP
     }
 
+// Variable for defining the overall state of the forklift
 public ForkliftState liftState = ForkliftState.STAY_AT_POSITION;
+
+// Variable for holding which way the forklift needs to move. Used by the
+// MOVING_TO_POSITION state of liftState
+private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRAL;
 
 // Hardware
 private WPI_TalonSRX forkliftMotor;
@@ -373,8 +427,6 @@ private GamePieceManipulator manipulator;
 // Variables
 
 private boolean setLiftPositionInit = true;
-
-private double currentForkliftDownSpeed = 0;
 
 private double currentForkliftMaxHeight = MAX_HEIGHT;
 
@@ -388,25 +440,29 @@ private double forkliftTargetSpeed = 0.0;
 
 private double currentMinLiftPosition = 0;
 
-private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRAL;
-
 // Constants
 
-public final static double TOP_ROCKET_CARGO = 69;
+// heights for the top, middle, and bottom openings for the cargo on the
+// rocket ship
+public final static double TOP_ROCKET_CARGO = 69; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 26;
+public final static double MIDDLE_ROCKET_CARGO = 26;// placeholder value
 
-public final static double LOWER_ROCKET_CARGO = 0;
+public final static double LOWER_ROCKET_CARGO = 0;// placeholder value
 
-public final static double TOP_ROCKET_HATCH = 50;
 
-public final static double MIDDLE_ROCKET_HATCH = 30;
+// heights for the top, middle, and bottom openings for the hatch
+// rocket ship
+public final static double TOP_ROCKET_HATCH = 50;// placeholder value
 
-public final static double LOWER_ROCKET_HATCH = 10;
+public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
 
-public final static double CARGO_SHIP_CARGO = 0;
+public final static double LOWER_ROCKET_HATCH = 10;// placeholder value
 
-public final static double CARGO_SHIP_HATCH = 0;
+// heights for the cargo and hatch openings on the cargo ship
+public final static double CARGO_SHIP_CARGO = 0;// placeholder value
+
+public final static double CARGO_SHIP_HATCH = 0;// placeholder value
 
 private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
