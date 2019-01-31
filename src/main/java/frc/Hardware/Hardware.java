@@ -7,7 +7,7 @@
 // MODIFIED BY:
 // ABSTRACT:
 // This file contains all of the global definitions for the
-// hardware objects in the system
+// hardware objects in the systemr
 //
 // NOTE: Please do not release this code without permission from
 // Team 339.
