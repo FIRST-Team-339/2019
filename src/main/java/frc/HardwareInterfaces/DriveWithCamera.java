@@ -12,6 +12,7 @@ import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.Relay.Value;
 
 /**
  * Contains all game specific vision code, including code to drive to the switch
@@ -178,7 +179,7 @@ public boolean driveToTarget (double speed)
     switch (state)
         {
         case INIT:
-            this.visionProcessor.setRelayValue(true);
+            this.visionProcessor.setRelayValue(Value.kOn);
             // visionProcessor.saveImage(ImageType.RAW);
             // visionProcessor.saveImage(ImageType.PROCESSED);
 
@@ -222,7 +223,7 @@ public boolean driveToTarget (double speed)
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
-            this.visionProcessor.setDigitalOutputValue(true);
+            this.visionProcessor.setDigitalOutputValue(Value.kOn);
 
 
             // if the switch center is to the right of our center set by the

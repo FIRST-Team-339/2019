@@ -15,6 +15,7 @@
 package frc.Hardware;
 
 import frc.HardwareInterfaces.DriveWithCamera;
+import frc.HardwareInterfaces.HRLVMaxSonarEZ;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -145,7 +147,9 @@ public static WPI_TalonSRX armRoller = new WPI_TalonSRX(10);// fix CANID
 // Relay classes
 // ====================================
 
-public static DigitalOutput ringLightRelay = new DigitalOutput(0);
+// public static DigitalOutput ringLightRelay = new DigitalOutput(0);
+
+public static Relay ringLightRelay = new Relay(0);
 
 // ====================================
 // Digital Inputs
@@ -279,7 +283,7 @@ public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
 // -------------------------------------
 // Sonar/Ultrasonic
 // -------------------------------------
-public static LVMaxSonarEZ frontUltraSonic = new LVMaxSonarEZ(3);
+public static HRLVMaxSonarEZ frontUltraSonic = new HRLVMaxSonarEZ(3);
 
 // =====================================
 // SPI Bus
@@ -308,11 +312,6 @@ public static KilroySPIGyro gyro = new KilroySPIGyro(true);
 public static VisionProcessor axisCamera = new VisionProcessor(
         "10.3.39.11", CameraModel.AXIS_M1013,
         ringLightRelay);
-
-
-
-
-
 
 // -------------------------------------
 // declare the USB camera server and the
@@ -361,6 +360,9 @@ public static Joystick rightOperator = new Joystick(3);
 // ------------------------------------
 public static MomentarySwitch descendButton = new MomentarySwitch(
         leftOperator, 5, false);
+
+public static MomentarySwitch ringLightButton = new MomentarySwitch(
+        leftOperator, 6, false);
 
 // **********************************************************
 // Kilroy's Ancillary classes
