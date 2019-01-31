@@ -15,7 +15,9 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Hardware.Hardware;
 
 
@@ -196,7 +198,9 @@ private int DEFAULT_CAMERA_BRIGHTNESS = 50;
 // ========OBJECTS FOR TAKE LIT IMAGE========
 // relay that controls the ringLight (turns it on or off)
 
-private DigitalOutput tempRingLight = null;
+// private DigitalOutput tempRingLight = null;
+
+private Relay tempRingLight = null;
 
 // timer used in the takeLitPicture function to delay taking an image until
 // after the ringLight turned on
@@ -256,8 +260,59 @@ public VisionProcessor (String ip, CameraModel camera)
  *
  */
 
+// public VisionProcessor (String ip, CameraModel camera,
+// DigitalOutput ringlightRelay)
+// {
+// // Adds the camera to the cscore CameraServer, in order to grab the
+// // stream.
+// this.camera = CameraServer.getInstance()
+// .addAxisCamera("axis-camera", ip);
+
+
+
+// // Based on the selected camera type, set the field of views and focal
+// // length.
+// this.cameraModel = camera;
+// switch (this.cameraModel)
+// {
+// case AXIS_M1011:
+// this.horizontalFieldOfView = M1011_HORIZ_FOV;
+// this.verticalFieldOfView = M1011_VERT_FOV;
+// break;
+// case AXIS_M1013:
+// this.horizontalFieldOfView = M1013_HORIZ_FOV;
+// this.verticalFieldOfView = M1013_VERT_FOV;
+// break;
+
+// default: // Data will default to one to avoid any "divide by zero"
+// // errors.
+// this.horizontalFieldOfView = 1;
+// this.verticalFieldOfView = 1;
+// } // end switch
+
+// this.pictureTimer.reset();
+// this.tempRingLight = ringlightRelay;
+// } // end VisionProcessor()
+
+
+
+/**
+ * Creates the object and starts the camera server
+ *
+ * @param ip
+ *                           the IP of the the axis camera (usually 10.3.39.11)
+ * @param camera
+ *                           the brand / model of the camera
+ * @param ringlightRelay
+ *                           - actual relay not just DigitalOutput
+ *                           camera ringlight to pick up retro-reflective tape:
+ *                           this
+ *                           is the janky fix
+ *
+ */
+
 public VisionProcessor (String ip, CameraModel camera,
-        DigitalOutput ringlightRelay)
+        Relay ringlightRelay)
 {
     // Adds the camera to the cscore CameraServer, in order to grab the
     // stream.
@@ -289,6 +344,7 @@ public VisionProcessor (String ip, CameraModel camera,
     this.pictureTimer.reset();
     this.tempRingLight = ringlightRelay;
 } // end VisionProcessor()
+
 
 /**
  * Creates the object and starts the camera server
@@ -334,33 +390,33 @@ public VisionProcessor (int usbPort, CameraModel camera)
  * @param ringlightRelay
  *                           camera ringlight to pick up retro-reflective tape
  */
-public VisionProcessor (int usbPort, CameraModel camera,
-        DigitalOutput ringlightRelay)
-{
-    // Adds the camera to the cscore CameraServer, in order to grab the
-    // stream.
-    this.camera = CameraServer.getInstance()
-            .startAutomaticCapture("axis-camera", usbPort);
+// public VisionProcessor (int usbPort, CameraModel camera,
+// DigitalOutput ringlightRelay)
+// {
+// // Adds the camera to the cscore CameraServer, in order to grab the
+// // stream.
+// this.camera = CameraServer.getInstance()
+// .startAutomaticCapture("axis-camera", usbPort);
 
-    // Based on the selected camera type, set the field of views and focal
-    // length.
-    this.cameraModel = camera;
-    switch (this.cameraModel)
-        {
-        // case LIFECAM: //Not enough information to properly find this data.
-        // see above.
-        // this.horizontalFieldOfView =
-        // this.verticalFieldOfView =
-        // this.focalLength =
-        // break;
-        default: // Data will default to one to avoid any "divide by zero"
-                 // errors.
-            this.horizontalFieldOfView = 1;
-            this.verticalFieldOfView = 1;
-        } // end switch
-    this.tempRingLight = ringlightRelay;
-    this.pictureTimer.reset();
-} // end VisionProcessor()
+// // Based on the selected camera type, set the field of views and focal
+// // length.
+// this.cameraModel = camera;
+// switch (this.cameraModel)
+// {
+// // case LIFECAM: //Not enough information to properly find this data.
+// // see above.
+// // this.horizontalFieldOfView =
+// // this.verticalFieldOfView =
+// // this.focalLength =
+// // break;
+// default: // Data will default to one to avoid any "divide by zero"
+// // errors.
+// this.horizontalFieldOfView = 1;
+// this.verticalFieldOfView = 1;
+// } // end switch
+// this.tempRingLight = ringlightRelay;
+// this.pictureTimer.reset();
+// } // end VisionProcessor()
 
 // ==========================END INIT===================================
 
@@ -599,7 +655,7 @@ public void takeLitPicture (boolean button)
         if (this.pictureTimer.get() <= TAKE_PICTURE_DELAY / 2.0)
             {
 
-            this.setRelayValue(true);
+            this.setRelayValue(Value.kOn);
             }
         // if the timer expires, save the picture , reset booleans, turns off
         // the ring light
@@ -612,7 +668,7 @@ public void takeLitPicture (boolean button)
 
             this.saveImageSafely(false, ImageType.RAW);
 
-            this.setRelayValue(false);
+            this.setRelayValue(Value.kOff);
             this.pictureTimer.stop();
             this.pictureTimer.reset();
             } // end if
@@ -633,7 +689,13 @@ private final double TAKE_PICTURE_DELAY = 1.0;
  */
 public boolean getRelayValue ()
 {
-    return this.tempRingLight.get();
+    if (this.tempRingLight.get() == Value.kOn)
+        {
+        return true;
+        } else
+        {
+        return false;
+        }
 } // end getRelayValue()
 
 /**
@@ -644,7 +706,13 @@ public boolean getRelayValue ()
  */
 public boolean getDigitalOutputValue ()
 {
-    return this.tempRingLight.get();
+    if (this.tempRingLight.get() == Value.kOn)
+        {
+        return true;
+        } else
+        {
+        return false;
+        }
 } // end getDigitalOutputValue ()
 
 /**
@@ -653,7 +721,7 @@ public boolean getDigitalOutputValue ()
  * @param ringLightValue
  *                           use kForward or kReverse to set the ring light
  */
-public void setRelayValue (boolean ringLightValue)
+public void setRelayValue (Value ringLightValue)
 {
     this.tempRingLight.set(ringLightValue);
 } // end setRelayValue()
@@ -664,7 +732,7 @@ public void setRelayValue (boolean ringLightValue)
  * @param ringLightValue
  *                           use true to turn the relay on
  */
-public void setDigitalOutputValue (boolean ringLightValue)
+public void setDigitalOutputValue (Value ringLightValue)
 {
     this.tempRingLight.set(ringLightValue);
 } // end setDigitalOutputValue
@@ -703,9 +771,10 @@ public ParticleReport[] getParticleReports ()
  */
 public boolean hasBlobs ()
 {
-    if (/* this.particleReports.length > 0 */ !Hardware.axisCamera
-            .filterContoursOutput().isEmpty())
-        return true;
+    // @ANE
+    // if (/* this.particleReports.length > 0 */ !Hardware.axisCamera
+    // .filterContoursOutput().isEmpty())
+    // return true;
     return false;
 } // end hasBlobs()
 

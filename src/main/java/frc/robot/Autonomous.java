@@ -35,6 +35,7 @@ import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.LightSensor;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 
 /**
@@ -279,8 +280,6 @@ private static void setPositionAndLevel ()
     autoPosition = Position.RIGHT;
 }
 
-
-
 // =====================================================================
 // Path Methods
 // =====================================================================
@@ -472,7 +471,7 @@ private static boolean depositRocketHatch ()
                 rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                 } else
                 {
-                Hardware.axisCamera.setRelayValue(false);
+                Hardware.axisCamera.setRelayValue(Value.kOff);
                 autoTimer.reset();
                 autoTimer.start();
                 Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
@@ -758,8 +757,7 @@ public static boolean driveOffStraightLevel1 (LightSensor backIR1,
 
     if (backIR1.isOn() == true || backIR2.isOn() == true)
         {
-        drive.driveStraight(driveSpeed, ACCELERATION_TIME,
-                usingGyro);
+        drive.driveStraight(driveSpeed, ACCELERATION_TIME, usingGyro);
         return false;
         } else
         {

@@ -409,44 +409,33 @@ public void reverseClimbUpdate ()
             break;
 
         case START_REVERSE_CLIMB:
-            // state the climb() function sets the state to and is basically an
+            // state the reverseClimb() function sets the state to and is
+            // basically an
             // init state
-            climbState = climberState.LOWER_FORKLIFT_TO_POSITION;
+            reverseClimbState = ReverseClimberState.DRIVE_BACKWARDS;
             break;
 
 
         case DRIVE_BACKWARDS:
-            // drives until we get close enough to the wall
+            // drives until we get far enough from the wall
             if (this.finishDriving() == true)
                 {
-                // goes to stop
-                prevState = climberState.FINISH_DRIVING;
-                climbState = climberState.STOP;
+                // goes to DELAY_ONE
+                prevReverseState = ReverseClimberState.DRIVE_BACKWARDS;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
                 }
             break;
 
-
-        // case RAISE_FORKLIFT_TO_POSITION:
-        // // lowers forklift to the first position needed to climb, not all
-        // // the way down but mostly dwn
-        // if (this.lowerForkliftToPosition() == true)
-        // {
-        // // moves on to delay init and then DELAY_ONE
-        // prevState = climberState.LOWER_FORKLIFT_TO_POSITION;
-        // climbState = climberState.DELAY_INIT;
-        // }
-        // break;
-
         case DELAY_ONE:
-            // first delay state after LOWER_FORKLIFT_TO_POSITION and before
-            // LOWER_ARM
+            // first delay state after DRIVE_BACKWARDS and before
+            // DEPLOY_BACK_WHEELS
             if (climbTimer.get() >= DELAY_ONE_TIME)
                 {
-                // sets state to LOWER_ARM
+                // sets state to DEPLOY_BACK_WHEELS
                 climbTimer.stop();
-                prevState = climberState.DELAY_ONE;
+                prevReverseState = ReverseClimberState.DELAY_ONE;
                 Hardware.intakeDeployEncoder.reset();
-                climbState = climberState.LOWER_ARM;
+                reverseClimbState = ReverseClimberState.DEPLOY_BACK_WHEELS;
                 }
             break;
 
@@ -454,129 +443,142 @@ public void reverseClimbUpdate ()
             // deploys back wheels
             if (this.deployBackWheels() == true)
                 {
-                // Goes to DELAY_THREE
-                prevState = climberState.DEPLOY_BACK_WHEELS;
-                climbState = climberState.DELAY_INIT;
+                // Goes to DELAY_TWO
+                prevReverseState = ReverseClimberState.DEPLOY_BACK_WHEELS;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
                 }
             break;
 
-        // case LOWER_ARM:
-        // // lowers nessie head all the way
-        // if (this.lowerArm() == true)
-        // {
-        // // goes to DELAY_TWO after DELAY_INIT
-        // prevState = climberState.LOWER_ARM;
-        // climbState = climberState.DELAY_INIT;
-        // }
-        // break;
-
         case DELAY_TWO:
-            // delay state after LOWER_ARM and before DEPLOY_BAK_WHEELS
+            // delay state after DEPLOY_BACK_WHEELS and before
+            // LIFT_FORKLIFT_COMPLETELY
             if (climbTimer.get() >= DELAY_TWO_TIME)
                 {
-                // sets state to DEPLOY_BACK_WHEELS
+                // sets state to LOWER_FORKLIFT_COMPLETELY
                 climbTimer.stop();
-                prevState = climberState.DELAY_TWO;
-                climbState = climberState.DEPLOY_BACK_WHEELS;
+                prevReverseState = ReverseClimberState.DELAY_TWO;
+                reverseClimbState = ReverseClimberState.LOWER_FORKLIFT_COMPLETELY;
+                }
+            break;
+
+        case LOWER_FORKLIFT_COMPLETELY:
+            // lowers forklift all the way and lifts the front end of the robot
+            // subsequentially
+            if (this.lowerForkliftCompletely() == true)
+                {
+                // goes to DELAY_THREE
+                prevReverseState = ReverseClimberState.LOWER_FORKLIFT_COMPLETELY;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
                 }
             break;
 
         case DELAY_THREE:
-            // delay state after DEPLOY_BACK_WHEELS and before
-            // LOWER_FORKLFT_COMPLETELY
+            // delay state after LOWER_FORKLFT_COMPLETELY and before LOWER_ARM
             if (climbTimer.get() >= DELAY_THREE_TIME)
                 {
-                // goes to LOWER_FORKLIFT_COMPLETELY
+                // goes to LOWER_ARM
                 climbTimer.stop();
-                prevState = climberState.DELAY_THREE;
-                climbState = climberState.LOWER_FORKLIFT_COMPLETELY;
+                prevReverseState = ReverseClimberState.DELAY_THREE;
+                reverseClimbState = ReverseClimberState.LOWER_ARM;
                 }
             break;
 
-        // case LOWER_FORKLIFT_COMPLETELY:
-        // // lowers forklift all the way and lifts the front end of the robot
-        // // subsequentially
-        // if (this.lowerForkliftCompletely() == true)
-        // {
-        // // goes to delay four
-        // prevState = climberState.LOWER_FORKLIFT_COMPLETELY;
-        // climbState = climberState.DELAY_INIT;
-        // }
-        // break;
+
+        case LOWER_ARM:
+            // lowers nessie head all the way
+            if (this.lowerArm() == true)
+                {
+                // goes to DELAY_FOUR
+                prevReverseState = ReverseClimberState.LOWER_ARM;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
+                }
+            break;
+
 
         case DELAY_FOUR:
-            // delay after LOWER_FORKLIFT_COMPLETELY and before DRIVE_FORWARD
+            // delay after LOWER_ARM and before DRIVE_OFF_COMPLETELY
             if (climbTimer.get() >= DELAY_FOUR_TIME)
                 {
-                // goes to DRIVE_FORWARD
+                // goes to DRIVE_OFF_COMPLETELY
                 climbTimer.stop();
-                prevState = climberState.DELAY_FOUR;
-                climbState = climberState.DRIVE_FORWARD;
+                prevReverseState = ReverseClimberState.DELAY_FOUR;
+                reverseClimbState = ReverseClimberState.DRIVE_OFF_COMPLETELY;
                 }
             break;
 
-        // case DRIVE_OFF_COMPLETELY:
-        // // drives forward to the point where the the rear wheels can be
-        // // retracted
-        // if (this.driveForward() == true)
-        // {
-        // // goes to DELAY_FIVE
-        // prevState = climberState.DRIVE_FORWARD;
-        // climbState = climberState.DELAY_INIT;
-        // }
-        // break;
+        case DRIVE_OFF_COMPLETELY:
+            // drives backwards to the point where the the rear wheels can be
+            // retracted
+            if (this.driveForward() == true)
+                {
+                // goes to DELAY_FIVE
+                prevReverseState = ReverseClimberState.DRIVE_OFF_COMPLETELY;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
+                }
+            break;
 
         case DELAY_FIVE:
-            // dely state after DRIVE_FORWARD and before RAISE_ARM
+            // delay state after DRIVE_FORWARD and before RETRACT_WHEELS
             if (climbTimer.get() >= DELAY_FIVE_TIME)
                 {
                 // goes to RAISE_ARM
                 climbTimer.stop();
-                prevState = climberState.DELAY_FIVE;
+                prevReverseState = ReverseClimberState.DELAY_FIVE;
                 Hardware.intakeDeployEncoder.reset();
-                climbState = climberState.RAISE_ARM;
+                reverseClimbState = ReverseClimberState.RETRACT_WHEELS;
                 }
             break;
 
-        // case RAISE_ARM:
-        // // raises nessie head all the way
-        // if (this.raiseArm() == true)
-        // {
-        // // goes to DELAY_SIX
-        // prevState = climberState.RAISE_ARM;
-        // climbState = climberState.DELAY_INIT;
-        // }
-        // break;
+        case RETRACT_WHEELS:
+            // retracts wheels
+            if (this.retractWheels() == true)
+                {
+                // goes to DELAY_SIX
+                prevReverseState = ReverseClimberState.RETRACT_WHEELS;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
+                }
+            break;
 
         case DELAY_SIX:
-            // delay state after RAISE_ARM ad before RETRACT_WHEELS
+            // delay state after RETRACT_WHEELS and before RAISE_ARM
             if (climbTimer.get() >= DELAY_SIX_TIME)
                 {
-                // goes to RETRACT_WHEELS
+                // goes to RAISE_ARM
                 climbTimer.stop();
-                prevState = climberState.DELAY_SIX;
-                climbState = climberState.RETRACT_WHEELS;
+                prevReverseState = ReverseClimberState.DELAY_SIX;
+                reverseClimbState = ReverseClimberState.RAISE_ARM;
                 }
             break;
 
-        // case RETRACT_WHEELS:
-        // // retracts wheels
-        // if (this.retractWheels() == true)
-        // {
-        // // goes to DELAY_SEVEN
-        // prevState = climberState.RETRACT_WHEELS;
-        // climbState = climberState.DELAY_INIT;
-        // }
-        // break;
+        case RAISE_ARM:
+            // raises nessie head all the way
+            if (this.raiseArm() == true)
+                {
+                // goes to DELAY_SEVEN
+                prevReverseState = ReverseClimberState.RAISE_ARM;
+                reverseClimbState = ReverseClimberState.DELAY_INIT;
+                }
+            break;
 
         case DELAY_SEVEN:
-            // delay after RETRACT_WHEELS and before FINISH_DRIVING
+            // delay after RAISE_ARM and before RAISE_FORKLIFT_TO_POSITION
             if (climbTimer.get() >= DELAY_SEVEN_TIME)
                 {
-                // goes to FINISH_DRIVING
+                // goes to RAISE_FORKLIFT_TO_POSITION
                 climbTimer.stop();
-                prevState = climberState.DELAY_SEVEN;
-                climbState = climberState.FINISH_DRIVING;
+                prevReverseState = ReverseClimberState.DELAY_SEVEN;
+                reverseClimbState = ReverseClimberState.RAISE_FORKLIFT_TO_POSITION;
+                }
+            break;
+
+        case RAISE_FORKLIFT_TO_POSITION:
+            // raises forklift to the position needed to lower robot, not all
+            // the way up
+            if (this.lowerForkliftToPosition() == true)
+                {
+                // moves on to STOP
+                prevReverseState = ReverseClimberState.RAISE_FORKLIFT_TO_POSITION;
+                reverseClimbState = ReverseClimberState.STOP;
                 }
             break;
 
@@ -591,27 +593,27 @@ public void reverseClimbUpdate ()
             climbTimer.start();
 
             // determines the next state to go to based in the previous state
-            if (prevState == climberState.LOWER_FORKLIFT_TO_POSITION)
+            if (prevReverseState == ReverseClimberState.DRIVE_BACKWARDS)
                 {
-                climbState = climberState.DELAY_ONE;
-                } else if (prevState == climberState.LOWER_ARM)
+                reverseClimbState = ReverseClimberState.DELAY_ONE;
+                } else if (prevReverseState == ReverseClimberState.DEPLOY_BACK_WHEELS)
                 {
-                climbState = climberState.DELAY_TWO;
-                } else if (prevState == climberState.DEPLOY_BACK_WHEELS)
+                reverseClimbState = ReverseClimberState.DELAY_TWO;
+                } else if (prevReverseState == ReverseClimberState.LOWER_FORKLIFT_COMPLETELY)
                 {
-                climbState = climberState.DELAY_THREE;
-                } else if (prevState == climberState.LOWER_FORKLIFT_COMPLETELY)
+                reverseClimbState = ReverseClimberState.DELAY_THREE;
+                } else if (prevReverseState == ReverseClimberState.LOWER_ARM)
                 {
-                climbState = climberState.DELAY_FOUR;
-                } else if (prevState == climberState.DRIVE_FORWARD)
+                reverseClimbState = ReverseClimberState.DELAY_FOUR;
+                } else if (prevReverseState == ReverseClimberState.DRIVE_OFF_COMPLETELY)
                 {
-                climbState = climberState.DELAY_FIVE;
-                } else if (prevState == climberState.RAISE_ARM)
+                reverseClimbState = ReverseClimberState.DELAY_FIVE;
+                } else if (prevReverseState == ReverseClimberState.RETRACT_WHEELS)
                 {
-                climbState = climberState.DELAY_SIX;
-                } else if (prevState == climberState.RETRACT_WHEELS)
+                reverseClimbState = ReverseClimberState.DELAY_SIX;
+                } else if (prevReverseState == ReverseClimberState.RAISE_ARM)
                 {
-                climbState = climberState.DELAY_SEVEN;
+                reverseClimbState = ReverseClimberState.DELAY_SEVEN;
                 }
             break;
 
@@ -631,19 +633,6 @@ public void reverseClimb ()
 {
     reverseClimbState = ReverseClimberState.START_REVERSE_CLIMB;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
