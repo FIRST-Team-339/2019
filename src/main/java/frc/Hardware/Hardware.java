@@ -274,7 +274,8 @@ public static DoubleSolenoid armIntakeSolenoid = new DoubleSolenoid(0,
 public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
         300);
 
-// public static RobotPotentiometer armPot = new RobotPotentiometer(n, 270);
+// public static RobotPotentiometer armPot = new RobotPotentiometer(n,
+// 270);
 
 // -------------------------------------
 // Sonar/Ultrasonic
@@ -457,5 +458,15 @@ public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
 public static ClimbToLevelTwo climber = new ClimbToLevelTwo(
         armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
         drive, lift, frontUltraSonic);
+
+// ====================================
+// Methods
+// ====================================
+
+public static void initialize ()
+{
+
+}
+
 
 } // end class
