@@ -179,6 +179,7 @@ public boolean driveToTarget (double speed)
         {
         case INIT:
             this.visionProcessor.setRelayValue(true);
+            Hardware.ringLightRelay.set(true);
             // visionProcessor.saveImage(ImageType.RAW);
             // visionProcessor.saveImage(ImageType.PROCESSED);
 
