@@ -66,10 +66,10 @@ public class Hardware
 // ------------------------------------
 public enum RobotYear
     {
-KILROY2018, KILROY2019
+KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public RobotYear whichRobot = RobotYear.KILROY2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -296,12 +296,12 @@ public static HRLVMaxSonarEZ frontUltraSonic = new HRLVMaxSonarEZ(3);
 // Analog Interfaces
 // -------------------------------------
 // if you are getting a null pointer exception from the gyro, try setting the
-// parameter you are passing into this delcaration to false. The null pointer
+// parameter you are passing into this declaration to false. The null pointer
 // exception is probably because there is not a gyro on the robot, and passing
 // in a false will tell the robot we do not have a gyro without requiring us to
 // comment out the gyro declaration.
 
-public static KilroySPIGyro gyro = new KilroySPIGyro(true);
+public static KilroySPIGyro gyro;
 
 
 
@@ -440,8 +440,8 @@ public static Drive drive = new Drive(transmission,
 public static DrivePID drivePID = new DrivePID(transmission,
         leftFrontDriveEncoder, rightFrontDriveEncoder,
         leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
-// TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 
+// TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 // TODO update with encoders once fixed
 public static DriveWithCamera driveWithCamera = new DriveWithCamera(
         transmission, null, null, frontUltraSonic,
@@ -469,7 +469,22 @@ public static ClimbToLevelTwo climber = new ClimbToLevelTwo(
 
 public static void initialize ()
 {
+    switch (whichRobot)
+        {
+        default:
+        case KILROY_2018:
+            // System.out.println("Hardware initilization KILROY_2018");
+            gyro = new KilroySPIGyro(true);
+            break;
 
+        case KILROY_2019:
+            // TODO add stuff to new robot
+            break;
+        case TEST_BOARD:
+            // System.out.println("Hardware initilization TEST_BOARD");
+            gyro = new KilroySPIGyro(true);
+            break;
+        }
 }
 
 
