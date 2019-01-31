@@ -15,6 +15,7 @@
 package frc.Hardware;
 
 import frc.HardwareInterfaces.DriveWithCamera;
+import frc.HardwareInterfaces.HRLVMaxSonarEZ;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -274,7 +275,7 @@ public static RobotPotentiometer delayPot = new RobotPotentiometer(2,
 // -------------------------------------
 // Sonar/Ultrasonic
 // -------------------------------------
-public static LVMaxSonarEZ frontUltraSonic = new LVMaxSonarEZ(3);
+public static HRLVMaxSonarEZ frontUltraSonic = new HRLVMaxSonarEZ(0);
 
 // =====================================
 // SPI Bus
