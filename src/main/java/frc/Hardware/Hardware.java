@@ -443,16 +443,17 @@ public static void initialize ()
             // TODO add stuff for new robot
             break;
         case TEST_BOARD:
-            SmartDashboard.putString("GameYear: ",
-                    "YEAH!: " + whichRobot);
-            System.out
-                    .println("Hardware initilization TEST_BOARD");
             gyro = new KilroySPIGyro(false);
             break;
         }
 }
 
-
+/**
+ * it's a switch statement for the current robot, a robot we don't have,
+ * and a robot Mr. Brown said not to use.
+ *
+ * @author Patrick
+ */
 public static void setHardwareSettings ()
 {
     switch (whichRobot)
@@ -529,6 +530,8 @@ public static void setHardwareSettings2018 ()
 
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
+
+    System.out.println("Connor would say \"we have done the thing\"");
 
 }
 
