@@ -241,6 +241,9 @@ public static void periodic ()
 
     Hardware.telemetry.printToShuffleboard();
 
+    Hardware.telemetry.printToConsole();
+
+
 }
 // end Periodic()
 
