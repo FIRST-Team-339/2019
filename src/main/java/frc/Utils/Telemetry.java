@@ -339,9 +339,9 @@ public void printToConsole ()
             // Sonar/UltraSonic
             // ---------------------------------
 
-            System.out.println(
-                    "Front UltraSonic " + Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper());
+            // System.out.println(
+            // "Front UltraSonic " + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
 
             //
 

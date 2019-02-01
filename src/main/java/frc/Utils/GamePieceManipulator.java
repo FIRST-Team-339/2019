@@ -94,6 +94,10 @@ public void masterUpdate ()
 // armMotor methods
 // =========================================================================
 
+
+
+
+
 /**
  * call during teleop to move the arm up and down based on the joystick controls
  */
@@ -110,9 +114,40 @@ public void moveArmByJoystick (Joystick armJoystick)
         }
 }
 
-public int getCurrentArmPosition ()
+/**
+ * Adjusts the arm potentiometer value so that it is zeroed
+ * at the undeployed position and being below the undeployed
+ * position has a negative value
+ */
+private double armPotAdjusted ()
 {
-    return armEncoder.get();// armPot.get();
+    // TODO no idea if this is the right value b/c I
+    // do not know if the potentiometer can be reset at
+    // robot init
+    return armPot.get();
+}
+
+public double getCurrentArmPosition ()
+{
+    if (armPot != null)
+        {
+        double valueFromHorizontal = (armPotAdjusted()
+                - ARM_POT_RAW_HORIZONTAL_VALUE)
+                * ARM_POT_SCALE_TO_DEGREES;
+
+        return valueFromHorizontal;
+        } else // if we are not using an armPot, we should be using an encoder
+        {
+        // assumes that the value from the encoder is reset to 0
+        // when the robot is started and negative when the manipulator
+        // is below the starting position
+        // TODO should getDistance be used instead of get
+        double valueFromHorizontal = (armEncoder.get()
+                - ARM_ENCODER_RAW_HORIZONTAL_VALUE)
+                * ARM_ENCODER_SCALE_TO_DEGREES;
+
+        return valueFromHorizontal;
+        }
 }
 
 // ready to test
@@ -132,69 +167,69 @@ public void moveArmToPosition (int targetPosition)
 }
 
 
-public void deployUpdate ()
-{
-    switch (deployMovementState)
-        {
-        case MOVING_BY_JOY:
-            // if ((this.forkliftTargetHeight > currentForkliftMaxHeight)
-            // || (this.forkliftTargetHeight < currentMinLiftPosition))
-            // {
-            // liftState = ForkliftState.STAY_AT_POSITION;
-            // break;
-            // }
+// public void deployUpdate ()
+// {
+// switch (deployMovementState)
+// {
+// case MOVING_BY_JOY:
+// if ((this.forkliftTargetHeight > currentForkliftMaxHeight)
+// || (this.forkliftTargetHeight < currentMinLiftPosition))
+// {
+// deployMovementState = DeployMovementState.STAY_AT_POSITION;
+// break;
+// }
 
-            // // Begins by stating whether we are increasing or decreasing
-            // if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
-            // {
-            // if (forkliftTargetHeight < this.getForkliftHeight())
-            // forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
-            // else
-            // forkliftDirection = ForkliftDirectionState.MOVING_UP;
-            // }
+// // Begins by stating whether we are increasing or decreasing
+// if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
+// {
+// if (forkliftTargetHeight < this.getForkliftHeight())
+// forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
+// else
+// forkliftDirection = ForkliftDirectionState.MOVING_UP;
+// }
 
-            // // Differentiate moving up from down
-            // if (forkliftDirection == ForkliftDirectionState.MOVING_UP)
-            // {
-            // // If we have passed the value we wanted...
-            // if (this.getForkliftHeight() > forkliftTargetHeight)
-            // {
-            // liftState = ForkliftState.STAY_AT_POSITION;
-            // // Reset the direction for next time.
-            // forkliftDirection = ForkliftDirectionState.NEUTRAL;
-            // break;
-            // }
-            // // we have NOT passed the value , keep going up.
+// // Differentiate moving up from down
+// if (forkliftDirection == ForkliftDirectionState.MOVING_UP)
+// {
+// // If we have passed the value we wanted...
+// if (this.getForkliftHeight() > forkliftTargetHeight)
+// {
+// liftState = ForkliftState.STAY_AT_POSITION;
+// // Reset the direction for next time.
+// forkliftDirection = ForkliftDirectionState.NEUTRAL;
+// break;
+// }
+// // we have NOT passed the value , keep going up.
 
-            // this.forkliftMotor.set(forkliftTargetSpeed);
+// this.forkliftMotor.set(forkliftTargetSpeed);
 
-            // } else
-            // {
-            // // If we have passed the value we wanted...
-            // if (this.getForkliftHeight() < forkliftTargetHeight)
-            // {
-            // liftState = ForkliftState.STAY_AT_POSITION;
-            // // Reset the direction for next time.
-            // forkliftDirection = ForkliftDirectionState.NEUTRAL;
-            // break;
-            // }
-            // // we have NOT passed the value , keep going down.
-            // this.forkliftMotor.set(-forkliftTargetSpeed);
-            // }
-            break;
-        case MOVING_TO_POSITION:
-            break;
+// } else
+// {
+// // If we have passed the value we wanted...
+// if (this.getForkliftHeight() < forkliftTargetHeight)
+// {
+// liftState = ForkliftState.STAY_AT_POSITION;
+// // Reset the direction for next time.
+// forkliftDirection = ForkliftDirectionState.NEUTRAL;
+// break;
+// }
+// // we have NOT passed the value , keep going down.
+// this.forkliftMotor.set(-forkliftTargetSpeed);
+// }
+// break;
+// case MOVING_TO_POSITION:
+// break;
 
-        default:
-        case STAY_AT_POSITION:
-            break;
+// default:
+// case STAY_AT_POSITION:
+// break;
 
-        case STOP:
+// case STOP:
 
-            break;
+// break;
 
-        }
-}
+// }
+// }
 // =========================================================================
 // Hatch Panel Methods
 // =========================================================================
@@ -286,6 +321,20 @@ private static final double RAISE_ARM_SPEED = .5;
 
 private static final double HOLD_ARM_SPEED = .2;
 
+// value that the arm pot returns when the manipulator is
+// parallel to the floor
+private static final double ARM_POT_RAW_HORIZONTAL_VALUE = -90; // placeholder
+
+// value that the arm encoder returns when the manipulator is
+// parallel to the floor
+private static final double ARM_ENCODER_RAW_HORIZONTAL_VALUE = 0.0; // placeholder
+
+// value that is multipled to the value from the arm pot to convert
+// it to degrees
+private static final double ARM_POT_SCALE_TO_DEGREES = 1.0; // placeholder
+
+// value that is multiplied by the number of ticks to convert it to degreesf
+private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
 
 
 // =========================================================================
@@ -294,10 +343,29 @@ private static final double HOLD_ARM_SPEED = .2;
 
 public DeployMovementState deployMovementState = DeployMovementState.STAY_AT_POSITION;
 
+// The angle the manipulator is trying to move to; 0 is the start angle,
+// positive angles are above the start, negative angles are below the starts
+public double targetManipulatorAngle = 0;
+
+
+
 // =========================================================================
 // Tuneables
 // =========================================================================
 
 private Timer rollerTimer = new Timer();
+
+/**
+ * Deploy goals:
+ *
+ * have a set max position and variable min positions (the
+ * deploy will be able to go low enough to lift the bottom of
+ * the robot up, and we probably don't want to do this
+ * until we climb)
+ *
+ *
+ *
+ */
+
 
 }

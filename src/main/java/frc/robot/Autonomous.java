@@ -266,13 +266,13 @@ private static void setPositionAndLevel ()
     // of the autoLevelSwitch
     // temporary test manual code; Meghan Brown and Guido Visioni; 26 January
     // 2018
-    if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE)
-        {
-        crossAutoline();
-        } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
-        {
-        autoLevel = Level.LEVEL_ONE;// TWO TODO
-        }
+    // if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE)
+    // {
+    // crossAutoline();
+    // } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
+    // {
+    // autoLevel = Level.LEVEL_ONE;// TWO TODO
+    // }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
 
