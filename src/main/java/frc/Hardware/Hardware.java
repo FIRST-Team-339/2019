@@ -70,7 +70,7 @@ public enum RobotYear
 KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.TEST_BOARD;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -398,50 +398,37 @@ public static Telemetry telemetry;
 // ------------------------------------
 // Transmission class
 // ------------------------------------
-public static TankTransmission transmission = new TankTransmission(
-        new SpeedControllerGroup(leftFrontCANMotor, leftRearCANMotor),
-        new SpeedControllerGroup(rightFrontCANMotor,
-                rightRearCANMotor));
+public static TankTransmission transmission;
 
 // ------------------------------------
 // Drive system
 // ------------------------------------
 // @ANE
-public static Drive drive = new Drive(transmission,
-        leftFrontDriveEncoder, rightFrontDriveEncoder,
-        // leftFrontDriveEncoder, rightFrontDriveEncoder,
-        gyro);
+public static Drive drive;
 
-public static DrivePID drivePID = new DrivePID(transmission,
-        leftFrontDriveEncoder, rightFrontDriveEncoder,
-        leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+public static DrivePID drivePID;
 
 // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 // TODO update with encoders once fixed
-public static DriveWithCamera driveWithCamera = new DriveWithCamera(
-        transmission, null, null, frontUltraSonic,
-        frontUltraSonic, gyro, axisCamera);
+public static DriveWithCamera driveWithCamera;
 
 // -------------------
 // Assembly classes (e.g. forklift)
 // -------------------
 
-public static GamePieceManipulator manipulator = new GamePieceManipulator(
-        intakeDeployArm, intakeDeployEncoder/* armEncoder */,
-        armRoller,
-        null/* photoSwitch */);
+public static GamePieceManipulator manipulator;
 
-public static Forklift lift = new Forklift(liftMotorOne, liftingEncoder,
-        manipulator);
+public static Forklift lift;
 
-public static ClimbToLevelTwo climber = new ClimbToLevelTwo(
-        armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
-        drive, lift, frontUltraSonic);
+public static ClimbToLevelTwo climber;
 
 // ====================================
 // Methods
 // ====================================
-
+/**
+ * This initializes the hardware for the robot depending on which year we are
+ * using
+ */
 public static void initialize ()
 {
     switch (whichRobot)
@@ -465,6 +452,9 @@ public static void initialize ()
         }
 }
 
+/**
+ * This initializes all of the components in Hardware
+ */
 public static void initialize2018 ()
 {
     // **********************************************************
