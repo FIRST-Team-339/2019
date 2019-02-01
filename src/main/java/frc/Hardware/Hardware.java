@@ -168,8 +168,7 @@ public static DoubleThrowSwitch autoPositionSwitch;
 
 // TODO check with wirers if the full functionality of the switch is working
 // 29 January 2019
-// public static SixPositionSwitch autoSixPosSwitch = new SixPositionSwitch(
-// 13, 14, 15, 16, 17, 18);
+public static SixPositionSwitch autoSixPosSwitch;
 
 // ------------------------------------
 // Gear Tooth Sensors
@@ -598,6 +597,8 @@ public static void initialize2018 ()
 
     autoPositionSwitch = new DoubleThrowSwitch(
             leftAutoSwitch, rightAutoSwitch);
+
+    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 13, 14, 15);
 
 
 
