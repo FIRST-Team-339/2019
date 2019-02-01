@@ -452,6 +452,90 @@ public static void initialize ()
         }
 }
 
+
+public static void setHardwareSettings ()
+{
+    switch (whichRobot)
+        {
+        default:
+        case KILROY_2018:
+            setHardwareSettings2018();
+            break;
+
+        case KILROY_2019:
+            // we'll do this later.
+            break;
+
+        case TEST_BOARD:
+            // Mr. Brown said no, so that means no. Specifically, he said "No,
+            // no no no no no, no way, no how. No."
+            break;
+        }
+}
+
+/**
+ * This sets up the settings and resets for the hardware objects so we
+ * don't have to write them all in robotInit. it's to keep it not cluttered.
+ *
+ * @author Patrick
+ */
+public static void setHardwareSettings2018 ()
+{
+    Hardware.compressor.setClosedLoopControl(true);
+
+    Hardware.gyro.calibrate();
+    Hardware.gyro.reset();
+
+
+    // written by Meghan Brown 2019
+    // makes the camera work --- can we get this in colour somehow?
+    // Hardware.USBCam.setResolution(320, 240);
+    // Hardware.USBCam.setFPS(20);
+    // Hardware.USBCam.setPixelFormat(VideoMode.PixelFormat.kYUYV);
+    // Hardware.USBCam.setWhiteBalanceManual(2500);
+
+    // Hardware.USBCamII.setResolution(320, 240);
+    // Hardware.USBCamII.setFPS(20);
+    // Hardware.USBCamII.setPixelFormat(VideoMode.PixelFormat.kYUYV);
+    // Hardware.USBCamII.setWhiteBalanceManual(2500);
+
+    // Hardware.USBCamUp.setResolution(320, 240);
+    // Hardware.USBCamUp.setFPS(20);
+    // Hardware.USBCamUp.setPixelFormat(VideoMode.PixelFormat.kYUYV);
+
+    // Hardware.rightFrontDriveEncoder.setReverseDirection(true);
+    // Hardware.leftFrontDriveEncoder.setReverseDirection(true);
+    Hardware.liftingEncoder.setReverseDirection(true);
+
+    // --------------------------------------
+    // reset the MotorSafetyHelpers for each
+    // of the drive motors
+    // --------------------------------------
+
+    // -------------------------------------
+    // Resets encoder values
+    // -------------------------------------
+    Hardware.rightFrontDriveEncoder.reset();
+    Hardware.leftFrontDriveEncoder.reset();
+    Hardware.liftingEncoder.reset();
+
+    // -------------------------------------
+    // Manually sets encoders Distance per Pulse
+    // -------------------------------------
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
+
+    Hardware.liftingEncoder
+            .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
+
+}
+
+private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
+
+private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
+
 /**
  * This initializes all of the components in Hardware
  */

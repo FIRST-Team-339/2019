@@ -49,62 +49,7 @@ public void robotInit ()
     // =========================================================
     Hardware.initialize();
 
-
-    Hardware.gyro.calibrate();
-    Hardware.gyro.reset();
-
-
-    // -----------
-    // --------------------------
-    // -
-    // Compressor Initialization
-    // --------------------------------------
-    Hardware.compressor.setClosedLoopControl(true);
-
-    // -------------------------------------
-    // Resets encoder values
-    // -------------------------------------
-    // Hardware.rightFrontDriveEncoder.setReverseDirection(true);
-    // Hardware.leftFrontDriveEncoder.setReverseDirection(true);
-    Hardware.liftingEncoder.setReverseDirection(true);
-
-    Hardware.rightFrontDriveEncoder.reset();
-    Hardware.leftFrontDriveEncoder.reset();
-    Hardware.liftingEncoder.reset();
-
-
-
-    // --------------------------------------
-    // reset the MotorSafetyHelpers for each
-    // of the drive motors
-    // --------------------------------------
-
-    // -------------------------------------
-    // Manually sets encoders Distance per Pulse
-    // -------------------------------------
-    Hardware.leftFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
-    Hardware.rightFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
-
-    Hardware.liftingEncoder
-            .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
-
-    // written by Meghan Brown 2019
-    // makes the camera work --- can we get this in colour somehow?
-    // Hardware.USBCam.setResolution(320, 240);
-    // Hardware.USBCam.setFPS(20);
-    // Hardware.USBCam.setPixelFormat(VideoMode.PixelFormat.kYUYV);
-    // Hardware.USBCam.setWhiteBalanceManual(2500);
-
-    // Hardware.USBCamII.setResolution(320, 240);
-    // Hardware.USBCamII.setFPS(20);
-    // Hardware.USBCamII.setPixelFormat(VideoMode.PixelFormat.kYUYV);
-    // Hardware.USBCamII.setWhiteBalanceManual(2500);
-
-    // Hardware.USBCamUp.setResolution(320, 240);
-    // Hardware.USBCamUp.setFPS(20);
-    // Hardware.USBCamUp.setPixelFormat(VideoMode.PixelFormat.kYUYV);
+    Hardware.setHardwareSettings();
 
     // User code goes above here
     // =========================================================
