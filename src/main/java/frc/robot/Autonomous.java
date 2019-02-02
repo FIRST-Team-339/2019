@@ -253,26 +253,29 @@ private static void setPositionAndLevel ()
     // state of the autoPositionSwitch
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
+        DISTANCE_TO_CROSS_AUTOLINE = 60;
+        System.out.println("Floor it!");
         autoPosition = Position.LEFT;
         } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
+        DISTANCE_TO_CROSS_AUTOLINE = 90;
         } else if (Hardware.autoCenterSwitch.isOn() == true)
         {
+        DISTANCE_TO_CROSS_AUTOLINE = 120;
         autoPosition = Position.CENTER;
         }
 
     // sets the autoLevel enum to the correct level, or disabled, based on the
-    // state of the autoLevelSwitch
-    // temporary test manual code; Meghan Brown and Guido Visioni; 26 January
-    // 2018
+    // state of the autoDisableSwitch
     if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
         {
+        System.out.println("Turning on GPS!");
         crossAutoline();
         } else if (Hardware.autoDisableSwitch
                 .getPosition() == LEVEL_TWO)
         {
-        crossAutoLine();
+        crossAutoline();
         }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
@@ -289,19 +292,20 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
+        // this actually works! 2 February 2019
         if (Hardware.drive.driveStraightInches(
                 DISTANCE_TO_CROSS_AUTOLINE,
                 DRIVE_SPEED, ACCELERATION_TIME,
                 false) == true)
             {
-            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             Hardware.drive.stop();
             return true;
             }
-        System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+        System.out.println("IT WORKED TOO WELL! SLAM THE BRAKES!");
         }
     if (autoLevel == Level.LEVEL_TWO)
         {
+        System.out.println("Oof!");
         descendFromLevelTwo(usingAlignByWall);
         }
     if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
@@ -659,6 +663,7 @@ INIT, LEAVE_LEVEL_2, TURN_AFTER_LEVEL_2_DROP, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_
 private static SideCargoHatchState sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
 
 private static boolean depositSideCargoHatch ()
+// welcome to the Gates of Hell
 {
     switch (sideCargoHatchState)
         {
@@ -863,7 +868,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 
         case FINISH:
             System.out.println(
-                    "YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTT");
+                    "YEEt! XD");
             return true;
 
         default:
@@ -872,6 +877,12 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
         }
     return false;
 }
+
+// =============================================
+// NOT CONSTANT VARIABLES
+// =============================================
+public static int DISTANCE_TO_CROSS_AUTOLINE;
+
 
 // =========================================================================
 // TUNEABLES
@@ -888,11 +899,11 @@ private static boolean descendInit = false;
 
 public static Timer descentTimer = new Timer();
 
+
 /*
  * ============================================================= Constants
  * =============================================================
  */
-
 public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
@@ -907,13 +918,10 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-// changed to correct-ish number 2 February 2019
-public static final int DISTANCE_TO_CROSS_AUTOLINE = 72;
-// public static final int LEFT_DISTANCE_CROSS_AUTOLINE = 60;
-// public static final int CENTER_DISTANCE_CROSS_AUTOLINE = 90;
-// public static final int RIGHT_DISTANCE_CROSS_AUTOLINE = 120;
-
-public static final double DRIVE_SPEED = .4;
+//TODO test cross autoline at 50% speed in the near future;
+//2 February 2019
+//public static final double DRIVE_SPEED = .4;
+public static final double DRIVE_SPEED = .5;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;
 
