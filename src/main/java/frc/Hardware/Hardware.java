@@ -183,9 +183,6 @@ public static KilroyEncoder rightFrontDriveEncoder;
 
 public static KilroyEncoder liftingEncoder;
 
-public static KilroyEncoder intakeDeployEncoder;// 23,
-// 24);// being removed???
-
 // public static KilroyEncoder sparkEncoder = new KilroyEncoder(19, 1);
 
 // -----------------------
@@ -270,6 +267,9 @@ public static DoubleSolenoid armIntakeSolenoid;
 // Potentiometers
 // --------------------------------------
 public static RobotPotentiometer delayPot;
+
+public static RobotPotentiometer intakeDeploySensor;// 23,
+// 24);// being removed???
 
 // public static RobotPotentiometer armPot = new RobotPotentiometer(n,
 // 270);
@@ -616,9 +616,9 @@ public static void initialize2018 ()
     liftingEncoder = new KilroyEncoder(10,
             11);
 
-    intakeDeployEncoder = new KilroyEncoder(
-            1,
-            2);
+    intakeDeploySensor = new RobotPotentiometer(
+            0,
+            270);
 
 
 
@@ -683,7 +683,7 @@ public static void initialize2018 ()
 
     delayPot = new RobotPotentiometer(
             2,
-            300);
+            270);
 
 
 
@@ -828,7 +828,7 @@ public static void initialize2018 ()
 
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
-            intakeDeployArm, intakeDeployEncoder/* armEncoder */,
+            intakeDeployArm, intakeDeploySensor/* armEncoder */,
             armRoller,
             null/* photoSwitch */);
 
@@ -837,7 +837,7 @@ public static void initialize2018 ()
             manipulator);
 
     climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, intakeDeployArm, intakeDeployEncoder,
+            armIntakeSolenoid, intakeDeployArm, intakeDeploySensor,
             drive, lift, frontUltraSonic);
 
 }

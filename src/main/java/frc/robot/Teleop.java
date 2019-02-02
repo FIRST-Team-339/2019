@@ -81,8 +81,6 @@ public static void init ()
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
 
-    Hardware.intakeDeployEncoder.reset();
-
     Hardware.gyro.reset();
     // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
     // FIRST_GEAR_RATIO);
