@@ -208,14 +208,14 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
-    )
+    switch (Hardware.autoSixPosSwitch.getPosition())
         {
         case 0:
             autoState = State.CROSS_AUTOLINE;
             break;
 
         case 1:
+            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             autoState = State.DEPOSIT_STRAIGHT_CARGO_HATCH;
             break;
 
@@ -251,13 +251,13 @@ private static void setPositionAndLevel ()
     // (only needed if not testing the physical switch)
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
-    if (Hardware.autoPositionSwitch.getPosition() == LEFT)
+    if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
-        } else if (Hardware.autoPositionSwitch.getPosition() == RIGHT)
+        } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
-        } else if (Hardware.autoPositionSwitch.isOn() == true)
+        } else if (Hardware.autoCenterSwitch.isOn() == true)
         {
         autoPosition = Position.CENTER;
         }
@@ -306,6 +306,7 @@ private static boolean crossAutoline ()
                 DRIVE_SPEED, ACCELERATION_TIME,
                 false) == true)
             {
+            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             Hardware.drive.stop();
             return true;
             }
@@ -918,7 +919,8 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
+// changed to correct-ish number 2 February 2019
+public static final int DISTANCE_TO_CROSS_AUTOLINE = 72;
 
 public static final double DRIVE_SPEED = .4;
 
