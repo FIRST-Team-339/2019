@@ -555,7 +555,8 @@ public static void initialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    intakeDeployArm = new VictorSP(4); // hanging
+    intakeDeployArm = new VictorSP(4);
+    // hanging
     // ----- Servo classes -----
 
 
@@ -636,12 +637,9 @@ public static void initialize2018 ()
 
 
 
-    testRedLight = new LightSensor(8);
+    leftBackIR = new LightSensor(8);
 
-
-    leftBackIR = null;
-
-    rightBackIR = null;
+    rightBackIR = new LightSensor(9);
 
     // ====================================
     // I2C Classes
