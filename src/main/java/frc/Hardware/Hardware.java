@@ -689,7 +689,7 @@ public static void initialize2018 ()
 
     // Sonar/Ultrasonic
     frontUltraSonic = new HRLVMaxSonarEZ(
-            0);
+            3);
 
     // =====================================
     // SPI Bus
