@@ -33,6 +33,7 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.vision.VisionProcessor.ImageType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -139,11 +140,17 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
+    Hardware.climber.climbUpdate();
+
     Hardware.telemetry.printToShuffleboard();
 
     Hardware.telemetry.printToConsole();
 
+    teleopDrive();
+
     individualTest();
+
+    printStatements();
 
 }
 // end Periodic()
@@ -173,10 +180,11 @@ private static void ashleyTest ()
     // System.out
     // .println(
     // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
-    // } else if (Hardware.rightDriver.getRawButton(5) == true)
-    // {
-    // Hardware.climber.climb();
-    // }
+    /* } else */ if (Hardware.rightDriver.getRawButton(5) == true)
+        {
+        System.out.println("WERE DOING SOMETHING AT LEAST");
+        Hardware.climber.climb();
+        }
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
@@ -250,16 +258,33 @@ private static void nithyaTest ()
 public static void printStatements ()
 {
 
-    if (Hardware.driverStation.isFMSAttached() == false)
+    // if (Hardware.driverStation.isFMSAttached() == false)
         {
         // ==================================
         // Scale Alignment
         // ==================================
 
         // =================================
-        // Motor
-        // Prints the value of motors
+        // Motors
         // =================================
+        // System.out.println("Arm Motor Voltage " + Hardware.armMotor.get());
+        // System.out.println("Right Front Drive Motor Voltage" +
+        // Hardware.rightFrontCANMotor.get());
+        // System.out.println("Left Front Drive Motor Voltage"
+        // + Hardware.leftFrontCANMotor.get());
+        // System.out.println("Right Rear Drive Motor Voltage" +
+        // Hardware.rightRearCANMotor.get());
+        // System.out.println("Left Rear Drive Motor Voltage"
+        // + Hardware.leftRearCANMotor.get());
+        // System.out.println("Lift Motor One Voltage"
+        // + Hardware.liftMotorOne.get());
+        // System.out.println("Lift Motor Two Voltage"
+        // + Hardware.liftMotorTwo.get());
+        // System.out.println("Arm Roller Voltage"
+        // + Hardware.armRoller.get());
+
+        // TODO Test Lift Motors', Arm Roller's, and Arm Motor's Voltage 2019
+
         // Hardware.rightFrontCANMotor.get());
         // SmartDashboard.putNumber("Right Rear Drive Motor",
         // Hardware.rightRearCANMotor.get());
@@ -411,17 +436,17 @@ public static void printStatements ()
  */
 public static void teleopDrive ()
 {
-    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
-    // Hardware.drive.shiftGears(
-    // Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-    // Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+    Hardware.drive.shiftGears(
+            Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
+            Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
 
-    // // makes sure the gear never goes over 2
-    // if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
-    // {
-    // Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-    // }
+    // makes sure the gear never goes over 2
+    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+        {
+        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+        }
 }
 
 // ================================

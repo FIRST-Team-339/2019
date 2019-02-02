@@ -133,6 +133,7 @@ public static void periodic ()
     if (Hardware.rightDriver.getRawButton(11)
             && Hardware.leftDriver.getRawButton(11))
         {
+        endAutoPath();
         autoState = State.FINISH;
         }
 
@@ -251,34 +252,34 @@ private static void setPositionAndLevel ()
     // (only needed if not testing the physical switch)
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
-    if (Hardware.autoPositionSwitch.getPosition() == LEFT)
+    if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
-        } else if (Hardware.autoPositionSwitch.getPosition() == RIGHT)
+        } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
-        } else if (Hardware.autoPositionSwitch.isOn() == true)
+        } else if (Hardware.autoCenterSwitch.isOn() == true)
         {
         autoPosition = Position.CENTER;
         }
 
     // sets the autoLevel enum to the correct level, or disabled, based on the
-    // state
-    // of the autoLevelSwitch
+    // state of the autoLevelSwitch
     // temporary test manual code; Meghan Brown and Guido Visioni; 26 January
     // 2018
-    // if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE)
-    // {
-    // crossAutoline();
-    // } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
-    // {
-    // autoLevel = Level.LEVEL_ONE;// TWO TODO
-    // }
+    if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
+        {
+        crossAutoline();
+        } else if (Hardware.autoDisableSwitch
+                .getPosition() == LEVEL_TWO)
+        {
+        crossAutoline();
+        }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
 
-    autoLevel = Level.LEVEL_ONE;
-    autoPosition = Position.RIGHT;
+    // autoLevel = Level.LEVEL_ONE;
+    // autoPosition = Position.RIGHT;
 }
 
 // =====================================================================
@@ -289,23 +290,12 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
-        // I hope this makes basic cross autoline work - Meghan Brown
-        // 28 January 2019
-        /*
-         * if (!Hardware.drive.driveStraightInches(
-         * DISTANCE_TO_CROSS_AUTOLINE,
-         * DRIVE_SPEED, ACCELERATION_TIME, true))
-         * {
-         * return true;
-         * }
-         */
-        // TODO come back and test; MB
-        // driveOffStraightLevel1();
         if (Hardware.drive.driveStraightInches(
                 DISTANCE_TO_CROSS_AUTOLINE,
                 DRIVE_SPEED, ACCELERATION_TIME,
                 false) == true)
             {
+            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             Hardware.drive.stop();
             return true;
             }
@@ -327,7 +317,7 @@ private static boolean crossAutoline ()
 
 private static enum DepositCargoHatchState
     {
-INIT, DESCEND, TURN_1_RIGHT_SIDE, TURN_1_LEFT_SIDE, DRIVE_1, TURN_2_RIGHT_SIDE, TURN_2_LEFT_SIDE, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO
+INIT, DESCEND, TURN_1_RIGHT_SIDE, TURN_1_LEFT_SIDE, DRIVE_1, TURN_2_RIGHT_SIDE, TURN_2_LEFT_SIDE, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO, FINISHED
     }
 
 private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
@@ -429,6 +419,8 @@ private static boolean depositCargoHatch ()
                 return true;
                 }
             break;
+        case FINISHED:
+            break;
         }
     return false;
 }
@@ -450,7 +442,7 @@ private static DriveWithCameraStates driveWithCameraStates = DriveWithCameraStat
 
 private static boolean depositRocketHatch ()
 {
-
+    System.out.println(rocketHatchState);
     if (rocketHatchState == RocketHatchState.STANDBY)
         {
         rocketHatchState = RocketHatchState.DESCEND;
@@ -475,12 +467,12 @@ private static boolean depositRocketHatch ()
                 Hardware.axisCamera.setRelayValue(Value.kOff);
                 autoTimer.reset();
                 autoTimer.start();
-                Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
-                        DRIVE_AGAINST_WALL_SPEED);
+                // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
+                // DRIVE_AGAINST_WALL_SPEED);
                 rocketHatchState = RocketHatchState.STRAIGHTEN_OUT_ON_WALL;
                 }
             break;
-
+        // TODO @ANE
         // =================================================================
         // DRIVE BY NONVISION this is where the smart kids code
         // =================================================================
@@ -508,14 +500,14 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
-                            TURN_SPEED, ACCELERATION_TIME, true))
+                            TURN_SPEED, ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
                     && Hardware.drive.turnDegrees(TURN_LEFT90,
-                            TURN_SPEED, ACCELERATION_TIME, true))
+                            TURN_SPEED, ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
@@ -797,8 +789,6 @@ public static boolean driveOffStraightLevel1 (LightSensor backIR1,
 }
 
 
-
-
 public static DescentState descentState = DescentState.STANDBY;
 
 // TODO placeholder
@@ -868,11 +858,11 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 
         case LANDING_SETUP:
 
-            if (Hardware.testRedLight.isOn() == true
+            if (Hardware.rightBackIR.isOn() == true
                     && usingAlignByWall == true)
                 {
                 descentState = DescentState.BACKWARDS_TIMER_INIT;
-                } else if (Hardware.testRedLight.isOn()
+                } else if (Hardware.rightBackIR.isOn()
                         && usingAlignByWall == false)
                 {
                 descentState = DescentState.FINISH;
@@ -911,11 +901,21 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
     return false;
 }
 
+
+public static void endAutoPath ()
+{
+    sideCargoHatchState = SideCargoHatchState.FINISHED;
+    depositCargoHatchState = DepositCargoHatchState.FINISHED;
+    rocketHatchState = RocketHatchState.FINISH;
+
+}
+
+
 // =========================================================================
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
-private static boolean usingVision = true;
+private static boolean usingVision = false;
 
 private static boolean usingAlignByWall = true;
 
@@ -927,8 +927,9 @@ private static boolean descendInit = false;
 public static Timer descentTimer = new Timer();
 
 /*
- * ============================================================= Constants
- * =============================================================
+ * ==============================================================
+ * Constants
+ * ==============================================================
  */
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
@@ -945,7 +946,11 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
+// changed to correct-ish number 2 February 2019
+public static final int DISTANCE_TO_CROSS_AUTOLINE = 72;
+// public static final int LEFT_DISTANCE_CROSS_AUTOLINE = 60;
+// public static final int CENTER_DISTANCE_CROSS_AUTOLINE = 90;
+// public static final int RIGHT_DISTANCE_CROSS_AUTOLINE = 120;
 
 public static final double DRIVE_SPEED = .4;
 
@@ -981,7 +986,7 @@ public static final int TURN_FOR_CAMERA_DEGREES = 50;
 
 public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN = 23;
 
-public static final int DISTANCE_NEEDED_TO_TURN = 6;
+public static final int DISTANCE_NEEDED_TO_TURN = 20;// change @ANE
 
 public static final int TURN_RIGHT90 = 90;
 
