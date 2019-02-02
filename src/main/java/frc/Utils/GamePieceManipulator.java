@@ -105,7 +105,7 @@ public void masterUpdate ()
 public void moveArmByJoystick (Joystick armJoystick)
 {
     if (Math.abs(armJoystick
-            .getY()) < DEPLOY_JOYSTICK_DEADBAND)
+            .getY()) > DEPLOY_JOYSTICK_DEADBAND)
     // if ((getCurrentArmPosition() < MAX_ARM_POSITION)
     // && (getCurrentArmPosition() > MIN_ARM_POSITION))
         {
