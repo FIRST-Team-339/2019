@@ -899,7 +899,6 @@ private static boolean descendInit = false;
 
 public static Timer descentTimer = new Timer();
 
-
 /*
  * ============================================================= Constants
  * =============================================================
@@ -918,9 +917,9 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-//TODO test cross autoline at 50% speed in the near future;
-//2 February 2019
-//public static final double DRIVE_SPEED = .4;
+// TODO test cross autoline at 50% speed in the near future;
+// 2 February 2019
+// public static final double DRIVE_SPEED = .4;
 public static final double DRIVE_SPEED = .5;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;
