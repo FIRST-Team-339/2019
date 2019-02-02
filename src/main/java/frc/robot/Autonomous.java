@@ -208,8 +208,7 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
-    )
+    switch (Hardware.autoSixPosSwitch.getPosition())
         {
         case 0:
             autoState = State.CROSS_AUTOLINE;
