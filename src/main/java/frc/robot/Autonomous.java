@@ -290,28 +290,29 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
-        if (Hardware.drive.driveStraightInches(
-                DISTANCE_TO_CROSS_AUTOLINE,
-                DRIVE_SPEED, ACCELERATION_TIME,
-                false) == true)
-            {
-            System.out.println(Hardware.autoSixPosSwitch.getPosition());
-            Hardware.drive.stop();
-            return true;
-            }
-        System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
-        }
-    if (autoLevel == Level.LEVEL_TWO)
-        {
-        descendFromLevelTwo(usingAlignByWall);
-        }
-    if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
-            DRIVE_SPEED, ACCELERATION_TIME,
-            false) == true)
-        {
-        Hardware.drive.stop();
-        return true;
-        }
+            //TODO , meghan use you own variables
+    //     if (Hardware.drive.driveStraightInches(
+    //             DISTANCE_TO_CROSS_AUTOLINE,
+    //             DRIVE_SPEED, ACCELERATION_TIME,
+    //             false) == true)
+    //         {
+    //         System.out.println(Hardware.autoSixPosSwitch.getPosition());
+    //         Hardware.drive.stop();
+    //         return true;
+    //         }
+    //     System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+    //     }
+    // if (autoLevel == Level.LEVEL_TWO)
+    //     {
+    //     descendFromLevelTwo(usingAlignByWall);
+    //     }
+    // if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
+    //         DRIVE_SPEED, ACCELERATION_TIME,
+    //         false) == true)
+    //     {
+    //     Hardware.drive.stop();
+    //     return true;
+    //     }
     return false;
 }
 
@@ -583,7 +584,7 @@ private static boolean depositRocketHatch ()
                     break;
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
-                            DISTANCE_TO_CROSS_AUTOLINE, .6,
+                            DISTANCE_TO_CROSS_AUTOLINE_CAMERA, .6,
                             ACCELERATION_TIME, USING_GYRO))
                         {
                         // turn right or left base on start position
@@ -629,7 +630,7 @@ private static boolean depositRocketHatch ()
                 case TURN_LEFT:
                     System.out.println("left");
                     if (Hardware.drive.turnDegrees(
-                            -TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
+                            TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
                             CAMERA_ACCELERATION,
                             USING_GYRO))
                         {
@@ -915,7 +916,7 @@ public static void endAutoPath ()
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
-private static boolean usingVision = false;
+private static boolean usingVision = true;
 
 private static boolean usingAlignByWall = true;
 
@@ -947,7 +948,7 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
 // changed to correct-ish number 2 February 2019
-public static final int DISTANCE_TO_CROSS_AUTOLINE = 72;
+public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 24;
 // public static final int LEFT_DISTANCE_CROSS_AUTOLINE = 60;
 // public static final int CENTER_DISTANCE_CROSS_AUTOLINE = 90;
 // public static final int RIGHT_DISTANCE_CROSS_AUTOLINE = 120;
