@@ -125,7 +125,7 @@ public ClimbToLevelTwo (DoubleSolenoid testSolenoid,
  *
  */
 public ClimbToLevelTwo (SingleSolenoid driveSolenoid,
-        SpeedController armMotor, RobotPotentiometer armPot,
+        SpeedController armMotor, RobotPotentiometer armSensor,
         Drive drive, Forklift lift, UltraSonic ultraSonic)
 {
 
@@ -665,7 +665,7 @@ private boolean lowerArm ()
     // checks the position of the arm and if it has not gone far enough, sets
     // the motor to the sped to lower the arm
     System.out.println("Trying to lower arm");
-    if (this.armEncoder.get() <= LOWERED_ARM_POSITION)
+    if (this.armSensor.get() <= LOWERED_ARM_POSITION)
         {
         armMotor.set(LOWER_ARM_SPEED);
         } else
@@ -738,7 +738,7 @@ private boolean raiseArm ()
     // checks to see if the arm has gone far enough, if not it sets th ar to the
     // raise arm speed
     System.out.println("Trying to raise arm");
-    if (armEncoder.get() >= RAISED_ARM_POSITION)
+    if (armSensor.get() >= RAISED_ARM_POSITION)
         {
         armMotor.set(RAISE_ARM_SPEED);
         } else
@@ -818,9 +818,9 @@ public void finishEarly ()
 // ---------------------------------------------
 
 // Positions
-private static final double LOWERED_ARM_POSITION = 200;
+private static final double LOWERED_ARM_POSITION = 260;
 
-private static final double RAISED_ARM_POSITION = -100.0;
+private static final double RAISED_ARM_POSITION = 225;
 
 private static final double LIFT_HEIGHT_TO_START_CLIMB = 30.0;
 
