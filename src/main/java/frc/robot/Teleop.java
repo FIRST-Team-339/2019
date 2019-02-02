@@ -57,6 +57,14 @@ public class Teleop
  */
 
 // if has done the thing
+
+/**
+ * A boolean that knows all and does all
+ *
+ * @author Conner McKevitt
+ * @parameters life force
+ * @written yes
+ */
 public static boolean hasDoneTheThing = true;
 
 public static void init ()
@@ -211,18 +219,7 @@ public static void periodic ()
     // =================================================================
     // @ANE
 
-    // if (
 
-    // || Hardware.rightDriver.getY() > DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() < -DEADBAND_VALU
-    // {
-    // Teleop.teleopDrive();
-    // h
-    // Hardware.axisCamera.s
-
-    // }
-
-    // =
 
     // =================================================================
     Hardware.lift.update();

@@ -220,7 +220,9 @@ public boolean driveToTarget (double speed)
                 {
                 slowestSpeed = motorspeed - DRIVE_CORRECTION;
                 }
+
             System.out.println("slowest speed: " + slowestSpeed);
+            System.out.println("motorspeed: " + motorspeed);
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -235,7 +237,8 @@ public boolean driveToTarget (double speed)
                 // left
                 System.out.println("WE ARE TOO left");
                 this.getTransmission().driveRaw(
-                        motorspeed + DRIVE_CORRECTION, slowestSpeed);
+                        motorspeed + DRIVE_CORRECTION,
+                        slowestSpeed);
 
                 }
             // if the switch center is to the left of our center set by the
@@ -261,11 +264,17 @@ public boolean driveToTarget (double speed)
                 System.out.println("ultrasonic distance");
                 state = DriveWithCameraState.DRIVE_WITH_US;
                 }
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
+                {
+                state = DriveWithCameraState.STOP;
+                }
             break;
         case DRIVE_WITH_US:
 
-
-            driveStraight(speed, 0, USING_GYRO);
+            // reset encoders gets null pointer
+            // driveStraight(speed, 0, USING_GYRO);
+            Hardware.drive.drive(speed, speed);
 
             // take a picture when we start to drive with ultrasonic
 
@@ -471,7 +480,7 @@ private final double CAMERA_NO_LONGER_WORKS = 25;
 private final double CAMERA_DEADBAND = 10;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 28;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 70;
 

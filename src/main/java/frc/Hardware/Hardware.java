@@ -15,7 +15,6 @@
 package frc.Hardware;
 
 import frc.HardwareInterfaces.DriveWithCamera;
-import frc.HardwareInterfaces.HRLVMaxSonarEZ;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -277,7 +276,7 @@ public static RobotPotentiometer intakeDeploySensor;// 23,
 // -------------------------------------
 // Sonar/Ultrasonic
 // -------------------------------------
-public static HRLVMaxSonarEZ frontUltraSonic;
+public static LVMaxSonarEZ frontUltraSonic;
 
 // =====================================
 // SPI Bus
@@ -530,7 +529,7 @@ public static void setHardwareSettings2018 ()
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
-    System.out.println("Connor would say \"we have done the thing\"");
+    System.out.println("Conner would say \"we have done the thing\"");
 
 }
 
@@ -688,7 +687,7 @@ public static void initialize2018 ()
 
 
     // Sonar/Ultrasonic
-    frontUltraSonic = new HRLVMaxSonarEZ(
+    frontUltraSonic = new LVMaxSonarEZ(
             3);
 
     // =====================================

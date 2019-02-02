@@ -579,6 +579,9 @@ private static boolean depositRocketHatch ()
         case DRIVE_BY_CAMERA:
             // TODO replace magic numbers with constants
             System.out.println("camera state" + driveWithCameraStates);
+            System.out.println(
+                    "ultrasonic distance: " + Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper());
             switch (driveWithCameraStates)
                 {
                 case INIT:
@@ -592,7 +595,7 @@ private static boolean depositRocketHatch ()
                             ACCELERATION_TIME, USING_GYRO))
                         {
                         // turn right or left base on start position
-                        if (true/* autoPosition == autoPosition.RIGHT */)
+                        if (autoPosition == autoPosition.RIGHT)
                             {
                             driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
                             } else
@@ -620,8 +623,8 @@ private static boolean depositRocketHatch ()
                         }
                     break;
                 case ALIGN:
-                    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-                    Hardware.axisCamera.saveImage(ImageType.RAW);
+                    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+                    // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
@@ -946,7 +949,7 @@ public static final double ACCELERATION_TIME = .6;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
-public static final int TURN_FOR_CAMERA_DEGREES = 44;
+public static final int TURN_FOR_CAMERA_DEGREES = 50;
 
 public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN = 23;
 

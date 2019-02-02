@@ -1065,6 +1065,7 @@ public void resetEncoders ()
     for (KilroyEncoder enc : encoders)
         {
         enc.reset();
+
         // System.out.print("reset encoders is commented out temporarly");
         // TODO uncomment
         // TODO another because very important
