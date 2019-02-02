@@ -168,7 +168,6 @@ public static SingleThrowSwitch levelTwoSwitch;
 
 public static DoubleThrowSwitch autoDisableSwitch;
 
-
 public static SixPositionSwitch autoSixPosSwitch;
 
 // ------------------------------------
@@ -605,9 +604,6 @@ public static void initialize2018 ()
 
     autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
             levelTwoSwitch);
-
-
-
 
     autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
 
