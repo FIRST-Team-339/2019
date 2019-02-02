@@ -122,10 +122,14 @@ public static void init ()
  */
 
 
-
+public static enum IndividualTest
+    {
+Ashley_Test, Meghan_Test, Conner_Test, Guido_Test, Patrick_Test, Cole_Test, Nithya_Test, Anna_Test, Null
+    }
 
 public static void periodic ()
 {
+
 
     // System.out.println(
     // Hardware.frontUltraSonic.getDistanceFromNearestBumper());
