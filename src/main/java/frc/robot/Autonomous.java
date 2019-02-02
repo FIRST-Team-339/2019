@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
+import frc.vision.VisionProcessor.ImageType;
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
@@ -619,6 +620,8 @@ private static boolean depositRocketHatch ()
                         }
                     break;
                 case ALIGN:
+                    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+                    Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))

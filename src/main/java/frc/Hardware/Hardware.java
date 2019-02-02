@@ -598,7 +598,7 @@ public static void initialize2018 ()
     autoPositionSwitch = new DoubleThrowSwitch(
             leftAutoSwitch, rightAutoSwitch);
 
-    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 13, 14, 15);
+    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
 
 
 

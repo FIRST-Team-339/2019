@@ -1,5 +1,6 @@
 package frc.Utils.drive;
 
+import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.Transmission.MecanumTransmission;
 import frc.HardwareInterfaces.Transmission.SwerveTransmission;
@@ -1570,12 +1571,16 @@ public boolean turnDegrees (int degrees, double speed,
 
     // If either sensor has reached the target position, then stop motors
     // and return true.
+    // using Gyro code
+    System.out.println("gyro: " + Hardware.gyro.getAngle());
     if (usingGyro && Math.abs(this.gyro.getAngle()) > Math.abs(degrees)
             - turnDegreesFudgeFactor)
         {
+        System.out.println("We have turned far enough");
         this.transmission.stop();
         turnDegreesInit = true;
         return true;
+        // not using gyro
         } else if (!usingGyro && this.getEncoderDistanceAverage(
                 MotorPosition.ALL) > degreesToEncoderInches(
                         Math.abs(degrees) - turnDegreesFudgeFactor,
