@@ -108,6 +108,7 @@ public static void init ()
 
 } // end Init
 
+
 // tune pid loop
 
 // private static boolean hasSeenTape = false;
@@ -120,18 +121,49 @@ public static void init ()
  * @written Jan 13, 2015
  */
 
-
-
-
 public static void periodic ()
 {
-
-    // System.out.println(
-    // Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
 
+    // =================================================================
+    Hardware.lift.update();
+
+    Hardware.manipulator.masterUpdate();
+
+    Hardware.climber.climbUpdate();
+
+    Hardware.telemetry.printToShuffleboard();
+
+    Hardware.telemetry.printToConsole();
+
+    individualTest();
+
+
+
+}
+// end Periodic()
+
+
+// Individual testing methods for each programmer. Each programmer should //put
+// their testing code inside their own method.
+// Author: Guido Visioni
+
+private static void individualTest ()
+{
+    ashleyTest();
+    connerTest();
+    coleTest();
+    guidoTest();
+    patrickTest();
+    annaTest();
+    meghanTest();
+    nithyaTest();
+}
+
+private static void ashleyTest ()
+{
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
@@ -149,48 +181,25 @@ public static void periodic ()
     // Autonomous.descentState = Autonomous.DescentState.STANDBY;
     // }
 
-    // if (Hardware.leftOperator.getRawButton(6) == true)
-    // {
-    // // Hardware.rightRearCANMotor.set(.5);
-    // System.out.println("Trying to climb");
-    // Hardware.climber.climb();
-    // } else
-    // {
-    // // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-    // }
-
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Hardware.climber.finishEarly();
     // }
-
-    // TODO manipulator has been changed and is not tested
-    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
-    // Hardware.manipulator.spinRollers(/*add buttons*/);
 
 
     // if (Hardware.descendButton.isOnCheckNow() == true)
     // {
     // Autonomous.descendFromLevelTwo();
     // }
+}
 
-    // @ANE
+private static void connerTest ()
+{
 
-    // save image
-    // if (Hardware.ringLightButton.isOnCheckNow() == true)
-    // {
-    // Hardware.axisCamera.setRelayValue(Value.kOn);
-    // } else
-    // {
-    // Hardware.axisCamera.setRelayValue(Value.kOff);
-    // }
+}
 
-    // if (Hardware.leftOperator.getRawButton(7))
-    // {
-    // Hardware.axisCamera.saveImage(ImageType.RAW);
-    // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
-    // }
-
+private static void coleTest ()
+{
     // Forklifts
 
     // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
@@ -208,44 +217,32 @@ public static void periodic ()
     // Hardware.intakeOverride.get());
 
 
+}
 
-
-    // =================================================================
-    // @ANE
-
-    // if (
-
-    // || Hardware.rightDriver.getY() > DEADBAND_VALUE
-    // || Hardware.rightDriver.getY() < -DEADBAND_VALU
-    // {
-    // Teleop.teleopDrive();
-    // h
-    // Hardware.axisCamera.s
-
-    // }
-
-    // =
-
-    // =================================================================
-    Hardware.lift.update();
-    Hardware.manipulator.masterUpdate();
-    Hardware.climber.climbUpdate();
-
-    // // ============================
-
-    // // =================================================================
-
-    // System.out.println(Hardware.gyro.getAngle());
-    // System.out.println(Hardware.gyro.isGyroConnected());
-    // System.out.println(Hardware.gyro.hasGyro);
-
-    Hardware.telemetry.printToShuffleboard();
-
-    Hardware.telemetry.printToConsole();
-
+private static void guidoTest ()
+{
 
 }
-// end Periodic()
+
+private static void patrickTest ()
+{
+
+}
+
+private static void annaTest ()
+{
+
+}
+
+private static void meghanTest ()
+{
+
+}
+
+private static void nithyaTest ()
+{
+
+}
 
 public static void printStatements ()
 {

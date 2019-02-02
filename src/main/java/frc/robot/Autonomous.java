@@ -215,6 +215,7 @@ private static void choosePath ()
             break;
 
         case 1:
+            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             autoState = State.DEPOSIT_STRAIGHT_CARGO_HATCH;
             break;
 
@@ -250,34 +251,34 @@ private static void setPositionAndLevel ()
     // (only needed if not testing the physical switch)
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
-    if (Hardware.autoPositionSwitch.getPosition() == LEFT)
+    if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
-        } else if (Hardware.autoPositionSwitch.getPosition() == RIGHT)
+        } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
-        } else if (Hardware.autoPositionSwitch.isOn() == true)
+        } else if (Hardware.autoCenterSwitch.isOn() == true)
         {
         autoPosition = Position.CENTER;
         }
 
     // sets the autoLevel enum to the correct level, or disabled, based on the
-    // state
-    // of the autoLevelSwitch
+    // state of the autoLevelSwitch
     // temporary test manual code; Meghan Brown and Guido Visioni; 26 January
     // 2018
-    // if (Hardware.autoLevelSwitch.getPosition() == LEVEL_ONE)
-    // {
-    // crossAutoline();
-    // } else if (Hardware.autoLevelSwitch.getPosition() == LEVEL_TWO)
-    // {
-    // autoLevel = Level.LEVEL_ONE;// TWO TODO
-    // }
+    if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
+        {
+        crossAutoline();
+        } else if (Hardware.autoDisableSwitch
+                .getPosition() == LEVEL_TWO)
+        {
+        crossAutoLine();
+        }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
 
-    autoLevel = Level.LEVEL_ONE;
-    autoPosition = Position.RIGHT;
+    // autoLevel = Level.LEVEL_ONE;
+    // autoPosition = Position.RIGHT;
 }
 
 // =====================================================================
@@ -288,23 +289,12 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
-        // I hope this makes basic cross autoline work - Meghan Brown
-        // 28 January 2019
-        /*
-         * if (!Hardware.drive.driveStraightInches(
-         * DISTANCE_TO_CROSS_AUTOLINE,
-         * DRIVE_SPEED, ACCELERATION_TIME, true))
-         * {
-         * return true;
-         * }
-         */
-        // TODO come back and test; MB
-        // driveOffStraightLevel1();
         if (Hardware.drive.driveStraightInches(
                 DISTANCE_TO_CROSS_AUTOLINE,
                 DRIVE_SPEED, ACCELERATION_TIME,
                 false) == true)
             {
+            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             Hardware.drive.stop();
             return true;
             }
@@ -917,7 +907,11 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-public static final int DISTANCE_TO_CROSS_AUTOLINE = 25;
+// changed to correct-ish number 2 February 2019
+public static final int DISTANCE_TO_CROSS_AUTOLINE = 72;
+// public static final int LEFT_DISTANCE_CROSS_AUTOLINE = 60;
+// public static final int CENTER_DISTANCE_CROSS_AUTOLINE = 90;
+// public static final int RIGHT_DISTANCE_CROSS_AUTOLINE = 120;
 
 public static final double DRIVE_SPEED = .4;
 

@@ -160,13 +160,14 @@ public static SingleThrowSwitch leftAutoSwitch;
 
 public static SingleThrowSwitch rightAutoSwitch;
 
-public static DoubleThrowSwitch autoPositionSwitch;
+public static DoubleThrowSwitch autoCenterSwitch;
 
-// public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
-// 18, 13); // false port numbers
+public static SingleThrowSwitch levelOneSwitch;
 
-// TODO check with wirers if the full functionality of the switch is working
-// 29 January 2019
+public static SingleThrowSwitch levelTwoSwitch;
+
+public static DoubleThrowSwitch autoDisableSwitch;
+
 public static SixPositionSwitch autoSixPosSwitch;
 
 // ------------------------------------
@@ -554,7 +555,8 @@ public static void initialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    intakeDeployArm = new VictorSP(4); // hanging
+    intakeDeployArm = new VictorSP(4);
+    // hanging
     // ----- Servo classes -----
 
 
@@ -594,8 +596,15 @@ public static void initialize2018 ()
     rightAutoSwitch = new SingleThrowSwitch(
             25);
 
-    autoPositionSwitch = new DoubleThrowSwitch(
+    autoCenterSwitch = new DoubleThrowSwitch(
             leftAutoSwitch, rightAutoSwitch);
+
+    levelOneSwitch = new SingleThrowSwitch(22);
+
+    levelTwoSwitch = new SingleThrowSwitch(23);
+
+    autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
+            levelTwoSwitch);
 
     autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
 
@@ -628,12 +637,9 @@ public static void initialize2018 ()
 
 
 
-    testRedLight = new LightSensor(8);
+    leftBackIR = new LightSensor(8);
 
-
-    leftBackIR = null;
-
-    rightBackIR = null;
+    rightBackIR = new LightSensor(9);
 
     // ====================================
     // I2C Classes
