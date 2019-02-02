@@ -15,7 +15,6 @@
 package frc.Hardware;
 
 import frc.HardwareInterfaces.DriveWithCamera;
-import frc.HardwareInterfaces.HRLVMaxSonarEZ;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -277,7 +276,7 @@ public static RobotPotentiometer intakeDeploySensor;// 23,
 // -------------------------------------
 // Sonar/Ultrasonic
 // -------------------------------------
-public static HRLVMaxSonarEZ frontUltraSonic;
+public static LVMaxSonarEZ frontUltraSonic;
 
 // =====================================
 // SPI Bus
@@ -555,7 +554,8 @@ public static void initialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    intakeDeployArm = new VictorSP(4); // hanging
+    intakeDeployArm = new VictorSP(4);
+    // hanging
     // ----- Servo classes -----
 
 
@@ -629,12 +629,9 @@ public static void initialize2018 ()
 
 
 
-    testRedLight = new LightSensor(8);
+    leftBackIR = new LightSensor(8);
 
-
-    leftBackIR = null;
-
-    rightBackIR = null;
+    rightBackIR = new LightSensor(9);
 
     // ====================================
     // I2C Classes
@@ -688,7 +685,7 @@ public static void initialize2018 ()
 
 
     // Sonar/Ultrasonic
-    frontUltraSonic = new HRLVMaxSonarEZ(
+    frontUltraSonic = new LVMaxSonarEZ(
             3);
 
     // =====================================
