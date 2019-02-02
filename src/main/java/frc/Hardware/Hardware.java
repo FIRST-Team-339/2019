@@ -109,7 +109,7 @@ public static boolean demoMode = false;
 // public static VictorSP armRollers = new VictorSP(1);// left intake on CAN
 // formerly cubeIntakeMotor
 
-public static VictorSP intakeDeployArm; // hanging
+public static VictorSP armMotor; // hanging
 
 // ------------------------------------
 // Servo classes
@@ -555,7 +555,7 @@ public static void initialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    intakeDeployArm = new VictorSP(4);
+    armMotor = new VictorSP(4);
     // hanging
     // ----- Servo classes -----
 
@@ -833,7 +833,7 @@ public static void initialize2018 ()
 
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
-            intakeDeployArm, intakeDeploySensor/* armEncoder */,
+            armMotor, intakeDeploySensor/* armEncoder */,
             armRoller,
             null/* photoSwitch */);
 
@@ -842,7 +842,7 @@ public static void initialize2018 ()
             manipulator);
 
     climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, intakeDeployArm, intakeDeploySensor,
+            armIntakeSolenoid, armMotor, intakeDeploySensor,
             drive, lift, frontUltraSonic);
 
 }
