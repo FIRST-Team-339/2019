@@ -33,6 +33,7 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.vision.VisionProcessor.ImageType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -131,6 +132,8 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
+    Hardware.climber.climbUpdate();
+
     Hardware.telemetry.printToShuffleboard();
 
     Hardware.telemetry.printToConsole();
@@ -140,8 +143,6 @@ public static void periodic ()
     individualTest();
 
     printStatements();
-
-    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
 }
 // end Periodic()
@@ -171,10 +172,11 @@ private static void ashleyTest ()
     // System.out
     // .println(
     // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
-    // } else if (Hardware.rightDriver.getRawButton(5) == true)
-    // {
-    // Hardware.climber.climb();
-    // }
+    /* } else */ if (Hardware.rightDriver.getRawButton(5) == true)
+        {
+        System.out.println("WERE DOING SOMETHING AT LEAST");
+        Hardware.climber.climb();
+        }
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
