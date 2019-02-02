@@ -20,7 +20,7 @@ private SpeedController armMotor = null;
 
 private KilroyEncoder armEncoder = null;
 
-private RobotPotentiometer armPot = null;
+private RobotPotentiometer armSensor = null;
 
 private DoubleSolenoid testSolenoid = null;
 
@@ -52,7 +52,7 @@ public ClimbToLevelTwo ()
 {
     this.driveSolenoid = null;
     this.armMotor = null;
-    this.armPot = null;
+    this.armSensor = null;
     this.armEncoder = null;
     this.drive = null;
     this.lift = null;
@@ -85,13 +85,14 @@ public ClimbToLevelTwo ()
  *
  */
 public ClimbToLevelTwo (DoubleSolenoid testSolenoid,
-        SpeedController armMotor, KilroyEncoder armEncoder, Drive drive,
+        SpeedController armMotor, RobotPotentiometer armSensor,
+        Drive drive,
         Forklift lift, UltraSonic ultraSonic)
 {
 
     this.testSolenoid = testSolenoid;
     this.armMotor = armMotor;
-    this.armEncoder = armEncoder;
+    this.armSensor = armSensor;
     this.drive = drive;
     this.lift = lift;
     this.ultraSonic = ultraSonic;
@@ -130,7 +131,7 @@ public ClimbToLevelTwo (SingleSolenoid driveSolenoid,
 
     this.driveSolenoid = driveSolenoid;
     this.armMotor = armMotor;
-    this.armPot = armPot;
+    this.armSensor = armSensor;
     this.drive = drive;
     this.lift = lift;
     this.ultraSonic = ultraSonic;
@@ -177,7 +178,7 @@ public void climbUpdate ()
                 // sets state to LOWER_ARM
                 climbTimer.stop();
                 prevState = climberState.DELAY_ONE;
-                Hardware.intakeDeployEncoder.reset();
+                // Hardware.intakeDeploySensor.reset();
                 climbState = climberState.LOWER_ARM;
                 }
             break;
@@ -265,7 +266,7 @@ public void climbUpdate ()
                 // goes to RAISE_ARM
                 climbTimer.stop();
                 prevState = climberState.DELAY_FIVE;
-                Hardware.intakeDeployEncoder.reset();
+                // Hardware.intakeDeploySensor.reset();
                 climbState = climberState.RAISE_ARM;
                 }
             break;
@@ -434,7 +435,7 @@ public void reverseClimbUpdate ()
                 // sets state to DEPLOY_BACK_WHEELS
                 climbTimer.stop();
                 prevReverseState = ReverseClimberState.DELAY_ONE;
-                Hardware.intakeDeployEncoder.reset();
+                // Hardware.intakeDeployEncoder.reset();
                 reverseClimbState = ReverseClimberState.DEPLOY_BACK_WHEELS;
                 }
             break;
@@ -524,7 +525,7 @@ public void reverseClimbUpdate ()
                 // goes to RAISE_ARM
                 climbTimer.stop();
                 prevReverseState = ReverseClimberState.DELAY_FIVE;
-                Hardware.intakeDeployEncoder.reset();
+                // Hardware.intakeDeployEncoder.reset();
                 reverseClimbState = ReverseClimberState.RETRACT_WHEELS;
                 }
             break;
