@@ -104,7 +104,7 @@ private int lastGoodValue = java.lang.Integer.MAX_VALUE;
 // values to make sure that they are
 // "good"
 // ----------------------------------
-private int numberOfItemsToCheckForValidity = 3;
+private int numberOfItemsToCheckForValidity = 5;
 
 // ---------------------------------
 // present index into the confidenceArray
@@ -155,7 +155,7 @@ private int weightedDistance = (10 /* ft */ * 12);
  *
  * @method UltraSonic() - constructor
  * @param channel
- *            - the port for the digital input
+ *                    - the port for the digital input
  * @author Bob Brown
  * @written Jan 14, 2012
  *          -------------------------------------------------------
@@ -173,10 +173,10 @@ public UltraSonic (final int channel)
  *
  * @method UltraSonic() - constructor
  * @param channel
- *            - the port for the digital input
+ *                          - the port for the digital input
  * @param scalingFactor
- *            - how to scale the Analog Channel to keep
- *            the correct range on the Ultrasonic range finder
+ *                          - how to scale the Analog Channel to keep
+ *                          the correct range on the Ultrasonic range finder
  * @author Bob Brown
  * @written Jan 14, 2012
  *          -------------------------------------------------------
@@ -194,9 +194,9 @@ public UltraSonic (final int channel, double scalingFactor)
  *
  * @method UltraSonic class() - constructor
  * @param channel
- *            - the port for the digital input
+ *                    - the port for the digital input
  * @param slot
- *            - the slot where the digital board is located
+ *                    - the slot where the digital board is located
  * @author Bob Brown
  * @written Jan 14, 2012
  *          -------------------------------------------------------
@@ -216,12 +216,12 @@ public UltraSonic (final int channel, double scalingFactor)
  *
  * @method UltraSonic class() - constructor
  * @param channel
- *            - the port for the digital input
+ *                          - the port for the digital input
  * @param slot
- *            - the slot where the digital board is located
+ *                          - the slot where the digital board is located
  * @param scalingFactor
- *            - how to scale the Analog Channel to keep
- *            the correct range on the Ultrasonic range finder
+ *                          - how to scale the Analog Channel to keep
+ *                          the correct range on the Ultrasonic range finder
  * @author Bob Brown
  * @written Jan 14, 2012
  *          -------------------------------------------------------
@@ -385,8 +385,7 @@ private int getDistanceValueWithConfidence ()
         // stored array to check to make sure that we
         // don't have an outlier
         // -------------------------------------
-        }
-    else
+        } else
         {
         // -------------------------------------
         // loop for all the requested entries until
@@ -408,8 +407,7 @@ private int getDistanceValueWithConfidence ()
                 // otherwise go back in the array to get
                 // the last value
                 // -------------------------------------
-                }
-            else
+                } else
                 {
                 workConfidenceValueIndex--;
                 }
@@ -628,8 +626,8 @@ public int getWeightedDistance ()
  * to Kilroy or not.
  *
  * @param rangeValue
- *            - value to be checked to see if we are outside of
- *            this value
+ *                       - value to be checked to see if we are outside of
+ *                       this value
  * @return boolean - true - if we are farther than the specified value to
  *         Kilroy
  *         false - if we are too close
@@ -652,8 +650,8 @@ public boolean isOutsideRange (int rangeValue)
  * to Kilroy or not.
  *
  * @param rangeValue
- *            - value to be checked to see if we are inside of
- *            this value
+ *                       - value to be checked to see if we are inside of
+ *                       this value
  * @return boolean - true - if we are closer than the specified value to
  *         Kilroy
  *         false - if we are not
@@ -696,7 +694,7 @@ public void resetConfidenceArray ()
  * values for to be used for past calculations
  *
  * @param newValue
- *            - new amount of time to keep past values for
+ *                     - new amount of time to keep past values for
  * @return double - amount of time to keep past values for - usually
  *         about 1 sec. worth
  * @method setAmountOfTimeToKeepPastValues
@@ -718,7 +716,7 @@ public double setAmountOfTimeToKeepPastValues (double newValue)
  * Confidence processing in our calculations for this sensor.
  *
  * @param on
- *            - denotes whether or not to turn confidence calculations on
+ *               - denotes whether or not to turn confidence calculations on
  * @return boolean - confidence is either on or not
  * @method setConfidenceCalculationsOn
  * @author Bob Brown
@@ -739,7 +737,7 @@ public boolean setConfidenceCalculationsOn (boolean on)
  * the index is now out of range and if so, resets it.
  *
  * @param newValue
- *            - value to be placed into the confidenceArray
+ *                     - value to be placed into the confidenceArray
  * @return int - the value that was placed into the confidence array
  * @method setDistanceValueIntoConfidenceArray
  * @author Bob Brown
@@ -765,8 +763,8 @@ private int setDistanceValueIntoConfidenceArray (int newValue)
  * make sure that everything is good.
  *
  * @param newValue
- *            - new number of items to check when we get
- *            a new sonar value
+ *                     - new number of items to check when we get
+ *                     a new sonar value
  * @return int - number of items to check backwards in the
  *         confidence array to make sure that the latest sonar
  *         value is "good"
@@ -788,7 +786,7 @@ public int setNumberOfItemsToCheckBackwardForValidity (int newValue)
  * Ultrasonic board.
  *
  * @param newDistance
- *            - set offset from bumpers to this distance
+ *                        - set offset from bumpers to this distance
  * @return distance value held by this class that represents the
  *         distance from the nearest bumper to the Ultrasonic
  *         board
@@ -810,8 +808,8 @@ public int setOffsetDistanceFromNearestBumper (int newDistance)
  * want to print distance value to drivers station
  *
  * @param newValue
- *            - new number of items to check when we get
- *            a new true or false value
+ *                     - new number of items to check when we get
+ *                     a new true or false value
  * @return boolean - true or false setting for option to print distance
  *         to Drivers station
  * @method setPrintToScreen
@@ -835,7 +833,7 @@ public boolean setPrintToScreen (boolean newValue)
  * scaling factor is 0.5
  *
  * @param scalingFactor
- *            - new scaling factor to be set into the system
+ *                          - new scaling factor to be set into the system
  * @return double - the newly revised scaling factor
  * @method setScalingFactor
  * @author Bob Brown
@@ -854,7 +852,7 @@ public double setScalingFactor (double scalingFactor)
  * about 50 ms. unless changed by a call setSensorPeriodicity()
  *
  * @param newValue
- *            - the new sensor periodicity
+ *                     - the new sensor periodicity
  * @return double - the present sensor periodicity (usually 50 ms.)
  * @method setSensorPeriodicity
  * @author Bob Brown
@@ -873,7 +871,7 @@ public double setSensorPeriodicity (double newValue)
  * we give more weight to the values input from the sonar
  *
  * @param newValue
- *            - new weighted distance
+ *                     - new weighted distance
  * @return int - weighted distance
  * @method setWeightedDistance
  * @author Bob Brown

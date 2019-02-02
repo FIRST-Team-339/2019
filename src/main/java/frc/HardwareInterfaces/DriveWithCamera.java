@@ -179,6 +179,7 @@ public boolean driveToTarget (double speed)
         {
         case INIT:
             this.visionProcessor.setRelayValue(Value.kOn);
+            Hardware.autoTimer.reset();
             // visionProcessor.saveImage(ImageType.RAW);
             // visionProcessor.saveImage(ImageType.PROCESSED);
 
@@ -261,13 +262,27 @@ public boolean driveToTarget (double speed)
                     .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
             /* && isAnyEncoderLargerThan(ENCODER_MIN_DISTANCE) */)
                 {
-                System.out.println("ultrasonic distance");
+
                 state = DriveWithCameraState.DRIVE_WITH_US;
                 }
+
+            // the timer will prevent the robot from stopping from random
+            // fluctuations in the ultrasonic that drop below the stop
+            // //distance
             if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
+            /* && Hardware.autoTimer.get() > .5 */)
                 {
                 state = DriveWithCameraState.STOP;
+                } else
+                {
+                Hardware.autoTimer.start();
+                }
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_STOP)
+                {
+                Hardware.autoTimer.stop();
+                Hardware.autoTimer.reset();
                 }
             break;
         case DRIVE_WITH_US:
@@ -279,7 +294,11 @@ public boolean driveToTarget (double speed)
             // take a picture when we start to drive with ultrasonic
 
             if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
+                    && (Hardware.leftFrontDriveEncoder
+                            .getDistance() >= MIN_INCHES
+                            || Hardware.rightFrontDriveEncoder
+                                    .getDistance() >= MIN_INCHES))
                 {
 
                 // visionProcessor.saveImage(ImageType.RAW);
@@ -290,6 +309,8 @@ public boolean driveToTarget (double speed)
             break;
         default:
         case STOP:
+            Hardware.autoTimer.stop();
+
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
             System.out.println("We are stopping");
@@ -299,6 +320,29 @@ public boolean driveToTarget (double speed)
         }
     return false;
 }
+
+public static enum Side
+    {
+RIGHT, LEFT, NULL
+    }
+
+private Side side = Side.NULL;
+
+public Side getTargetSide ()
+{
+    if (getCameraCenterValue() < SWITCH_CAMERA_CENTER)
+        {
+        side = Side.RIGHT;
+        return side;
+        } else if (getCameraCenterValue() > SWITCH_CAMERA_CENTER)
+        {
+        side = Side.LEFT;
+        return side;
+        }
+    side = Side.NULL;
+    return side;
+}
+
 
 private DriveWithCameraState state = DriveWithCameraState.INIT;
 
@@ -445,16 +489,16 @@ public double getCameraCenterValue ()
         {
         center = (visionProcessor.getNthSizeBlob(0).center.x
                 + visionProcessor.getNthSizeBlob(1).center.x) / 2;
-        System.out.println("blob center: " + center);
+        // System.out.println("blob center: " + center);
 
-        System.out.println("TWO BLOBS");
+        // System.out.println("TWO BLOBS");
         }
     // if we only can detect one blob, the center is equal to the center x
     // position of the blob
     else if (visionProcessor.getParticleReports().length == 1)
         {
         center = visionProcessor.getNthSizeBlob(0).center.x;
-        System.out.println("ONE BLOBS");
+        // System.out.println("ONE BLOBS");
         }
     // if we don't have any blobs, set the center equal to the constanct
     // center,
@@ -470,7 +514,7 @@ public double getCameraCenterValue ()
 // ================VISION CONSTANTS================
 // the distance in inches in which we drive the robot straight using the
 // ultrasonic
-private final double CAMERA_NO_LONGER_WORKS = 25;
+private final double CAMERA_NO_LONGER_WORKS = 3;
 
 // The minimum encoder distance we must drive before we enable the ultrasonic
 // private final double ENCODER_MIN_DISTANCE = 50; // inches
@@ -480,7 +524,7 @@ private final double CAMERA_NO_LONGER_WORKS = 25;
 private final double CAMERA_DEADBAND = 10;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 25;
+private final double DISTANCE_FROM_WALL_TO_STOP = 20;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 70;
 
@@ -495,5 +539,7 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 private final double DRIVE_CORRECTION = .2;
 
 private final boolean USING_GYRO = false;
+
+private final double MIN_INCHES = 60;
 
 }

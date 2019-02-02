@@ -33,6 +33,7 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.LightSensor;
+import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -208,8 +209,7 @@ public static void periodic ()
  */
 private static void choosePath ()
 {
-    switch (2/** Hardware.autoSixPosSwitch.getPosition() */
-    )
+    switch (Hardware.autoSixPosSwitch.getPosition())
         {
         case 0:
             autoState = State.CROSS_AUTOLINE;
@@ -443,7 +443,7 @@ private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
 // states for the camera nested switch statement
 private static enum DriveWithCameraStates
     {
-INIT, DRIVE, TURN_RIGHT, TURN_LEFT, ALIGN
+INIT, DRIVE, FIND_SIDE, TURN_RIGHT, TURN_LEFT, ALIGN
     }
 
 private static DriveWithCameraStates driveWithCameraStates = DriveWithCameraStates.INIT;
@@ -595,28 +595,50 @@ private static boolean depositRocketHatch ()
                             ACCELERATION_TIME, USING_GYRO))
                         {
                         // turn right or left base on start position
-                        if (autoPosition == autoPosition.RIGHT)
+                        if (autoPosition == Position.RIGHT)
                             {
                             driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
-                            } else
+                            } else if (autoPosition == Position.LEFT)
                             {
                             driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                            } else
+                            {
+                            driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
                             }
                         }
                     break;
+                case FIND_SIDE:
+                    Hardware.ringLightRelay.set(Value.kOn);
+                    if (Hardware.driveWithCamera
+                            .getTargetSide() == Side.RIGHT)
+                        {
+                        driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
+                        } else if (Hardware.driveWithCamera
+                                .getTargetSide() == Side.LEFT)
+                        {
+                        driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                        } else
+                        {
+                        rocketHatchState = RocketHatchState.FINISH;
+                        }
+                    break;
                 case TURN_RIGHT:
+                    System.out.println("right");
                     System.out.println(
                             "gyro angle" + Hardware.gyro.getAngle());
                     if (Hardware.drive.turnDegrees(
-                            TURN_FOR_CAMERA_DEGREES, .2, .2,
+                            TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
+                            CAMERA_ACCELERATION,
                             USING_GYRO))
                         {
                         driveWithCameraStates = DriveWithCameraStates.ALIGN;
                         }
                     break;
                 case TURN_LEFT:
+                    System.out.println("left");
                     if (Hardware.drive.turnDegrees(
-                            -TURN_FOR_CAMERA_DEGREES, .2, .2,
+                            -TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
+                            CAMERA_ACCELERATION,
                             USING_GYRO))
                         {
                         driveWithCameraStates = DriveWithCameraStates.ALIGN;
@@ -629,7 +651,9 @@ private static boolean depositRocketHatch ()
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
-                        rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                        // TODO remove
+                        return true;
+                        // rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                         }
 
                     break;
@@ -945,6 +969,10 @@ public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
  * Acceleration time that we generally pass into the drive class's driveStraight
  * function; .6 is the value we used for 2018's robot
  */
+public static final double CAMERA_TURN_SPEED = .2;
+
+public static final double CAMERA_ACCELERATION = .2;
+
 public static final double ACCELERATION_TIME = .6;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
