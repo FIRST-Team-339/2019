@@ -7,7 +7,6 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 // import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
-import frc.vision.VisionProcessor.ImageType;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -193,6 +192,7 @@ public boolean driveToTarget (double speed)
             System.out.println("ultrasonic: " + this.frontUltrasonic
                     .getDistanceFromNearestBumper());
 
+
             // adjust speed based on distance
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
@@ -208,6 +208,7 @@ public boolean driveToTarget (double speed)
                 {
                 slowAmount = 1;
                 }
+            System.out.println("slow amount: " + slowAmount);
 
             motorspeed = speed * slowAmount;
 
@@ -219,7 +220,7 @@ public boolean driveToTarget (double speed)
                 {
                 slowestSpeed = motorspeed - DRIVE_CORRECTION;
                 }
-
+            System.out.println("slowest speed: " + slowestSpeed);
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -264,7 +265,7 @@ public boolean driveToTarget (double speed)
         case DRIVE_WITH_US:
 
 
-            driveStraight(speed, 0, true);
+            driveStraight(speed, 0, USING_GYRO);
 
             // take a picture when we start to drive with ultrasonic
 
@@ -272,8 +273,8 @@ public boolean driveToTarget (double speed)
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
                 {
 
-                visionProcessor.saveImage(ImageType.RAW);
-                visionProcessor.saveImage(ImageType.PROCESSED);
+                // visionProcessor.saveImage(ImageType.RAW);
+                // visionProcessor.saveImage(ImageType.PROCESSED);
                 state = DriveWithCameraState.STOP;
                 }
 
@@ -483,5 +484,7 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
 private final double DRIVE_CORRECTION = .2;
+
+private final boolean USING_GYRO = false;
 
 }
