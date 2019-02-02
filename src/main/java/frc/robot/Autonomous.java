@@ -272,7 +272,7 @@ private static void setPositionAndLevel ()
         } else if (Hardware.autoDisableSwitch
                 .getPosition() == LEVEL_TWO)
         {
-        crossAutoLine();
+        crossAutoline();
         }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
