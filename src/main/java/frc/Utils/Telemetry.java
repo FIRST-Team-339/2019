@@ -192,8 +192,8 @@ public void printToConsole ()
             // System.out.println(
             // "Right = on");
 
-            // System.out.println("6 pos = "
-            // + Hardware.autoSixPosSwitch.getPosition());
+            System.out.println("6 pos = "
+                    + Hardware.autoSixPosSwitch.getPosition());
 
             // System.out.println(
             // "Demo swich isOn" + Hardware.demoModeSwitch.isOn());
@@ -283,9 +283,6 @@ public void printToConsole ()
             // System.out.println("Right Rear Ticks "
             // + Hardware.rightRearDriveEncoder.get());
 
-            // System.out.println("deploy Ticks "
-            // + Hardware.intakeDeployEncoder.get());
-
             // System.out.println(
             // "lift ticks " + Hardware.liftingEncoder.get());
 
@@ -324,6 +321,9 @@ public void printToConsole ()
             // ---------------------------------
             // System.out
             // .println("Delay Pot " + Hardware.delayPot.get(0, 5));
+
+            System.out.println("deploy position "
+                    + Hardware.intakeDeploySensor.get());
 
             // ---------------------------------
             // GYRO
