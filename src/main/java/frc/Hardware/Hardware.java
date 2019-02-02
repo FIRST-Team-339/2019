@@ -95,20 +95,10 @@ public static boolean demoMode = false;
 // ------------------------------------
 // Talon classes
 // ------------------------------------
-// public static Talon rightDriveMotor = new Talon(2);// on CAN now
-
-// public static Talon leftDriveMotor = new Talon(3);// on CAN now
-
 
 // ------------------------------------
 // Victor Classes
 // ------------------------------------
-
-// public static VictorSP liftingMotor = new VictorSP(0);//on CAN now
-
-// public static VictorSP armRollers = new VictorSP(1);// left intake on CAN
-// formerly cubeIntakeMotor
-
 public static VictorSP intakeDeployArm; // hanging
 
 // ------------------------------------
@@ -145,9 +135,6 @@ public static WPI_TalonSRX armRoller;// fix CANID
 // ====================================
 // Relay classes
 // ====================================
-
-// public static DigitalOutput ringLightRelay = new DigitalOutput(0);
-
 public static Relay ringLightRelay;
 
 // ====================================
@@ -160,14 +147,13 @@ public static SingleThrowSwitch leftAutoSwitch;
 
 public static SingleThrowSwitch rightAutoSwitch;
 
-public static DoubleThrowSwitch autoCenterSwitch;
+public static DoubleThrowSwitch autoPositionSwitch;
 
-public static SingleThrowSwitch levelOneSwitch;
+// public static DoubleThrowSwitch autoLevelSwitch = new DoubleThrowSwitch(
+// 18, 13); // false port numbers
 
-public static SingleThrowSwitch levelTwoSwitch;
-
-public static DoubleThrowSwitch autoDisableSwitch;
-
+// TODO check with wirers if the full functionality of the switch is working
+// 29 January 2019
 public static SixPositionSwitch autoSixPosSwitch;
 
 // ------------------------------------
@@ -434,12 +420,11 @@ public static void initialize ()
         {
         default:
         case KILROY_2018:
-            initialize2018();
+            robotInitialize2018();
             break;
 
         case KILROY_2019:
-            gyro = new KilroySPIGyro(true);
-            // TODO add stuff for new robot
+            robotInitialize2019();
             break;
         case TEST_BOARD:
             gyro = new KilroySPIGyro(false);
@@ -541,7 +526,7 @@ private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 /**
  * This initializes all of the components in Hardware
  */
-public static void initialize2018 ()
+public static void robotInitialize2018 ()
 {
     // **********************************************************
     // DIGITAL I/O CLASSES
@@ -566,14 +551,12 @@ public static void initialize2018 ()
     pdp = new PowerDistributionPanel(2);
     liftMotorOne = new WPI_TalonSRX(23);
     liftMotorTwo = new WPI_TalonSRX(6);
-    rightFrontCANMotor = new WPI_TalonSRX(14);
 
+    rightFrontCANMotor = new WPI_TalonSRX(14);
 
     leftFrontCANMotor = new WPI_TalonSRX(11);
 
     rightRearCANMotor = new WPI_TalonSRX(15);
-
-
 
     leftRearCANMotor = new WPI_TalonSRX(13);
 
@@ -596,15 +579,8 @@ public static void initialize2018 ()
     rightAutoSwitch = new SingleThrowSwitch(
             25);
 
-    autoCenterSwitch = new DoubleThrowSwitch(
+    autoPositionSwitch = new DoubleThrowSwitch(
             leftAutoSwitch, rightAutoSwitch);
-
-    levelOneSwitch = new SingleThrowSwitch(22);
-
-    levelTwoSwitch = new SingleThrowSwitch(23);
-
-    autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
-            levelTwoSwitch);
 
     autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
 
@@ -844,6 +820,11 @@ public static void initialize2018 ()
     climber = new ClimbToLevelTwo(
             armIntakeSolenoid, intakeDeployArm, intakeDeploySensor,
             drive, lift, frontUltraSonic);
+
+}
+
+public static void robotInitialize2019 ()
+{
 
 }
 } // end class
