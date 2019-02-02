@@ -132,6 +132,7 @@ public static void periodic ()
     if (Hardware.rightDriver.getRawButton(11)
             && Hardware.leftDriver.getRawButton(11))
         {
+        endAutoPath();
         autoState = State.FINISH;
         }
 
@@ -215,7 +216,6 @@ private static void choosePath ()
             break;
 
         case 1:
-            System.out.println(Hardware.autoSixPosSwitch.getPosition());
             autoState = State.DEPOSIT_STRAIGHT_CARGO_HATCH;
             break;
 
@@ -316,7 +316,7 @@ private static boolean crossAutoline ()
 
 private static enum DepositCargoHatchState
     {
-INIT, DESCEND, TURN_1_RIGHT_SIDE, TURN_1_LEFT_SIDE, DRIVE_1, TURN_2_RIGHT_SIDE, TURN_2_LEFT_SIDE, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO
+INIT, DESCEND, TURN_1_RIGHT_SIDE, TURN_1_LEFT_SIDE, DRIVE_1, TURN_2_RIGHT_SIDE, TURN_2_LEFT_SIDE, DRIVE_2, ALIGN_TO_CARGO, DEPOSIT_CARGO, FINISHED
     }
 
 private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
@@ -418,6 +418,8 @@ private static boolean depositCargoHatch ()
                 return true;
                 }
             break;
+        case FINISHED:
+            break;
         }
     return false;
 }
@@ -439,7 +441,7 @@ private static DriveWithCameraStates driveWithCameraStates = DriveWithCameraStat
 
 private static boolean depositRocketHatch ()
 {
-
+    System.out.println(rocketHatchState);
     if (rocketHatchState == RocketHatchState.STANDBY)
         {
         rocketHatchState = RocketHatchState.DESCEND;
@@ -464,12 +466,12 @@ private static boolean depositRocketHatch ()
                 Hardware.axisCamera.setRelayValue(Value.kOff);
                 autoTimer.reset();
                 autoTimer.start();
-                Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
-                        DRIVE_AGAINST_WALL_SPEED);
+                // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
+                // DRIVE_AGAINST_WALL_SPEED);
                 rocketHatchState = RocketHatchState.STRAIGHTEN_OUT_ON_WALL;
                 }
             break;
-
+        // TODO @ANE
         // =================================================================
         // DRIVE BY NONVISION this is where the smart kids code
         // =================================================================
@@ -497,14 +499,14 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
-                            TURN_SPEED, ACCELERATION_TIME, true))
+                            TURN_SPEED, ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
                     && Hardware.drive.turnDegrees(TURN_LEFT90,
-                            TURN_SPEED, ACCELERATION_TIME, true))
+                            TURN_SPEED, ACCELERATION_TIME, false))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
@@ -759,8 +761,6 @@ public static boolean driveOffStraightLevel1 (LightSensor backIR1,
 }
 
 
-
-
 public static DescentState descentState = DescentState.STANDBY;
 
 // TODO placeholder
@@ -830,11 +830,11 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 
         case LANDING_SETUP:
 
-            if (Hardware.testRedLight.isOn() == true
+            if (Hardware.rightBackIR.isOn() == true
                     && usingAlignByWall == true)
                 {
                 descentState = DescentState.BACKWARDS_TIMER_INIT;
-                } else if (Hardware.testRedLight.isOn()
+                } else if (Hardware.rightBackIR.isOn()
                         && usingAlignByWall == false)
                 {
                 descentState = DescentState.FINISH;
@@ -873,11 +873,21 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
     return false;
 }
 
+
+public static void endAutoPath ()
+{
+    sideCargoHatchState = SideCargoHatchState.FINISHED;
+    depositCargoHatchState = DepositCargoHatchState.FINISHED;
+    rocketHatchState = RocketHatchState.FINISH;
+
+}
+
+
 // =========================================================================
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
-private static boolean usingVision = true;
+private static boolean usingVision = false;
 
 private static boolean usingAlignByWall = true;
 
@@ -889,8 +899,9 @@ private static boolean descendInit = false;
 public static Timer descentTimer = new Timer();
 
 /*
- * ============================================================= Constants
- * =============================================================
+ * ==============================================================
+ * Constants
+ * ==============================================================
  */
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
@@ -943,7 +954,7 @@ public static final int TURN_FOR_CAMERA_DEGREES = 44;
 
 public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN = 23;
 
-public static final int DISTANCE_NEEDED_TO_TURN = 6;
+public static final int DISTANCE_NEEDED_TO_TURN = 20;// change @ANE
 
 public static final int TURN_RIGHT90 = 90;
 
