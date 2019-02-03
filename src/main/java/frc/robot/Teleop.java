@@ -32,9 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.vision.VisionProcessor.ImageType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -279,7 +277,7 @@ public static void printStatements ()
         // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
 
-        // TODO Test ringLightRelay
+
 
         // Hardware.rightRearCANMotor.get());
         // System.out.println("Left Front Drive Motor " +

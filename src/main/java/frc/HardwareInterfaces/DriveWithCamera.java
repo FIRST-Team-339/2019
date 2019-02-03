@@ -537,7 +537,7 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .15;
 
-private final boolean USING_GYRO = false;
+
 
 private final double MIN_INCHES = 60;
 

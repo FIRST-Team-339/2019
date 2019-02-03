@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.VisionProcessor.ImageType;
+
 
 /**
  * An Autonomous class. This class <b>beautifully</b> uses state machines in
@@ -291,8 +291,8 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
-        // TODO , meghan use you own variables
-        if (Hardware.drive.driveStraightInches(// TODO
+
+        if (Hardware.drive.driveStraightInches(
                 DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
                 DRIVE_SPEED, ACCELERATION_TIME,
                 false) == true)
@@ -308,7 +308,7 @@ private static boolean crossAutoline ()
         descendFromLevelTwo(usingAlignByWall);
         }
     if (Hardware.drive.driveStraightInches(
-            DISTANCE_TO_CROSS_AUTOLINE_CAMERA,// TODO
+            DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
             DRIVE_SPEED, ACCELERATION_TIME,
             false) == true)
         {
@@ -576,7 +576,7 @@ private static boolean depositRocketHatch ()
         // =================================================================
 
         case DRIVE_BY_CAMERA:
-            // TODO replace magic numbers with constants
+
             System.out.println("camera state" + driveWithCameraStates);
             System.out.println(
                     "ultrasonic distance: " + Hardware.frontUltraSonic
