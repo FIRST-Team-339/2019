@@ -430,7 +430,7 @@ private static boolean depositCargoHatch ()
 
 private static enum RocketHatchState
     {
-STANDBY, DESCEND, STRAIGHTEN_OUT_ON_WALL, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_ROCKET_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
+STANDBY, DESCEND, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, DELAY_BEFORE_TURN_ALONG_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_ROCKET_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
     }
 
 private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
@@ -472,23 +472,13 @@ private static boolean depositRocketHatch ()
                 autoTimer.start();
                 // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
                 // DRIVE_AGAINST_WALL_SPEED);
-                rocketHatchState = RocketHatchState.STRAIGHTEN_OUT_ON_WALL;
+                rocketHatchState = RocketHatchState.DRIVE_FORWARD_TO_TURN;
                 }
             break;
         // TODO @ANE
         // =================================================================
         // DRIVE BY NONVISION this is where the smart kids code
         // =================================================================
-        case STRAIGHTEN_OUT_ON_WALL:
-
-            if (autoTimer.get() >= TIME_TO_STRAIGHTEN_OUT_ON_WALL)
-                {
-                Hardware.drive.stop();
-                autoTimer.stop();
-                rocketHatchState = RocketHatchState.DRIVE_FORWARD_TO_TURN;
-                }
-            break;
-
         case DRIVE_FORWARD_TO_TURN:
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET, DRIVE_SPEED,
@@ -503,50 +493,63 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
-                            TURN_SPEED, ACCELERATION_TIME, false))
+                            TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
                     && Hardware.drive.turnDegrees(TURN_LEFT90,
-                            TURN_SPEED, ACCELERATION_TIME, false))
+                            TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
             break;
         case DRIVE_TOWARDS_FIELD_WALL:
             if (Hardware.frontUltraSonic
-                    .getDistanceFromNearestBumper() >= DISTANCE_NEEDED_TO_TURN)
+                    .getDistanceFromNearestBumper() > DISTANCE_NEEDED_TO_TURN)
                 {
                 Hardware.drive.driveStraight(DRIVE_SPEED,
                         ACCELERATION_TIME, false);
                 } else
                 {
+
                 Hardware.drive.stop();
+                Hardware.gyro.reset();
+                autoTimer.reset();
+                autoTimer.reset();
                 rocketHatchState = RocketHatchState.TURN_ALONG_FIELD_WALL;
                 }
 
             break;
+
+        case DELAY_BEFORE_TURN_ALONG_FIELD_WALL:
+            if (autoTimer.get() >= TIME_TO_DELAY_B4_TURN)
+                {
+                rocketHatchState = RocketHatchState.TURN_ALONG_FIELD_WALL;
+                }
+            break;
+
+
         case TURN_ALONG_FIELD_WALL:
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
                     && Hardware.drive.turnDegrees(TURN_LEFT90,
-                            TURN_SPEED, ACCELERATION_TIME, false))
+                            TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
-                            TURN_SPEED, ACCELERATION_TIME, false))
+                            TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
                 }
             break;
 
         case ALIGN_PERPENDICULAR_TO_TAPE:
-            // if (alignPerpemdicularToTape() == true)
+            // if (alignPerpendicularToTape() == true)
             // {
             // rocketHatchState = RocketHatchState.DRIVE_TO_TAPE;
             // }
@@ -814,24 +817,6 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
         {
         descentState = DescentState.INIT;
         }
-    // if (descendInit == false)
-    // {
-    // descentTimer.start();
-    // descendInit = true;
-    // }
-
-    // if (descentTimer.get() <= TIME_TO_DRIVE_OFF_PLATFORM)
-    // {
-    // Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
-    // false);
-    // } else
-    // {
-    // Hardware.drive.stop();
-    // descentTimer.stop();
-    // descentTimer.reset();
-    // descendInit = false;
-    // return true;
-    // }
 
     // return false;
     System.out.println(descentState);
@@ -997,9 +982,11 @@ public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .5;
 
 // rocket hatch contstants- no vision
 
-public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 23;
+public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 60;
 
 public static final int DISTANCE_NEEDED_TO_TURN = 20;// change @ANE
+
+public static final double TIME_TO_DELAY_B4_TURN = 2.0;
 
 
 

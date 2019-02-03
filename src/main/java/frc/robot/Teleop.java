@@ -167,6 +167,14 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    // if (Hardware.leftDriver.getRawButton(3) == true)
+    // {
+    // Hardware.alignByTape.align();
+    // } else
+    // {
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
+
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
@@ -354,6 +362,9 @@ public static void printStatements ()
         // ---------------------------------
         // Sonar/UltraSonic
         // ---------------------------------
+
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
 
         // =========================
         // Servos

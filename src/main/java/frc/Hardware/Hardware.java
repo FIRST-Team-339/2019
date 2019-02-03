@@ -25,7 +25,6 @@ import frc.HardwareInterfaces.MomentarySwitch;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
-import frc.Utils.Telemetry;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
 import frc.vision.AutoGenVision;
@@ -398,6 +397,8 @@ public static GamePieceManipulator manipulator;
 public static Forklift lift;
 
 public static ClimbToLevelTwo climber;
+
+public static AlignPerpendicularToTape alignByTape;
 
 // ====================================
 // Methods
@@ -821,6 +822,9 @@ public static void robotInitialize2018 ()
             armIntakeSolenoid, intakeDeployArm, intakeDeploySensor,
             drive, lift, frontUltraSonic);
 
+    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
+            drive);
+
 }
 
 public static void robotInitialize2019 ()
@@ -1123,4 +1127,5 @@ public static void robotInitialize2019 ()
             armIntakeSolenoid, armMotor, intakeDeploySensor,
             drive, lift, frontUltraSonic);
 }
+
 } // end class
