@@ -193,8 +193,8 @@ public void printToConsole ()
             // System.out.println(
             // "Right = on");
 
-            System.out.println("6 pos = "
-                    + Hardware.autoSixPosSwitch.getPosition());
+            // System.out.println("6 pos = "
+            // + Hardware.autoSixPosSwitch.getPosition());
 
             // System.out.println(
             // "Demo swich isOn" + Hardware.demoModeSwitch.isOn());
@@ -340,9 +340,9 @@ public void printToConsole ()
             // Sonar/UltraSonic
             // ---------------------------------
 
-            System.out.println(
-                    "Front UltraSonic " + Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper());
+            // System.out.println(
+            // "Front UltraSonic " + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
 
             //
 

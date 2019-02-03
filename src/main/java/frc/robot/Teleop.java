@@ -363,8 +363,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        System.out.println("ultrasonic " + Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper());
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
 
         // =========================
         // Servos
