@@ -167,6 +167,14 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    // if (Hardware.leftDriver.getRawButton(3) == true)
+    // {
+    // Hardware.alignByTape.align();
+    // } else
+    // {
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
+
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
@@ -208,11 +216,26 @@ private static void coleTest ()
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_HATCH,
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHighestForkliftTargetHeight.get());
+    // Hardware.cargoShipCargoButton.get());
 
-    // // Manipulator
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.cargoShipHatchButton.get());
+
+    // Hardware.lift.setToNextHigherPreset(
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextHigherForkliftTargetHeight.get(),
+    // Hardware.chooseCargoRocketHeights.get());
+
+    // Hardware.lift.setToNextLowerPreset(
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextLowerForkliftTargetHeight.get(),
+    // Hardware.chooseCargoRocketHeights.get());
+
+
+    // Manipulator
 
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
             Hardware.intakeTrigger.get(),
@@ -229,7 +252,7 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-
+    // Hi Patrick!
 }
 
 private static void annaTest ()
@@ -364,6 +387,9 @@ public static void printStatements ()
         // ---------------------------------
         // Sonar/UltraSonic
         // ---------------------------------
+
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
 
         // =========================
         // Servos
