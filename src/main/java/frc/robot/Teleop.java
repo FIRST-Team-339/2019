@@ -59,19 +59,12 @@ public class Teleop
 
 // if has done the thing
 
-/**
- * A boolean that knows all and does all
- *
- * @author Conner McKevitt
- * @parameters life force
- * @written yes
- */
-public static boolean hasDoneTheThing = true;
+
 
 public static void init ()
 {
 
-    hasDoneTheThing = true;
+
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -180,11 +173,11 @@ private static void ashleyTest ()
     // System.out
     // .println(
     // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
-    /* } else */ if (Hardware.rightDriver.getRawButton(5) == true)
-        {
-        System.out.println("WERE DOING SOMETHING AT LEAST");
-        Hardware.climber.climb();
-        }
+    // } else if (Hardware.rightDriver.getRawButton(5) == true)
+    // {
+    // System.out.println("WERE DOING SOMETHING AT LEAST");
+    // Hardware.climber.climb();
+    // }
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
@@ -205,7 +198,7 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    // System.out.println("has done the thing:" + hasDoneTheThing);
+
 }
 
 private static void coleTest ()
