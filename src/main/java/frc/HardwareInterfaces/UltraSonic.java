@@ -104,7 +104,7 @@ private int lastGoodValue = java.lang.Integer.MAX_VALUE;
 // values to make sure that they are
 // "good"
 // ----------------------------------
-private int numberOfItemsToCheckForValidity = 10;
+private int numberOfItemsToCheckForValidity = 5;
 
 // ---------------------------------
 // present index into the confidenceArray
