@@ -228,7 +228,6 @@ public boolean driveToTarget (double speed)
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
-            this.visionProcessor.setDigitalOutputValue(Value.kOn);
 
 
             // if the switch center is to the right of our center set by the
@@ -267,24 +266,14 @@ public boolean driveToTarget (double speed)
                 state = DriveWithCameraState.DRIVE_WITH_US;
                 }
 
-            // the timer will prevent the robot from stopping from random
-            // fluctuations in the ultrasonic that drop below the stop
-            // //distance
+
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && Hardware.autoTimer.get() > .5)
+            /* && Hardware.autoTimer.get() > .5 */)
                 {
                 state = DriveWithCameraState.STOP;
-                } else
-                {
-                Hardware.autoTimer.start();
                 }
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_STOP)
-                {
-                Hardware.autoTimer.stop();
-                Hardware.autoTimer.reset();
-                }
+
             break;
         case DRIVE_WITH_US:
 
@@ -339,11 +328,11 @@ private Side side = Side.NULL;
  */
 public Side getTargetSide ()
 {
-    if (getCameraCenterValue() < SWITCH_CAMERA_CENTER)
+    if (this.getCameraCenterValue() < SWITCH_CAMERA_CENTER)
         {
         side = Side.RIGHT;
         return side;
-        } else if (getCameraCenterValue() > SWITCH_CAMERA_CENTER)
+        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER)
         {
         side = Side.LEFT;
         return side;
@@ -488,6 +477,7 @@ public void visionTest (double compensationFactor, double speed)
  */
 public double getCameraCenterValue ()
 {
+    Hardware.axisCamera.setRelayValue(Value.kOn);
     double center = 0;
 
     visionProcessor.processImage();
@@ -533,19 +523,19 @@ private final double CAMERA_NO_LONGER_WORKS = 3;
 private final double CAMERA_DEADBAND = 10;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 20;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW1 = 70;
+private final double DISTANCE_FROM_WALL_TO_SLOW1 = 80;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW2 = 45;
+private final double DISTANCE_FROM_WALL_TO_SLOW2 = 50;
 
 private final double SLOW_MODIFIER = .65;
-// 20 + 50;
+
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .2;
+private final double DRIVE_CORRECTION = .15;
 
 private final boolean USING_GYRO = false;
 

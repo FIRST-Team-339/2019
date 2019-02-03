@@ -323,8 +323,8 @@ public void printToConsole ()
             // System.out
             // .println("Delay Pot " + Hardware.delayPot.get(0, 5));
 
-            System.out.println("deploy position "
-                    + Hardware.intakeDeploySensor.get());
+            // System.out.println("deploy position "
+            // + Hardware.intakeDeploySensor.get());
 
             // ---------------------------------
             // GYRO
@@ -344,7 +344,7 @@ public void printToConsole ()
             // "Front UltraSonic " + Hardware.frontUltraSonic
             // .getDistanceFromNearestBumper());
 
-            //
+            // //
 
             // System.out.println("Rear UltraSonic "
             // + Hardware.rearUltraSonic.getDistanceFromNearestBumper());

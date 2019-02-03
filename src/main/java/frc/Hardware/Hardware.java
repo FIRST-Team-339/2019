@@ -33,6 +33,8 @@ import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -41,6 +43,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -98,14 +101,9 @@ public static boolean demoMode = false;
 // ------------------------------------
 // Victor Classes
 // ------------------------------------
-public static VictorSP intakeDeployArm; // hanging
+public static VictorSP intakeDeployArm;
 
-// public static VictorSP liftingMotor = new VictorSP(0);//on CAN now
-
-// public static VictorSP armRollers = new VictorSP(1);// left intake on CAN
-// formerly cubeIntakeMotor
-
-public static VictorSP armMotor; // hanging
+public static VictorSP armMotor;
 
 // ------------------------------------
 // Servo classes
@@ -116,27 +114,21 @@ public static VictorSP armMotor; // hanging
 // ====================================
 public static PowerDistributionPanel pdp;
 
-public static WPI_TalonSRX liftMotorOne;
-// CAN version
-
-public static WPI_TalonSRX liftMotorTwo;
-// CAN version
+public static SpeedController liftMotor;
 
 /** The right front drive motor */
-public static WPI_TalonSRX rightFrontCANMotor;
+public static SpeedController rightFrontCANMotor;
 
 /** The left front drive motor */
-public static WPI_TalonSRX leftFrontCANMotor;
+public static SpeedController leftFrontCANMotor;
 
 /** The right rear drive motor */
-public static WPI_TalonSRX rightRearCANMotor;
-// TODO - fix number
+public static SpeedController rightRearCANMotor;
 
 /** The left rear drive motor */
-public static WPI_TalonSRX leftRearCANMotor;
-// TODO - fix number
+public static SpeedController leftRearCANMotor;
 
-public static WPI_TalonSRX armRoller;// fix CANID
+public static SpeedController armRoller;
 
 // ====================================
 // Relay classes
@@ -328,9 +320,9 @@ public static JoystickButton intakeOverride;
 
 public static JoystickButton deployOverride;
 
-public static JoystickButton cargoShipCargoHeight;
+public static JoystickButton cargoShipCargoButton;
 
-public static JoystickButton cargoShipHatchHeight;
+public static JoystickButton cargoShipHatchButton;
 
 // ----- Right Operator -----
 
@@ -338,9 +330,9 @@ public static JoystickButton chooseCargoRocketHeights;
 
 public static JoystickButton forkliftOverride;
 
-public static JoystickButton nextHighestForkliftTargetHeight;
+public static JoystickButton nextHigherForkliftTargetHeight;
 
-public static JoystickButton nextLowestForkliftTargetHeight;
+public static JoystickButton nextLowerForkliftTargetHeight;
 
 
 // ------------------------------------
@@ -545,9 +537,7 @@ public static void robotInitialize2018 ()
     // ====================================
     pdp = new PowerDistributionPanel(2);
 
-    liftMotorOne = new WPI_TalonSRX(23);
-
-    liftMotorTwo = new WPI_TalonSRX(6);
+    liftMotor = new WPI_TalonSRX(23);
 
     rightFrontCANMotor = new WPI_TalonSRX(14);
 
@@ -740,10 +730,10 @@ public static void robotInitialize2018 ()
     deployOverride = new JoystickButton(
             leftOperator, 5);
 
-    cargoShipCargoHeight = new JoystickButton(
+    cargoShipCargoButton = new JoystickButton(
             leftOperator, 6);
 
-    cargoShipHatchHeight = new JoystickButton(
+    cargoShipHatchButton = new JoystickButton(
             leftOperator, 7);
 
     // ----- Right Operator -----
@@ -754,10 +744,10 @@ public static void robotInitialize2018 ()
     forkliftOverride = new JoystickButton(
             rightOperator, 5);
 
-    nextHighestForkliftTargetHeight = new JoystickButton(
+    nextHigherForkliftTargetHeight = new JoystickButton(
             rightOperator, 6);
 
-    nextLowestForkliftTargetHeight = new JoystickButton(
+    nextLowerForkliftTargetHeight = new JoystickButton(
             rightOperator, 7);
 
 
@@ -770,6 +760,7 @@ public static void robotInitialize2018 ()
 
     ringLightButton = new MomentarySwitch(
             leftOperator, 6, false);
+
 
     // **********************************************************
     // Kilroy's Ancillary classes
@@ -814,7 +805,7 @@ public static void robotInitialize2018 ()
             armRoller,
             null/* photoSwitch */);
 
-    lift = new Forklift(liftMotorOne,
+    lift = new Forklift(liftMotor,
             liftingEncoder,
             manipulator);
 
@@ -851,19 +842,17 @@ public static void robotInitialize2019 ()
     // ====================================
     pdp = new PowerDistributionPanel(2);
 
-    liftMotorOne = new WPI_TalonSRX(23);
+    liftMotor = new CANSparkMax(23, MotorType.kBrushless);
 
-    liftMotorTwo = new WPI_TalonSRX(6);
+    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
 
-    rightFrontCANMotor = new WPI_TalonSRX(14);
+    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
 
-    leftFrontCANMotor = new WPI_TalonSRX(11);
+    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
 
-    rightRearCANMotor = new WPI_TalonSRX(15);
+    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
 
-    leftRearCANMotor = new WPI_TalonSRX(13);
-
-    armRoller = new WPI_TalonSRX(10);// fix CANID
+    armRoller = new CANSparkMax(10, MotorType.kBrushless);// fix CANID
 
     // ====================================
     // Relay classes
@@ -1046,10 +1035,10 @@ public static void robotInitialize2019 ()
     deployOverride = new JoystickButton(
             leftOperator, 5);
 
-    cargoShipCargoHeight = new JoystickButton(
+    cargoShipCargoButton = new JoystickButton(
             leftOperator, 6);
 
-    cargoShipHatchHeight = new JoystickButton(
+    cargoShipHatchButton = new JoystickButton(
             leftOperator, 7);
 
     // ----- Right Operator -----
@@ -1060,10 +1049,10 @@ public static void robotInitialize2019 ()
     forkliftOverride = new JoystickButton(
             rightOperator, 5);
 
-    nextHighestForkliftTargetHeight = new JoystickButton(
+    nextHigherForkliftTargetHeight = new JoystickButton(
             rightOperator, 6);
 
-    nextLowestForkliftTargetHeight = new JoystickButton(
+    nextLowerForkliftTargetHeight = new JoystickButton(
             rightOperator, 7);
 
 
@@ -1119,7 +1108,7 @@ public static void robotInitialize2019 ()
             armRoller,
             null/* photoSwitch */);
 
-    lift = new Forklift(liftMotorOne,
+    lift = new Forklift(liftMotor,
             liftingEncoder,
             manipulator);
 
