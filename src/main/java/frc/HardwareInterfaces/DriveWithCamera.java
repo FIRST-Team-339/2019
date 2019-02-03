@@ -7,6 +7,7 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 // import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
+import frc.vision.VisionProcessor.ImageType;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -301,8 +302,8 @@ public boolean driveToTarget (double speed)
                                     .getDistance() >= MIN_INCHES))
                 {
 
-                // visionProcessor.saveImage(ImageType.RAW);
-                // visionProcessor.saveImage(ImageType.PROCESSED);
+                visionProcessor.saveImage(ImageType.RAW);
+                visionProcessor.saveImage(ImageType.PROCESSED);
                 state = DriveWithCameraState.STOP;
                 }
 
@@ -328,6 +329,14 @@ RIGHT, LEFT, NULL
 
 private Side side = Side.NULL;
 
+
+/**
+ * Code for 2019 camera to align to the rocket. returns Side that the camera see
+ * vision targets on
+ *
+ * @author Conner McKevitt
+ * @return
+ */
 public Side getTargetSide ()
 {
     if (getCameraCenterValue() < SWITCH_CAMERA_CENTER)
