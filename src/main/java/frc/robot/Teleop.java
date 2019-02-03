@@ -180,11 +180,11 @@ private static void ashleyTest ()
     // System.out
     // .println(
     // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
-    /* } else */ if (Hardware.rightDriver.getRawButton(5) == true)
-        {
-        System.out.println("WERE DOING SOMETHING AT LEAST");
-        Hardware.climber.climb();
-        }
+    // } else if (Hardware.rightDriver.getRawButton(5) == true)
+    // {
+    // System.out.println("WERE DOING SOMETHING AT LEAST");
+    // Hardware.climber.climb();
+    // }
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
