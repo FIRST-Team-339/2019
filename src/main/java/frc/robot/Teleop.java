@@ -59,19 +59,12 @@ public class Teleop
 
 // if has done the thing
 
-/**
- * A boolean that knows all and does all
- *
- * @author Conner McKevitt
- * @parameters life force
- * @written yes
- */
-public static boolean hasDoneTheThing = true;
+
 
 public static void init ()
 {
 
-    hasDoneTheThing = true;
+
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -205,7 +198,7 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    // System.out.println("has done the thing:" + hasDoneTheThing);
+
 }
 
 private static void coleTest ()
