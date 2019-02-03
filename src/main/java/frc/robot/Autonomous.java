@@ -290,29 +290,30 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
-            //TODO , meghan use you own variables
-    //     if (Hardware.drive.driveStraightInches(
-    //             DISTANCE_TO_CROSS_AUTOLINE,
-    //             DRIVE_SPEED, ACCELERATION_TIME,
-    //             false) == true)
-    //         {
-    //         System.out.println(Hardware.autoSixPosSwitch.getPosition());
-    //         Hardware.drive.stop();
-    //         return true;
-    //         }
-    //     System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
-    //     }
-    // if (autoLevel == Level.LEVEL_TWO)
-    //     {
-    //     descendFromLevelTwo(usingAlignByWall);
-    //     }
-    // if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
-    //         DRIVE_SPEED, ACCELERATION_TIME,
-    //         false) == true)
-    //     {
-    //     Hardware.drive.stop();
-    //     return true;
-    //     }
+        // TODO , meghan use you own variables
+        // if (Hardware.drive.driveStraightInches(
+        // DISTANCE_TO_CROSS_AUTOLINE,
+        // DRIVE_SPEED, ACCELERATION_TIME,
+        // false) == true)
+        // {
+        // System.out.println(Hardware.autoSixPosSwitch.getPosition());
+        // Hardware.drive.stop();
+        // return true;
+        // }
+        // System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+        // }
+        // if (autoLevel == Level.LEVEL_TWO)
+        // {
+        // descendFromLevelTwo(usingAlignByWall);
+        // }
+        // if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
+        // DRIVE_SPEED, ACCELERATION_TIME,
+        // false) == true)
+        // {
+        // Hardware.drive.stop();
+        // return true;
+        // }
+        }
     return false;
 }
 
