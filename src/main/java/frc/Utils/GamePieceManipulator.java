@@ -292,7 +292,7 @@ private void intakeOuttakeByButtons (boolean intakeButtonValue,
 public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
         boolean outtakeButtonValue, boolean intakeOverrideButtonValue)
 {
-    this.intakeOuttakeByButtonsSeperated(intakeButtonValue,
+    this.intake.intakeOuttakeByButtonsSeperated(intakeButtonValue,
             outtakeButtonValue, intakeOverrideButtonValue);
 }
 

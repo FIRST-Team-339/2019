@@ -1,8 +1,8 @@
 package frc.Utils;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.HardwareInterfaces.KilroyEncoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -34,7 +34,7 @@ public class Forklift
  * @param gamePieceManipulator
  *
  */
-public Forklift (WPI_TalonSRX liftMotor, KilroyEncoder liftEncoder,
+public Forklift (SpeedController liftMotor, KilroyEncoder liftEncoder,
         GamePieceManipulator gamePieceManipulator)
 {
     this.forkliftMotor = liftMotor;
@@ -553,7 +553,7 @@ public ForkliftState liftState = ForkliftState.STAY_AT_POSITION;
 private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRAL;
 
 // Hardware
-private WPI_TalonSRX forkliftMotor;
+private SpeedController forkliftMotor;
 
 private KilroyEncoder forkliftEncoder;
 

@@ -59,19 +59,12 @@ public class Teleop
 
 // if has done the thing
 
-/**
- * A boolean that knows all and does all
- *
- * @author Conner McKevitt
- * @parameters life force
- * @written yes
- */
-public static boolean hasDoneTheThing = true;
+
 
 public static void init ()
 {
 
-    hasDoneTheThing = true;
+
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -148,6 +141,8 @@ public static void periodic ()
 
     teleopDrive();
 
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
+
     individualTest();
 
     printStatements();
@@ -180,11 +175,11 @@ private static void ashleyTest ()
     // System.out
     // .println(
     // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
-    /* } else */ if (Hardware.rightDriver.getRawButton(5) == true)
-        {
-        System.out.println("WERE DOING SOMETHING AT LEAST");
-        Hardware.climber.climb();
-        }
+    // } else if (Hardware.rightDriver.getRawButton(5) == true)
+    // {
+    // System.out.println("WERE DOING SOMETHING AT LEAST");
+    // Hardware.climber.climb();
+    // }
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
@@ -205,15 +200,15 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    // System.out.println("has done the thing:" + hasDoneTheThing);
+
 }
 
 private static void coleTest ()
 {
     // Forklifts
 
-    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-    // Hardware.forkliftOverride.get());
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.forkliftOverride.get());
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
@@ -236,10 +231,10 @@ private static void coleTest ()
 
     // Manipulator
 
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // Hardware.intakeTrigger.get(),
-    // Hardware.outtakeButton.get(),
-    // Hardware.intakeOverride.get());
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
 
 }
@@ -282,26 +277,25 @@ public static void printStatements ()
         // =================================
         // Motors
         // =================================
-        // System.out.println("Arm Motor Voltage " + Hardware.armMotor.get());
-        // System.out.println("Right Front Drive Motor Voltage" +
+        // TODO test arm motor print statement
+        // System.out.println(
+        // "Intake deploy arm: " + Hardware.intakeDeployArm.get());
+        // System.out.println("Arm motor: " + Hardware.armMotor.get());
+        // System.out.println("Lift Motor One "
+        // + Hardware.liftMotor.get());
+        // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
-        // System.out.println("Left Front Drive Motor Voltage"
+        // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
-        // System.out.println("Right Rear Drive Motor Voltage" +
+        // System.out.println("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
-        // System.out.println("Left Rear Drive Motor Voltage"
+        // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        // System.out.println("Lift Motor One Voltage"
-        // + Hardware.liftMotorOne.get());
-        // System.out.println("Lift Motor Two Voltage"
-        // + Hardware.liftMotorTwo.get());
-        // System.out.println("Arm Roller Voltage"
+        // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
 
-        // TODO Test Lift Motors', Arm Roller's, and Arm Motor's Voltage 2019
+        // TODO Test ringLightRelay
 
-        // Hardware.rightFrontCANMotor.get());
-        // SmartDashboard.putNumber("Right Rear Drive Motor",
         // Hardware.rightRearCANMotor.get());
         // System.out.println("Left Front Drive Motor " +
         // Relay
@@ -315,6 +309,17 @@ public static void printStatements ()
 
         // Switches
         // prints state of switches
+        // System.out.println(
+        // "Left auto switch: " + Hardware.leftAutoSwitch.get());
+        // System.out.println(
+        // "Right auto switch: " + Hardware.rightAutoSwitch.get());
+        // System.out.println("Center auto switch: "
+        // + Hardware.autoCenterSwitch.getPosition());
+        // System.out.println(
+        // "Level one switch: " + Hardware.levelOneSwitch.get());
+        // System.out.println(
+        // "Level two switch: " + Hardware.levelTwoSwitch.get());
+
         // ---------------------------------
 
         // SmartDashboard.putBoolean("Disable SW",
