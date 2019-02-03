@@ -983,13 +983,13 @@ public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
  * Acceleration time that we generally pass into the drive class's driveStraight
  * function; .6 is the value we used for 2018's robot
  */
-public static final double CAMERA_TURN_SPEED = .3;
+public static final double CAMERA_TURN_SPEED = .5;
 
 public static final double CAMERA_ACCELERATION = .2;
 
 public static final double ACCELERATION_TIME = .2;
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .3;// TODO
 
 public static final int TURN_FOR_CAMERA_DEGREES = 50;
 
@@ -1003,7 +1003,7 @@ public static final int TURN_LEFT90 = -90;
 
 public static final double TURN_SPEED = .4;
 
-public static final boolean USING_GYRO = false;
+public static final boolean USING_GYRO = true;
 
 public static Timer autoTimer = new Timer();
 

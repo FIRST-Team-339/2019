@@ -228,7 +228,6 @@ public boolean driveToTarget (double speed)
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
-            this.visionProcessor.setDigitalOutputValue(Value.kOn);
 
 
             // if the switch center is to the right of our center set by the
@@ -272,7 +271,7 @@ public boolean driveToTarget (double speed)
             // //distance
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && Hardware.autoTimer.get() > .5)
+            /* && Hardware.autoTimer.get() > .5 */)
                 {
                 state = DriveWithCameraState.STOP;
                 } else
