@@ -141,6 +141,8 @@ public static void periodic ()
 
     teleopDrive();
 
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
+
     individualTest();
 
     printStatements();
@@ -214,10 +216,10 @@ private static void coleTest ()
 
     // // Manipulator
 
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // Hardware.intakeTrigger.get(),
-    // Hardware.outtakeButton.get(),
-    // Hardware.intakeOverride.get());
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
 
 }
@@ -261,7 +263,11 @@ public static void printStatements ()
         // Motors
         // =================================
         // TODO test arm motor print statement
-        // System.out.println("Arm Motor " + Hardware.armMotor.get());
+        // System.out.println(
+        // "Intake deploy arm: " + Hardware.intakeDeployArm.get());
+        // System.out.println("Arm motor: " + Hardware.armMotor.get());
+        // System.out.println("Lift Motor One "
+        // + Hardware.liftMotor.get());
         // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
         // System.out.println("LF Drive Motor "
@@ -270,15 +276,11 @@ public static void printStatements ()
         // Hardware.rightRearCANMotor.get());
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        // System.out.println("Lift Motor One "
-        // + Hardware.liftMotor.get());
         // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
 
-        // TODO Test Lift Motors', Arm Roller's, and Arm Motor's Voltage 2019
+        // TODO Test ringLightRelay
 
-        // Hardware.rightFrontCANMotor.get());
-        // SmartDashboard.putNumber("Right Rear Drive Motor",
         // Hardware.rightRearCANMotor.get());
         // System.out.println("Left Front Drive Motor " +
         // Relay

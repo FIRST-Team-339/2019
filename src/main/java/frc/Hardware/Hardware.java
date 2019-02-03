@@ -102,14 +102,9 @@ public static boolean demoMode = false;
 // ------------------------------------
 // Victor Classes
 // ------------------------------------
-public static VictorSP intakeDeployArm; // hanging
+public static VictorSP intakeDeployArm;
 
-// public static VictorSP liftingMotor = new VictorSP(0);//on CAN now
-
-// public static VictorSP armRollers = new VictorSP(1);// left intake on CAN
-// formerly cubeIntakeMotor
-
-public static VictorSP armMotor; // hanging
+public static VictorSP armMotor;
 
 // ------------------------------------
 // Servo classes
@@ -121,7 +116,6 @@ public static VictorSP armMotor; // hanging
 public static PowerDistributionPanel pdp;
 
 public static SpeedController liftMotor;
-// CAN version
 
 /** The right front drive motor */
 public static SpeedController rightFrontCANMotor;
@@ -131,13 +125,11 @@ public static SpeedController leftFrontCANMotor;
 
 /** The right rear drive motor */
 public static SpeedController rightRearCANMotor;
-// TODO - fix number
 
 /** The left rear drive motor */
 public static SpeedController leftRearCANMotor;
-// TODO - fix number
 
-public static SpeedController armRoller;// fix CANID
+public static SpeedController armRoller;
 
 // ====================================
 // Relay classes
