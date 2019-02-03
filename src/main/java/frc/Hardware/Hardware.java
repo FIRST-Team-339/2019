@@ -34,6 +34,8 @@ import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -42,6 +44,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -117,27 +120,24 @@ public static VictorSP armMotor; // hanging
 // ====================================
 public static PowerDistributionPanel pdp;
 
-public static WPI_TalonSRX liftMotorOne;
-// CAN version
-
-public static WPI_TalonSRX liftMotorTwo;
+public static SpeedController liftMotor;
 // CAN version
 
 /** The right front drive motor */
-public static WPI_TalonSRX rightFrontCANMotor;
+public static SpeedController rightFrontCANMotor;
 
 /** The left front drive motor */
-public static WPI_TalonSRX leftFrontCANMotor;
+public static SpeedController leftFrontCANMotor;
 
 /** The right rear drive motor */
-public static WPI_TalonSRX rightRearCANMotor;
+public static SpeedController rightRearCANMotor;
 // TODO - fix number
 
 /** The left rear drive motor */
-public static WPI_TalonSRX leftRearCANMotor;
+public static SpeedController leftRearCANMotor;
 // TODO - fix number
 
-public static WPI_TalonSRX armRoller;// fix CANID
+public static SpeedController armRoller;// fix CANID
 
 // ====================================
 // Relay classes
@@ -544,9 +544,7 @@ public static void robotInitialize2018 ()
     // ====================================
     pdp = new PowerDistributionPanel(2);
 
-    liftMotorOne = new WPI_TalonSRX(23);
-
-    liftMotorTwo = new WPI_TalonSRX(6);
+    liftMotor = new WPI_TalonSRX(23);
 
     rightFrontCANMotor = new WPI_TalonSRX(14);
 
@@ -813,7 +811,7 @@ public static void robotInitialize2018 ()
             armRoller,
             null/* photoSwitch */);
 
-    lift = new Forklift(liftMotorOne,
+    lift = new Forklift(liftMotor,
             liftingEncoder,
             manipulator);
 
@@ -847,19 +845,17 @@ public static void robotInitialize2019 ()
     // ====================================
     pdp = new PowerDistributionPanel(2);
 
-    liftMotorOne = new WPI_TalonSRX(23);
+    liftMotor = new CANSparkMax(23, MotorType.kBrushless);
 
-    liftMotorTwo = new WPI_TalonSRX(6);
+    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
 
-    rightFrontCANMotor = new WPI_TalonSRX(14);
+    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
 
-    leftFrontCANMotor = new WPI_TalonSRX(11);
+    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
 
-    rightRearCANMotor = new WPI_TalonSRX(15);
+    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
 
-    leftRearCANMotor = new WPI_TalonSRX(13);
-
-    armRoller = new WPI_TalonSRX(10);// fix CANID
+    armRoller = new CANSparkMax(10, MotorType.kBrushless);// fix CANID
 
     // ====================================
     // Relay classes
@@ -1115,7 +1111,7 @@ public static void robotInitialize2019 ()
             armRoller,
             null/* photoSwitch */);
 
-    lift = new Forklift(liftMotorOne,
+    lift = new Forklift(liftMotor,
             liftingEncoder,
             manipulator);
 
