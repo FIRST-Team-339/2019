@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
+import frc.Utils.drive.Drive.BrakeType;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -290,29 +291,30 @@ private static boolean crossAutoline ()
 {
     if (autoLevel == Level.LEVEL_ONE)
         {
-            //TODO , meghan use you own variables
-    //     if (Hardware.drive.driveStraightInches(
-    //             DISTANCE_TO_CROSS_AUTOLINE,
-    //             DRIVE_SPEED, ACCELERATION_TIME,
-    //             false) == true)
-    //         {
-    //         System.out.println(Hardware.autoSixPosSwitch.getPosition());
-    //         Hardware.drive.stop();
-    //         return true;
-    //         }
-    //     System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
-    //     }
-    // if (autoLevel == Level.LEVEL_TWO)
-    //     {
-    //     descendFromLevelTwo(usingAlignByWall);
-    //     }
-    // if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
-    //         DRIVE_SPEED, ACCELERATION_TIME,
-    //         false) == true)
-    //     {
-    //     Hardware.drive.stop();
-    //     return true;
-    //     }
+        // TODO , meghan use you own variables
+        if (Hardware.drive.driveStraightInches(// TODO
+                DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
+                DRIVE_SPEED, ACCELERATION_TIME,
+                false) == true)
+            {
+            System.out.println(Hardware.autoSixPosSwitch.getPosition());
+            Hardware.drive.stop();
+            return true;
+            }
+        System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+        }
+    if (autoLevel == Level.LEVEL_TWO)
+        {
+        descendFromLevelTwo(usingAlignByWall);
+        }
+    if (Hardware.drive.driveStraightInches(
+            DISTANCE_TO_CROSS_AUTOLINE_CAMERA,// TODO
+            DRIVE_SPEED, ACCELERATION_TIME,
+            false) == true)
+        {
+        Hardware.drive.stop();
+        return true;
+        }
     return false;
 }
 
@@ -584,19 +586,26 @@ private static boolean depositRocketHatch ()
                     break;
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
-                            DISTANCE_TO_CROSS_AUTOLINE_CAMERA, .6,
+                            DISTANCE_TO_CROSS_AUTOLINE_CAMERA, .4,
                             ACCELERATION_TIME, USING_GYRO))
                         {
-                        // turn right or left base on start position
-                        if (autoPosition == Position.RIGHT)
+                        Hardware.drive.stop();
+                        if (Hardware.rightFrontCANMotor.get() == 0
+                                && Hardware.leftFrontCANMotor
+                                        .get() == 0)
                             {
-                            driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
-                            } else if (autoPosition == Position.LEFT)
-                            {
-                            driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
-                            } else
-                            {
-                            driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
+
+                            // turn right or left base on start position
+                            if (autoPosition == Position.RIGHT)
+                                {
+                                driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
+                                } else if (autoPosition == Position.LEFT)
+                                {
+                                driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                                } else
+                                {
+                                driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
+                                }
                             }
                         }
                     break;
@@ -617,12 +626,10 @@ private static boolean depositRocketHatch ()
                     break;
                 case TURN_RIGHT:
                     System.out.println("right");
-                    System.out.println(
-                            "gyro angle" + Hardware.gyro.getAngle());
+
                     if (Hardware.drive.turnDegrees(
                             TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
-                            CAMERA_ACCELERATION,
-                            USING_GYRO))
+                            CAMERA_ACCELERATION, USING_GYRO))
                         {
                         driveWithCameraStates = DriveWithCameraStates.ALIGN;
                         }
@@ -630,9 +637,8 @@ private static boolean depositRocketHatch ()
                 case TURN_LEFT:
                     System.out.println("left");
                     if (Hardware.drive.turnDegrees(
-                            TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
-                            CAMERA_ACCELERATION,
-                            USING_GYRO))
+                            -TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
+                            CAMERA_ACCELERATION, USING_GYRO))
                         {
                         driveWithCameraStates = DriveWithCameraStates.ALIGN;
                         }
@@ -975,13 +981,13 @@ public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
  * Acceleration time that we generally pass into the drive class's driveStraight
  * function; .6 is the value we used for 2018's robot
  */
-public static final double CAMERA_TURN_SPEED = .2;
+public static final double CAMERA_TURN_SPEED = .3;
 
 public static final double CAMERA_ACCELERATION = .2;
 
-public static final double ACCELERATION_TIME = .6;
+public static final double ACCELERATION_TIME = .2;
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .30;// TODO
 
 public static final int TURN_FOR_CAMERA_DEGREES = 50;
 

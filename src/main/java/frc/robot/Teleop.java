@@ -205,7 +205,15 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    // System.out.println("has done the thing:" + hasDoneTheThing);
+    if (Hardware.leftOperator.getRawButton(7))
+        {
+        hasDoneTheThing = false;
+        }
+    if (hasDoneTheThing == false)
+        {
+        if (Hardware.drive.turnDegrees(50, .6, 1, false))
+            hasDoneTheThing = true;
+        }
 }
 
 private static void coleTest ()

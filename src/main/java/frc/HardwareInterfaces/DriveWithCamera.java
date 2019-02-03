@@ -271,7 +271,7 @@ public boolean driveToTarget (double speed)
             // //distance
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-            /* && Hardware.autoTimer.get() > .5 */)
+                    && Hardware.autoTimer.get() > .5)
                 {
                 state = DriveWithCameraState.STOP;
                 } else
