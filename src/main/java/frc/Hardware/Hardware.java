@@ -329,9 +329,9 @@ public static JoystickButton intakeOverride;
 
 public static JoystickButton deployOverride;
 
-public static JoystickButton cargoShipCargoHeight;
+public static JoystickButton cargoShipCargoButton;
 
-public static JoystickButton cargoShipHatchHeight;
+public static JoystickButton cargoShipHatchButton;
 
 // ----- Right Operator -----
 
@@ -339,9 +339,9 @@ public static JoystickButton chooseCargoRocketHeights;
 
 public static JoystickButton forkliftOverride;
 
-public static JoystickButton nextHighestForkliftTargetHeight;
+public static JoystickButton nextHigherForkliftTargetHeight;
 
-public static JoystickButton nextLowestForkliftTargetHeight;
+public static JoystickButton nextLowerForkliftTargetHeight;
 
 
 // ------------------------------------
@@ -739,10 +739,10 @@ public static void robotInitialize2018 ()
     deployOverride = new JoystickButton(
             leftOperator, 5);
 
-    cargoShipCargoHeight = new JoystickButton(
+    cargoShipCargoButton = new JoystickButton(
             leftOperator, 6);
 
-    cargoShipHatchHeight = new JoystickButton(
+    cargoShipHatchButton = new JoystickButton(
             leftOperator, 7);
 
     // ----- Right Operator -----
@@ -753,10 +753,10 @@ public static void robotInitialize2018 ()
     forkliftOverride = new JoystickButton(
             rightOperator, 5);
 
-    nextHighestForkliftTargetHeight = new JoystickButton(
+    nextHigherForkliftTargetHeight = new JoystickButton(
             rightOperator, 6);
 
-    nextLowestForkliftTargetHeight = new JoystickButton(
+    nextLowerForkliftTargetHeight = new JoystickButton(
             rightOperator, 7);
 
 
@@ -769,6 +769,7 @@ public static void robotInitialize2018 ()
 
     ringLightButton = new MomentarySwitch(
             leftOperator, 6, false);
+
 
     // **********************************************************
     // Kilroy's Ancillary classes
@@ -1042,10 +1043,10 @@ public static void robotInitialize2019 ()
     deployOverride = new JoystickButton(
             leftOperator, 5);
 
-    cargoShipCargoHeight = new JoystickButton(
+    cargoShipCargoButton = new JoystickButton(
             leftOperator, 6);
 
-    cargoShipHatchHeight = new JoystickButton(
+    cargoShipHatchButton = new JoystickButton(
             leftOperator, 7);
 
     // ----- Right Operator -----
@@ -1056,10 +1057,10 @@ public static void robotInitialize2019 ()
     forkliftOverride = new JoystickButton(
             rightOperator, 5);
 
-    nextHighestForkliftTargetHeight = new JoystickButton(
+    nextHigherForkliftTargetHeight = new JoystickButton(
             rightOperator, 6);
 
-    nextLowestForkliftTargetHeight = new JoystickButton(
+    nextLowerForkliftTargetHeight = new JoystickButton(
             rightOperator, 7);
 
 
