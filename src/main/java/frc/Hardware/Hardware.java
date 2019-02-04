@@ -101,9 +101,7 @@ public static boolean demoMode = false;
 // ------------------------------------
 // Victor Classes
 // ------------------------------------
-public static VictorSP intakeDeployArm;
-
-public static VictorSP armMotor;
+public static VictorSP armMotor = null;
 
 // ------------------------------------
 // Servo classes
@@ -112,28 +110,28 @@ public static VictorSP armMotor;
 // ====================================
 // CAN classes
 // ====================================
-public static PowerDistributionPanel pdp;
+public static PowerDistributionPanel pdp = null;
 
-public static SpeedController liftMotor;
+public static SpeedController liftMotor = null;
 
 /** The right front drive motor */
-public static SpeedController rightFrontCANMotor;
+public static SpeedController rightFrontCANMotor = null;
 
 /** The left front drive motor */
-public static SpeedController leftFrontCANMotor;
+public static SpeedController leftFrontCANMotor = null;
 
 /** The right rear drive motor */
-public static SpeedController rightRearCANMotor;
+public static SpeedController rightRearCANMotor = null;
 
 /** The left rear drive motor */
-public static SpeedController leftRearCANMotor;
+public static SpeedController leftRearCANMotor = null;
 
-public static SpeedController armRoller;
+public static SpeedController armRoller = null;
 
 // ====================================
 // Relay classes
 // ====================================
-public static Relay ringLightRelay;
+public static Relay ringLightRelay = null;
 
 // ====================================
 // Digital Inputs
@@ -141,19 +139,19 @@ public static Relay ringLightRelay;
 // ------------------------------------
 // Single and double throw switches
 // ------------------------------------
-public static SingleThrowSwitch leftAutoSwitch;
+public static SingleThrowSwitch leftAutoSwitch = null;
 
-public static SingleThrowSwitch rightAutoSwitch;
+public static SingleThrowSwitch rightAutoSwitch = null;
 
-public static DoubleThrowSwitch autoCenterSwitch;
+public static DoubleThrowSwitch autoCenterSwitch = null;
 
-public static SingleThrowSwitch levelOneSwitch;
+public static SingleThrowSwitch levelOneSwitch = null;
 
-public static SingleThrowSwitch levelTwoSwitch;
+public static SingleThrowSwitch levelTwoSwitch = null;
 
-public static DoubleThrowSwitch autoDisableSwitch;
+public static DoubleThrowSwitch autoDisableSwitch = null;
 
-public static SixPositionSwitch autoSixPosSwitch;
+public static SixPositionSwitch autoSixPosSwitch = null;
 
 // ------------------------------------
 // Gear Tooth Sensors
@@ -162,11 +160,11 @@ public static SixPositionSwitch autoSixPosSwitch;
 // ------------------------------------
 // Encoders
 // ------------------------------------
-public static KilroyEncoder leftFrontDriveEncoder;
+public static KilroyEncoder leftFrontDriveEncoder = null;
 
-public static KilroyEncoder rightFrontDriveEncoder;
+public static KilroyEncoder rightFrontDriveEncoder = null;
 
-public static KilroyEncoder liftingEncoder;
+public static KilroyEncoder liftingEncoder = null;
 
 // -----------------------
 // Wiring diagram
@@ -188,7 +186,7 @@ public static KilroyEncoder liftingEncoder;
 // Red Light/IR Sensor class
 // -------------------------------------
 
-public static LightSensor armIR;
+public static LightSensor armIR = null;
 // TODO check port for 2018 robot
 
 public static LightSensor leftBackIR = null;
@@ -206,7 +204,7 @@ public static LightSensor rightBackIR = null;
 // ====================================
 // Compressor class - runs the compressor
 // ====================================
-public static Compressor compressor;
+public static Compressor compressor = null;
 
 // ====================================
 // Pneumatic Control Module
@@ -219,7 +217,7 @@ public static Compressor compressor;
 // Double Solenoids
 // ------------------------------------
 
-public static DoubleSolenoid armIntakeSolenoid;
+public static DoubleSolenoid armIntakeSolenoid = null;
 
 // ------------------------------------
 // Single Solenoids
@@ -239,14 +237,14 @@ public static DoubleSolenoid armIntakeSolenoid;
 // --------------------------------------
 // Potentiometers
 // --------------------------------------
-public static RobotPotentiometer delayPot;
+public static RobotPotentiometer delayPot = null;
 
-public static RobotPotentiometer intakeDeploySensor;
+public static RobotPotentiometer intakeDeploySensor = null;
 
 // -------------------------------------
 // Sonar/Ultrasonic
 // -------------------------------------
-public static LVMaxSonarEZ frontUltraSonic;
+public static LVMaxSonarEZ frontUltraSonic = null;
 
 // =====================================
 // SPI Bus
@@ -261,7 +259,7 @@ public static LVMaxSonarEZ frontUltraSonic;
 // in a false will tell the robot we do not have a gyro without requiring us to
 // comment out the gyro declaration.
 
-public static KilroySPIGyro gyro;
+public static KilroySPIGyro gyro = null;
 
 
 // **********************************************************
@@ -271,16 +269,16 @@ public static KilroySPIGyro gyro;
 // Axis/USB Camera class
 // -------------------------------------
 
-public static VisionProcessor axisCamera;
+public static VisionProcessor axisCamera = null;
 
 // -------------------------------------
 // declare the USB camera server and the
 // USB camera it serves at the same time
 // -------------------------------------
 
-public static UsbCamera USBCam;
+public static UsbCamera USBCam = null;
 
-public static UsbCamera USBCamII;
+public static UsbCamera USBCamII = null;
 
 // -------------------------------------
 // declare the USB camera server and the
@@ -293,18 +291,18 @@ public static UsbCamera USBCamII;
 // ------------------------------------
 // DriverStations class
 // ------------------------------------
-public static DriverStation driverStation;
+public static DriverStation driverStation = null;
 
 // ------------------------------------
 // Joystick classes
 // ------------------------------------
-public static Joystick leftDriver;
+public static Joystick leftDriver = null;
 
-public static Joystick rightDriver;
+public static Joystick rightDriver = null;
 
-public static Joystick leftOperator;
+public static Joystick leftOperator = null;
 
-public static Joystick rightOperator;
+public static Joystick rightOperator = null;
 
 // ------------------------------------
 // Buttons classes
@@ -312,35 +310,35 @@ public static Joystick rightOperator;
 // ----- Left Operator -----
 
 // left trigger
-public static JoystickButton intakeTrigger;
+public static JoystickButton intakeTrigger = null;
 
-public static JoystickButton outtakeButton;
+public static JoystickButton outtakeButton = null;
 
-public static JoystickButton intakeOverride;
+public static JoystickButton intakeOverride = null;
 
-public static JoystickButton deployOverride;
+public static JoystickButton deployOverride = null;
 
-public static JoystickButton cargoShipCargoButton;
+public static JoystickButton cargoShipCargoButton = null;
 
-public static JoystickButton cargoShipHatchButton;
+public static JoystickButton cargoShipHatchButton = null;
 
 // ----- Right Operator -----
 
-public static JoystickButton chooseCargoRocketHeights;
+public static JoystickButton chooseCargoRocketHeights = null;
 
-public static JoystickButton forkliftOverride;
+public static JoystickButton forkliftOverride = null;
 
-public static JoystickButton nextHigherForkliftTargetHeight;
+public static JoystickButton nextHigherForkliftTargetHeight = null;
 
-public static JoystickButton nextLowerForkliftTargetHeight;
+public static JoystickButton nextLowerForkliftTargetHeight = null;
 
 
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
-public static MomentarySwitch descendButton;
+public static MomentarySwitch descendButton = null;
 
-public static MomentarySwitch ringLightButton;
+public static MomentarySwitch ringLightButton = null;
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -357,67 +355,576 @@ public static MomentarySwitch ringLightButton;
 // ------------------------------------
 // Utility classes
 // ------------------------------------
-public static Timer autoTimer;
+public static Timer autoTimer = null;
 
-public static Timer deployTimer;
+public static Timer deployTimer = null;
 
-public static Telemetry telemetry;
+public static Telemetry telemetry = null;
 
 // ------------------------------------
 // Transmission class
 // ------------------------------------
-public static TankTransmission transmission;
+public static TankTransmission transmission = null;
 
 // ------------------------------------
 // Drive system
 // ------------------------------------
 // @ANE
-public static Drive drive;
+public static Drive drive = null;
 
-public static DrivePID drivePID;
+public static DrivePID drivePID = null;
 
 // TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
 // TODO update with encoders once fixed
-public static DriveWithCamera driveWithCamera;
+public static DriveWithCamera driveWithCamera = null;
 
 // -------------------
 // Assembly classes (e.g. forklift)
 // -------------------
 
-public static GamePieceManipulator manipulator;
+public static GamePieceManipulator manipulator = null;
 
-public static Forklift lift;
+public static Forklift lift = null;
 
-public static ClimbToLevelTwo climber;
+public static ClimbToLevelTwo climber = null;
 
-public static AlignPerpendicularToTape alignByTape;
+public static AlignPerpendicularToTape alignByTape = null;
 
 // ====================================
 // Methods
 // ====================================
 
-
 /**
- * This initializes the hardware for the robot depending on which year we are
- * using
+ * This initializes the hardware for the robot depending on which year we
+ * are using
  */
 public static void initialize ()
 {
+    commonInitialization();
     switch (whichRobot)
         {
-        default:
         case KILROY_2018:
             robotInitialize2018();
             break;
 
+        default:
         case KILROY_2019:
             robotInitialize2019();
             break;
+
         case TEST_BOARD:
-            gyro = new KilroySPIGyro(false);
             break;
         }
 }
+
+public static void commonInitialization ()
+{
+    // **********************************************************
+    // DIGITAL I/O CLASSES
+    // **********************************************************
+
+    // ====================================
+    // PWM classes
+    // ====================================
+
+    // ----- Jaguar classes -----
+    // ----- Talon classes -----
+    // ----- Victor classes -----
+
+    armMotor = new VictorSP(4);
+    // hanging
+    // ----- Servo classes -----
+
+    // ====================================
+    // CAN classes
+    // ====================================
+    pdp = new PowerDistributionPanel(2);
+
+
+    // ====================================
+    // Relay classes
+    // ====================================
+    ringLightRelay = new Relay(0);
+
+    // ====================================
+    // Digital Inputs
+    // ====================================
+    // -------------------------------------
+    // Single and double throw switches
+    // -------------------------------------
+    leftAutoSwitch = new SingleThrowSwitch(20);
+
+    rightAutoSwitch = new SingleThrowSwitch(25);
+
+    autoCenterSwitch = new DoubleThrowSwitch(leftAutoSwitch,
+            rightAutoSwitch);
+
+    levelOneSwitch = new SingleThrowSwitch(22);
+
+    levelTwoSwitch = new SingleThrowSwitch(23);
+
+    autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
+            levelTwoSwitch);
+
+    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
+
+    // Gear Tooth Sensors
+
+    // Encoders
+
+    leftFrontDriveEncoder = new KilroyEncoder(4, 5);
+
+    rightFrontDriveEncoder = new KilroyEncoder(6, 7);
+
+    liftingEncoder = new KilroyEncoder(10, 11);
+
+    // -------------------------------------
+    // Red Light/IR Sensor class
+    // -------------------------------------
+    armIR = new LightSensor(21);
+
+    leftBackIR = new LightSensor(8);
+
+    rightBackIR = new LightSensor(9);
+
+    // ====================================
+    // I2C Classes
+    // ====================================
+
+    // **********************************************************
+    // SOLENOID I/O CLASSES
+    // **********************************************************
+    // ====================================
+    // Compressor class - runs the compressor
+    // ====================================
+    compressor = new Compressor();
+
+    // ====================================
+    // Pneumatic Control Module
+    // ====================================
+
+    // ====================================
+    // Solenoids
+    // ====================================
+
+    // Double Solenoids
+    armIntakeSolenoid = new DoubleSolenoid(0, 1);
+
+    // Single Solenoids
+
+    // **********************************************************
+    // ANALOG I/O CLASSES
+    // **********************************************************
+    // ====================================
+    // Analog classes
+    // ====================================
+
+    // Gyro class
+
+    // P/N ADW22307
+
+    // Potentiometers
+
+    delayPot = new RobotPotentiometer(2, 270);
+
+    intakeDeploySensor = new RobotPotentiometer(0, 270);
+
+    // Sonar/Ultrasonic
+    frontUltraSonic = new LVMaxSonarEZ(3);
+
+    // =====================================
+    // SPI Bus
+    // =====================================
+
+    // Analog Interfaces
+    gyro = new KilroySPIGyro(true);
+
+    // **********************************************************
+    // roboRIO CONNECTIONS CLASSES
+    // **********************************************************
+
+    // Axis/USB Camera class
+
+    // -------------------------------------
+    // declare the USB camera server and the
+    // USB camera it serves at the same time
+    // -------------------------------------
+
+    USBCam = CameraServer.getInstance().startAutomaticCapture(0);
+
+    USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
+
+    // **********************************************************
+    // DRIVER STATION CLASSES
+    // **********************************************************
+
+    // DriverStations class
+
+    driverStation = DriverStation.getInstance();
+
+    // Joystick classes
+    leftDriver = new Joystick(0);
+
+    rightDriver = new Joystick(1);
+
+    leftOperator = new Joystick(2);
+
+    rightOperator = new Joystick(3);
+
+    // Buttons classes
+    // ----- Left Operator -----
+
+    // left trigger
+    intakeTrigger = new JoystickButton(leftOperator, 1);
+
+    outtakeButton = new JoystickButton(leftOperator, 2);
+
+    intakeOverride = new JoystickButton(leftOperator, 3);
+
+    deployOverride = new JoystickButton(leftOperator, 5);
+
+    cargoShipCargoButton = new JoystickButton(leftOperator, 6);
+
+    cargoShipHatchButton = new JoystickButton(leftOperator, 7);
+
+    // ----- Right Operator -----
+
+    chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
+
+    forkliftOverride = new JoystickButton(rightOperator, 5);
+
+    nextHigherForkliftTargetHeight = new JoystickButton(rightOperator,
+            6);
+
+    nextLowerForkliftTargetHeight = new JoystickButton(rightOperator,
+            7);
+
+    //
+    // Momentary Switches
+    //
+
+    descendButton = new MomentarySwitch(leftOperator, 5, false);
+
+    ringLightButton = new MomentarySwitch(leftOperator, 6, false);
+
+    // **********************************************************
+    // Kilroy's Ancillary classes
+    // **********************************************************
+    // PID tuneables
+    // PID classes
+    // Utility classes
+
+    autoTimer = new Timer();
+
+    deployTimer = new Timer();
+
+    telemetry = new Telemetry(10000);
+
+    // Transmission class
+    transmission = new TankTransmission(
+            new SpeedControllerGroup(leftFrontCANMotor,
+                    leftRearCANMotor),
+            new SpeedControllerGroup(rightFrontCANMotor,
+                    rightRearCANMotor));
+
+    // ------------------------------------
+    // Drive system
+    // ------------------------------------
+    drive = new Drive(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
+
+    drivePID = new DrivePID(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+
+    driveWithCamera = new DriveWithCamera(
+            transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
+
+    // Assembly classes (e.g. forklift)
+    manipulator = new GamePieceManipulator(
+            armMotor, intakeDeploySensor/* armEncoder */,
+            armRoller,
+            null/* photoSwitch */);
+
+    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
+
+    climber = new ClimbToLevelTwo(
+            armIntakeSolenoid, armMotor, intakeDeploySensor,
+            drive, lift, frontUltraSonic);
+
+    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
+            drive);
+} // end of commonInitialization
+
+/**
+ * This initializes all of the components in Hardware
+ */
+public static void robotInitialize2018 ()
+{
+    // **********************************************************
+    // DIGITAL I/O CLASSES
+    // **********************************************************
+
+    // ====================================
+    // PWM classes
+    // ====================================
+
+    // ----- Jaguar classes -----
+    // ----- Talon classes -----
+    // ----- Victor classes -----
+    // ----- Servo classes -----
+
+
+    // ====================================
+    // CAN classes
+    // ====================================
+    liftMotor = new WPI_TalonSRX(23);
+
+    rightFrontCANMotor = new WPI_TalonSRX(14);
+
+    leftFrontCANMotor = new WPI_TalonSRX(11);
+
+    rightRearCANMotor = new WPI_TalonSRX(15);
+
+    leftRearCANMotor = new WPI_TalonSRX(13);
+
+    armRoller = new WPI_TalonSRX(10);// fix CANID
+
+    // ====================================
+    // Relay classes
+    // ====================================
+
+    // ====================================
+    // Digital Inputs
+    // ====================================
+    // -------------------------------------
+    // Single and double throw switches
+    // -------------------------------------
+
+    // Gear Tooth Sensors
+
+    // Encoders
+
+    // -------------------------------------
+    // Red Light/IR Sensor class
+    // -------------------------------------
+
+    // ====================================
+    // I2C Classes
+    // ====================================
+
+    // **********************************************************
+    // SOLENOID I/O CLASSES
+    // **********************************************************
+    // ====================================
+    // Compressor class - runs the compressor
+    // ====================================
+
+    // ====================================
+    // Pneumatic Control Module
+    // ====================================
+
+    // ====================================
+    // Solenoids
+    // ====================================
+
+    // Double Solenoids
+
+    // Single Solenoids
+
+
+    // **********************************************************
+    // ANALOG I/O CLASSES
+    // **********************************************************
+    // ====================================
+    // Analog classes
+    // ====================================
+
+    // Gyro class
+
+    // P/N ADW22307
+
+
+    // Potentiometers
+
+    // Sonar/Ultrasonic
+
+    // =====================================
+    // SPI Bus
+    // =====================================
+
+    // Analog Interfaces
+
+    // **********************************************************
+    // roboRIO CONNECTIONS CLASSES
+    // **********************************************************
+
+    // Axis/USB Camera class
+    axisCamera = new VisionProcessor("10.3.39.11",
+            CameraModel.AXIS_M1013,
+            ringLightRelay);
+
+    // -------------------------------------
+    // declare the USB camera server and the
+    // USB camera it serves at the same time
+    // -------------------------------------
+
+    // **********************************************************
+    // DRIVER STATION CLASSES
+    // **********************************************************
+
+    // DriverStations class
+
+    // Joystick classes
+
+    // Buttons classes
+    // ----- Left Operator -----
+
+    // left trigger
+
+    // ----- Right Operator -----
+
+    //
+    // Momentary Switches
+    //
+
+    // **********************************************************
+    // Kilroy's Ancillary classes
+    // **********************************************************
+    // PID tuneables
+    // PID classes
+    // Utility classes
+
+    // Transmission class
+
+    // ------------------------------------
+    // Drive system
+    // ------------------------------------
+
+}  // end of robotInitialize2018
+
+/**
+ * This initializes all of the components in Hardware
+ */
+public static void robotInitialize2019 ()
+{
+    // **********************************************************
+    // DIGITAL I/O CLASSES
+    // **********************************************************
+
+    // ====================================
+    // PWM classes
+    // ====================================
+
+    // ----- Jaguar classes -----
+    // ----- Talon classes -----
+    // ----- Victor classes -----
+    // ----- Servo classes -----
+
+
+    // ====================================
+    // CAN classes
+    // ====================================
+    liftMotor = new CANSparkMax(23, MotorType.kBrushless);
+
+    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
+
+    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
+
+    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
+
+    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
+
+    armRoller = new CANSparkMax(10, MotorType.kBrushless);// fix CANID
+
+    // ====================================
+    // Relay classes
+    // ====================================
+
+    // ====================================
+    // Digital Inputs
+    // ====================================
+    // -------------------------------------
+    // Single and double throw switches
+    // -------------------------------------
+
+    // Gear Tooth Sensors
+
+    // Encoders
+
+    // -------------------------------------
+    // Red Light/IR Sensor class
+    // -------------------------------------
+
+    // ====================================
+    // I2C Classes
+    // ====================================
+
+    // **********************************************************
+    // SOLENOID I/O CLASSES
+    // **********************************************************
+    // ====================================
+    // Compressor class - runs the compressor
+    // ====================================
+
+    // ====================================
+    // Pneumatic Control Module
+    // ====================================
+
+    // ====================================
+    // Solenoids
+    // ====================================
+
+    // Double Solenoids
+
+    // Single Solenoids
+
+
+    // **********************************************************
+    // ANALOG I/O CLASSES
+    // **********************************************************
+    // ====================================
+    // Analog classes
+    // ====================================
+
+    // Gyro class
+
+    // P/N ADW22307
+
+
+    // Potentiometers
+
+    // Sonar/Ultrasonic
+
+    // =====================================
+    // SPI Bus
+    // =====================================
+
+    // Analog Interfaces
+
+    // **********************************************************
+    // roboRIO CONNECTIONS CLASSES
+    // **********************************************************
+
+    // Axis/USB Camera class
+    axisCamera = new VisionProcessor("10.3.39.11",
+            CameraModel.AXIS_M1013,
+            ringLightRelay);
+
+    // -------------------------------------
+    // declare the USB camera server and the
+    // USB camera it serves at the same time
+    // -------------------------------------
+
+    // **********************************************************
+    // DRIVER STATION CLASSES
+    // **********************************************************
+
+    // DriverStations class
+
+} // end robotInitialize2019
 
 /**
  * it's a switch statement for the current robot, a robot we don't have,
@@ -427,20 +934,19 @@ public static void initialize ()
  */
 public static void setHardwareSettings ()
 {
+    commonHardwareSettings();
     switch (whichRobot)
         {
-        default:
         case KILROY_2018:
             setHardwareSettings2018();
             break;
 
+        default:
         case KILROY_2019:
-            // we'll do this later.
+            setHardwareSettings2018();
             break;
 
         case TEST_BOARD:
-            // Mr. Brown said no, so that means no. Specifically, he said "No,
-            // no no no no no, no way, no how. No."
             break;
         }
 }
@@ -451,7 +957,7 @@ public static void setHardwareSettings ()
  *
  * @author Patrick
  */
-public static void setHardwareSettings2018 ()
+public static void commonHardwareSettings ()
 {
     Hardware.compressor.setClosedLoopControl(true);
 
@@ -504,617 +1010,30 @@ public static void setHardwareSettings2018 ()
 
     System.out.println("Connor would say \"we have done the thing\"");
 
-}
+} // end commonHardwareSettings
+
+/**
+ * This sets up the settings and resets for the hardware objects so we
+ * don't have to write them all in robotInit. it's to keep it not cluttered.
+ *
+ * @author Patrick
+ */
+public static void setHardwareSettings2018 ()
+{
+} // end setHardwareSettings2018
+
+/**
+ * This sets up the settings and resets for the hardware objects so we
+ * don't have to write them all in robotInit. it's to keep it not cluttered.
+ *
+ * @author Patrick
+ */
+public static void setHardwareSettings2019 ()
+{
+} // end setHardwareSettings2019
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
-
-/**
- * This initializes all of the components in Hardware
- */
-public static void robotInitialize2018 ()
-{
-    // **********************************************************
-    // DIGITAL I/O CLASSES
-    // **********************************************************
-
-    // ====================================
-    // PWM classes
-    // ====================================
-
-    // ----- Jaguar classes -----
-    // ----- Talon classes -----
-    // ----- Victor classes -----
-
-    armMotor = new VictorSP(4);
-    // hanging
-    // ----- Servo classes -----
-
-
-    // ====================================
-    // CAN classes
-    // ====================================
-    pdp = new PowerDistributionPanel(2);
-
-    liftMotor = new WPI_TalonSRX(23);
-
-    rightFrontCANMotor = new WPI_TalonSRX(14);
-
-    leftFrontCANMotor = new WPI_TalonSRX(11);
-
-    rightRearCANMotor = new WPI_TalonSRX(15);
-
-    leftRearCANMotor = new WPI_TalonSRX(13);
-
-    armRoller = new WPI_TalonSRX(10);// fix CANID
-
-    // ====================================
-    // Relay classes
-    // ====================================
-    ringLightRelay = new Relay(0);
-
-    // ====================================
-    // Digital Inputs
-    // ====================================
-    // -------------------------------------
-    // Single and double throw switches
-    // -------------------------------------
-    leftAutoSwitch = new SingleThrowSwitch(
-            20);
-
-    rightAutoSwitch = new SingleThrowSwitch(
-            25);
-
-    autoCenterSwitch = new DoubleThrowSwitch(
-            leftAutoSwitch, rightAutoSwitch);
-
-    levelOneSwitch = new SingleThrowSwitch(22);
-
-    levelTwoSwitch = new SingleThrowSwitch(23);
-
-    autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
-            levelTwoSwitch);
-
-    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
-
-
-
-    // Gear Tooth Sensors
-
-
-    // Encoders
-
-    leftFrontDriveEncoder = new KilroyEncoder(
-            4, 5);
-
-    rightFrontDriveEncoder = new KilroyEncoder(
-            6, 7);
-
-    liftingEncoder = new KilroyEncoder(10,
-            11);
-
-    // -------------------------------------
-    // Red Light/IR Sensor class
-    // -------------------------------------
-
-    armIR = new LightSensor(21);
-
-    leftBackIR = new LightSensor(8);
-
-    rightBackIR = new LightSensor(9);
-
-    // ====================================
-    // I2C Classes
-    // ====================================
-
-    // **********************************************************
-    // SOLENOID I/O CLASSES
-    // **********************************************************
-    // ====================================
-    // Compressor class - runs the compressor
-    // ====================================
-    compressor = new Compressor();
-
-    // ====================================
-    // Pneumatic Control Module
-    // ====================================
-
-    // ====================================
-    // Solenoids
-    // ====================================
-
-    // Double Solenoids
-
-
-    armIntakeSolenoid = new DoubleSolenoid(
-            0,
-            1);
-
-
-    // Single Solenoids
-
-
-    // **********************************************************
-    // ANALOG I/O CLASSES
-    // **********************************************************
-    // ====================================
-    // Analog classes
-    // ====================================
-
-    // Gyro class
-
-    // P/N ADW22307
-
-
-    // Potentiometers
-
-    delayPot = new RobotPotentiometer(
-            2,
-            270);
-
-    intakeDeploySensor = new RobotPotentiometer(
-            0,
-            270);
-
-
-    // Sonar/Ultrasonic
-    frontUltraSonic = new LVMaxSonarEZ(
-            3);
-
-    // =====================================
-    // SPI Bus
-    // =====================================
-
-    // Analog Interfaces
-    gyro = new KilroySPIGyro(true);
-
-
-
-    // **********************************************************
-    // roboRIO CONNECTIONS CLASSES
-    // **********************************************************
-
-    // Axis/USB Camera class
-
-
-    axisCamera = new VisionProcessor(
-            "10.3.39.11", CameraModel.AXIS_M1013,
-            ringLightRelay);
-
-    // -------------------------------------
-    // declare the USB camera server and the
-    // USB camera it serves at the same time
-    // -------------------------------------
-
-    USBCam = CameraServer.getInstance()
-            .startAutomaticCapture(0);
-
-    USBCamII = CameraServer.getInstance()
-            .startAutomaticCapture(1);
-
-
-
-
-    // **********************************************************
-    // DRIVER STATION CLASSES
-    // **********************************************************
-
-    // DriverStations class
-
-    driverStation = DriverStation
-            .getInstance();
-
-    // Joystick classes
-    leftDriver = new Joystick(0);
-
-    rightDriver = new Joystick(1);
-
-    leftOperator = new Joystick(2);
-
-    rightOperator = new Joystick(3);
-
-    // Buttons classes
-    // ----- Left Operator -----
-
-    // left trigger
-    intakeTrigger = new JoystickButton(
-            leftOperator, 1);
-
-    outtakeButton = new JoystickButton(
-            leftOperator, 2);
-
-    intakeOverride = new JoystickButton(
-            leftOperator, 3);
-
-    deployOverride = new JoystickButton(
-            leftOperator, 5);
-
-    cargoShipCargoButton = new JoystickButton(
-            leftOperator, 6);
-
-    cargoShipHatchButton = new JoystickButton(
-            leftOperator, 7);
-
-    // ----- Right Operator -----
-
-    chooseCargoRocketHeights = new JoystickButton(
-            rightOperator, 4);
-
-    forkliftOverride = new JoystickButton(
-            rightOperator, 5);
-
-    nextHigherForkliftTargetHeight = new JoystickButton(
-            rightOperator, 6);
-
-    nextLowerForkliftTargetHeight = new JoystickButton(
-            rightOperator, 7);
-
-
-    //
-    // Momentary Switches
-    //
-
-    descendButton = new MomentarySwitch(
-            leftOperator, 5, false);
-
-    ringLightButton = new MomentarySwitch(
-            leftOperator, 6, false);
-
-
-    // **********************************************************
-    // Kilroy's Ancillary classes
-    // **********************************************************
-    // PID tuneables
-    // PID classes
-    // Utility classes
-
-    autoTimer = new Timer();
-
-    deployTimer = new Timer();
-
-    telemetry = new Telemetry(10000);
-
-    // Transmission class
-    transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
-
-    // ------------------------------------
-    // Drive system
-    // ------------------------------------
-    // @ANE
-    drive = new Drive(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            // leftFrontDriveEncoder, rightFrontDriveEncoder,
-            gyro);
-
-    drivePID = new DrivePID(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
-
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
-
-    // Assembly classes (e.g. forklift)
-    manipulator = new GamePieceManipulator(
-            intakeDeployArm, intakeDeploySensor/* armEncoder */,
-            armRoller,
-            null/* photoSwitch */);
-
-    lift = new Forklift(liftMotor,
-            liftingEncoder,
-            manipulator);
-
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, intakeDeployArm, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-
-    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
-            drive);
-
-}
-
-public static void robotInitialize2019 ()
-{
-    // **********************************************************
-    // DIGITAL I/O CLASSES
-    // **********************************************************
-
-    // ====================================
-    // PWM classes
-    // ====================================
-
-    // ----- Jaguar classes -----
-    // ----- Talon classes -----
-    // ----- Victor classes -----
-
-    intakeDeployArm = new VictorSP(4);
-    // hanging
-    // ----- Servo classes -----
-
-
-    // ====================================
-    // CAN classes
-    // ====================================
-    pdp = new PowerDistributionPanel(2);
-
-    liftMotor = new CANSparkMax(23, MotorType.kBrushless);
-
-    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
-
-    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
-
-    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
-
-    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
-
-    armRoller = new CANSparkMax(10, MotorType.kBrushless);// fix CANID
-
-    // ====================================
-    // Relay classes
-    // ====================================
-    ringLightRelay = new Relay(0);
-
-    // ====================================
-    // Digital Inputs
-    // ====================================
-    // -------------------------------------
-    // Single and double throw switches
-    // -------------------------------------
-    leftAutoSwitch = new SingleThrowSwitch(
-            20);
-
-    rightAutoSwitch = new SingleThrowSwitch(
-            25);
-
-    autoCenterSwitch = new DoubleThrowSwitch(
-            leftAutoSwitch, rightAutoSwitch);
-
-    levelOneSwitch = new SingleThrowSwitch(22);
-
-    levelTwoSwitch = new SingleThrowSwitch(23);
-
-    autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
-            levelTwoSwitch);
-
-    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
-
-
-
-    // Gear Tooth Sensors
-
-
-    // Encoders
-
-    leftFrontDriveEncoder = new KilroyEncoder(
-            4, 5);
-
-    rightFrontDriveEncoder = new KilroyEncoder(
-            6, 7);
-
-    liftingEncoder = new KilroyEncoder(10,
-            11);
-
-    // -------------------------------------
-    // Red Light/IR Sensor class
-    // -------------------------------------
-
-    armIR = new LightSensor(21);
-
-    leftBackIR = new LightSensor(8);
-
-    rightBackIR = new LightSensor(9);
-
-    // ====================================
-    // I2C Classes
-    // ====================================
-
-    // **********************************************************
-    // SOLENOID I/O CLASSES
-    // **********************************************************
-    // ====================================
-    // Compressor class - runs the compressor
-    // ====================================
-    compressor = new Compressor();
-
-    // ====================================
-    // Pneumatic Control Module
-    // ====================================
-
-    // ====================================
-    // Solenoids
-    // ====================================
-
-    // Double Solenoids
-
-
-    armIntakeSolenoid = new DoubleSolenoid(
-            0,
-            1);
-
-
-    // Single Solenoids
-
-
-    // **********************************************************
-    // ANALOG I/O CLASSES
-    // **********************************************************
-    // ====================================
-    // Analog classes
-    // ====================================
-
-    // Gyro class
-
-    // P/N ADW22307
-
-
-    // Potentiometers
-
-    delayPot = new RobotPotentiometer(
-            2,
-            270);
-
-    intakeDeploySensor = new RobotPotentiometer(
-            0,
-            270);
-
-
-    // Sonar/Ultrasonic
-    frontUltraSonic = new LVMaxSonarEZ(
-            3);
-
-    // =====================================
-    // SPI Bus
-    // =====================================
-
-    // Analog Interfaces
-    gyro = new KilroySPIGyro(true);
-
-
-
-    // **********************************************************
-    // roboRIO CONNECTIONS CLASSES
-    // **********************************************************
-
-    // Axis/USB Camera class
-
-
-    axisCamera = new VisionProcessor(
-            "10.3.39.11", CameraModel.AXIS_M1013,
-            ringLightRelay);
-
-    // -------------------------------------
-    // declare the USB camera server and the
-    // USB camera it serves at the same time
-    // -------------------------------------
-
-    USBCam = CameraServer.getInstance()
-            .startAutomaticCapture(0);
-
-    USBCamII = CameraServer.getInstance()
-            .startAutomaticCapture(1);
-
-
-
-
-    // **********************************************************
-    // DRIVER STATION CLASSES
-    // **********************************************************
-
-    // DriverStations class
-
-    driverStation = DriverStation
-            .getInstance();
-
-    // Joystick classes
-    leftDriver = new Joystick(0);
-
-    rightDriver = new Joystick(1);
-
-    leftOperator = new Joystick(2);
-
-    rightOperator = new Joystick(3);
-
-    // Buttons classes
-    // ----- Left Operator -----
-
-    // left trigger
-    intakeTrigger = new JoystickButton(
-            leftOperator, 1);
-
-    outtakeButton = new JoystickButton(
-            leftOperator, 2);
-
-    intakeOverride = new JoystickButton(
-            leftOperator, 3);
-
-    deployOverride = new JoystickButton(
-            leftOperator, 5);
-
-    cargoShipCargoButton = new JoystickButton(
-            leftOperator, 6);
-
-    cargoShipHatchButton = new JoystickButton(
-            leftOperator, 7);
-
-    // ----- Right Operator -----
-
-    chooseCargoRocketHeights = new JoystickButton(
-            rightOperator, 4);
-
-    forkliftOverride = new JoystickButton(
-            rightOperator, 5);
-
-    nextHigherForkliftTargetHeight = new JoystickButton(
-            rightOperator, 6);
-
-    nextLowerForkliftTargetHeight = new JoystickButton(
-            rightOperator, 7);
-
-
-    //
-    // Momentary Switches
-    //
-
-    descendButton = new MomentarySwitch(
-            leftOperator, 5, false);
-
-    ringLightButton = new MomentarySwitch(
-            leftOperator, 6, false);
-
-    // **********************************************************
-    // Kilroy's Ancillary classes
-    // **********************************************************
-    // PID tuneables
-    // PID classes
-    // Utility classes
-
-    autoTimer = new Timer();
-
-    deployTimer = new Timer();
-
-    telemetry = new Telemetry(10000);
-
-    // Transmission class
-    transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
-
-    // ------------------------------------
-    // Drive system
-    // ------------------------------------
-    drive = new Drive(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            // leftFrontDriveEncoder, rightFrontDriveEncoder,
-            gyro);
-
-    drivePID = new DrivePID(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
-
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
-
-    // Assembly classes (e.g. forklift)
-    manipulator = new GamePieceManipulator(
-            armMotor, intakeDeploySensor/* armEncoder */,
-            armRoller,
-            null/* photoSwitch */);
-
-    lift = new Forklift(liftMotor,
-            liftingEncoder,
-            manipulator);
-
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, armMotor, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-}
 
 } // end class
