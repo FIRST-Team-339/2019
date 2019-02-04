@@ -55,7 +55,6 @@ public class Teleop
  * @written Jan 13, 2015
  */
 
-// if has done the thing
 
 
 
