@@ -34,6 +34,7 @@ package frc.robot;
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -596,21 +597,27 @@ private static boolean depositRocketHatch ()
                             DISTANCE_TO_CROSS_AUTOLINE_CAMERA, .4,
                             ACCELERATION_TIME, USING_GYRO))
                         {
-                        // Hardware.drive.stop();
-
-
-                        // turn right or left base on start position
-                        if (autoPosition == Position.RIGHT)
+                        CameraServer.getInstance()
+                                .addAxisCamera("10.3.39.11");
+                        if (Hardware.axisCamera
+                                .getParticleReports().length < 1)
                             {
-                            driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
-                            } else if (autoPosition == Position.LEFT)
-                            {
-                            driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                            System.out.println(
+                                    "Camera is so stressed that it stopped doing the thing");
                             } else
                             {
-                            driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
-                            }
+                            if (autoPosition == Position.RIGHT)
+                                {
+                                driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
+                                } else if (autoPosition == Position.LEFT)
+                                {
+                                driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                                } else
+                                {
+                                driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
+                                }
 
+                            }
                         }
                     break;
                 case FIND_SIDE:

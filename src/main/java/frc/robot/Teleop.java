@@ -33,10 +33,12 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
+import frc.vision.VisionProcessor.ImageType;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -154,14 +156,14 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
+    // ashleyTest();
     connerTest();
-    coleTest();
-    guidoTest();
-    patrickTest();
-    annaTest();
-    meghanTest();
-    nithyaTest();
+    // coleTest();
+    // guidoTest();
+    // patrickTest();
+    // annaTest();
+    // meghanTest();
+    // nithyaTest();
 }
 
 private static void ashleyTest ()
@@ -205,7 +207,8 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-
+    Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
 }
 
 private static void coleTest ()
