@@ -32,6 +32,7 @@ import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -101,7 +102,6 @@ public static boolean demoMode = false;
 // ------------------------------------
 // Victor Classes
 // ------------------------------------
-public static VictorSP armMotor = null;
 
 // ------------------------------------
 // Servo classes
@@ -111,6 +111,8 @@ public static VictorSP armMotor = null;
 // CAN classes
 // ====================================
 public static PowerDistributionPanel pdp = null;
+
+public static SpeedController armMotor = null;
 
 public static SpeedController liftMotor = null;
 
@@ -163,6 +165,10 @@ public static SixPositionSwitch autoSixPosSwitch = null;
 public static KilroyEncoder leftFrontDriveEncoder = null;
 
 public static KilroyEncoder rightFrontDriveEncoder = null;
+
+public static KilroyEncoder leftRearDriveEncoder = null;
+
+public static KilroyEncoder rightRearDriveEncoder = null;
 
 public static KilroyEncoder liftingEncoder = null;
 
@@ -429,10 +435,7 @@ public static void commonInitialization ()
 
     // ----- Jaguar classes -----
     // ----- Talon classes -----
-    // ----- Victor classes -----
-
-    armMotor = new VictorSP(4);
-    // hanging
+    // ----- Victor classes ----
     // ----- Servo classes -----
 
     // ====================================
@@ -471,13 +474,6 @@ public static void commonInitialization ()
     // Gear Tooth Sensors
 
     // Encoders
-
-    leftFrontDriveEncoder = new KilroyEncoder(4, 5);
-
-    rightFrontDriveEncoder = new KilroyEncoder(6, 7);
-
-    liftingEncoder = new KilroyEncoder(10, 11);
-
     // -------------------------------------
     // Red Light/IR Sensor class
     // -------------------------------------
@@ -644,6 +640,9 @@ public static void robotInitialize2018 ()
     // ----- Jaguar classes -----
     // ----- Talon classes -----
     // ----- Victor classes -----
+
+    armMotor = new VictorSP(4);
+
     // ----- Servo classes -----
 
 
@@ -660,7 +659,7 @@ public static void robotInitialize2018 ()
 
     leftRearCANMotor = new WPI_TalonSRX(13);
 
-    armRoller = new WPI_TalonSRX(10);// fix CANID
+    armRoller = new WPI_TalonSRX(10);
 
     // ====================================
     // Relay classes
@@ -676,6 +675,11 @@ public static void robotInitialize2018 ()
     // Gear Tooth Sensors
 
     // Encoders
+    leftFrontDriveEncoder = new KilroyEncoder(4, 5);
+
+    rightFrontDriveEncoder = new KilroyEncoder(6, 7);
+
+    liftingEncoder = new KilroyEncoder(10, 11);
 
     // -------------------------------------
     // Red Light/IR Sensor class
@@ -829,7 +833,9 @@ public static void robotInitialize2019 ()
     // ====================================
     // CAN classes
     // ====================================
-    liftMotor = new CANSparkMax(23, MotorType.kBrushless);
+    armMotor = new WPI_TalonSRX(24);
+
+    liftMotor = new WPI_TalonSRX(23);
 
     rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
 
@@ -839,7 +845,7 @@ public static void robotInitialize2019 ()
 
     leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
 
-    armRoller = new CANSparkMax(10, MotorType.kBrushless);// fix CANID
+    armRoller = new WPI_TalonSRX(10);
 
     // ====================================
     // Relay classes
@@ -855,6 +861,19 @@ public static void robotInitialize2019 ()
     // Gear Tooth Sensors
 
     // Encoders
+    leftFrontDriveEncoder = new KilroyEncoder(
+            (CANSparkMax) leftFrontCANMotor);
+
+    rightFrontDriveEncoder = new KilroyEncoder(
+            (CANSparkMax) rightFrontCANMotor);
+
+    leftRearDriveEncoder = new KilroyEncoder(
+            (CANSparkMax) leftRearCANMotor);
+
+    rightRearDriveEncoder = new KilroyEncoder(
+            (CANSparkMax) rightRearCANMotor);
+
+    liftingEncoder = new KilroyEncoder((TalonSRX) liftMotor);
 
     // -------------------------------------
     // Red Light/IR Sensor class
