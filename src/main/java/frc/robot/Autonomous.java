@@ -33,10 +33,12 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.LightSensor;
+import frc.HardwareInterfaces.KilroyEncoder;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
+import frc.Utils.drive.Drive.BrakeType;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -126,6 +128,11 @@ public static Level autoLevel = Level.NULL;
  *
  * @author Nathanial Lydick
  * @written Jan 13, 2015
+ *
+ *          FYI: drive.stop cuts power to the motors, causing the robot to
+ *          coast. drive.brake results in a complete (? IDK, McGee rewrote much
+ *          of the drive class.) stop
+ *
  */
 public static void periodic ()
 {
@@ -251,18 +258,16 @@ private static void setPositionAndLevel ()
     // (only needed if not testing the physical switch)
     // sets the autoPosition enum to the correct side based on the
     // state of the autoPositionSwitch
+
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
-        DISTANCE_TO_CROSS_AUTOLINE = 60;
-        System.out.println("Floor it!");
         autoPosition = Position.LEFT;
+        System.out.println("Floor it!");
         } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
-        DISTANCE_TO_CROSS_AUTOLINE = 90;
         } else if (Hardware.autoCenterSwitch.isOn() == true)
         {
-        DISTANCE_TO_CROSS_AUTOLINE = 120;
         autoPosition = Position.CENTER;
         }
 
@@ -287,36 +292,123 @@ private static void setPositionAndLevel ()
 // =====================================================================
 // Path Methods
 // =====================================================================
+public static enum Cross
+    {
+AWAKEN, L2_CLEAR_DATUM, NYOOM, SLAM_BRAKES, FINITE_INCANTATEM
+    }
+
+private static Cross cross = Cross.AWAKEN;
 
 private static boolean crossAutoline ()
 {
-    if (autoLevel == Level.LEVEL_ONE)
+    switch (cross)
         {
-        // this actually works! 2 February 2019
-        if (Hardware.drive.driveStraightInches(
-                DISTANCE_TO_CROSS_AUTOLINE,
-                DRIVE_SPEED, ACCELERATION_TIME,
-                false) == true)
-            {
-            Hardware.drive.stop();
-            return true;
-            }
-        System.out.println("IT WORKED TOO WELL! SLAM THE BRAKES!");
-        }
-    if (autoLevel == Level.LEVEL_TWO)
-        {
-        System.out.println("Oof!");
-        descendFromLevelTwo(usingAlignByWall);
-        }
-    if (Hardware.drive.driveStraightInches(DISTANCE_TO_CROSS_AUTOLINE,
-            DRIVE_SPEED, ACCELERATION_TIME,
-            false) == true)
-        {
-        Hardware.drive.stop();
-        return true;
+        case AWAKEN:
+            // initial state for crossing the autoline
+            setPositionAndLevel();
+            switch (autoPosition)
+                {
+                case LEFT:
+                    distanceToCrossAutoline = 60;
+                    break;
+                case CENTER:
+                    distanceToCrossAutoline = 90;
+                    break;
+                case RIGHT:
+                    distanceToCrossAutoline = 120;
+                    break;
+                case NULL:
+                    break;
+                }
+            Hardware.leftFrontDriveEncoder.reset();
+            Hardware.rightFrontDriveEncoder.reset();
+            System.out.println("GOOD MORNING VIETNAM!");
+            cross = Cross.L2_CLEAR_DATUM;
+            break;
+
+        case L2_CLEAR_DATUM:
+            // only run if going off of level ii
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                descendFromLevelTwo(usingAlignByWall);
+                Hardware.leftFrontDriveEncoder.reset();
+                Hardware.rightFrontDriveEncoder.reset();
+                } else
+                {
+                System.out.println("Manoevering, clear the datum!");
+                cross = Cross.NYOOM;
+                }
+            break;
+
+        case NYOOM:
+            if (Hardware.drive.driveStraightInches(
+                    distanceToCrossAutoline,
+                    DRIVE_SPEED, ACCELERATION_TIME, false) == true)
+                {
+                System.out.println("*distant screaming*");
+                cross = Cross.SLAM_BRAKES;
+                }
+            break;
+
+        case SLAM_BRAKES:
+            Hardware.drive.brake(BrakeType.AFTER_DRIVE);
+            System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+            cross = Cross.FINITE_INCANTATEM;
+            break;
+
+        case FINITE_INCANTATEM:
+            System.out.println(
+                    "You have arrived at your final destination...the foreboding Vaaach homeworld.");
+            break;
         }
     return false;
 }
+
+// non-state machine version
+// private static boolean crossAutoline ()
+// {
+// switch (autoPosition)
+// {
+// case LEFT:
+// distanceToCrossAutoline = 60;
+// break;
+// case CENTER:
+// distanceToCrossAutoline = 90;
+// break;
+// case RIGHT:
+// distanceToCrossAutoline = 120;
+// break;
+// }
+// if (autoLevel == Level.LEVEL_ONE)
+// {
+// // this actually works! 2 February 2019
+// if (Hardware.drive.driveStraightInches(
+// distanceToCrossAutoline,
+// DRIVE_SPEED, ACCELERATION_TIME,
+// false) == true)
+// {
+// Hardware.drive.brake(BrakeType.AFTER_DRIVE);
+// return true;
+// }
+// System.out.println(
+// "IT WORKED TOO WELL! SLAM THE BRAKES!");
+// }
+// if (autoLevel == Level.LEVEL_TWO)
+// {
+// System.out.println("Oof!");
+// descendFromLevelTwo(usingAlignByWall);
+// }
+// if (Hardware.drive.driveStraightInches(
+// distanceToCrossAutoline,
+// DRIVE_SPEED, ACCELERATION_TIME,
+// false) == true)
+// {
+// Hardware.drive.brake(BrakeType.AFTER_DRIVE);
+// return true;
+// }
+// return false;
+// }
+
 
 private static enum DepositCargoHatchState
     {
@@ -581,7 +673,8 @@ private static boolean depositRocketHatch ()
                     break;
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
-                            DISTANCE_TO_CROSS_AUTOLINE, .6,
+                            distanceToCrossAutoline,
+                            .6,
                             ACCELERATION_TIME, USING_GYRO))
                         {
                         // turn right or left base on start position
@@ -650,7 +743,9 @@ private static boolean depositRocketHatch ()
     return false;
 }
 
-/** Enum for representing the states used in the depositSideCargoHatch path */
+/**
+ * Enum for representing the states used in the depositSideCargoHatch path
+ */
 private static enum SideCargoHatchState
     {
 INIT, LEAVE_LEVEL_2, TURN_AFTER_LEVEL_2_DROP, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
@@ -782,29 +877,10 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
         {
         descentState = DescentState.INIT;
         }
-    // if (descendInit == false)
-    // {
-    // descentTimer.start();
-    // descendInit = true;
-    // }
 
-    // if (descentTimer.get() <= TIME_TO_DRIVE_OFF_PLATFORM)
-    // {
-    // Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
-    // false);
-    // } else
-    // {
-    // Hardware.drive.stop();
-    // descentTimer.stop();
-    // descentTimer.reset();
-    // descendInit = false;
-    // return true;
-    // }
 
-    // return false;
     System.out.println(descentState);
     System.out.println(descentTimer.get());
-
     switch (descentState)
         {
 
@@ -835,15 +911,15 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 
         case LANDING_SETUP:
 
-            if (Hardware.testRedLight.isOn() == true
-                    && usingAlignByWall == true)
-                {
-                descentState = DescentState.BACKWARDS_TIMER_INIT;
-                } else if (Hardware.testRedLight.isOn()
-                        && usingAlignByWall == false)
-                {
-                descentState = DescentState.FINISH;
-                }
+            // if (Hardware.testRedLight.isOn() == true
+            // && usingAlignByWall == true)
+            // {
+            // descentState = DescentState.BACKWARDS_TIMER_INIT;
+            // } else if (Hardware.testRedLight.isOn()
+            // && usingAlignByWall == false)
+            // {
+            // descentState = DescentState.FINISH;
+            // }
 
             break;
 
@@ -881,7 +957,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 // =============================================
 // NOT CONSTANT VARIABLES
 // =============================================
-public static int DISTANCE_TO_CROSS_AUTOLINE;
+public static int distanceToCrossAutoline;
 
 
 // =========================================================================
