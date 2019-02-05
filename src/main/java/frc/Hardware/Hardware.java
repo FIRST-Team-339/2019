@@ -620,42 +620,12 @@ public static void commonInitialization ()
 
     telemetry = new Telemetry(10000);
 
-    // Transmission class
-    transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
-
     // ------------------------------------
     // Drive system
     // ------------------------------------
-    drive = new Drive(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            gyro);
 
-    drivePID = new DrivePID(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
 
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
 
-    // Assembly classes (e.g. forklift)
-    manipulator = new GamePieceManipulator(
-            armMotor, intakeDeploySensor/* armEncoder */,
-            armRoller,
-            null/* photoSwitch */);
-
-    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
-
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, armMotor, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-
-    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
-            drive);
 } // end of commonInitialization
 
 /**
@@ -798,10 +768,42 @@ public static void robotInitialize2018 ()
     // Utility classes
 
     // Transmission class
+    // Transmission class
+    transmission = new TankTransmission(
+            new SpeedControllerGroup(leftFrontCANMotor,
+                    leftRearCANMotor),
+            new SpeedControllerGroup(rightFrontCANMotor,
+                    rightRearCANMotor));
 
     // ------------------------------------
     // Drive system
     // ------------------------------------
+    drive = new Drive(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
+
+    drivePID = new DrivePID(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+
+    driveWithCamera = new DriveWithCamera(
+            transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
+
+    // Assembly classes (e.g. forklift)
+    manipulator = new GamePieceManipulator(
+            armMotor, intakeDeploySensor/* armEncoder */,
+            armRoller,
+            null/* photoSwitch */);
+
+    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
+
+    climber = new ClimbToLevelTwo(
+            armIntakeSolenoid, armMotor, intakeDeploySensor,
+            drive, lift, frontUltraSonic);
+
+    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
+            drive);
 
 }  // end of robotInitialize2018
 
@@ -923,6 +925,66 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // DriverStations class
+    // DriverStations class
+
+    // Joystick classes
+
+    // Buttons classes
+    // ----- Left Operator -----
+
+    // left trigger
+
+    // ----- Right Operator -----
+
+    //
+    // Momentary Switches
+    //
+
+    // **********************************************************
+    // Kilroy's Ancillary classes
+    // **********************************************************
+    // PID tuneables
+    // PID classes
+    // Utility classes
+
+    // Transmission class
+    // Transmission class
+    transmission = new TankTransmission(
+            new SpeedControllerGroup(leftFrontCANMotor,
+                    leftRearCANMotor),
+            new SpeedControllerGroup(rightFrontCANMotor,
+                    rightRearCANMotor));
+
+    // ------------------------------------
+    // Drive system
+    // ------------------------------------
+    drive = new Drive(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
+
+    drivePID = new DrivePID(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+
+    driveWithCamera = new DriveWithCamera(
+            transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
+
+
+    // Assembly classes (e.g. forklift)
+    manipulator = new GamePieceManipulator(
+            armMotor, intakeDeploySensor/* armEncoder */,
+            armRoller,
+            null/* photoSwitch */);
+
+    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
+
+    climber = new ClimbToLevelTwo(
+            armIntakeSolenoid, armMotor, intakeDeploySensor,
+            drive, lift, frontUltraSonic);
+
+    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
+            drive);
 
 } // end robotInitialize2019
 
@@ -943,7 +1005,7 @@ public static void setHardwareSettings ()
 
         default:
         case KILROY_2019:
-            setHardwareSettings2018();
+            setHardwareSettings2019();
             break;
 
         case TEST_BOARD:

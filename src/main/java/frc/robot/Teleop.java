@@ -139,7 +139,7 @@ public static void periodic ()
 
     Hardware.telemetry.printToConsole();
 
-    teleopDrive();
+    // teleopDrive();
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
