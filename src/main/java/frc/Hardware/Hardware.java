@@ -435,7 +435,7 @@ public static void setHardwareSettings ()
             break;
 
         case KILROY_2019:
-            // we'll do this later.
+            setHardwareSettings2019();
             break;
 
         case TEST_BOARD:
@@ -509,6 +509,12 @@ public static void setHardwareSettings2018 ()
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
+
+
+public static void setHardwareSettings2019 ()
+{
+
+}
 
 /**
  * This initializes all of the components in Hardware
