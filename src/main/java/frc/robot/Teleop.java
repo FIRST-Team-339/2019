@@ -302,15 +302,17 @@ public static void printStatements ()
         // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
 
-        // TODO Test ringLightRelay
-
-        // Hardware.rightRearCANMotor.get());
-        // System.out.println("Left Front Drive Motor " +
+        // =================================
         // Relay
         // =================================
-        //
+        // System.out.println(
+        // "Ring light relay: " + Hardware.ringLightRelay.get());
+
+
+
+
         // =================================
-        // // Digital Inputs
+        // Digital Inputs
         // =================================
         //
         // ---------------------------------
@@ -327,6 +329,10 @@ public static void printStatements ()
         // "Level one switch: " + Hardware.levelOneSwitch.get());
         // System.out.println(
         // "Level two switch: " + Hardware.levelTwoSwitch.get());
+        // System.out.println("Auto disable switch: "
+        // + Hardware.autoDisableSwitch.getPosition());
+        // System.out.println("Auto 6 position switch: "
+        // + Hardware.autoSixPosSwitch.getPosition());
 
         // ---------------------------------
 
@@ -360,7 +366,11 @@ public static void printStatements ()
         // Red Light/IR Sensors
         // prints the state of the sensor
         // ---------------------------------
-
+        // System.out.println("Arm IR: "+Hardware.armIR.get());
+        // System.out
+        // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // System.out.println(
+        // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
         // Pneumatics
         // =================================
@@ -369,6 +379,8 @@ public static void printStatements ()
         // Compressor
         // prints information on the compressor
         // ---------------------------------
+        // System.out.println("Compressor: " +
+        // Hardware.compressor.getCompressorCurrent());
 
         // ---------------------------------
         // Solenoids
