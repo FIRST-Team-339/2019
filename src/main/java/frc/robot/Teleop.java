@@ -138,7 +138,7 @@ public static void periodic ()
 
     Hardware.telemetry.printToConsole();
 
-    teleopDrive();
+    // teleopDrive();
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
@@ -168,13 +168,13 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    // if (Hardware.leftDriver.getRawButton(3) == true)
-    // {
-    // Hardware.alignByTape.align();
-    // } else
-    // {
-    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-    // }
+    if (Hardware.leftDriver.getRawButton(3) == true)
+        {
+        Hardware.alignByTape.align();
+        } else
+        {
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        }
 
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {

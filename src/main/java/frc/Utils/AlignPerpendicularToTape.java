@@ -63,7 +63,6 @@ public boolean align ()
         System.out.println("WE GOT TO THE LEFT");
         leftSpeed = 0.0;
         }
-    drive.getTransmission().driveRaw(leftSpeed, rightSpeed);
 
     if (leftIRTripped == true && rightIRTripped == false)
         {
@@ -76,25 +75,27 @@ public boolean align ()
             {
             if (leftBackIR.isOn() == true && rightBackIR.isOn() == true)
                 {
-                System.out.println("WERE TRYING TO STOP");
+                System.out.println("WERE TRYING TO TURN");
                 return true;
                 } else
                 {
-                drive.getTransmission().driveRaw(.2, -.2);
+                leftSpeed = .2;
+                rightSpeed = -.2;
                 }
+            } else if (leftBackIR.isOn() == true
+                    && rightBackIR.isOn() == true)
+            {
+            System.out.println("WERE TRYING TO TURN");
+            return true;
             } else
             {
-            if (leftBackIR.isOn() == true && rightBackIR.isOn() == true)
-                {
-                System.out.println("WERE TRYING TO STOP");
-                return true;
-                } else
-                {
-                drive.getTransmission().driveRaw(-.2, .2);
-                }
+            leftSpeed = -.2;
+            rightSpeed = .2;
             }
-        }
 
+
+        }
+    drive.getTransmission().driveRaw(leftSpeed, rightSpeed);
     return false;
 }
 
