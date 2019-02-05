@@ -21,7 +21,6 @@ package frc.HardwareInterfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import edu.wpi.cscore.AxisCamera;
 
 /**
@@ -54,6 +53,7 @@ private static int txtNumber = 0;
 
 // The focal length of the camera, you can find it in the camera documentation
 private double focalLength = 2.8;
+
 // The horizontal field of view of the camera in degrees.
 private double horizFieldOfView = 67;
 
@@ -78,7 +78,7 @@ private double vertFieldOfView = 34;
  *
  * @method KilroyCamera() - constructor
  * @param hasCamera
- *            - whether we have a camera
+ *                      - whether we have a camera
  * @author Nathan Lydick
  * @written Oct 16, 2014
  *          -------------------------------------------------------
@@ -92,8 +92,7 @@ public KilroyCamera (boolean hasCamera)
     if (hasCamera)
         {
         this.camera = new AxisCamera("Kilroy Axis", KILROY_CAMERA_IP);
-        }
-    else
+        } else
         {
         this.camera = null;
         }
@@ -104,9 +103,10 @@ public KilroyCamera (boolean hasCamera)
  *
  * @method KilroyCamera() - constructor
  * @param hasCamera
- *            - whether we have a camera
+ *                      - whether we have a camera
  * @param ip
- *            The ip that the camera is at with the context of 10.x.39.11
+ *                      The ip that the camera is at with the context of
+ *                      10.x.39.11
  * @author Ryan McGee
  *
  * @written Mar 9, 2017
@@ -121,8 +121,7 @@ public KilroyCamera (boolean hasCamera, String ip)
         {
         KILROY_CAMERA_IP = ip;
         this.camera = new AxisCamera("Kilroy Axis", KILROY_CAMERA_IP);
-        }
-    else
+        } else
         {
         this.camera = null;
         }
@@ -154,11 +153,11 @@ public void clearAllImages ()
 
 // public boolean freshImage ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.isFreshImage();
-//     // returns true so that if we ever try to wait for an image, we will
-//     // just continue
-//     return true;
+// if (this.haveCamera)
+// return this.camera.isFreshImage();
+// // returns true so that if we ever try to wait for an image, we will
+// // just continue
+// return true;
 // }
 
 public int getBrightness ()
@@ -188,26 +187,26 @@ public final AxisCamera getCameraInstance ()
 
 // public int getColorLevel ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getColorLevel();
-//     // returns a value that it shouldn't be
-//     return noCameraIntReturnValue;
+// if (this.haveCamera)
+// return this.camera.getColorLevel();
+// // returns a value that it shouldn't be
+// return noCameraIntReturnValue;
 // }
 
 // public int getCompression ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getCompression();
-//     // returns a value that it shouldn't be
-//     return noCameraIntReturnValue;
+// if (this.haveCamera)
+// return this.camera.getCompression();
+// // returns a value that it shouldn't be
+// return noCameraIntReturnValue;
 // }
 
 // public AxisCamera.ExposureControl getExposureControl ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getExposureControl();
-//     // returns automatic
-//     return AxisCamera.ExposureControl.kAutomatic;
+// if (this.haveCamera)
+// return this.camera.getExposureControl();
+// // returns automatic
+// return AxisCamera.ExposureControl.kAutomatic;
 // }
 
 // -------------------------------------------------------
@@ -235,24 +234,24 @@ public boolean gethaveCamera ()
  * @return ColorImage - Camera.getImage() or a 0x0 hsl image
  * @author Nathan Lydick
  * @throws NIVisionException
- *             - throws exception when fails
+ *                               - throws exception when fails
  * @written Oct 16, 2014
  *          -------------------------------------------------------
  */
 // public ColorImage getImage () throws NIVisionException
 // {
-//     if (this.haveCamera)
-//         return this.camera.getImage();
-//     // returns a 0x0 image
-//     return new HSLImage();
+// if (this.haveCamera)
+// return this.camera.getImage();
+// // returns a 0x0 image
+// return new HSLImage();
 // }
 
 // public int getMaxFPS ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getMaxFPS();
-//     // returns a value that it shouldn't be
-//     return noCameraIntReturnValue;
+// if (this.haveCamera)
+// return this.camera.getMaxFPS();
+// // returns a value that it shouldn't be
+// return noCameraIntReturnValue;
 // }
 
 // --------------------------------------------------------------
@@ -262,26 +261,26 @@ public boolean gethaveCamera ()
 // --------------------------------------------------------------
 // public AxisCamera.Resolution getResolution ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getResolution();
-//     // returns the smallest resolution and our default
-//     return AxisCamera.Resolution.k160x120;
+// if (this.haveCamera)
+// return this.camera.getResolution();
+// // returns the smallest resolution and our default
+// return AxisCamera.Resolution.k160x120;
 // }
 
 // public AxisCamera.Rotation getRotation ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getRotation();
-//     // returns 0 rotation
-//     return AxisCamera.Rotation.k0;
+// if (this.haveCamera)
+// return this.camera.getRotation();
+// // returns 0 rotation
+// return AxisCamera.Rotation.k0;
 // }
 
 // public AxisCamera.WhiteBalance getWhiteBalance ()
 // {
-//     if (this.haveCamera)
-//         return this.camera.getWhiteBalance();
-//     // returns automatic
-//     return AxisCamera.WhiteBalance.kAutomatic;
+// if (this.haveCamera)
+// return this.camera.getWhiteBalance();
+// // returns automatic
+// return AxisCamera.WhiteBalance.kAutomatic;
 // }
 
 /**
@@ -303,7 +302,7 @@ public void setFocalLength (double focalLength)
 }
 
 /**
- * 
+ *
  * @return
  *         The horizontal field of view of the camera, in degrees
  */
@@ -314,9 +313,9 @@ public double getHorizFieldOfView ()
 
 /**
  * Saves the field of view of the hardware camera into this class.
- * 
+ *
  * @param FOV
- *            THe horizontal field of view, in degrees.
+ *                THe horizontal field of view, in degrees.
  */
 public void setVertFieldOfView (double FOV)
 {
@@ -331,65 +330,65 @@ public double getVertFieldOfView ()
 
 /**
  * Saves the field of view of the hardware camera into this class.
- * 
+ *
  * @param FOV
- *            THe horizontal field of view, in degrees.
+ *                THe horizontal field of view, in degrees.
  */
 public void setHorizFieldOfView (double FOV)
 {
     this.horizFieldOfView = FOV;
 }
 
-// TODO maybe do this in the constructor so I don't spend the cycles everytime
+
 // this is called
 /**
- * 
+ *
  * @return
  *         The horizontal resolution of the axis camera this object refers to.
  */
 // public double getHorizontalResolution ()
 // {
-//     switch (this.getResolution())
-//         {
-//         case k640x480:
-//             return 640.0;
-//         case k480x360:
-//             return 480.0;
-//         case k320x240:
-//             return 320.0;
-//         case k240x180:
-//             return 240.0;
-//         case k176x144:
-//             return 176.0;
-//         default:
-//         case k160x120:
-//             return 160.0;
-//         }
+// switch (this.getResolution())
+// {
+// case k640x480:
+// return 640.0;
+// case k480x360:
+// return 480.0;
+// case k320x240:
+// return 320.0;
+// case k240x180:
+// return 240.0;
+// case k176x144:
+// return 176.0;
+// default:
+// case k160x120:
+// return 160.0;
+// }
 // }
 
 // /**
-//  * 
-//  * @return
-//  *         The vertical resolution of the camera this object this refers to.
-//  */
+// *
+// * @return
+// * The vertical resolution of the camera this object this refers to.
+// */
 // public double getVerticalResolution ()
 // {
-//     switch (this.getResolution())
-//         {
-//         case k640x480:
-//             return 480.0;
-//         case k480x360:
-//             return 360.0;
-//         case k320x240:
-//             return 240.0;
-//         case k240x180:
-//             return 180.0;
-//         case k176x144:
-//             return 144.0;
-//         default:
-//         case k160x120:
-//             return 120.0;
-//         }
+// switch (this.getResolution())
+// {
+// case k640x480:
+// return 480.0;
+// case k480x360:
+// return 360.0;
+// case k320x240:
+// return 240.0;
+// case k240x180:
+// return 180.0;
+// case k176x144:
+// return 144.0;
+// default:
+// case k160x120:
+// return 120.0;
+// }
 // }
 
 /**
@@ -397,10 +396,10 @@ public void setHorizFieldOfView (double FOV)
  * This will override old images of the same name.
  *
  * @param fileName
- *            no extensions necessary
+ *                     no extensions necessary
  */
 
-// TODO Merge commands and fix comments, etc (Everything)
+
 public void saveImage (String fileName)
 {
     // System.out.println("\n\n\nthe command is : " );
@@ -449,7 +448,7 @@ public void saveImage (String fileName)
  * when more than 10 pictures are taken, the label "loops" back to 0
  * this is done through the modulus function, which divides the imageNumber
  * by ten and uses the remainder as the image number
- * 
+ *
  * author@ Ashley Espeland
  * date@ 1/31016
  */
@@ -494,7 +493,7 @@ public void saveTextSafely (String text)
  *
  * @method setHaveCamera() - constructor
  * @param value
- *            - the new value as to whether we have a camera
+ *                  - the new value as to whether we have a camera
  * @author Nathan Lydick
  * @written Oct 16, 2014
  *          -------------------------------------------------------
@@ -506,54 +505,54 @@ public void setHaveCamera (boolean value)
 
 // public void writeBrightness (int brightness)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeBrightness(brightness);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeBrightness(brightness);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeColorLevel (int value)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeColorLevel(value);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeColorLevel(value);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeCompression (int value)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeCompression(value);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeCompression(value);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeExposureControl (AxisCamera.ExposureControl value)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeExposureControl(value);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeExposureControl(value);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeExposure(int value)
@@ -566,62 +565,62 @@ public void setHaveCamera (boolean value)
 
 // public void writeMaxFPS (int value)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeMaxFPS(value);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeMaxFPS(value);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeResolution (AxisCamera.Resolution value)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeResolution(value);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeResolution(value);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeRotation (AxisCamera.Rotation value)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeRotation(value);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeRotation(value);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 // public void writeWhiteBalance (AxisCamera.WhiteBalance whiteBalance)
 // {
-//     if (this.haveCamera)
-//         {
-//         this.camera.writeWhiteBalance(whiteBalance);
-//         }
-//     else
-//         {
-//         // returns nothing
+// if (this.haveCamera)
+// {
+// this.camera.writeWhiteBalance(whiteBalance);
+// }
+// else
+// {
+// // returns nothing
 
-//         }
+// }
 // }
 
 
 /**
  * Takes a single image
- * 
+ *
  * @param joystickButton
- *            joystick.button
+ *                           joystick.button
  * @author Becky Button
  */
 public void takeSinglePicture (boolean rawButton)

@@ -32,13 +32,13 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.vision.VisionProcessor.ImageType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
+import frc.vision.VisionProcessor.ImageType;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -57,13 +57,13 @@ public class Teleop
  * @written Jan 13, 2015
  */
 
-// if has done the thing
-public static boolean hasDoneTheThing = true;
+
+
 
 public static void init ()
 {
 
-    hasDoneTheThing = true;
+
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
@@ -138,7 +138,9 @@ public static void periodic ()
 
     Hardware.telemetry.printToConsole();
 
-    teleopDrive();
+    // teleopDrive();
+
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
     individualTest();
 
@@ -154,29 +156,37 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
+    // ashleyTest();
     connerTest();
-    coleTest();
-    guidoTest();
-    patrickTest();
-    annaTest();
-    meghanTest();
-    nithyaTest();
+    // coleTest();
+    // guidoTest();
+    // patrickTest();
+    // annaTest();
+    // meghanTest();
+    // nithyaTest();
 }
 
 private static void ashleyTest ()
 {
+    if (Hardware.leftDriver.getRawButton(3) == true)
+        {
+        Hardware.alignByTape.align();
+        } else
+        {
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        }
+
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
     // System.out
     // .println(
     // "HELP WE'VE FALLEN AND WE CAN'T GET BACK UP we hzve yoted");
-    /* } else */ if (Hardware.rightDriver.getRawButton(5) == true)
-        {
-        System.out.println("WERE DOING SOMETHING AT LEAST");
-        Hardware.climber.climb();
-        }
+    // } else if (Hardware.rightDriver.getRawButton(5) == true)
+    // {
+    // System.out.println("WERE DOING SOMETHING AT LEAST");
+    // Hardware.climber.climb();
+    // }
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
@@ -197,26 +207,42 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-
+    Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
 }
 
 private static void coleTest ()
 {
     // Forklifts
 
-    // Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-    // Hardware.forkliftOverride.get());
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.forkliftOverride.get());
 
-    // Hardware.lift.setLiftPositionByButton(Forklift.MIDDLE_ROCKET_HATCH,
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHighestForkliftTargetHeight.get());
+    // Hardware.cargoShipCargoButton.get());
 
-    // // Manipulator
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.cargoShipHatchButton.get());
 
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // Hardware.intakeTrigger.get(),
-    // Hardware.outtakeButton.get(),
-    // Hardware.intakeOverride.get());
+    // Hardware.lift.setToNextHigherPreset(
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextHigherForkliftTargetHeight.get(),
+    // Hardware.chooseCargoRocketHeights.get());
+
+    // Hardware.lift.setToNextLowerPreset(
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextLowerForkliftTargetHeight.get(),
+    // Hardware.chooseCargoRocketHeights.get());
+
+
+    // Manipulator
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
 
 }
@@ -228,7 +254,7 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-
+    // Hi Patrick!
 }
 
 private static void annaTest ()
@@ -246,6 +272,7 @@ private static void nithyaTest ()
 
 }
 
+
 public static void printStatements ()
 {
 
@@ -258,39 +285,54 @@ public static void printStatements ()
         // =================================
         // Motors
         // =================================
-        // System.out.println("Arm Motor Voltage " + Hardware.armMotor.get());
-        // System.out.println("Right Front Drive Motor Voltage" +
+
+        // System.out.println("Arm motor: " + Hardware.armMotor.get());
+        // System.out.println("Lift Motor One "
+        // + Hardware.liftMotor.get());
+        // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
-        // System.out.println("Left Front Drive Motor Voltage"
+        // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
-        // System.out.println("Right Rear Drive Motor Voltage" +
+        // System.out.println("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
-        // System.out.println("Left Rear Drive Motor Voltage"
+        // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        // System.out.println("Lift Motor One Voltage"
-        // + Hardware.liftMotorOne.get());
-        // System.out.println("Lift Motor Two Voltage"
-        // + Hardware.liftMotorTwo.get());
-        // System.out.println("Arm Roller Voltage"
+        // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
 
-        // TODO Test Lift Motors', Arm Roller's, and Arm Motor's Voltage 2019
-
-        // Hardware.rightFrontCANMotor.get());
-        // SmartDashboard.putNumber("Right Rear Drive Motor",
-        // Hardware.rightRearCANMotor.get());
-        // System.out.println("Left Front Drive Motor " +
+        // =================================
         // Relay
         // =================================
-        //
+        // System.out.println(
+        // "Ring light relay: " + Hardware.ringLightRelay.get());
+
+
+
+
         // =================================
-        // // Digital Inputs
+        // Digital Inputs
         // =================================
         //
         // ---------------------------------
 
         // Switches
         // prints state of switches
+        // System.out.println(
+        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        // System.out.println(
+        // "Right auto switch: "
+        // + Hardware.rightAutoSwitch.isOn());
+        // System.out.println("Center auto switch: "
+        // + Hardware.autoCenterSwitch.isOn());
+        // System.out.println(
+        // "Level one switch: " + Hardware.levelOneSwitch.isOn());
+        // System.out.println(
+        // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
+        // System.out.println("Auto disable switch: "
+        // + Hardware.autoDisableSwitch.isOn());
+        // System.out.println("Auto 6 position switch: "
+        // + Hardware.autoSixPosSwitch.getPosition());
+
         // ---------------------------------
 
         // SmartDashboard.putBoolean("Disable SW",
@@ -301,13 +343,8 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Left Front Encoder Inches",
+        // SmartDashboard.putNumber("Left Front Encoder Inches"+
         // Hardware.leftFrontDriveEncoder.getDistance());
-
-        // System.out.println("Left Front Encoder Ticks "
-        // + Hardware.leftFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Left Front Encoder Ticks",
-        // Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
@@ -323,7 +360,11 @@ public static void printStatements ()
         // Red Light/IR Sensors
         // prints the state of the sensor
         // ---------------------------------
-
+        // System.out.println("Arm IR: "+Hardware.armIR.get());
+        // System.out
+        // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // System.out.println(
+        // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
         // Pneumatics
         // =================================
@@ -332,10 +373,15 @@ public static void printStatements ()
         // Compressor
         // prints information on the compressor
         // ---------------------------------
+        // System.out.println("Compressor: " +
+        // Hardware.compressor.getCompressorCurrent());
 
         // ---------------------------------
         // Solenoids
         // ---------------------------------
+        // System.out.println("Arm intake solenoid: "
+        // + Hardware.armIntakeSolenoid.get());
+
 
         // Analogs
         // =================================
@@ -345,13 +391,22 @@ public static void printStatements ()
         // where the pot is turned to
         // ---------------------------------
 
-        // ---------------------------------
-        // GYRO
-        // ---------------------------------
+
+
+        // ----------------------------------
+        // Potentiometers
+        // ----------------------------------
+
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("Intake deploy sensor: "
+        // + Hardware.intakeDeploySensor.get());
 
         // ---------------------------------
         // Sonar/UltraSonic
         // ---------------------------------
+
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
 
         // =========================
         // Servos
@@ -365,6 +420,12 @@ public static void printStatements ()
         // Analog Interfaces
         // -------------------------------------
 
+        // ---------------------------------
+        // GYRO
+        // ---------------------------------
+
+        // System.out.println("Gyro: " + Hardware.gyro.getAngle());
+
         // =================================
         // Connection Items
         // =================================
@@ -373,6 +434,11 @@ public static void printStatements ()
         // Cameras
         // prints any camera information required
         // =================================
+
+        // -------------------------------------
+        // Axis/USB Camera class
+        // -------------------------------------
+
 
         // =================================
         // Driver station

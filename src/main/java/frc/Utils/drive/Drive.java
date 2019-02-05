@@ -1065,9 +1065,11 @@ public void resetEncoders ()
     for (KilroyEncoder enc : encoders)
         {
         enc.reset();
+        Hardware.leftFrontDriveEncoder.reset();
+        Hardware.rightFrontDriveEncoder.reset();
+
         // System.out.print("reset encoders is commented out temporarly");
-        // TODO uncomment
-        // TODO another because very important
+
         }
 }
 
@@ -1564,7 +1566,9 @@ public boolean turnDegrees (int degrees, double speed,
             turnDegreesInit = false;
             } else
             {
+            // System.out.print("not gyro");
             this.resetEncoders();
+
             turnDegreesInit = false;
             }
         }
@@ -1586,6 +1590,11 @@ public boolean turnDegrees (int degrees, double speed,
                         Math.abs(degrees) - turnDegreesFudgeFactor,
                         false))
         {
+        System.out
+                .println("encoder required: " + degreesToEncoderInches(
+                        Math.abs(degrees) - turnDegreesFudgeFactor,
+                        false));
+
         this.transmission.stop();
         turnDegreesInit = true;
         return true;
@@ -1593,10 +1602,14 @@ public boolean turnDegrees (int degrees, double speed,
 
     // If degrees is positive, then turn left. If not, then turn right.
     if (degrees > 0)
+        {
+        // Hardware.drive.drive(speed, -speed);
         this.accelerateProportionaly(speed, -speed, acceleration);
-    else
+        } else
+        {
+        // Hardware.drive.drive(-speed, speed);
         this.accelerateProportionaly(-speed, speed, acceleration);
-
+        }
     return false;
 }
 
