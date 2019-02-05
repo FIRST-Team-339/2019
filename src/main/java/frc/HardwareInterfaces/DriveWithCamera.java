@@ -529,13 +529,13 @@ private final double DISTANCE_FROM_WALL_TO_SLOW1 = 80;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 50;
 
-private final double SLOW_MODIFIER = .65;
+private final double SLOW_MODIFIER = .6;
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .15;
+private final double DRIVE_CORRECTION = .20;
 
 
 
