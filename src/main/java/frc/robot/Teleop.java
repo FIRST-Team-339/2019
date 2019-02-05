@@ -285,9 +285,7 @@ public static void printStatements ()
         // =================================
         // Motors
         // =================================
-        // TODO test arm motor print statement
-        // System.out.println(
-        // "Intake deploy arm: " + Hardware.intakeDeployArm.get());
+
         // System.out.println("Arm motor: " + Hardware.armMotor.get());
         // System.out.println("Lift Motor One "
         // + Hardware.liftMotor.get());
@@ -302,15 +300,17 @@ public static void printStatements ()
         // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
 
-
-
-        // Hardware.rightRearCANMotor.get());
-        // System.out.println("Left Front Drive Motor " +
+        // =================================
         // Relay
         // =================================
-        //
+        // System.out.println(
+        // "Ring light relay: " + Hardware.ringLightRelay.get());
+
+
+
+
         // =================================
-        // // Digital Inputs
+        // Digital Inputs
         // =================================
         //
         // ---------------------------------
@@ -318,15 +318,20 @@ public static void printStatements ()
         // Switches
         // prints state of switches
         // System.out.println(
-        // "Left auto switch: " + Hardware.leftAutoSwitch.get());
+        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
         // System.out.println(
-        // "Right auto switch: " + Hardware.rightAutoSwitch.get());
+        // "Right auto switch: "
+        // + Hardware.rightAutoSwitch.isOn());
         // System.out.println("Center auto switch: "
-        // + Hardware.autoCenterSwitch.getPosition());
+        // + Hardware.autoCenterSwitch.isOn());
         // System.out.println(
-        // "Level one switch: " + Hardware.levelOneSwitch.get());
+        // "Level one switch: " + Hardware.levelOneSwitch.isOn());
         // System.out.println(
-        // "Level two switch: " + Hardware.levelTwoSwitch.get());
+        // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
+        // System.out.println("Auto disable switch: "
+        // + Hardware.autoDisableSwitch.isOn());
+        // System.out.println("Auto 6 position switch: "
+        // + Hardware.autoSixPosSwitch.getPosition());
 
         // ---------------------------------
 
@@ -338,13 +343,8 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Left Front Encoder Inches",
+        // SmartDashboard.putNumber("Left Front Encoder Inches"+
         // Hardware.leftFrontDriveEncoder.getDistance());
-
-        // System.out.println("Left Front Encoder Ticks "
-        // + Hardware.leftFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Left Front Encoder Ticks",
-        // Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
@@ -360,7 +360,11 @@ public static void printStatements ()
         // Red Light/IR Sensors
         // prints the state of the sensor
         // ---------------------------------
-
+        // System.out.println("Arm IR: "+Hardware.armIR.get());
+        // System.out
+        // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // System.out.println(
+        // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
         // Pneumatics
         // =================================
@@ -369,10 +373,15 @@ public static void printStatements ()
         // Compressor
         // prints information on the compressor
         // ---------------------------------
+        // System.out.println("Compressor: " +
+        // Hardware.compressor.getCompressorCurrent());
 
         // ---------------------------------
         // Solenoids
         // ---------------------------------
+        // System.out.println("Arm intake solenoid: "
+        // + Hardware.armIntakeSolenoid.get());
+
 
         // Analogs
         // =================================
@@ -382,9 +391,15 @@ public static void printStatements ()
         // where the pot is turned to
         // ---------------------------------
 
-        // ---------------------------------
-        // GYRO
-        // ---------------------------------
+
+
+        // ----------------------------------
+        // Potentiometers
+        // ----------------------------------
+
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("Intake deploy sensor: "
+        // + Hardware.intakeDeploySensor.get());
 
         // ---------------------------------
         // Sonar/UltraSonic
@@ -405,6 +420,12 @@ public static void printStatements ()
         // Analog Interfaces
         // -------------------------------------
 
+        // ---------------------------------
+        // GYRO
+        // ---------------------------------
+
+        // System.out.println("Gyro: " + Hardware.gyro.getAngle());
+
         // =================================
         // Connection Items
         // =================================
@@ -413,6 +434,11 @@ public static void printStatements ()
         // Cameras
         // prints any camera information required
         // =================================
+
+        // -------------------------------------
+        // Axis/USB Camera class
+        // -------------------------------------
+
 
         // =================================
         // Driver station
