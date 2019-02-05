@@ -69,6 +69,7 @@ public class Autonomous
  */
 public static void init ()
 {
+    Hardware.drive.setGearPercentage(1, 1.0);
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
     // of the drive motors
