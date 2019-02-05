@@ -1043,6 +1043,14 @@ public static void commonHardwareSettings ()
  */
 public static void setHardwareSettings2018 ()
 {
+    // ----------------------------
+    // motor initialization
+    // ----------------------------
+    Hardware.rightFrontCANMotor.setInverted(false);
+    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.leftFrontCANMotor.setInverted(false);
+    Hardware.leftRearCANMotor.setInverted(false);
+
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
@@ -1078,6 +1086,14 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
+    // ----------------------------
+    // motor initialization
+    // ----------------------------
+    Hardware.rightFrontCANMotor.setInverted(false);
+    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.leftFrontCANMotor.setInverted(false);
+    Hardware.leftRearCANMotor.setInverted(false);
+
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
