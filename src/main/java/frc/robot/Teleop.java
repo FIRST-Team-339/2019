@@ -157,7 +157,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -369,9 +369,10 @@ public static void printStatements ()
         // Red Light/IR Sensors
         // prints the state of the sensor
         // ---------------------------------
-        // System.out.println("Arm IR: "+Hardware.armIR.get());
+        // System.out.println("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // TODO resest right back IR
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
@@ -388,8 +389,11 @@ public static void printStatements ()
         // ---------------------------------
         // Solenoids
         // ---------------------------------
-        // System.out.println("Arm intake solenoid: "
-        // + Hardware.armIntakeSolenoid.get());
+        // TODO test arm intake solenoid
+        // System.out.println("Arm intake solenoid forward: "
+        // + Hardware.armIntakeSolenoid.getForward());
+        // System.out.println("Arm intake solenoid reverse: "
+        // + Hardware.armIntakeSolenoid.getReverse());
 
 
         // Analogs
@@ -405,8 +409,8 @@ public static void printStatements ()
         // ----------------------------------
         // Potentiometers
         // ----------------------------------
-
-        // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // TODO test potentiometers
+        System.out.println("Delay pot: " + Hardware.delayPot.get());
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
