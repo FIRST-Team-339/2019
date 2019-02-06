@@ -22,6 +22,7 @@ import frc.HardwareInterfaces.KilroySPIGyro;
 import frc.HardwareInterfaces.LVMaxSonarEZ;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.MomentarySwitch;
+import frc.HardwareInterfaces.QuickSwitch;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
@@ -345,6 +346,8 @@ public static JoystickButton nextLowerForkliftTargetHeight = null;
 public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
+
+public static QuickSwitch testQuickSwitch1 = null;
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -809,7 +812,8 @@ public static void robotInitialize2018 ()
 
     //
     // Momentary Switches
-    //
+
+    testQuickSwitch1 = new QuickSwitch(leftOperator, 10);
 
 }  // end of robotInitialize2018
 
@@ -951,6 +955,8 @@ public static void robotInitialize2019 ()
     // Joystick classes
 
     // Buttons classes
+
+    testQuickSwitch1 = new QuickSwitch(leftOperator, 10);
     // ----- Left Operator -----
 
     // left trigger

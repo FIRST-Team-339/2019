@@ -142,7 +142,6 @@ public static void periodic ()
     individualTest();
 
     printStatements();
-
 }
 // end Periodic()
 
@@ -242,13 +241,12 @@ private static void coleTest ()
     // Hardware.nextLowerForkliftTargetHeight.get(),
     // Hardware.chooseCargoRocketHeights.get());
 
-
     // Manipulator
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 }
@@ -260,7 +258,8 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-    // Hi Patrick!
+    SmartDashboard.putBoolean("Is Patrick Happy?",
+            Hardware.rightDriver.getRawButton(4));
 }
 
 private static void annaTest ()
@@ -366,9 +365,10 @@ public static void printStatements ()
         // Red Light/IR Sensors
         // prints the state of the sensor
         // ---------------------------------
-        // System.out.println("Arm IR: "+Hardware.armIR.get());
+        // System.out.println("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // TODO resest right back IR
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
@@ -385,8 +385,11 @@ public static void printStatements ()
         // ---------------------------------
         // Solenoids
         // ---------------------------------
-        // System.out.println("Arm intake solenoid: "
-        // + Hardware.armIntakeSolenoid.get());
+        // TODO test arm intake solenoid
+        // System.out.println("Arm intake solenoid forward: "
+        // + Hardware.armIntakeSolenoid.getForward());
+        // System.out.println("Arm intake solenoid reverse: "
+        // + Hardware.armIntakeSolenoid.getReverse());
 
 
         // Analogs
@@ -402,8 +405,8 @@ public static void printStatements ()
         // ----------------------------------
         // Potentiometers
         // ----------------------------------
-
-        // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // TODO test potentiometers
+        System.out.println("Delay pot: " + Hardware.delayPot.get());
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
