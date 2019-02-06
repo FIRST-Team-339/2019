@@ -142,7 +142,6 @@ public static void periodic ()
     individualTest();
 
     printStatements();
-
 }
 // end Periodic()
 
@@ -154,7 +153,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -260,7 +259,8 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-    // Hi Patrick!
+    SmartDashboard.putBoolean("Is Patrick Happy?",
+            Hardware.rightDriver.getRawButton(4));
 }
 
 private static void annaTest ()
