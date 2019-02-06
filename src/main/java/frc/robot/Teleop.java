@@ -214,10 +214,18 @@ private static void ashleyTest ()
     // }
 }
 
+private static boolean started = false;
+
 private static void connerTest ()
 {
-    Hardware.axisCamera.setRelayValue(Value.kOn);
-    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+    if (started == false && Hardware.leftOperator.getRawButton(6))
+        {
+        started = true;
+        if (Hardware.driveWithCamera.visionTest(.4))
+            {
+            started = false;
+            }
+        }
 }
 
 private static void coleTest ()
