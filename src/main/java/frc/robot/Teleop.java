@@ -63,30 +63,27 @@ public class Teleop
 public static void init ()
 {
 
-
-
     LiveWindow.disableTelemetry(Hardware.pdp);
 
     Hardware.telemetry.printToConsole();
     Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.setTimeBetweenPrints(1000);
 
-    // sets the gear to 0 at the beginning.
-    // Hardware.drive.setGear(0);
-
     Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
     Hardware.transmission.enableDeadband();
 
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
-    Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
-
     Hardware.gyro.reset();
-    // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-    // FIRST_GEAR_RATIO);
-    // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-    // SECOND_GEAR_RATIO);
+
+    // ---------------------------------
+    // drive class initialization
+    // ---------------------------------
+    Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+            FIRST_GEAR_RATIO);
+    Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+            SECOND_GEAR_RATIO);
+    // sets the gear to 0 at the beginning.
+    Hardware.drive.setGear(0);
+
 
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
@@ -145,7 +142,6 @@ public static void periodic ()
     individualTest();
 
     printStatements();
-
 }
 // end Periodic()
 
@@ -156,8 +152,8 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    // ashleyTest();
-    connerTest();
+    ashleyTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -170,7 +166,7 @@ private static void ashleyTest ()
 {
     if (Hardware.leftDriver.getRawButton(3) == true)
         {
-        if (Hardware.alignByTape.align() == true)
+        // if (Hardware.alignByTape.align() == true)
             {
             System.out.println(
                     "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
@@ -236,30 +232,29 @@ private static void coleTest ()
             Hardware.forkliftOverride.get());
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipCargoButton.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.cargoShipCargoButton);
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipHatchButton.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.cargoShipHatchButton);
 
     // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHigherForkliftTargetHeight.get(),
-    // Hardware.chooseCargoRocketHeights.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.nextHigherLiftHeightButton,
+    //         Hardware.chooseCargoRocketHeights.get());
 
     // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextLowerForkliftTargetHeight.get(),
-    // Hardware.chooseCargoRocketHeights.get());
-
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.nextLowerLiftHeightButton,
+    //         Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 }
@@ -271,7 +266,8 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-    // Hi Patrick!
+    SmartDashboard.putBoolean("Is Patrick Happy?",
+            Hardware.rightDriver.getRawButton(4));
 }
 
 private static void annaTest ()
@@ -377,9 +373,10 @@ public static void printStatements ()
         // Red Light/IR Sensors
         // prints the state of the sensor
         // ---------------------------------
-        // System.out.println("Arm IR: "+Hardware.armIR.get());
+        // System.out.println("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // TODO resest right back IR
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
@@ -396,8 +393,11 @@ public static void printStatements ()
         // ---------------------------------
         // Solenoids
         // ---------------------------------
-        // System.out.println("Arm intake solenoid: "
-        // + Hardware.armIntakeSolenoid.get());
+        // TODO test arm intake solenoid
+        // System.out.println("Arm intake solenoid forward: "
+        // + Hardware.armIntakeSolenoid.getForward());
+        // System.out.println("Arm intake solenoid reverse: "
+        // + Hardware.armIntakeSolenoid.getReverse());
 
 
         // Analogs
@@ -413,8 +413,8 @@ public static void printStatements ()
         // ----------------------------------
         // Potentiometers
         // ----------------------------------
-
-        // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // TODO test potentiometers
+        System.out.println("Delay pot: " + Hardware.delayPot.get());
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
