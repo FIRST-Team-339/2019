@@ -241,13 +241,12 @@ private static void coleTest ()
     // Hardware.nextLowerForkliftTargetHeight.get(),
     // Hardware.chooseCargoRocketHeights.get());
 
-
     // Manipulator
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 }
