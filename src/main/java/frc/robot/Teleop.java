@@ -225,22 +225,22 @@ private static void coleTest ()
             Hardware.forkliftOverride.get());
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipCargoButton.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.cargoShipCargoButton);
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipHatchButton.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.cargoShipHatchButton);
 
     // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHigherForkliftTargetHeight.get(),
-    // Hardware.chooseCargoRocketHeights.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.nextHigherLiftHeightButton,
+    //         Hardware.chooseCargoRocketHeights.get());
 
     // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextLowerForkliftTargetHeight.get(),
-    // Hardware.chooseCargoRocketHeights.get());
+    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    //         Hardware.nextLowerLiftHeightButton,
+    //         Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 

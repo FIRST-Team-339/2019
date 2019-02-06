@@ -492,13 +492,13 @@ public void update ()
 public void printDebugInfo ()
 {
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
-    SmartDashboard.putNumber("FL Encoder Ticks: ",
-            this.forkliftEncoder.get());
-    SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
-    SmartDashboard.putString("FL Direction State: ",
-            "" + this.forkliftDirection);
-    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
-            setLiftPositionInit);
+    // SmartDashboard.putNumber("FL Encoder Ticks: ",
+    // this.forkliftEncoder.get());
+    // SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
+    // SmartDashboard.putString("FL Direction State: ",
+    // "" + this.forkliftDirection);
+    // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+    // setLiftPositionInit);
 }
 
 // ==================
@@ -552,11 +552,11 @@ private double currentMinLiftPosition = 0;
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 69; // placeholder value
+public final static double TOP_ROCKET_CARGO = 55; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 26;// placeholder value
+public final static double MIDDLE_ROCKET_CARGO = 35;// placeholder value
 
-public final static double LOWER_ROCKET_CARGO = 0;// placeholder value
+public final static double LOWER_ROCKET_CARGO = 15;// placeholder value
 
 
 // heights for the top, middle, and bottom openings for the hatch
@@ -568,9 +568,9 @@ public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
 public final static double LOWER_ROCKET_HATCH = 10;// placeholder value
 
 // heights for the cargo and hatch openings on the cargo ship
-public final static double CARGO_SHIP_CARGO = 0;// placeholder value
+public final static double CARGO_SHIP_CARGO = 45;// placeholder value
 
-public final static double CARGO_SHIP_HATCH = 0;// placeholder value
+public final static double CARGO_SHIP_HATCH = 40;// placeholder value
 
 private static final double MAX_HEIGHT = 69; // placeholder value from last year
 

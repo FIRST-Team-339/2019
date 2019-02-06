@@ -312,7 +312,7 @@ public static Joystick leftOperator = null;
 public static Joystick rightOperator = null;
 
 // ------------------------------------
-// Buttons classes
+// Buttons classes and Quick Switches
 // ------------------------------------
 // ----- Left Operator -----
 
@@ -325,20 +325,19 @@ public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
 
-public static JoystickButton cargoShipCargoButton = null;
-
-public static JoystickButton cargoShipHatchButton = null;
-
 // ----- Right Operator -----
 
 public static JoystickButton chooseCargoRocketHeights = null;
 
 public static JoystickButton forkliftOverride = null;
 
-public static JoystickButton nextHigherForkliftTargetHeight = null;
+public static QuickSwitch nextHigherLiftHeightButton = null;
 
-public static JoystickButton nextLowerForkliftTargetHeight = null;
+public static QuickSwitch nextLowerLiftHeightButton = null;
 
+public static QuickSwitch cargoShipCargoButton = null;
+
+public static QuickSwitch cargoShipHatchButton = null;
 
 // ------------------------------------
 // Momentary Switches
@@ -347,7 +346,11 @@ public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
 
-public static QuickSwitch testQuickSwitch1 = null;
+
+
+
+
+
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -592,9 +595,6 @@ public static void commonInitialization ()
 
     deployOverride = new JoystickButton(leftOperator, 5);
 
-    cargoShipCargoButton = new JoystickButton(leftOperator, 6);
-
-    cargoShipHatchButton = new JoystickButton(leftOperator, 7);
 
     // ----- Right Operator -----
 
@@ -602,19 +602,23 @@ public static void commonInitialization ()
 
     forkliftOverride = new JoystickButton(rightOperator, 5);
 
-    nextHigherForkliftTargetHeight = new JoystickButton(rightOperator,
+    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
             6);
 
-    nextLowerForkliftTargetHeight = new JoystickButton(rightOperator,
+    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    //
+    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
+
+    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+
     // Momentary Switches
-    //
 
     descendButton = new MomentarySwitch(leftOperator, 5, false);
 
     ringLightButton = new MomentarySwitch(leftOperator, 6, false);
+
+
 
 } // end of commonInitialization
 
@@ -813,7 +817,6 @@ public static void robotInitialize2018 ()
     //
     // Momentary Switches
 
-    testQuickSwitch1 = new QuickSwitch(leftOperator, 10);
 
 }  // end of robotInitialize2018
 
@@ -956,17 +959,23 @@ public static void robotInitialize2019 ()
 
     // Buttons classes
 
-    testQuickSwitch1 = new QuickSwitch(leftOperator, 10);
     // ----- Left Operator -----
 
     // left trigger
 
     // ----- Right Operator -----
 
-    //
-    // Momentary Switches
-    //
+    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
+            6);
 
+    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
+            7);
+
+    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
+
+    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+
+    // Momentary Switches
 
 } // end robotInitialize2019
 
