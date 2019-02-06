@@ -253,6 +253,121 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
     return false;
 }
 
+
+
+
+// TODO add deadband?
+public void setToNextHigherPreset (double forkliftSpeed,
+        QuickSwitch goToHeightButton, boolean goingToCargoButtonValue)
+{
+    if (goToHeightButton.getCurrentValue() == true)
+        {
+        double position = -1;
+        double forkliftHeight = this.getForkliftHeight();
+
+        // if the button to indicate the operator wishes to be going
+        // to a cargo height is being pressed
+        if (goingToCargoButtonValue == true)
+            {
+            // set position to the next preset cargo height on the rocket
+            // above the forklift's current height
+            if (forkliftHeight < LOWER_ROCKET_CARGO)
+                {
+                position = LOWER_ROCKET_CARGO;
+                } else if (forkliftHeight < MIDDLE_ROCKET_CARGO)
+                {
+                position = MIDDLE_ROCKET_CARGO;
+                } else if (forkliftHeight < TOP_ROCKET_CARGO)
+                {
+                position = TOP_ROCKET_CARGO;
+                }
+            } else
+            {
+            // set position to the next preset hatch height on the rocket
+            // above the forklift's current height
+            if (forkliftHeight < LOWER_ROCKET_HATCH)
+                {
+                position = LOWER_ROCKET_HATCH;
+                } else if (forkliftHeight < MIDDLE_ROCKET_HATCH)
+                {
+                position = MIDDLE_ROCKET_HATCH;
+                } else if (forkliftHeight < TOP_ROCKET_HATCH)
+                {
+                position = TOP_ROCKET_HATCH;
+                }
+            }
+
+        SmartDashboard.putNumber("Next Highest Position:", position);
+        // if position was set to one of the prest heights
+        // (if it was not it would still be -1)
+        if (position >= 0.0)
+            {
+            // tell the forklift state machine we want to move to said
+            // position
+            this.forkliftTargetHeight = position;
+            this.forkliftTargetSpeed = Math.abs(forkliftSpeed);
+            this.liftState = ForkliftState.MOVING_TO_POSITION;
+            }
+        }
+}
+
+public void setToNextLowerPreset (double forkliftSpeed,
+        QuickSwitch goToHeightButton, boolean goingToCargoButtonValue)
+{
+    if (goToHeightButton.getCurrentValue() == true)
+        {
+        double position = -1;
+        double forkliftHeight = this.getForkliftHeight();
+
+        // if the button to indicate the operator wishes to be going
+        // to a cargo height is being pressed
+        if (goingToCargoButtonValue == true)
+            {
+            // set position to the next preset cargo height on the rocket
+            // below the forklift's current height
+            if (forkliftHeight > TOP_ROCKET_CARGO)
+                {
+                position = TOP_ROCKET_CARGO;
+                } else if (forkliftHeight > MIDDLE_ROCKET_CARGO)
+                {
+                position = MIDDLE_ROCKET_CARGO;
+                } else if (forkliftHeight > LOWER_ROCKET_CARGO)
+                {
+                position = LOWER_ROCKET_CARGO;
+                }
+            } else
+            {
+            // set position to the next preset hatch height on the rocket
+            // below the forklift's current height
+            if (forkliftHeight > TOP_ROCKET_HATCH)
+                {
+                position = TOP_ROCKET_HATCH;
+                } else if (forkliftHeight > MIDDLE_ROCKET_HATCH)
+                {
+                position = MIDDLE_ROCKET_HATCH;
+                } else if (forkliftHeight > LOWER_ROCKET_HATCH)
+                {
+                position = LOWER_ROCKET_HATCH;
+                }
+            }
+
+        SmartDashboard.putNumber("Next Lower Position:", position);
+        // if position was set to one of the prest heights
+        // (if it was not it would still be -1)
+        if (position >= 0.0)
+            {
+            // tell the forklift state machine we want to move to said
+            // position
+            this.forkliftTargetHeight = position;
+            this.forkliftTargetSpeed = Math.abs(forkliftSpeed);
+            this.liftState = ForkliftState.MOVING_TO_POSITION;
+            }
+        }
+}
+
+
+
+
 /**
  * For use in teleop and autonomous periodic.
  *

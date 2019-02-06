@@ -62,28 +62,28 @@ public class Teleop
 
 public static void init ()
 {
+
     LiveWindow.disableTelemetry(Hardware.pdp);
 
     Hardware.telemetry.printToConsole();
     Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.setTimeBetweenPrints(1000);
 
-    // sets the gear to 0 at the beginning.
-    // Hardware.drive.setGear(0);
-
     Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
     Hardware.transmission.enableDeadband();
 
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
-    Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
-
     Hardware.gyro.reset();
-    // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-    // FIRST_GEAR_RATIO);
-    // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-    // SECOND_GEAR_RATIO);
+
+    // ---------------------------------
+    // drive class initialization
+    // ---------------------------------
+    Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+            FIRST_GEAR_RATIO);
+    Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+            SECOND_GEAR_RATIO);
+    // sets the gear to 0 at the beginning.
+    Hardware.drive.setGear(0);
+
 
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
@@ -155,7 +155,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    coleTest();
+    // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
