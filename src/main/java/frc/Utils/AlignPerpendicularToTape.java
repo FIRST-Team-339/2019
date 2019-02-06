@@ -29,6 +29,10 @@ private boolean rightIRTripped = false;
 
 private boolean leftTrippedFirst = false;
 
+private boolean rightTrippedFirst = false;
+
+private boolean finished = false;
+
 
 public AlignPerpendicularToTape (LightSensor leftBackIR,
         LightSensor rightBackIR, Drive drive)
@@ -38,78 +42,95 @@ public AlignPerpendicularToTape (LightSensor leftBackIR,
     this.leftBackIR = leftBackIR;
 }
 
-public boolean align ()
+// public boolean align ()
+// {
+
+// System.out.println("IRs" + leftBackIR.isOn() + rightBackIR.isOn());
+
+// double leftSpeed = -.2;
+// double rightSpeed = -.2;
+
+// if (leftBackIR.isOn() == true)
+// {
+// leftIRTripped = true;
+// }
+
+// if (rightBackIR.isOn() == true)
+// {
+// rightIRTripped = true;
+// }
+
+// if (rightIRTripped == true)
+// {
+// // System.out.println("WE GOT TO THE RIGHT");
+// rightSpeed = 0.0;
+// }
+// if (leftIRTripped == true)
+// {
+// // System.out.println("WE GOT TO THE LEFT");
+// leftSpeed = 0.0;
+// }
+
+// if (leftIRTripped == true && rightIRTripped == false)
+// {
+// leftTrippedFirst = true;
+// }
+
+// if (leftIRTripped == false && rightIRTripped == true)
+// {
+// rightTrippedFirst = true;
+// }
+
+// if (leftIRTripped == true && rightIRTripped == true
+// && finished == false)
+// {
+// if (leftTrippedFirst == true)
+// {
+// // System.out.println("BEEP BEEP ");
+// if (leftBackIR.isOn() == true && rightBackIR
+// .isOn() == true)
+// {
+// System.out.println("TRYYYYYYYYYYYYYYYYYYYYYYYY");
+// drive.stop();
+// leftSpeed = 0.0;
+// rightSpeed = 0.0;
+// return true;
+// } else
+// {
+// System.out.println("WERE TRYING TO TURN");
+// leftSpeed = .3;
+// rightSpeed = -.25;
+// }
+// } else if (rightTrippedFirst == true
+// && leftBackIR.isOn() == true
+// && rightBackIR.isOn() == true)
+// {
+// System.out.println("TRYYYYYYYYYYYYYYYYYYYYYYYY");
+// drive.stop();
+// leftSpeed = 0.0;
+// rightSpeed = 0.0;
+// finished = true;
+// return true;
+// } else
+// {
+// // System.out.println("WERE TRYING TO TURN");
+// leftSpeed = -.25;
+// rightSpeed = .3;
+// }
+// }
+// drive.getTransmission().driveRaw(leftSpeed, rightSpeed);
+// return false;
+// }
+public enum AlignState
+    {
+
+
+    }
+
+public void align ()
 {
 
-    System.out.println("IRs" + leftBackIR.isOn() + rightBackIR.isOn());
-
-    double leftSpeed = -.2;
-    double rightSpeed = -.2;
-
-    if (leftBackIR.isOn() == true)
-        {
-        leftIRTripped = true;
-        }
-
-    if (rightBackIR.isOn() == true)
-        {
-        rightIRTripped = true;
-        }
-
-    if (rightIRTripped == true)
-        {
-        // System.out.println("WE GOT TO THE RIGHT");
-        rightSpeed = 0.0;
-        }
-    if (leftIRTripped == true)
-        {
-        // System.out.println("WE GOT TO THE LEFT");
-        leftSpeed = 0.0;
-        }
-
-    if (leftIRTripped == true && rightIRTripped == false)
-        {
-        leftTrippedFirst = true;
-        }
-
-    if (leftIRTripped == true && rightIRTripped == true)
-        {
-        if (leftTrippedFirst == true)
-            {
-            // System.out.println("BEEP BEEP ");
-            if (leftBackIR.isOn() == true && rightBackIR
-                    .isOn() == true)
-                {
-                System.out.println("TRYYYYYYYYYYYYYYYYYYYYYYYY");
-                drive.stop();
-                leftSpeed = 0.0;
-                rightSpeed = 0.0;
-                return true;
-                } else
-                {
-                System.out.println("WERE TRYING TO TURN");
-                leftSpeed = .3;
-                rightSpeed = -.25;
-                }
-            } else if (leftBackIR.isOn() == true
-                    && rightBackIR.isOn() == true)
-            {
-            System.out.println("TRYYYYYYYYYYYYYYYYYYYYYYYY");
-            drive.stop();
-            leftSpeed = 0.0;
-            rightSpeed = 0.0;
-            return true;
-            } else
-            {
-            // System.out.println("WERE TRYING TO TURN");
-            leftSpeed = -.25;
-            rightSpeed = .3;
-            }
-        }
-    drive.getTransmission().driveRaw(leftSpeed, rightSpeed);
-    return false;
 }
-
 
 public void resetForAlign ()
 {
