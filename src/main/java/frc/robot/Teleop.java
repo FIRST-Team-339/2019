@@ -63,30 +63,27 @@ public class Teleop
 public static void init ()
 {
 
-
-
     LiveWindow.disableTelemetry(Hardware.pdp);
 
     Hardware.telemetry.printToConsole();
     Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.setTimeBetweenPrints(1000);
 
-    // sets the gear to 0 at the beginning.
-    // Hardware.drive.setGear(0);
-
     Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
     Hardware.transmission.enableDeadband();
 
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
-    Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
-
     Hardware.gyro.reset();
-    // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-    // FIRST_GEAR_RATIO);
-    // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-    // SECOND_GEAR_RATIO);
+
+    // ---------------------------------
+    // drive class initialization
+    // ---------------------------------
+    Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+            FIRST_GEAR_RATIO);
+    Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+            SECOND_GEAR_RATIO);
+    // sets the gear to 0 at the beginning.
+    Hardware.drive.setGear(0);
+
 
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
@@ -145,7 +142,6 @@ public static void periodic ()
     individualTest();
 
     printStatements();
-
 }
 // end Periodic()
 
@@ -245,13 +241,12 @@ private static void coleTest ()
     // Hardware.nextLowerForkliftTargetHeight.get(),
     // Hardware.chooseCargoRocketHeights.get());
 
-
     // Manipulator
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 }
@@ -263,7 +258,8 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-    // Hi Patrick!
+    SmartDashboard.putBoolean("Is Patrick Happy?",
+            Hardware.rightDriver.getRawButton(4));
 }
 
 private static void annaTest ()

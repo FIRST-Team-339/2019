@@ -61,6 +61,7 @@ public void robotInit ()
 
     System.out.println(
             "Kilroy XX is started.  All hardware items created.");
+
 } // end robotInit()
 
 /**
@@ -99,9 +100,9 @@ public void autonomousInit ()
     // =========================================================
     // User code goes below here
     // =========================================================
-    m_autoSelected = SmartDashboard.getString("Auto Selector",
-            kDefaultAuto);
-    Autonomous.init();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector",
+    // kDefaultAuto);
+    // Autonomous.init();
 
     // =========================================================
     // User code goes above here

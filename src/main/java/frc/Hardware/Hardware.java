@@ -22,6 +22,7 @@ import frc.HardwareInterfaces.KilroySPIGyro;
 import frc.HardwareInterfaces.LVMaxSonarEZ;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.MomentarySwitch;
+import frc.HardwareInterfaces.QuickSwitch;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
@@ -346,6 +347,8 @@ public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
 
+public static QuickSwitch testQuickSwitch1 = null;
+
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -406,6 +409,11 @@ public static AlignPerpendicularToTape alignByTape = null;
  */
 public static void initialize ()
 {
+    // ---------------------------
+    // any hardware declarations that
+    // are exactly the same between 2018
+    // and 2019. Make them only once
+    // ---------------------------
     commonInitialization();
     switch (whichRobot)
         {
@@ -420,7 +428,12 @@ public static void initialize ()
 
         case TEST_BOARD:
             break;
-        }
+        } // end switch
+          // ------------------------
+          // The function calls in commonKilroyAncillary
+          // must follow all other hardware declarations
+          // -------------------------
+    commonKilroyAncillary();
 }
 
 public static void commonInitialization ()
@@ -603,26 +616,63 @@ public static void commonInitialization ()
 
     ringLightButton = new MomentarySwitch(leftOperator, 6, false);
 
+} // end of commonInitialization
+
+public static void commonKilroyAncillary ()
+{
     // **********************************************************
     // Kilroy's Ancillary classes
     // **********************************************************
     // PID tuneables
     // PID classes
     // Utility classes
-
     autoTimer = new Timer();
 
     deployTimer = new Timer();
 
     telemetry = new Telemetry(10000);
 
+
+    // Transmission class
+    // Transmission class
+    transmission = new TankTransmission(
+            new SpeedControllerGroup(leftFrontCANMotor,
+                    leftRearCANMotor),
+            new SpeedControllerGroup(rightFrontCANMotor,
+                    rightRearCANMotor));
+
     // ------------------------------------
     // Drive system
     // ------------------------------------
+    drive = new Drive(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            gyro);
+
+    drivePID = new DrivePID(transmission,
+            leftFrontDriveEncoder, rightFrontDriveEncoder,
+            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+
+    driveWithCamera = new DriveWithCamera(
+            transmission, null, null, frontUltraSonic,
+            frontUltraSonic, gyro, axisCamera);
 
 
+    // Assembly classes (e.g. forklift)
+    manipulator = new GamePieceManipulator(
+            armMotor, intakeDeploySensor/* armEncoder */,
+            armRoller,
+            null/* photoSwitch */);
 
-} // end of commonInitialization
+    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
+
+    climber = new ClimbToLevelTwo(
+            armIntakeSolenoid, armMotor, intakeDeploySensor,
+            drive, lift, frontUltraSonic);
+
+    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
+            drive);
+
+} // end commonKilroyAncillary()
 
 /**
  * This initializes all of the components in Hardware
@@ -762,52 +812,8 @@ public static void robotInitialize2018 ()
 
     //
     // Momentary Switches
-    //
 
-    // **********************************************************
-    // Kilroy's Ancillary classes
-    // **********************************************************
-    // PID tuneables
-    // PID classes
-    // Utility classes
-
-    // Transmission class
-    // Transmission class
-    transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
-
-    // ------------------------------------
-    // Drive system
-    // ------------------------------------
-    drive = new Drive(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            gyro);
-
-    drivePID = new DrivePID(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
-
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
-
-    // Assembly classes (e.g. forklift)
-    manipulator = new GamePieceManipulator(
-            armMotor, intakeDeploySensor/* armEncoder */,
-            armRoller,
-            null/* photoSwitch */);
-
-    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
-
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, armMotor, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-
-    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
-            drive);
+    testQuickSwitch1 = new QuickSwitch(leftOperator, 10);
 
 }  // end of robotInitialize2018
 
@@ -949,6 +955,8 @@ public static void robotInitialize2019 ()
     // Joystick classes
 
     // Buttons classes
+
+    testQuickSwitch1 = new QuickSwitch(leftOperator, 10);
     // ----- Left Operator -----
 
     // left trigger
@@ -959,51 +967,6 @@ public static void robotInitialize2019 ()
     // Momentary Switches
     //
 
-    // **********************************************************
-    // Kilroy's Ancillary classes
-    // **********************************************************
-    // PID tuneables
-    // PID classes
-    // Utility classes
-
-    // Transmission class
-    // Transmission class
-    transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
-
-    // ------------------------------------
-    // Drive system
-    // ------------------------------------
-    drive = new Drive(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            gyro);
-
-    drivePID = new DrivePID(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
-
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
-
-
-    // Assembly classes (e.g. forklift)
-    manipulator = new GamePieceManipulator(
-            armMotor, intakeDeploySensor/* armEncoder */,
-            armRoller,
-            null/* photoSwitch */);
-
-    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
-
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, armMotor, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-
-    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
-            drive);
 
 } // end robotInitialize2019
 
@@ -1040,12 +1003,21 @@ public static void setHardwareSettings ()
  */
 public static void commonHardwareSettings ()
 {
+    // ------------------------------
+    // starts the compressor
+    // ------------------------------
     Hardware.compressor.setClosedLoopControl(true);
 
+    // ------------------------------
+    // must be calibrated before we can
+    // use the gyro
+    // ------------------------------
     Hardware.gyro.calibrate();
     Hardware.gyro.reset();
 
-
+    // ------------------------------
+    // camera setup
+    // ------------------------------
     // written by Meghan Brown 2019
     // makes the camera work --- can we get this in colour somehow?
     // Hardware.USBCam.setResolution(320, 240);
@@ -1062,14 +1034,35 @@ public static void commonHardwareSettings ()
     // Hardware.USBCamUp.setFPS(20);
     // Hardware.USBCamUp.setPixelFormat(VideoMode.PixelFormat.kYUYV);
 
-    // Hardware.rightFrontDriveEncoder.setReverseDirection(true);
-    // Hardware.leftFrontDriveEncoder.setReverseDirection(true);
-    Hardware.liftingEncoder.setReverseDirection(true);
-
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
     // of the drive motors
     // --------------------------------------
+
+} // end commonHardwareSettings
+
+/**
+ * This sets up the settings and resets for the hardware objects so we
+ * don't have to write them all in robotInit. it's to keep it not cluttered.
+ *
+ * @author Patrick
+ */
+public static void setHardwareSettings2018 ()
+{
+    // ----------------------------
+    // motor initialization
+    // ----------------------------
+    Hardware.rightFrontCANMotor.setInverted(false);
+    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.leftFrontCANMotor.setInverted(false);
+    Hardware.leftRearCANMotor.setInverted(false);
+
+    // ---------------------------
+    // Encoder Initialization
+    // ---------------------------
+    Hardware.rightFrontDriveEncoder.setReverseDirection(false);
+    Hardware.leftFrontDriveEncoder.setReverseDirection(false);
+    Hardware.liftingEncoder.setReverseDirection(true);
 
     // -------------------------------------
     // Resets encoder values
@@ -1089,18 +1082,6 @@ public static void commonHardwareSettings ()
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
-    System.out.println("Connor would say \"we have done the thing\"");
-
-} // end commonHardwareSettings
-
-/**
- * This sets up the settings and resets for the hardware objects so we
- * don't have to write them all in robotInit. it's to keep it not cluttered.
- *
- * @author Patrick
- */
-public static void setHardwareSettings2018 ()
-{
 } // end setHardwareSettings2018
 
 /**
@@ -1111,10 +1092,54 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
+    // ----------------------------
+    // motor initialization
+    // ----------------------------
+    Hardware.rightFrontCANMotor.setInverted(false);
+    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.leftFrontCANMotor.setInverted(false);
+    Hardware.leftRearCANMotor.setInverted(false);
+
+    // ---------------------------
+    // Encoder Initialization
+    // ---------------------------
+    // Hardware.rightFrontDriveEncoder.setReverseDirection(false);
+    // Hardware.leftFrontDriveEncoder.setReverseDirection(false);
+    // Hardware.rightRearDriveEncoder.setReverseDirection(false);
+    // Hardware.leftRearDriveEncoder.setReverseDirection(false);
+    // Hardware.liftingEncoder.setReverseDirection(false);
+
+    // -------------------------------------
+    // Manually sets encoders Distance per Pulse
+    // -------------------------------------
+    // Hardware.leftFrontDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.rightFrontDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.leftFrontDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.rightFrontDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.liftingEncoder
+    // .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
+
+    // -------------------------------------
+    // Resets encoder values
+    // -------------------------------------
+    Hardware.rightFrontDriveEncoder.reset();
+    Hardware.leftFrontDriveEncoder.reset();
+    Hardware.rightRearDriveEncoder.reset();
+    Hardware.leftRearDriveEncoder.reset();
+    Hardware.liftingEncoder.reset();
+
 } // end setHardwareSettings2019
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
+
+// private static final double KILROY_XX_DRIVE_ENCODER_DPP = 0.0346;
+
+// private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 
 } // end class
