@@ -6,10 +6,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class QuickSwitch
 {
 
-Joystick joystick;
-
-int buttonNumber;
-
 JoystickButton button;
 
 boolean isOn = false;
@@ -29,13 +25,25 @@ public QuickSwitch (JoystickButton button)
 
 public boolean getCurrentValue ()
 {
-
+    this.update();
     return isOn;
 }
 
-public void update ()
+private void update ()
 {
+    if (this.button.get() == true)
+        {
+        if (this.wasPreviouslyOn == false)
+            this.isOn = true;
+        else
+            this.isOn = false;
 
+        wasPreviouslyOn = true;
+        } else
+        {
+        this.isOn = false;
+        this.wasPreviouslyOn = false;
+        }
 }
 
 }

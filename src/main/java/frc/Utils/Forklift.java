@@ -1,6 +1,7 @@
 package frc.Utils;
 
 import frc.HardwareInterfaces.KilroyEncoder;
+import frc.HardwareInterfaces.QuickSwitch;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -162,15 +163,15 @@ public void setMaxLiftHeight (int inches)
  * @param forkliftSpeed
  *                          - the desired speed we will move to position at
  * @param button
- *                          - the value of the button we are using (whether
- *                          or not it is pressed)
+ *                          - the QuickSwitch we are using to say when we want
+ *                          to move to the specified position
  *
  */
 public void setLiftPositionByButton (double position,
-        double forkliftSpeed, boolean button)
+        double forkliftSpeed, QuickSwitch button)
 {
     // if the button is being held down and was not being held down before
-    if (button == true && setLiftPositionPreviousButtonValue == false)
+    if (button.getCurrentValue() == true)
         {
         // tell the forklift state machine we want to move to a particular
         // position
@@ -178,15 +179,7 @@ public void setLiftPositionByButton (double position,
         forkliftTargetSpeed = Math.abs(forkliftSpeed);
         liftState = ForkliftState.MOVING_TO_POSITION;
         }
-    // update value of the setLiftPositionPreviousButtonValue variable
-    setLiftPositionPreviousButtonValue = button;
 }
-
-// not an actual momentary switch object, but a boolean used to the same effect;
-// used to keep the setLiftPositionByButton method from trying to set the
-// forklift height multiple times in a row when the forklift height is near the
-// height
-private boolean setLiftPositionPreviousButtonValue = false;
 
 /**
  * Moves the arm to the the position input, FORKLIFT_MAX_HEIGHT being the top

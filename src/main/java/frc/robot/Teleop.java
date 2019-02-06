@@ -62,9 +62,6 @@ public class Teleop
 
 public static void init ()
 {
-
-
-
     LiveWindow.disableTelemetry(Hardware.pdp);
 
     Hardware.telemetry.printToConsole();
@@ -157,8 +154,8 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
-    // coleTest();
+    // connerTest();
+    coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -245,13 +242,12 @@ private static void coleTest ()
     // Hardware.nextLowerForkliftTargetHeight.get(),
     // Hardware.chooseCargoRocketHeights.get());
 
-
     // Manipulator
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTrigger.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
 
 }
