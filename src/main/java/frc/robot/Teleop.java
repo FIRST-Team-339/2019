@@ -153,7 +153,7 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    // ashleyTest();
+    ashleyTest();
     // connerTest();
     // coleTest();
     // guidoTest();
@@ -167,7 +167,7 @@ private static void ashleyTest ()
 {
     if (Hardware.leftDriver.getRawButton(3) == true)
         {
-        if (Hardware.alignByTape.align() == true)
+        // if (Hardware.alignByTape.align() == true)
             {
             System.out.println(
                     "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");

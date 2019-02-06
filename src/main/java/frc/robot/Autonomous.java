@@ -161,7 +161,8 @@ public static void periodic ()
             if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0,
                     5.0))
                 {
-                System.out.println("DOGS ARE AWESOME AND CATS ARE NOT");
+                System.out.println(
+                        "CATS ARE AWESOME AND CATS ARE AMAZING");
                 autoState = State.CHOOSE_PATH;
                 Hardware.autoTimer.stop();
                 break;
@@ -670,17 +671,21 @@ private static boolean depositRocketHatch ()
         case ALIGN_PERPENDICULAR_TO_TAPE:
             // if (alignPerpendicularToTape() == true)
             // {
-            // rocketHatchState = RocketHatchState.DRIVE_TO_TAPE;
+            rocketHatchState = RocketHatchState.DRIVE_TO_ROCKET_TAPE;
             // }
 
             break;
 
         case DRIVE_TO_ROCKET_TAPE:
-        // if (redlight1 == true || redlight2 == true || redlight3 == true ||
-        // redlight4 == true ||redlight5 == true)
-            {
-            rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
-            }
+            // if (redlight1 == true || redlight2 == true || redlight3 == true
+            // ||
+            // redlight4 == true ||redlight5 == true)
+            if (Hardware.frontUltraSonic
+                    .getDistanceFromNearestBumper() < DISTANCE_NEEDED_TO_TURN)
+                {
+                Hardware.drive.stop();
+                rocketHatchState = RocketHatchState.ALIGN_TO_ROCKET;
+                }
         // else
             {
             Hardware.drive.driveStraight(DRIVE_SPEED, ACCELERATION_TIME,
@@ -1033,7 +1038,7 @@ public static void endAutoPath ()
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
-private static boolean usingVision = true;
+private static boolean usingVision = false;
 
 private static boolean usingAlignByWall = false;
 
