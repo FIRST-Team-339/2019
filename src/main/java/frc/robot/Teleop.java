@@ -118,6 +118,30 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
+    // Forklifts
+
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.forkliftOverride.get());
+
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.cargoShipCargoButton);
+
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.cargoShipHatchButton);
+
+    Hardware.lift.setToNextHigherPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.nextHigherLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
+
+    Hardware.lift.setToNextLowerPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.nextLowerLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
+
+
     // =================================================================
     Hardware.lift.update();
 
@@ -125,19 +149,16 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    // TODO pls yell at me if I puch this
+    teleopDrive();
+
+    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
+
+    individualTest();
+
     // Hardware.telemetry.printToShuffleboard();
 
     // Hardware.telemetry.printToConsole();
-
-
-
-
-
-    teleopDrive();
-
-    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
-
-    individualTest();
 
     printStatements();
 }
@@ -162,23 +183,26 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    if (Hardware.leftDriver.getRawButton(3) == true)
-        {
-        // if (Hardware.alignByTape.align() == true)
-            {
-            System.out.println(
-                    "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
-            }
-        } else
-        {
-        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-        }
 
 
-    if (Hardware.rightDriver.getRawButton(3) == true)
-        {
-        Hardware.alignByTape.resetForAlign();
-        }
+
+    // if (Hardware.leftDriver.getRawButton(3) == true)
+    // {
+    // // if (Hardware.alignByTape.align() == true)
+    // {
+    // System.out.println(
+    // "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
+    // }
+    // } else
+    // {
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
+
+
+    // if (Hardware.rightDriver.getRawButton(3) == true)
+    // {
+    // Hardware.alignByTape.resetForAlign();
+    // }
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
@@ -224,28 +248,6 @@ private static void connerTest ()
 
 private static void coleTest ()
 {
-    // Forklifts
-
-    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-            Hardware.forkliftOverride.get());
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipCargoButton);
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipHatchButton);
-
-    // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHigherLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
-
-    // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextLowerLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 
@@ -259,13 +261,43 @@ private static void coleTest ()
 
 private static void guidoTest ()
 {
-
+    SmartDashboard.putNumber("Lift Encoder",
+            Hardware.lift.getForkliftHeight());
 }
 
 private static void patrickTest ()
 {
-    SmartDashboard.putBoolean("Is Patrick Happy?",
-            Hardware.rightDriver.getRawButton(4));
+
+    if (Hardware.rightDriver.getRawButton(4) == true
+            && currentBackground < 2)
+        {
+        currentBackground++;
+        }
+
+    if (Hardware.rightDriver.getRawButton(5) == true)
+        {
+        currentBackground = 0;
+        }
+
+
+    if (currentBackground == 0)
+        {
+        isBlue = false;
+        isOrange = false;
+        }
+    if (currentBackground == 1)
+        {
+        isBlue = true;
+        isOrange = false;
+        }
+    if (currentBackground == 2)
+        {
+        isBlue = false;
+        isOrange = true;
+        }
+
+    SmartDashboard.putBoolean("Blue", isBlue);
+    SmartDashboard.putBoolean("Orange", isOrange);
 }
 
 private static void annaTest ()
@@ -411,7 +443,7 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
         // TODO test potentiometers
-        System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -518,9 +550,12 @@ public static void teleopDrive ()
         }
 }
 
+
+
 // ================================
 // Constants
 // ================================
+
 
 private static final int GEAR_UP_SHIFT_BUTTON = 3;
 
@@ -539,6 +574,13 @@ private static final double FIRST_GEAR_RATIO = .4;
 private static final double SECOND_GEAR_RATIO = .7;
 
 private static final double DEADBAND_VALUE = .2;
+
+private static int currentBackground = 0;
+
+private static boolean isBlue = true;
+
+private static boolean isOrange = true;
+
 // ================================
 // Variables
 // ================================

@@ -62,6 +62,11 @@ public static enum DeployMovementState
 MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP
     }
 
+private static enum DeployMovementDirection
+    {
+MOVING_UP, MOVING_DOWN, NEUTRAL
+    }
+
 // =========================================================================
 // General Methods
 // =========================================================================
@@ -93,9 +98,6 @@ public void masterUpdate ()
 // =========================================================================
 // armMotor methods
 // =========================================================================
-
-
-
 
 
 /**
@@ -141,7 +143,7 @@ public double getCurrentArmPosition ()
         // assumes that the value from the encoder is reset to 0
         // when the robot is started and negative when the manipulator
         // is below the starting position
-        // TODO should getDistance be used instead of get
+        // TODO should getDistance be used instead of get?
         double valueFromHorizontal = (armEncoder.get()
                 - ARM_ENCODER_RAW_HORIZONTAL_VALUE)
                 * ARM_ENCODER_SCALE_TO_DEGREES;
@@ -166,70 +168,113 @@ public void moveArmToPosition (int targetPosition)
         }
 }
 
+private double deployTargetAngle = 0.0;
 
-// public void deployUpdate ()
-// {
-// switch (deployMovementState)
-// {
-// case MOVING_BY_JOY:
-// if ((this.forkliftTargetHeight > currentForkliftMaxHeight)
-// || (this.forkliftTargetHeight < currentMinLiftPosition))
-// {
-// deployMovementState = DeployMovementState.STAY_AT_POSITION;
-// break;
-// }
+private double deployTargetSpeed = 0.0;
 
-// // Begins by stating whether we are increasing or decreasing
-// if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
-// {
-// if (forkliftTargetHeight < this.getForkliftHeight())
-// forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
-// else
-// forkliftDirection = ForkliftDirectionState.MOVING_UP;
-// }
+private double currentDeployMaxAngle = 0.0;
 
-// // Differentiate moving up from down
-// if (forkliftDirection == ForkliftDirectionState.MOVING_UP)
-// {
-// // If we have passed the value we wanted...
-// if (this.getForkliftHeight() > forkliftTargetHeight)
-// {
-// liftState = ForkliftState.STAY_AT_POSITION;
-// // Reset the direction for next time.
-// forkliftDirection = ForkliftDirectionState.NEUTRAL;
-// break;
-// }
-// // we have NOT passed the value , keep going up.
+private double currentDeployMinAngle = 0.0;
 
-// this.forkliftMotor.set(forkliftTargetSpeed);
+private boolean isSetDeployPositionInitReady = true;
 
-// } else
-// {
-// // If we have passed the value we wanted...
-// if (this.getForkliftHeight() < forkliftTargetHeight)
-// {
-// liftState = ForkliftState.STAY_AT_POSITION;
-// // Reset the direction for next time.
-// forkliftDirection = ForkliftDirectionState.NEUTRAL;
-// break;
-// }
-// // we have NOT passed the value , keep going down.
-// this.forkliftMotor.set(-forkliftTargetSpeed);
-// }
-// break;
-// case MOVING_TO_POSITION:
-// break;
+public void deployUpdate ()
+{
+    switch (deployMovementState)
+        {
+        case MOVING_TO_POSITION:
+            if ((this.deployTargetAngle > currentDeployMaxAngle)
+                    || (this.deployTargetAngle < currentDeployMinAngle))
+                {
+                deployMovementState = DeployMovementState.STAY_AT_POSITION;
+                break;
+                }
 
-// default:
-// case STAY_AT_POSITION:
-// break;
+            // Begins by stating whether we are increasing or decreasing
+            if (deployDirection == DeployMovementDirection.NEUTRAL)
+                {
+                if (deployTargetAngle < this.getCurrentArmPosition())
+                    deployDirection = DeployMovementDirection.MOVING_DOWN;
+                else
+                    deployDirection = DeployMovementDirection.MOVING_UP;
+                }
 
-// case STOP:
+            // Differentiate moving up from down
+            if (deployDirection == DeployMovementDirection.MOVING_UP)
+                {
+                // If we have passed the value we wanted...
+                if (this.getCurrentArmPosition() > deployTargetAngle)
+                    {
+                    deployMovementState = DeployMovementState.STAY_AT_POSITION;
+                    // Reset the direction for next time.
+                    deployDirection = DeployMovementDirection.NEUTRAL;
+                    break;
+                    }
+                // we have NOT passed the value , keep going up.
 
-// break;
+                this.armMotor.set(deployTargetSpeed);
 
-// }
-// }
+                } else
+                {
+                // If we have passed the value we wanted...
+                if (this.getCurrentArmPosition() < deployTargetAngle)
+                    {
+                    deployMovementState = DeployMovementState.STAY_AT_POSITION;
+                    // Reset the direction for next time.
+                    deployDirection = DeployMovementDirection.NEUTRAL;
+                    break;
+                    }
+                // we have NOT passed the value , keep going down.
+                this.armMotor.set(-deployTargetSpeed);
+                }
+            break;
+        case MOVING_BY_JOY:
+            isSetDeployPositionInitReady = true;
+            this.armMotor.set(deployTargetSpeed);
+            // If we are no longer holding the joystick, then it will
+            // automatically stay at position. If we are holding the
+            // joysticks, then other functions will set
+            // deployMovementState back to MOVINg_BY_JOY before we get
+            // back here
+            deployMovementState = DeployMovementState.STAY_AT_POSITION;
+            break;
+
+        default:
+        case STAY_AT_POSITION:
+            // TODO the new armMotor might not even need a voltage to
+            // stay in place, so we might be able to just give the arm motor
+            // 0.0 no matter what game piece we have
+
+            // Depending on what piece the manipulator has, send the appropriate
+            // value to the motor so the forklift does not slide down due to
+            // gravity
+            switch (this.hasWhichGamePiece())
+                {
+                case HATCH_PANEL:
+                    this.armMotor.set(STAY_UP_WITH_HATCH);
+                    break;
+
+                case CARGO:
+                    this.armMotor.set(STAY_UP_WITH_CARGO);
+                    break;
+
+                default:
+                case NONE:
+                    this.armMotor.set(STAY_UP_NO_PIECE);
+                    break;
+
+                }
+            // Reset the direction for next move-to-position.
+            deployDirection = DeployMovementDirection.NEUTRAL;
+            isSetDeployPositionInitReady = true;
+            break;
+
+        case STOP:
+            this.armMotor.set(0.0);
+            break;
+
+        }
+}
 // =========================================================================
 // Hatch Panel Methods
 // =========================================================================
@@ -336,16 +381,24 @@ private static final double ARM_POT_SCALE_TO_DEGREES = 1.0; // placeholder
 // value that is multiplied by the number of ticks to convert it to degreesf
 private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
 
+private static double STAY_UP_WITH_HATCH = 0.0;
+
+private static double STAY_UP_WITH_CARGO = 0.0;
+
+private static double STAY_UP_NO_PIECE = 0.0;
+
 
 // =========================================================================
 // Variables
 // =========================================================================
 
-public DeployMovementState deployMovementState = DeployMovementState.STAY_AT_POSITION;
+private DeployMovementState deployMovementState = DeployMovementState.STAY_AT_POSITION;
+
+private DeployMovementDirection deployDirection = DeployMovementDirection.NEUTRAL;
 
 // The angle the manipulator is trying to move to; 0 is the start angle,
 // positive angles are above the start, negative angles are below the starts
-public double targetManipulatorAngle = 0;
+private double targetManipulatorAngle = 0;
 
 
 

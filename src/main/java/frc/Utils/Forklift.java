@@ -255,15 +255,40 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
 
 
 
-
-// TODO add deadband?
+/**
+ * Sets the forklift to the next higher Cargo or Hatch height on the
+ * rocket ship when the button associated with goToHeightButton is
+ * pressed
+ *
+ * @param forkliftSpeed
+ *                                    - the speed the forklift will move at; if
+ *                                    unsure
+ *                                    about which to use, use
+ *                                    Forklift.DEFAULT_TELEOP_BUTTON_SPEED
+ * @param goToHeightButton
+ *                                    - the QuickSwitch associated with the
+ *                                    button that
+ *                                    needs to be pressed to go to the actually
+ *                                    move the forklift to the preset heights
+ *
+ * @param goingToCargoButtonValue
+ *                                    - value of the button, that, if true,
+ *                                    tells
+ *                                    the forklift to go the preset Cargo
+ *                                    heights for the rocket ships (when
+ *                                    goToHeightButton is pressed); if false, go
+ *                                    to the preset hatch heights for the rocket
+ *                                    ship (when goToHeightButton is pressed)
+ *
+ */
 public void setToNextHigherPreset (double forkliftSpeed,
         QuickSwitch goToHeightButton, boolean goingToCargoButtonValue)
 {
     if (goToHeightButton.getCurrentValue() == true)
         {
         double position = -1;
-        double forkliftHeight = this.getForkliftHeight();
+        double forkliftHeight = this.getForkliftHeight()
+                + NEXT_HIGHER_POSITION_DEADBAND;
 
         // if the button to indicate the operator wishes to be going
         // to a cargo height is being pressed
@@ -297,7 +322,7 @@ public void setToNextHigherPreset (double forkliftSpeed,
                 }
             }
 
-        SmartDashboard.putNumber("Next Highest Position:", position);
+        System.out.println("Next Highest Position: " + position);
         // if position was set to one of the prest heights
         // (if it was not it would still be -1)
         if (position >= 0.0)
@@ -311,13 +336,44 @@ public void setToNextHigherPreset (double forkliftSpeed,
         }
 }
 
+// # of feet that the forklift can be off of the next highest position to
+// count as already being there
+private final double NEXT_HIGHER_POSITION_DEADBAND = 1;
+
+/**
+ * Sets the forklift to the next lower Cargo or Hatch height on the
+ * rocket ship when the button associated with goToHeightButton is
+ * pressed
+ *
+ * @param forkliftSpeed
+ *                                    - the speed the forklift will move at; if
+ *                                    unsure
+ *                                    about which to use, use
+ *                                    Forklift.DEFAULT_TELEOP_BUTTON_SPEED
+ * @param goToHeightButton
+ *                                    - the QuickSwitch associated with the
+ *                                    button that
+ *                                    needs to be pressed to go to the actually
+ *                                    move the forklift to the preset heights
+ *
+ * @param goingToCargoButtonValue
+ *                                    - value of the button, that, if true,
+ *                                    tells
+ *                                    the forklift to go the preset Cargo
+ *                                    heights for the rocket ships (when
+ *                                    goToHeightButton is pressed); if false, go
+ *                                    to the preset hatch heights for the rocket
+ *                                    ship (when goToHeightButton is pressed)
+ *
+ */
 public void setToNextLowerPreset (double forkliftSpeed,
         QuickSwitch goToHeightButton, boolean goingToCargoButtonValue)
 {
     if (goToHeightButton.getCurrentValue() == true)
         {
         double position = -1;
-        double forkliftHeight = this.getForkliftHeight();
+        double forkliftHeight = this.getForkliftHeight()
+                - NEXT_LOWER_POSITION_DEADBAND;
 
         // if the button to indicate the operator wishes to be going
         // to a cargo height is being pressed
@@ -365,7 +421,9 @@ public void setToNextLowerPreset (double forkliftSpeed,
         }
 }
 
-
+// # of feet that the forklift can be off of the next lowest position to
+// count as already being there
+private final double NEXT_LOWER_POSITION_DEADBAND = 1;
 
 
 /**
@@ -379,7 +437,6 @@ public void setToNextLowerPreset (double forkliftSpeed,
  */
 public void update ()
 {
-    // this.printDebugInfo();
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
     if (manipulator.isDeployed() == false)
@@ -487,8 +544,8 @@ public void update ()
         }
 }
 
-// Useful forklift infromation that can be sent to smart dashboard when we are
-// testing
+// Useful forklift infromation that can be sent to smart dashboard when we
+// are testing
 public void printDebugInfo ()
 {
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());

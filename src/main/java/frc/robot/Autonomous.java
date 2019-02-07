@@ -151,23 +151,20 @@ public static void periodic ()
         {
         case INIT:
             setPositionAndLevel();
+            Hardware.autoTimer.start();
             autoState = State.DELAY;
             break;
         case DELAY:
 
             // Delay using the potentiometer, from 0 to 5 seconds
             // once finished, stop the timer and go to the next state
-
             if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0,
                     5.0))
                 {
-                System.out.println(
-                        "CATS ARE AWESOME AND CATS ARE AMAZING");
                 autoState = State.CHOOSE_PATH;
                 Hardware.autoTimer.stop();
-                break;
                 }
-
+            break;
 
         case CHOOSE_PATH:
             choosePath();
@@ -233,7 +230,6 @@ private static void choosePath ()
             break;
 
         case 2:
-            rocketHatchState = RocketHatchState.DESCEND;
             autoState = State.DEPOSIT_ROCKET_HATCH;
             break;
 
@@ -268,7 +264,7 @@ private static void setPositionAndLevel ()
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
-        System.out.println("Floor it!");
+        System.out.println("position and level set");
         } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
@@ -311,7 +307,7 @@ private static boolean crossAutoline ()
         {
         case AWAKEN:
             // initial state for crossing the autoline
-            setPositionAndLevel();
+            // setPositionAndLevel();
             switch (autoPosition)
                 {
                 case LEFT:
@@ -438,11 +434,11 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case DESCEND:
-            if (descendFromLevelTwo(usingAlignByWall))
-                {
-                // turn based on start position
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
-                }
+        // if (descendFromLevelTwo(usingAlignByWall))
+            {
+            // turn based on start position
+            depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
+            }
             break;
 
         case STRAIGHT_DEPOSIT_DRIVE_1:
@@ -587,7 +583,7 @@ private static boolean depositRocketHatch ()
                 rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                 } else
                 {
-                Hardware.axisCamera.setRelayValue(Value.kOff);
+                // Hardware.axisCamera.setRelayValue(Value.kOff);
                 autoTimer.reset();
                 autoTimer.start();
                 // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
@@ -883,13 +879,13 @@ private static boolean depositSideCargoHatch ()
 
 private static void driverControl ()
 {
-    if (Hardware.leftDriver.getRawButton(5) == true)
-        {
-        Hardware.leftFrontCANMotor.set(.5);
-        } else
-        {
-        Hardware.leftFrontCANMotor.set(0);
-        }
+    // if (Hardware.leftDriver.getRawButton(5) == true)
+    // {
+    // Hardware.leftFrontCANMotor.set(.5);
+    // } else
+    // {
+    // Hardware.leftFrontCANMotor.set(0);
+    // }
     Teleop.periodic();
 }
 
@@ -1030,6 +1026,8 @@ public static void endAutoPath ()
     sideCargoHatchState = SideCargoHatchState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
+    descentState = DescentState.FINISH;
+    cross = Cross.FINITE_INCANTATEM;
 
 }
 
