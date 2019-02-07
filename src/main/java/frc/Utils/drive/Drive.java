@@ -1065,8 +1065,6 @@ public void resetEncoders ()
     for (KilroyEncoder enc : encoders)
         {
         enc.reset();
-        Hardware.leftFrontDriveEncoder.reset();
-        Hardware.rightFrontDriveEncoder.reset();
 
         // System.out.print("reset encoders is commented out temporarly");
 
@@ -1576,7 +1574,7 @@ public boolean turnDegrees (int degrees, double speed,
     // If either sensor has reached the target position, then stop motors
     // and return true.
     // using Gyro code
-    System.out.println("gyro: " + Hardware.gyro.getAngle());
+    System.out.println("gyro: " + this.gyro.getAngle());
     if (usingGyro && Math.abs(this.gyro.getAngle()) > Math.abs(degrees)
             - turnDegreesFudgeFactor)
         {
