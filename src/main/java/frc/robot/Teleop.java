@@ -33,6 +33,7 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -56,17 +57,11 @@ public class Teleop
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-
-
-
-
 public static void init ()
 {
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
-    Hardware.telemetry.printToConsole();
-    Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.setTimeBetweenPrints(1000);
 
     Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
@@ -117,7 +112,6 @@ public static void init ()
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-
 public static void periodic ()
 {
     // =================================================================
@@ -137,7 +131,7 @@ public static void periodic ()
 
 
     // TODO pls yell at me if I puch this
-    // teleopDrive();
+    teleopDrive();
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
@@ -154,7 +148,7 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    // ashleyTest();
+    ashleyTest();
     connerTest();
     // coleTest();
     // guidoTest();
@@ -292,8 +286,7 @@ private static void nithyaTest ()
 
 public static void printStatements ()
 {
-
-    // if (Hardware.driverStation.isFMSAttached() == false)
+    if (Hardware.driverStation.isFMSAttached() == false)
         {
         // ==================================
         // Scale Alignment
@@ -304,6 +297,8 @@ public static void printStatements ()
         // =================================
 
         // System.out.println("Arm motor: " + Hardware.armMotor.get());
+        // Hardware.telemetry.printToConsole(
+        // "Arm motor: " + Hardware.armMotor.get());
         // System.out.println("Lift Motor One "
         // + Hardware.liftMotor.get());
         // System.out.println("RF Drive Motor " +
@@ -322,8 +317,6 @@ public static void printStatements ()
         // =================================
         // System.out.println(
         // "Ring light relay: " + Hardware.ringLightRelay.get());
-
-
 
 
         // =================================
@@ -500,8 +493,6 @@ public static void printStatements ()
         // what time does the timer have now
         // ---------------------------------
         }
-
-    SmartDashboard.updateValues();
 } // end printStatements()
 
 /**

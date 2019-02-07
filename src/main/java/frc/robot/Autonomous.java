@@ -279,15 +279,15 @@ private static void setPositionAndLevel ()
 
     // sets the autoLevel enum to the correct level, or disabled, based on the
     // state of the autoDisableSwitch
-    if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
-        {
-        // System.out.println("Turning on GPS!");
-        crossAutoline();
-        } else if (Hardware.autoDisableSwitch
-                .getPosition() == LEVEL_TWO)
-        {
-        crossAutoline();
-        }
+    // if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
+    // {
+    // System.out.println("Turning on GPS!");
+    // crossAutoline();
+    // } else if (Hardware.autoDisableSwitch
+    // .getPosition() == LEVEL_TWO)
+    // {
+    // crossAutoline();
+    // }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
 
