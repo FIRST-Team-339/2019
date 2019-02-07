@@ -152,7 +152,7 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
+    // ashleyTest();
     // connerTest();
     // coleTest();
     // guidoTest();
@@ -224,22 +224,22 @@ private static void coleTest ()
             Hardware.forkliftOverride.get());
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.cargoShipCargoButton);
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.cargoShipCargoButton);
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.cargoShipHatchButton);
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.cargoShipHatchButton);
 
     // Hardware.lift.setToNextHigherPreset(
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.nextHigherLiftHeightButton,
-    //         Hardware.chooseCargoRocketHeights.get());
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextHigherLiftHeightButton,
+    // Hardware.chooseCargoRocketHeights.get());
 
     // Hardware.lift.setToNextLowerPreset(
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.nextLowerLiftHeightButton,
-    //         Hardware.chooseCargoRocketHeights.get());
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextLowerLiftHeightButton,
+    // Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 
@@ -258,8 +258,37 @@ private static void guidoTest ()
 
 private static void patrickTest ()
 {
-    SmartDashboard.putBoolean("Is Patrick Happy?",
-            Hardware.rightDriver.getRawButton(4));
+
+    if (Hardware.rightDriver.getRawButton(4) == true
+            && currentBackground < 2)
+        {
+        currentBackground++;
+        }
+
+    if (Hardware.rightDriver.getRawButton(5) == true)
+        {
+        currentBackground = 0;
+        }
+
+
+    if (currentBackground == 0)
+        {
+        isBlue = false;
+        isOrange = false;
+        }
+    if (currentBackground == 1)
+        {
+        isBlue = true;
+        isOrange = false;
+        }
+    if (currentBackground == 2)
+        {
+        isBlue = false;
+        isOrange = true;
+        }
+
+    SmartDashboard.putBoolean("Blue", isBlue);
+    SmartDashboard.putBoolean("Orange", isOrange);
 }
 
 private static void annaTest ()
@@ -536,6 +565,13 @@ private static final double FIRST_GEAR_RATIO = .4;
 private static final double SECOND_GEAR_RATIO = .7;
 
 private static final double DEADBAND_VALUE = .2;
+
+private static int currentBackground = 0;
+
+private static boolean isBlue = true;
+
+private static boolean isOrange = true;
+
 // ================================
 // Variables
 // ================================
