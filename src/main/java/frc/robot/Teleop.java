@@ -118,6 +118,30 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
+    // Forklifts
+
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.forkliftOverride.get());
+
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.cargoShipCargoButton);
+
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.cargoShipHatchButton);
+
+    Hardware.lift.setToNextHigherPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.nextHigherLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
+
+    Hardware.lift.setToNextLowerPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.nextLowerLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
+
+
     // =================================================================
     Hardware.lift.update();
 
@@ -127,9 +151,13 @@ public static void periodic ()
 
     teleopDrive();
 
-    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
+    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
     individualTest();
+
+    // Hardware.telemetry.printToShuffleboard();
+
+    // Hardware.telemetry.printToConsole();
 
     printStatements();
 }
@@ -200,36 +228,24 @@ private static void ashleyTest ()
     // }
 }
 
+private static boolean started = false;
+
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+
+    if (started == false && Hardware.leftOperator.getRawButton(9))
+        {
+        started = true;
+        if (Hardware.driveWithCamera.visionTest(.4))
+            {
+            started = false;
+            }
+        }
 }
 
 private static void coleTest ()
 {
-    // Forklifts
-
-    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-            Hardware.forkliftOverride.get());
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipCargoButton);
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipHatchButton);
-
-    // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHigherLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
-
-    // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextLowerLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 
@@ -396,7 +412,7 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
         // TODO test potentiometers
-        System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
