@@ -441,6 +441,7 @@ public static void initialize ()
 
 public static void commonInitialization ()
 {
+
     // **********************************************************
     // DIGITAL I/O CLASSES
     // **********************************************************
@@ -605,7 +606,7 @@ public static void commonInitialization ()
     nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
             6);
 
-    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
+    nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
@@ -614,9 +615,9 @@ public static void commonInitialization ()
 
     // Momentary Switches
 
-    descendButton = new MomentarySwitch(leftOperator, 5, false);
+    // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
-    ringLightButton = new MomentarySwitch(leftOperator, 6, false);
+    // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
 
 
 
@@ -964,16 +965,6 @@ public static void robotInitialize2019 ()
     // left trigger
 
     // ----- Right Operator -----
-
-    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
-            6);
-
-    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
-            7);
-
-    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
-
-    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
     // Momentary Switches
 
