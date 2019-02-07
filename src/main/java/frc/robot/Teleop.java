@@ -33,6 +33,7 @@ package frc.robot;
 
 import frc.Hardware.Hardware;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -56,17 +57,11 @@ public class Teleop
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-
-
-
-
 public static void init ()
 {
 
     LiveWindow.disableTelemetry(Hardware.pdp);
 
-    Hardware.telemetry.printToConsole();
-    Hardware.telemetry.printToShuffleboard();
     Hardware.telemetry.setTimeBetweenPrints(1000);
 
     Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
@@ -117,12 +112,35 @@ public static void init ()
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-
 public static void periodic ()
 {
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
+
+    // Forklifts
+
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.forkliftOverride.get());
+
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.cargoShipCargoButton);
+
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.cargoShipHatchButton);
+
+    Hardware.lift.setToNextHigherPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.nextHigherLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
+
+    Hardware.lift.setToNextLowerPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Hardware.nextLowerLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
+
 
     // =================================================================
     Hardware.lift.update();
@@ -131,15 +149,15 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
-    Hardware.telemetry.printToShuffleboard();
-
-    Hardware.telemetry.printToConsole();
-
     teleopDrive();
 
-    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
+    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
     individualTest();
+
+    // Hardware.telemetry.printToShuffleboard();
+
+    // Hardware.telemetry.printToConsole();
 
     printStatements();
 }
@@ -210,36 +228,24 @@ private static void ashleyTest ()
     // }
 }
 
+private static boolean started = false;
+
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+
+    if (started == false && Hardware.leftOperator.getRawButton(9))
+        {
+        started = true;
+        if (Hardware.driveWithCamera.visionTest(.4))
+            {
+            started = false;
+            }
+        }
 }
 
 private static void coleTest ()
 {
-    // Forklifts
-
-    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-            Hardware.forkliftOverride.get());
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipCargoButton);
-
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.cargoShipHatchButton);
-
-    // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextHigherLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
-
-    // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    // Hardware.nextLowerLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 
@@ -309,8 +315,7 @@ private static void nithyaTest ()
 
 public static void printStatements ()
 {
-
-    // if (Hardware.driverStation.isFMSAttached() == false)
+    if (Hardware.driverStation.isFMSAttached() == false)
         {
         // ==================================
         // Scale Alignment
@@ -321,6 +326,8 @@ public static void printStatements ()
         // =================================
 
         // System.out.println("Arm motor: " + Hardware.armMotor.get());
+        // Hardware.telemetry.printToConsole(
+        // "Arm motor: " + Hardware.armMotor.get());
         // System.out.println("Lift Motor One "
         // + Hardware.liftMotor.get());
         // System.out.println("RF Drive Motor " +
@@ -339,8 +346,6 @@ public static void printStatements ()
         // =================================
         // System.out.println(
         // "Ring light relay: " + Hardware.ringLightRelay.get());
-
-
 
 
         // =================================
@@ -435,7 +440,7 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
         // TODO test potentiometers
-        System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -517,8 +522,6 @@ public static void printStatements ()
         // what time does the timer have now
         // ---------------------------------
         }
-
-    SmartDashboard.updateValues();
 } // end printStatements()
 
 /**
@@ -544,9 +547,12 @@ public static void teleopDrive ()
         }
 }
 
+
+
 // ================================
 // Constants
 // ================================
+
 
 private static final int GEAR_UP_SHIFT_BUTTON = 3;
 

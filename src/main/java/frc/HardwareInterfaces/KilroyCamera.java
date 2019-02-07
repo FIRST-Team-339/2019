@@ -45,7 +45,8 @@ private boolean haveCamera;
 // the return value for integers when we have no camera
 public static final int noCameraIntReturnValue = -1;
 
-private static String KILROY_CAMERA_IP = "10.3.39.11";
+// TODO
+private static String KILROY_CAMERA_IP = "10.13.39.11";
 
 private static int imageNumber = 0;
 

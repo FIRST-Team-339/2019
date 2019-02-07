@@ -165,11 +165,12 @@ public static void periodic ()
                         "CATS ARE AWESOME AND CATS ARE AMAZING");
                 autoState = State.CHOOSE_PATH;
                 Hardware.autoTimer.stop();
-                break;
                 }
-
+            break;
 
         case CHOOSE_PATH:
+            System.out.println(
+                    "STOOOOOOOOOOOOOOOOOOOPPPPPPPPPPPPPPPPPPPPPPPPP");
             choosePath();
             break;
 
@@ -233,7 +234,6 @@ private static void choosePath ()
             break;
 
         case 2:
-            rocketHatchState = RocketHatchState.DESCEND;
             autoState = State.DEPOSIT_ROCKET_HATCH;
             break;
 
@@ -268,7 +268,7 @@ private static void setPositionAndLevel ()
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
-        System.out.println("Floor it!");
+        System.out.println("position and level set");
         } else if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
         {
         autoPosition = Position.RIGHT;
@@ -279,15 +279,15 @@ private static void setPositionAndLevel ()
 
     // sets the autoLevel enum to the correct level, or disabled, based on the
     // state of the autoDisableSwitch
-    if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
-        {
-        System.out.println("Turning on GPS!");
-        crossAutoline();
-        } else if (Hardware.autoDisableSwitch
-                .getPosition() == LEVEL_TWO)
-        {
-        crossAutoline();
-        }
+    // if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
+    // {
+    // System.out.println("Turning on GPS!");
+    // crossAutoline();
+    // } else if (Hardware.autoDisableSwitch
+    // .getPosition() == LEVEL_TWO)
+    // {
+    // crossAutoline();
+    // }
 
     // TEMP CODE FOR TEST PURPOSES ONLY
 
@@ -311,7 +311,7 @@ private static boolean crossAutoline ()
         {
         case AWAKEN:
             // initial state for crossing the autoline
-            setPositionAndLevel();
+            // setPositionAndLevel();
             switch (autoPosition)
                 {
                 case LEFT:
@@ -438,11 +438,11 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case DESCEND:
-            if (descendFromLevelTwo(usingAlignByWall))
-                {
-                // turn based on start position
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
-                }
+        // if (descendFromLevelTwo(usingAlignByWall))
+            {
+            // turn based on start position
+            depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
+            }
             break;
 
         case STRAIGHT_DEPOSIT_DRIVE_1:
@@ -883,13 +883,13 @@ private static boolean depositSideCargoHatch ()
 
 private static void driverControl ()
 {
-    if (Hardware.leftDriver.getRawButton(5) == true)
-        {
-        Hardware.leftFrontCANMotor.set(.5);
-        } else
-        {
-        Hardware.leftFrontCANMotor.set(0);
-        }
+    // if (Hardware.leftDriver.getRawButton(5) == true)
+    // {
+    // Hardware.leftFrontCANMotor.set(.5);
+    // } else
+    // {
+    // Hardware.leftFrontCANMotor.set(0);
+    // }
     Teleop.periodic();
 }
 
