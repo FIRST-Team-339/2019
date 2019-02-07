@@ -113,6 +113,8 @@ public DriveWithCamera (TransmissionBase transmission,
 {
     super(transmission, leftEncoder, rightEncoder, gyro);
 
+
+
     this.frontUltrasonic = frontUltrasonic;
     // this.rearUltrasonic = rearUltrasonic;
     this.visionProcessor = visionProcessor;
@@ -180,10 +182,10 @@ public boolean driveToTarget (double speed)
     switch (state)
         {
         case INIT:
-            this.visionProcessor.setRelayValue(Value.kOn);
+            Hardware.axisCamera.setRelayValue(Value.kForward);
             Hardware.autoTimer.reset();
-            // visionProcessor.saveImage(ImageType.RAW);
-            // visionProcessor.saveImage(ImageType.PROCESSED);
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
 
             // this.resetEncoders();
             double motorspeed = speed;
@@ -192,6 +194,8 @@ public boolean driveToTarget (double speed)
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
             System.out.println("ultrasonic: " + this.frontUltrasonic
                     .getDistanceFromNearestBumper());
 
@@ -300,8 +304,8 @@ public boolean driveToTarget (double speed)
             break;
         default:
         case STOP:
-            Hardware.autoTimer.stop();
-
+            // Hardware.autoTimer.stop();
+            Hardware.axisCamera.setRelayValue(Value.kOn);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
             System.out.println("We are stopping");

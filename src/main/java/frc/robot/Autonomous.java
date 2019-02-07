@@ -1038,7 +1038,7 @@ public static void endAutoPath ()
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
-private static boolean usingVision = false;
+private static boolean usingVision = true;
 
 private static boolean usingAlignByWall = false;
 

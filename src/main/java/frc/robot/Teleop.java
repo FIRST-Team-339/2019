@@ -125,12 +125,14 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
-    Hardware.telemetry.printToShuffleboard();
+    // Hardware.telemetry.printToShuffleboard();
 
-    Hardware.telemetry.printToConsole();
+    // Hardware.telemetry.printToConsole();
 
 
-    // TODO pls yell at me if I puch this
+
+
+
     teleopDrive();
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
@@ -148,8 +150,8 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
-    connerTest();
+    // ashleyTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -210,16 +212,14 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+    // Hardware.axisCamera.setRelayValue(Value.kOn);
 
-    if (started == false && Hardware.leftOperator.getRawButton(9))
+
+    if (Hardware.driveWithCamera.visionTest(.4))
         {
-        started = true;
-        if (Hardware.driveWithCamera.visionTest(.4))
-            {
-            started = false;
-            }
+        System.out.println("ALigned amybe i hope");
         }
+
 }
 
 private static void coleTest ()

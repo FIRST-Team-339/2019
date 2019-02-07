@@ -342,6 +342,8 @@ public VisionProcessor (String ip, CameraModel camera,
 
     this.pictureTimer.reset();
     this.tempRingLight = ringlightRelay;
+
+
 } // end VisionProcessor()
 
 
@@ -722,7 +724,10 @@ public boolean getDigitalOutputValue ()
  */
 public void setRelayValue (Value ringLightValue)
 {
+
     this.tempRingLight.set(ringLightValue);
+
+
 } // end setRelayValue()
 
 /**
