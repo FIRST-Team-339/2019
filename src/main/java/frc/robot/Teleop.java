@@ -142,10 +142,10 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    //ashleyTest();
+    // ashleyTest();
     // connerTest();
     // coleTest();
-    // guidoTest();
+    guidoTest();
     // patrickTest();
     // annaTest();
     // meghanTest();
@@ -243,7 +243,8 @@ private static void coleTest ()
 
 private static void guidoTest ()
 {
-
+    SmartDashboard.putNumber("Lift Encoder",
+            Hardware.lift.getForkliftHeight());
 }
 
 private static void patrickTest ()
