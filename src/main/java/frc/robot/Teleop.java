@@ -149,6 +149,7 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    // TODO pls yell at me if I puch this
     teleopDrive();
 
     // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
@@ -182,23 +183,26 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    if (Hardware.leftDriver.getRawButton(3) == true)
-        {
-        // if (Hardware.alignByTape.align() == true)
-            {
-            System.out.println(
-                    "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
-            }
-        } else
-        {
-        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-        }
 
 
-    if (Hardware.rightDriver.getRawButton(3) == true)
-        {
-        Hardware.alignByTape.resetForAlign();
-        }
+
+    // if (Hardware.leftDriver.getRawButton(3) == true)
+    // {
+    // // if (Hardware.alignByTape.align() == true)
+    // {
+    // System.out.println(
+    // "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
+    // }
+    // } else
+    // {
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
+
+
+    // if (Hardware.rightDriver.getRawButton(3) == true)
+    // {
+    // Hardware.alignByTape.resetForAlign();
+    // }
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
