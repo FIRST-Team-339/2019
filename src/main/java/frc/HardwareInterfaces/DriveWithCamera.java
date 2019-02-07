@@ -8,6 +8,7 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
+import frc.vision.VisionProcessor.ParticleReport;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -328,11 +329,13 @@ private Side side = Side.NULL;
  */
 public Side getTargetSide ()
 {
-    if (this.getCameraCenterValue() < SWITCH_CAMERA_CENTER)
+    if (this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
+            - CAMERA_DEADBAND)
         {
         side = Side.RIGHT;
         return side;
-        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER)
+        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
+                + CAMERA_DEADBAND)
         {
         side = Side.LEFT;
         return side;
@@ -435,38 +438,114 @@ public boolean jankyDriveToTarget (double speed)
 private DriveWithCameraState jankyState = DriveWithCameraState.INIT;
 
 /**
- * Method to test the vision code without the ultrasonic
+ * Method to test a new way to align with vision
  *
  * @param speed
  * @param compensationFactor
  */
-public void visionTest (double compensationFactor, double speed)
+public boolean visionTest (double speed)
 {
-    this.getCameraCenterValue();
-    // System.out.println("Center for the vision : " + center);
-    if (this.getCameraCenterValue() >= SWITCH_CAMERA_CENTER
-            - CAMERA_DEADBAND
-            && this.getCameraCenterValue() <= SWITCH_CAMERA_CENTER
-                    + CAMERA_DEADBAND)
+    switch (testState)
         {
-        // driveStraight(speed, false);
-        // System.out.println("We are aligned in the center");
-        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
-                + CAMERA_DEADBAND)
-        {
-        // center is too far left, drive faster on the right
-        this.getTransmission().driveRaw(speed,
-                speed * compensationFactor);
-        // System.out.println("We're too right");
-        } else
-        {
-        // center is too far right, drive faster on the left
-        this.getTransmission().driveRaw(speed * compensationFactor,
-                speed);
-        // System.out.println("We're too left");
+        case INIT_TEST:
+            this.visionProcessor.setRelayValue(Value.kOn);
+
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
+
+            break;
+        case ALIGN_TEST:
+            System.out.println(
+                    "Angle from the target" + Hardware.axisCamera
+                            .getYawAngleDegrees(Hardware.axisCamera
+                                    .getNthSizeBlob(0)));
+            double angle = Hardware.axisCamera
+                    .getYawAngleDegrees(Hardware.axisCamera
+                            .getNthSizeBlob(0));
+            double compensateFactor = 0;
+            double slowAmount = 1;
+            double motorspeed = speed;
+            double slowestSpeed;
+
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
+                    && this.frontUltrasonic
+                            .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
+                {
+                slowAmount = SLOW_MODIFIER;
+                } else if (this.frontUltrasonic
+                        .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
+                {
+                slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
+                } else
+                {
+                slowAmount = 1;
+                }
+            System.out.println("slow amount: " + slowAmount);
+
+            motorspeed = speed * slowAmount;
+
+            // adjust speed so that motors never reverse
+            if (motorspeed - compensateFactor <= 0)
+                {
+                slowestSpeed = 0.05;
+                } else
+                {
+                slowestSpeed = motorspeed - compensateFactor;
+                }
+
+
+
+            if (Math.abs(angle) > 70)
+                compensateFactor = TEST_COMPENSATE_1;
+            else if (Math.abs(angle) > 45)
+                compensateFactor = TEST_COMPENSATE_2;
+            else if (Math.abs(angle) > 20)
+                compensateFactor = TEST_COMPENSATE_3;
+            else
+                compensateFactor = DEFAULT_COMPENSTATE_TEST;
+
+            if (this.getTargetSide() == Side.RIGHT)
+                {
+                this.getTransmission()
+                        .driveRaw(motorspeed + compensateFactor,
+                                slowAmount);
+                } else if (this.getTargetSide() == Side.RIGHT)
+                {
+                this.getTransmission()
+                        .driveRaw(slowestSpeed,
+                                motorspeed + compensateFactor);
+                } else
+                {
+                this.getTransmission()
+                        .driveRaw(motorspeed, motorspeed);
+                }
+
+
+
+        default:
+        case STOP_TEST:
+
+            // if we are too close to the wall, brake, then set all motors to
+            // zero, else drive by ultrasonic
+            System.out.println("We are stopping");
+            this.getTransmission().driveRaw(0, 0);
+            state = DriveWithCameraState.INIT;
+            return true;
         }
+    return false;
+
+
 }
 
+
+private enum TestState
+    {
+INIT_TEST, ALIGN_TEST, STOP_TEST
+
+    }
+
+private TestState testState = TestState.INIT_TEST;
 // private int currentPictureIteration = 0;
 
 /**
@@ -511,6 +590,17 @@ public double getCameraCenterValue ()
 }
 
 // ================VISION CONSTANTS================
+private final double DEFAULT_COMPENSTATE_TEST = 0;
+
+private final double TEST_COMPENSATE_1 = .3;
+
+private final double TEST_COMPENSATE_2 = .2;
+
+private final double TEST_COMPENSATE_3 = .1;
+
+
+
+
 // the distance in inches in which we drive the robot straight using the
 // ultrasonic
 private final double CAMERA_NO_LONGER_WORKS = 3;
@@ -520,7 +610,7 @@ private final double CAMERA_NO_LONGER_WORKS = 3;
 // 38 + 50;
 
 // the number in pixels that the center we are looking for can be off
-private final double CAMERA_DEADBAND = 10;
+private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
 private final double DISTANCE_FROM_WALL_TO_STOP = 25;
