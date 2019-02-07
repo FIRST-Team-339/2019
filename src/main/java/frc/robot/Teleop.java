@@ -135,7 +135,9 @@ public static void periodic ()
 
     Hardware.telemetry.printToConsole();
 
-    teleopDrive();
+
+    // TODO pls yell at me if I puch this
+    // teleopDrive();
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
@@ -152,8 +154,8 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
-    // connerTest();
+    // ashleyTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -214,7 +216,9 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    if (started == false && Hardware.leftOperator.getRawButton(6))
+    Hardware.axisCamera.setRelayValue(Value.kOn);
+
+    if (started == false && Hardware.leftOperator.getRawButton(9))
         {
         started = true;
         if (Hardware.driveWithCamera.visionTest(.4))
@@ -232,22 +236,22 @@ private static void coleTest ()
             Hardware.forkliftOverride.get());
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.cargoShipCargoButton);
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.cargoShipCargoButton);
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.cargoShipHatchButton);
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.cargoShipHatchButton);
 
     // Hardware.lift.setToNextHigherPreset(
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.nextHigherLiftHeightButton,
-    //         Hardware.chooseCargoRocketHeights.get());
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextHigherLiftHeightButton,
+    // Hardware.chooseCargoRocketHeights.get());
 
     // Hardware.lift.setToNextLowerPreset(
-    //         Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
-    //         Hardware.nextLowerLiftHeightButton,
-    //         Hardware.chooseCargoRocketHeights.get());
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+    // Hardware.nextLowerLiftHeightButton,
+    // Hardware.chooseCargoRocketHeights.get());
 
     // Manipulator
 

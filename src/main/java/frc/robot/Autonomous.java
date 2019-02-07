@@ -281,7 +281,7 @@ private static void setPositionAndLevel ()
     // state of the autoDisableSwitch
     if (Hardware.autoDisableSwitch.getPosition() == LEVEL_ONE)
         {
-        System.out.println("Turning on GPS!");
+        // System.out.println("Turning on GPS!");
         crossAutoline();
         } else if (Hardware.autoDisableSwitch
                 .getPosition() == LEVEL_TWO)

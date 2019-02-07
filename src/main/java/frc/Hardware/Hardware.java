@@ -790,7 +790,7 @@ public static void robotInitialize2018 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor("10.3.39.11",
+    axisCamera = new VisionProcessor("10.13.39.11",
             CameraModel.AXIS_M1013,
             ringLightRelay);
 
