@@ -417,7 +417,6 @@ public static void initialize ()
     // are exactly the same between 2018
     // and 2019. Make them only once
     // ---------------------------
-    commonInitialization();
     switch (whichRobot)
         {
         case KILROY_2018:
@@ -436,7 +435,7 @@ public static void initialize ()
           // The function calls in commonKilroyAncillary
           // must follow all other hardware declarations
           // -------------------------
-    commonKilroyAncillary();
+    commonInitialization();
 }
 
 public static void commonInitialization ()
@@ -603,8 +602,7 @@ public static void commonInitialization ()
 
     forkliftOverride = new JoystickButton(rightOperator, 5);
 
-    nextHigherLiftHeightButton = new QuickSwitch(rightOperator,
-            6);
+    nextHigherLiftHeightButton = new QuickSwitch(rightOperator, 6);
 
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
@@ -619,12 +617,6 @@ public static void commonInitialization ()
 
     // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
 
-
-
-} // end of commonInitialization
-
-public static void commonKilroyAncillary ()
-{
     // **********************************************************
     // Kilroy's Ancillary classes
     // **********************************************************
@@ -677,7 +669,8 @@ public static void commonKilroyAncillary ()
     alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
             drive);
 
-} // end commonKilroyAncillary()
+
+} // end of commonInitialization
 
 /**
  * This initializes all of the components in Hardware
@@ -699,7 +692,6 @@ public static void robotInitialize2018 ()
     armMotor = new VictorSP(4);
 
     // ----- Servo classes -----
-
 
     // ====================================
     // CAN classes
@@ -791,7 +783,7 @@ public static void robotInitialize2018 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor("10.3.39.11",
+    axisCamera = new VisionProcessor("10.13.39.11",
             CameraModel.AXIS_M1013,
             ringLightRelay);
 
@@ -838,7 +830,6 @@ public static void robotInitialize2019 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
     // ----- Servo classes -----
-
 
     // ====================================
     // CAN classes
@@ -912,7 +903,6 @@ public static void robotInitialize2019 ()
 
     // Single Solenoids
 
-
     // **********************************************************
     // ANALOG I/O CLASSES
     // **********************************************************
@@ -923,7 +913,6 @@ public static void robotInitialize2019 ()
     // Gyro class
 
     // P/N ADW22307
-
 
     // Potentiometers
 
@@ -978,7 +967,6 @@ public static void robotInitialize2019 ()
  */
 public static void setHardwareSettings ()
 {
-    commonHardwareSettings();
     switch (whichRobot)
         {
         case KILROY_2018:
@@ -993,6 +981,7 @@ public static void setHardwareSettings ()
         case TEST_BOARD:
             break;
         }
+    commonHardwareSettings();
 }
 
 /**
