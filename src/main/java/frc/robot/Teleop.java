@@ -251,10 +251,15 @@ private static void coleTest ()
 
     // Manipulator
 
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // Hardware.intakeTrigger.get(),
-    // Hardware.outtakeButton.get(),
-    // Hardware.intakeOverride.get());
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
+
+    // Hardware.manipulator.moveArmByButton();
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
 
 }
