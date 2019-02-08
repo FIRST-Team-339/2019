@@ -151,26 +151,22 @@ public static void periodic ()
         {
         case INIT:
             setPositionAndLevel();
+            Hardware.autoTimer.start();
             autoState = State.DELAY;
             break;
         case DELAY:
 
             // Delay using the potentiometer, from 0 to 5 seconds
             // once finished, stop the timer and go to the next state
-
             if (Hardware.autoTimer.get() >= Hardware.delayPot.get(0.0,
                     5.0))
                 {
-                System.out.println(
-                        "CATS ARE AWESOME AND CATS ARE AMAZING");
                 autoState = State.CHOOSE_PATH;
                 Hardware.autoTimer.stop();
                 }
             break;
 
         case CHOOSE_PATH:
-            System.out.println(
-                    "STOOOOOOOOOOOOOOOOOOOPPPPPPPPPPPPPPPPPPPPPPPPP");
             choosePath();
             break;
 
@@ -587,7 +583,7 @@ private static boolean depositRocketHatch ()
                 rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                 } else
                 {
-                Hardware.axisCamera.setRelayValue(Value.kOff);
+                // Hardware.axisCamera.setRelayValue(Value.kOff);
                 autoTimer.reset();
                 autoTimer.start();
                 // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
@@ -1030,6 +1026,8 @@ public static void endAutoPath ()
     sideCargoHatchState = SideCargoHatchState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
+    descentState = DescentState.FINISH;
+    cross = Cross.FINITE_INCANTATEM;
 
 }
 
@@ -1038,7 +1036,7 @@ public static void endAutoPath ()
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
-private static boolean usingVision = false;
+private static boolean usingVision = true;
 
 private static boolean usingAlignByWall = false;
 

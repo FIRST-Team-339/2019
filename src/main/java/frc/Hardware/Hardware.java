@@ -278,6 +278,8 @@ public static KilroySPIGyro gyro = null;
 
 public static VisionProcessor axisCamera = null;
 
+public static String axisCameraIp = null;
+
 // -------------------------------------
 // declare the USB camera server and the
 // USB camera it serves at the same time
@@ -420,11 +422,13 @@ public static void initialize ()
     switch (whichRobot)
         {
         case KILROY_2018:
+            axisCameraIp = "10.13.39.11";
             robotInitialize2018();
             break;
 
         default:
         case KILROY_2019:
+            axisCameraIp = "10.3.39.11";
             robotInitialize2019();
             break;
 
@@ -464,6 +468,9 @@ public static void commonInitialization ()
     // Relay classes
     // ====================================
     ringLightRelay = new Relay(0);
+
+
+
 
     // ====================================
     // Digital Inputs
@@ -557,6 +564,9 @@ public static void commonInitialization ()
 
     // Axis/USB Camera class
 
+    axisCamera = new VisionProcessor(axisCameraIp,
+            CameraModel.AXIS_M1013,
+            ringLightRelay);
     // -------------------------------------
     // declare the USB camera server and the
     // USB camera it serves at the same time
@@ -783,9 +793,8 @@ public static void robotInitialize2018 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor("10.13.39.11",
-            CameraModel.AXIS_M1013,
-            ringLightRelay);
+
+
 
     // -------------------------------------
     // declare the USB camera server and the

@@ -149,6 +149,7 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    // TODO pls yell at me if I puch this
     teleopDrive();
 
     // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
@@ -182,23 +183,26 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    if (Hardware.leftDriver.getRawButton(3) == true)
-        {
-        // if (Hardware.alignByTape.align() == true)
-            {
-            System.out.println(
-                    "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
-            }
-        } else
-        {
-        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
-        }
 
 
-    if (Hardware.rightDriver.getRawButton(3) == true)
-        {
-        Hardware.alignByTape.resetForAlign();
-        }
+
+    // if (Hardware.leftDriver.getRawButton(3) == true)
+    // {
+    // // if (Hardware.alignByTape.align() == true)
+    // {
+    // System.out.println(
+    // "MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW");
+    // }
+    // } else
+    // {
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // }
+
+
+    // if (Hardware.rightDriver.getRawButton(3) == true)
+    // {
+    // Hardware.alignByTape.resetForAlign();
+    // }
     // if (Hardware.leftDriver.getRawButton(5) == true)
     // {
     // Autonomous.descendFromLevelTwo(true);
@@ -232,16 +236,14 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+    // Hardware.axisCamera.setRelayValue(Value.kOn);
 
-    if (started == false && Hardware.leftOperator.getRawButton(9))
+
+    if (Hardware.driveWithCamera.visionTest(.4))
         {
-        started = true;
-        if (Hardware.driveWithCamera.visionTest(.4))
-            {
-            started = false;
-            }
+        System.out.println("ALigned amybe i hope");
         }
+
 }
 
 private static void coleTest ()
@@ -259,7 +261,8 @@ private static void coleTest ()
 
 private static void guidoTest ()
 {
-
+    SmartDashboard.putNumber("Lift Encoder",
+            Hardware.lift.getForkliftHeight());
 }
 
 private static void patrickTest ()
@@ -419,7 +422,7 @@ public static void printStatements ()
         // System.out.println("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
-        // TODO resest right back IR
+        // TODO retest right back IR
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
