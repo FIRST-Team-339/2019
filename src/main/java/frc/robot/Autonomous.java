@@ -95,7 +95,7 @@ public static void init ()
  */
 public static enum State
     {
-INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, FINISH
+INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, BLIND_ROCKET_HATCH, FINISH
     }
 
 /**
@@ -186,6 +186,7 @@ public static void periodic ()
 
         case DEPOSIT_ROCKET_HATCH:
             System.out.println("rocket hatch");
+            usingVision = true;
             if (depositRocketHatch() == true)
                 {
                 autoState = State.FINISH;
@@ -194,6 +195,14 @@ public static void periodic ()
 
         case DEPOSIT_SIDE_CARGO_HATCH:
             if (depositSideCargoHatch() == true)
+                {
+                autoState = State.FINISH;
+                }
+            break;
+
+        case BLIND_ROCKET_HATCH:
+            usingVision = false;
+            if (depositRocketHatch() == true)
                 {
                 autoState = State.FINISH;
                 }
@@ -238,10 +247,11 @@ private static void choosePath ()
             break;
 
         case 4:
+            autoState = State.BLIND_ROCKET_HATCH;
             break;
 
         case 5:
-            break;
+
         default:
             autoState = State.FINISH;
             break;
@@ -546,7 +556,7 @@ private static boolean depositCargoHatch ()
 
 private static enum RocketHatchState
     {
-STANDBY, DESCEND, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, DELAY_BEFORE_TURN_ALONG_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_ROCKET_TAPE, ALIGN_TO_ROCKET, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
+STANDBY, DESCEND, DRIVE_FORWARD_TO_TURN, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, DELAY_BEFORE_TURN_ALONG_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_ROCKET_TAPE, ALIGN_TO_ROCKET, PREP_TO_DEPOSIT_HATCH, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
     }
 
 private static RocketHatchState rocketHatchState = RocketHatchState.STANDBY;
@@ -622,6 +632,9 @@ private static boolean depositRocketHatch ()
                 }
             break;
         case DRIVE_TOWARDS_FIELD_WALL:
+            System.out
+                    .println("ultrasonic - " + Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper());
             if (Hardware.frontUltraSonic
                     .getDistanceFromNearestBumper() > DISTANCE_NEEDED_TO_TURN)
                 {
@@ -653,14 +666,16 @@ private static boolean depositRocketHatch ()
                     && Hardware.drive.turnDegrees(TURN_LEFT90,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
-                rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
+                // currently bypasses the align state
+                rocketHatchState = RocketHatchState.DRIVE_TO_ROCKET_TAPE;
                 }
             // turn for if we are on the left side of th field
             else if (autoPosition == Position.LEFT
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
-                rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
+                // currently bypasses the align state
+                rocketHatchState = RocketHatchState.DRIVE_TO_ROCKET_TAPE;
                 }
             break;
 
@@ -796,6 +811,15 @@ private static boolean depositRocketHatch ()
             rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
             }
             break;
+
+        case PREP_TO_DEPOSIT_HATCH:
+            if (prepToDeposit() == true)
+                {
+                rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                }
+            break;
+
+
         case DEPOSIT_HATCH:
         // if (GamePieceManipulator.depositRocketHatch() == true)
             {
@@ -803,6 +827,8 @@ private static boolean depositRocketHatch ()
             }
             break;
         case FINISH:
+            System.out.println(
+                    "YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO IT WORKED");
             return true;
         default:
             break;
@@ -1021,6 +1047,23 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
 }
 
 
+/**
+ * function to back up and raise arm to deposit
+ */
+public static boolean prepToDeposit ()
+{
+    if (Hardware.drive.driveStraightInches(-6, .5, .6,
+            USING_GYRO) == true)
+        {
+        // Hardware.manipulator.
+        System.out.println(
+                "NOW WE WOULD MOVE THE ARM IF THAT CODE WAS ACTUALLY WRITTEN");
+        return true;
+        }
+    return false;
+}
+
+
 public static void endAutoPath ()
 {
     sideCargoHatchState = SideCargoHatchState.FINISHED;
@@ -1122,7 +1165,7 @@ public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .5;
 
 // rocket hatch contstants- no vision
 
-public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 60;
+public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 20;// 60;
 
 public static final int DISTANCE_NEEDED_TO_TURN = 20;// change @ANE
 

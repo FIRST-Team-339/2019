@@ -149,6 +149,23 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    // buttons
+    if (Hardware.climbOneButton.isOnCheckNow() == true
+            && Hardware.climbTwoButton.isOnCheckNow() == true)
+        {
+        Hardware.climber.climb();
+        }
+
+
+    // buttons to cancel everything
+    if (Hardware.cancelTwoButton.get() == true
+            && Hardware.cancelOneButton.get() == true)
+        {
+        Hardware.climber.finishEarly();
+        Autonomous.endAutoPath();
+
+        }
+
     // TODO pls yell at me if I puch this
     teleopDrive();
 
@@ -184,7 +201,8 @@ private static void individualTest ()
 private static void ashleyTest ()
 {
 
-
+    // System.out.println("ultrasonic - "
+    // + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
