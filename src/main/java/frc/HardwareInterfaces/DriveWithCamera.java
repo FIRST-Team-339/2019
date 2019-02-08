@@ -292,7 +292,7 @@ public boolean driveToTarget (double speed)
             break;
         case DRIVE_WITH_US:
 
-            // reset encoders gets null pointer
+
             // driveStraight(speed, 0, USING_GYRO);
             Hardware.drive.drive(speed, speed);
 

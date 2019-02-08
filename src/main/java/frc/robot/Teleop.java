@@ -320,9 +320,14 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    if (Autonomous.prepDepost())
-        Hardware.depositGamePiece.depositHatch();
-
+    if (!started)
+        {
+        if (Autonomous.prepDeposit())
+            {
+            started = true;
+            Hardware.depositGamePiece.depositHatch();
+            }
+        }
     // Hardware.axisCamera.setRelayValue(Value.kOn);
 
     // System.out.println("Right or left: "

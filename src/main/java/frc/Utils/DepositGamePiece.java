@@ -45,8 +45,12 @@ public boolean depositHatch ()
                 depositHatchState = DepositHatchState.DEPOSIT_HATCH;
                 } else
                 {
-                // this.gamePieceManipulator
-                // .moveArmToPosition(LOWERED_ARM_POSITION);
+                if (this.gamePieceManipulator
+                        .moveArmToPosition(LOWERED_ARM_POSITION,
+                                ARM_MOVE_SPEED))
+                    {
+                    depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                    }
                 }
             break;
 
@@ -69,14 +73,65 @@ public boolean depositHatch ()
     return false;
 }
 
+public enum DepositCargoState
+    {
+INIT, RAISE_MANIPULATOR, DEPOSIT_CARGO, BACKUP_CARGO, STOP
+    }
+
+public static DepositCargoState depositCargoState = DepositCargoState.INIT;
+
 public boolean depositCargo ()
 {
 
+    switch (depositCargoState)
+        {
+        case INIT:
+            if (this.gamePieceManipulator.isDeployed())
+                {
 
+                depositCargoState = DepositCargoState.RAISE_MANIPULATOR;
+                } else
+                {
+                if (this.gamePieceManipulator
+                        .moveArmToPosition(CARGO_ARM_POSITION,
+                                ARM_MOVE_SPEED))
+                    {
+                    depositCargoState = DepositCargoState.DEPOSIT_CARGO;
+                    }
+                }
+            break;
+        case RAISE_MANIPULATOR:
+            if (this.gamePieceManipulator
+                    .moveArmToPosition(CARGO_ARM_POSITION,
+                            ARM_MOVE_SPEED))
+                {
+                depositCargoState = DepositCargoState.DEPOSIT_CARGO;
+                }
+            break;
+
+        case DEPOSIT_CARGO:
+            System.out.println("Depositing the cargo");
+            depositHatchState = DepositHatchState.BACKUP_HATCH;
+            break;
+        case BACKUP_CARGO:
+            if (this.drive.driveStraightInches(BACKUP_INCHES,
+                    BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
+                {
+                depositHatchState = DepositHatchState.STOP;
+                }
+            break;
+        case STOP:
+            this.drive.drive(0, 0);
+
+            depositHatchState = DepositHatchState.INIT;
+            return true;
+        }
     return false;
 }
 
 private static boolean usingGyro = true;
+
+private static final double ARM_MOVE_SPEED = .4;
 
 private static final double BACKUP_INCHES = 6;// TODO
 
@@ -87,6 +142,8 @@ private static final double BACKUP_SPEED = .4;
 private static final int LOWERED_ARM_POSITION = 260;
 
 private static final int RAISED_ARM_POSITION = 225;
+
+private static final int CARGO_ARM_POSITION = 245;// TODO magic number
 
 
 

@@ -314,7 +314,7 @@ private static PrepState prepState = PrepState.INIT;
  * Code to set up the forklift for autonomous for a hatch deposit
  *
  */
-public static boolean prepDepost ()
+public static boolean prepDeposit ()
 {
     switch (prepState)
         {
@@ -323,6 +323,7 @@ public static boolean prepDepost ()
             break;
 
         case RAISE_FORKLIFT:
+            System.out.println("Raise FOrklift");
             if (Hardware.lift
                     .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
                 {
@@ -331,10 +332,16 @@ public static boolean prepDepost ()
             break;
 
         case DEPLOY_MANIPULATOR:
-            // Hardware.manipulator
-            // .moveArmToPosition(260);// TODO constant
+            System.out.println("Deploy");
+            // TODO put variables in constants once tested
+            if (Hardware.manipulator.moveArmToPosition(
+                    260, .4))
+                {
+                prepState = PrepState.STOP_PREP;
+                }
             break;
         case STOP_PREP:
+            System.out.println("stop");
             prepState = PrepState.INIT;
             return true;
         }
@@ -1126,7 +1133,7 @@ private static boolean usingVision = true;
 private static boolean usingAlignByWall = false;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = true;
+private static boolean usingVisionOnStraight = false;
 
 private static boolean descendInit = false;
 
@@ -1148,7 +1155,7 @@ public static int distanceToCrossAutoline;
 
 // turn stuff
 
-public static final double TURN_BY_GYRO_SPEED = .5;
+public static final double TURN_BY_GYRO_SPEED = .4;
 
 public static final int TURN_RIGHT90 = 90;
 
