@@ -373,7 +373,10 @@ public void climbUpdate ()
  */
 public void climb ()
 {
-    climbState = climberState.START_CLIMB;
+    if (climbState == climberState.STANDBY)
+        {
+        climbState = climberState.START_CLIMB;
+        }
 }
 
 
@@ -586,6 +589,10 @@ public void reverseClimbUpdate ()
         case STOP:
             // stops stuff
             this.stop();
+            if (finishedEarly == true)
+                {
+                climbState = climberState.STANDBY;
+                }
             break;
 
         case DELAY_INIT:
@@ -806,6 +813,7 @@ private void stop ()
 public void finishEarly ()
 {
     // sets state to STOP
+    finishedEarly = true;
     climbState = climberState.STOP;
 }
 
@@ -867,5 +875,9 @@ private static final double DELAY_FIVE_TIME = 0.0;
 private static final double DELAY_SIX_TIME = 0.0;
 
 private static final double DELAY_SEVEN_TIME = 1.0;
+
+// Extra tuneable stuff
+
+public static boolean finishedEarly = false;
 
 }
