@@ -341,12 +341,29 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
+
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
 public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
+
+public static MomentarySwitch climbOneButton = null;
+
+public static MomentarySwitch climbTwoButton = null;
+
+
+// ----------Left Driver---------------
+public static JoystickButton cancelOneButton = null;
+
+
+
+// ----------Right Driver--------------
+public static JoystickButton cancelTwoButton = null;
+
+
+
 
 
 // **********************************************************
@@ -398,6 +415,8 @@ public static Forklift lift = null;
 public static ClimbToLevelTwo climber = null;
 
 public static AlignPerpendicularToTape alignByTape = null;
+
+public static DepositGamePiece depositGamePiece = null;
 
 // ====================================
 // Methods
@@ -616,11 +635,25 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
+    // ----------Left Driver---------------
+    cancelOneButton = new JoystickButton(leftDriver, 11);
+
+
+    // ----------Right Driver--------------
+    cancelTwoButton = new JoystickButton(rightDriver, 11);
+
+
     // Momentary Switches
 
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
     // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
+
+    climbOneButton = new MomentarySwitch();
+
+    climbTwoButton = new MomentarySwitch();
+
+
 
     // **********************************************************
     // Kilroy's Ancillary classes
@@ -673,6 +706,10 @@ public static void commonInitialization ()
 
     alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
             drive);
+
+    depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
+
+
 
 } // end of commonInitialization
 

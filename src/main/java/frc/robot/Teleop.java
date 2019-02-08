@@ -219,6 +219,23 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    // buttons
+    if (Hardware.climbOneButton.isOnCheckNow() == true
+            && Hardware.climbTwoButton.isOnCheckNow() == true)
+        {
+        Hardware.climber.climb();
+        }
+
+
+    // buttons to cancel everything
+    if (Hardware.cancelTwoButton.get() == true
+            && Hardware.cancelOneButton.get() == true)
+        {
+        Hardware.climber.finishEarly();
+        Autonomous.endAutoPath();
+
+        }
+
     // TODO pls yell at me if I puch this
     teleopDrive();
 
@@ -242,7 +259,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -303,13 +320,17 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
+    if (Autonomous.prepDepost())
+        Hardware.depositGamePiece.depositHatch();
+
     // Hardware.axisCamera.setRelayValue(Value.kOn);
 
-
-    if (Hardware.driveWithCamera.visionTest(.4))
-        {
-        System.out.println("ALigned amybe i hope");
-        }
+    // System.out.println("Right or left: "
+    // + Hardware.driveWithCamera.getTargetSide());
+    // if (Hardware.driveWithCamera.visionTest(.4))
+    // {
+    // System.out.println("ALigned amybe i hope");
+    // }
 
 } // end connerTest()
 
@@ -317,11 +338,16 @@ private static void coleTest ()
 {
 
     // Manipulator
-    // test
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // Hardware.intakeTrigger.get(),
-    // Hardware.outtakeButton.get(),
-    // Hardware.intakeOverride.get());
+
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
+
+    // Hardware.manipulator.moveArmByButton();
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
 } // end coleTest()
 
