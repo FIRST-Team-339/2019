@@ -265,36 +265,53 @@ private static void guidoTest ()
 private static void patrickTest ()
 {
 
-    if (Hardware.rightDriver.getRawButton(4) == true
-            && currentBackground < 2)
+    if (Hardware.rightDriver
+            .getRawButton(CYCLE_BACKGROUND_COLOR) == true
+            && isCurrentlyChanging == false)
         {
-        currentBackground++;
+        switch (backgroundColor)
+            {
+            case CLEAR:
+                backgroundColor = CurrentBackground.BLUE;
+                isCurrentlyChanging = true;
+                break;
+
+            case BLUE:
+                backgroundColor = CurrentBackground.ORANGE;
+                isCurrentlyChanging = true;
+                break;
+
+            case ORANGE:
+                backgroundColor = CurrentBackground.CLEAR;
+                isCurrentlyChanging = true;
+                break;
+            }
         }
 
-    if (Hardware.rightDriver.getRawButton(5) == true)
+    switch (backgroundColor)
         {
-        currentBackground = 0;
-        }
+        case CLEAR:
+            isBlue = false;
+            isOrange = false;
+            break;
 
+        case BLUE:
+            isBlue = true;
+            isOrange = false;
+            break;
 
-    if (currentBackground == 0)
-        {
-        isBlue = false;
-        isOrange = false;
+        case ORANGE:
+            isBlue = true;
+            isOrange = true;
+            break;
         }
-    if (currentBackground == 1)
-        {
-        isBlue = true;
-        isOrange = false;
-        }
-    if (currentBackground == 2)
-        {
-        isBlue = false;
-        isOrange = true;
-        }
-
     SmartDashboard.putBoolean("Blue", isBlue);
     SmartDashboard.putBoolean("Orange", isOrange);
+
+    if (Hardware.rightDriver.getRawButton(4) == false)
+        {
+        isCurrentlyChanging = false;
+        }
 }
 
 private static void annaTest ()
@@ -572,11 +589,20 @@ private static final double SECOND_GEAR_RATIO = .7;
 
 private static final double DEADBAND_VALUE = .2;
 
-private static int currentBackground = 0;
+final static int CYCLE_BACKGROUND_COLOR = 4;
+
+private static enum CurrentBackground
+    {
+CLEAR, BLUE, ORANGE
+    }
+
+public static CurrentBackground backgroundColor = CurrentBackground.CLEAR;
 
 private static boolean isBlue = true;
 
 private static boolean isOrange = true;
+
+private static boolean isCurrentlyChanging = false;
 
 // ================================
 // Variables
