@@ -404,6 +404,8 @@ public static ClimbToLevelTwo climber = null;
 
 public static AlignPerpendicularToTape alignByTape = null;
 
+public static DepositGamePiece depositGamePiece = null;
+
 // ====================================
 // Methods
 // ====================================
@@ -678,6 +680,9 @@ public static void commonInitialization ()
 
     alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
             drive);
+
+    depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
+
 
 
 } // end of commonInitialization

@@ -150,7 +150,7 @@ public static void periodic ()
     Hardware.climber.climbUpdate();
 
     // TODO pls yell at me if I puch this
-    teleopDrive();
+    // teleopDrive();
 
     // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
@@ -236,10 +236,13 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+    if (Autonomous.prepDepost())
+        Hardware.depositGamePiece.depositHatch();
 
-    System.out.println("Right or left: "
-            + Hardware.driveWithCamera.getTargetSide());
+    // Hardware.axisCamera.setRelayValue(Value.kOn);
+
+    // System.out.println("Right or left: "
+    // + Hardware.driveWithCamera.getTargetSide());
     // if (Hardware.driveWithCamera.visionTest(.4))
     // {
     // System.out.println("ALigned amybe i hope");

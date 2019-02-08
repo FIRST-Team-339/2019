@@ -266,7 +266,7 @@ public boolean driveToTarget (double speed)
                 this.getTransmission().driveRaw(slowestSpeed,
                         motorspeed + DRIVE_CORRECTION);
 
-                } else
+                } else if (this.getTargetSide() == Side.CENTER)
                 {
                 System.out.println("Driving straight");
                 this.getTransmission().driveRaw(motorspeed, motorspeed);
@@ -274,7 +274,7 @@ public boolean driveToTarget (double speed)
 
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
-            /* && isAnyEncoderLargerThan(ENCODER_MIN_DISTANCE */)
+                    && isAnyEncoderLargerThan(MIN_INCHES))
                 {
 
                 state = DriveWithCameraState.DRIVE_WITH_US;
@@ -326,12 +326,7 @@ public boolean driveToTarget (double speed)
     return false;
 }
 
-public static enum Side
-    {
-RIGHT, LEFT, NULL
-    }
 
-private Side side = Side.NULL;
 
 
 /**
@@ -353,11 +348,24 @@ public Side getTargetSide ()
         {
         side = Side.LEFT;
         return side;
+        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
+                - CAMERA_DEADBAND
+                && this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
+                        + CAMERA_DEADBAND)
+        {
+        side = Side.CENTER;
+        return side;
         }
     side = Side.NULL;
     return side;
 }
 
+public static enum Side
+    {
+RIGHT, LEFT, NULL, CENTER
+    }
+
+private Side side = Side.NULL;
 
 private DriveWithCameraState state = DriveWithCameraState.INIT;
 

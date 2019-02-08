@@ -279,10 +279,9 @@ public void deployUpdate ()
 // Hatch Panel Methods
 // =========================================================================
 
-public boolean depositHatch ()
-{
-    return false;
-}
+
+
+
 
 // =========================================================================
 // roller methods
