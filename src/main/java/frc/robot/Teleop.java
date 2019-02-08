@@ -50,6 +50,7 @@ import frc.vision.VisionProcessor.ImageType;
  */
 public class Teleop
 {
+
 /**
  * User Initialization code for teleop mode should go here. Will be called once
  * when the robot enters teleop mode.
@@ -59,12 +60,37 @@ public class Teleop
  */
 public static void init ()
 {
+    switch (Hardware.whichRobot)
+        {
+        case KILROY_2018:
+            initTeleop2018();
+            break;
 
-    LiveWindow.disableTelemetry(Hardware.pdp);
+        default:
+        case KILROY_2019:
+            initTeleop2019();
+            break;
 
-    Hardware.telemetry.setTimeBetweenPrints(1000);
+        case TEST_BOARD:
+            break;
+        } // end switch
+} // end Init
 
-    Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE);
+
+/**
+ * User Initialization code for teleop mode should go here. Will be called once
+ * when the robot enters teleop mode.
+ *
+ * @author Nathanial Lydick
+ * @written Jan 13, 2015
+ */
+public static void initTeleop2018 ()
+{
+    Hardware.telemetry
+            .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XIX);
+
+    Hardware.transmission
+            .setJoystickDeadband(DEADBAND_VALUE_KILROY_XIX);
     Hardware.transmission.enableDeadband();
 
     Hardware.gyro.reset();
@@ -73,9 +99,55 @@ public static void init ()
     // drive class initialization
     // ---------------------------------
     Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-            FIRST_GEAR_RATIO);
+            FIRST_GEAR_RATIO_KILROY_XIX);
     Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-            SECOND_GEAR_RATIO);
+            SECOND_GEAR_RATIO_KILROY_XIX);
+    // sets the gear to 0 at the beginning.
+    Hardware.drive.setGear(0);
+
+    // --------------------------------------
+    // reset the MotorSafetyHelpers for each
+    // of the drive motors
+    // --------------------------------------
+
+    // ---------------------------------
+    // Encoder resetting
+    // ---------------------------------
+    // Hardware.rightFrontDriveEncoder.reset();
+    // Hardware.leftFrontDriveEncoder.reset();
+
+    // ---------------------------------
+    // setup motors
+    // ---------------------------------
+    // Hardware.rightDriveMotor.set(0);
+    // Hardware.leftDriveMotor.set(0);
+
+} // end initTeleop2018()
+
+/**
+ * User Initialization code for teleop mode should go here. Will be called once
+ * when the robot enters teleop mode.
+ *
+ * @author Nathanial Lydick
+ * @written Jan 13, 2015
+ */
+public static void initTeleop2019 ()
+{
+    Hardware.telemetry
+            .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
+
+    Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE_KILROY_XX);
+    Hardware.transmission.enableDeadband();
+
+    Hardware.gyro.reset();
+
+    // ---------------------------------
+    // drive class initialization
+    // ---------------------------------
+    Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+            FIRST_GEAR_RATIO_KILROY_XX);
+    Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+            SECOND_GEAR_RATIO_KILROY_XX);
     // sets the gear to 0 at the beginning.
     Hardware.drive.setGear(0);
 
@@ -97,9 +169,7 @@ public static void init ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
-
-} // end Init
-
+} // end initTeleop2019()
 
 // tune pid loop
 
@@ -184,8 +254,6 @@ private static void individualTest ()
 private static void ashleyTest ()
 {
 
-
-
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
     // // if (Hardware.alignByTape.align() == true)
@@ -225,12 +293,11 @@ private static void ashleyTest ()
     // Hardware.climber.finishEarly();
     // }
 
-
     // if (Hardware.descendButton.isOnCheckNow() == true)
     // {
     // Autonomous.descendFromLevelTwo();
     // }
-}
+} // end ashleyTest()
 
 private static boolean started = false;
 
@@ -248,26 +315,30 @@ private static void connerTest ()
     // System.out.println("ALigned amybe i hope");
     // }
 
-}
+} // end connerTest()
 
 private static void coleTest ()
 {
 
     // Manipulator
 
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // Hardware.intakeTrigger.get(),
-    // Hardware.outtakeButton.get(),
-    // Hardware.intakeOverride.get());
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
 
+    // Hardware.manipulator.moveArmByButton();
 
-}
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
+
+} // end coleTest()
 
 private static void guidoTest ()
 {
     SmartDashboard.putNumber("Lift Encoder",
             Hardware.lift.getForkliftHeight());
-}
+} // end guidoTest()
 
 private static void patrickTest ()
 {
@@ -302,22 +373,22 @@ private static void patrickTest ()
 
     SmartDashboard.putBoolean("Blue", isBlue);
     SmartDashboard.putBoolean("Orange", isOrange);
-}
+} // end patrickTest()
 
 private static void annaTest ()
 {
 
-}
+} // end annaTest()
 
 private static void meghanTest ()
 {
 
-}
+} // end meghanTest()
 
 private static void nithyaTest ()
 {
 
-}
+} // end nithyaTest()
 
 
 public static void printStatements ()
@@ -389,18 +460,33 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Left Front Encoder Inches"+
-        // Hardware.leftFrontDriveEncoder.getDistance());
+
+        // System.out.println("Left front encoder ticks: "
+        // + Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Right Front Encoder Inches",
-        // Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Right Front Encoder Ticks",
-        // Hardware.rightFrontDriveEncoder.get());
+
+        // System.out.println("Left rear encoder inches: "
+        // + Hardware.leftRearDriveEncoder.getDistance());
+
+        // System.out.println("Left rear encoder ticks: "
+        // + Hardware.leftRearDriveEncoder.get());
+
+        // System.out.println("Right rear encoder distance: "
+        // + Hardware.rightRearDriveEncoder.getDistance());
+
+        // System.out.println("Right rear encoder ticks: "
+        // + Hardware.rightRearDriveEncoder.get());
+
+        // System.out.println("Lift encoder inches: "
+        // + Hardware.liftingEncoder.getDistance());
+
+        // System.out.println(
+        // "Lift encoder ticks: " + Hardware.liftingEncoder.get());
 
         // ---------------------------------
         // Red Light/IR Sensors
@@ -409,7 +495,7 @@ public static void printStatements ()
         // System.out.println("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
-        // TODO retest right back IR
+
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
@@ -420,8 +506,6 @@ public static void printStatements ()
         // Compressor
         // prints information on the compressor
         // ---------------------------------
-        // System.out.println("Compressor: " +
-        // Hardware.compressor.getCompressorCurrent());
 
         // ---------------------------------
         // Solenoids
@@ -432,7 +516,6 @@ public static void printStatements ()
         // System.out.println("Arm intake solenoid reverse: "
         // + Hardware.armIntakeSolenoid.getReverse());
 
-
         // Analogs
         // =================================
 
@@ -441,13 +524,12 @@ public static void printStatements ()
         // where the pot is turned to
         // ---------------------------------
 
-
-
         // ----------------------------------
         // Potentiometers
         // ----------------------------------
         // TODO test potentiometers
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -488,7 +570,6 @@ public static void printStatements ()
         // -------------------------------------
         // Axis/USB Camera class
         // -------------------------------------
-
 
         // =================================
         // Driver station
@@ -552,14 +633,13 @@ public static void teleopDrive ()
         {
         Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
         }
-}
+} // end teleopDrive()
 
 
 
 // ================================
 // Constants
 // ================================
-
 
 private static final int GEAR_UP_SHIFT_BUTTON = 3;
 
@@ -573,11 +653,21 @@ private static final int FIRST_GEAR_NUMBER = 0;
 
 private static final int SECOND_GEAR_NUMBER = 1;
 
-private static final double FIRST_GEAR_RATIO = .4;
+private static final double FIRST_GEAR_RATIO_KILROY_XIX = .4;
 
-private static final double SECOND_GEAR_RATIO = .7;
+private static final double SECOND_GEAR_RATIO_KILROY_XIX = .7;
 
-private static final double DEADBAND_VALUE = .2;
+private static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
+
+private static final double SECOND_GEAR_RATIO_KILROY_XX = .5;
+
+private static final double DEADBAND_VALUE_KILROY_XIX = .2;
+
+private static final double DEADBAND_VALUE_KILROY_XX = .2;
+
+private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
+
+private static final int TELEMETRY_PERIODICITY_KILROY_XX = 1000;
 
 private static int currentBackground = 0;
 

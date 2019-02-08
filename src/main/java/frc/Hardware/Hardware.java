@@ -349,11 +349,6 @@ public static MomentarySwitch descendButton = null;
 public static MomentarySwitch ringLightButton = null;
 
 
-
-
-
-
-
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -770,7 +765,6 @@ public static void robotInitialize2018 ()
 
     // Single Solenoids
 
-
     // **********************************************************
     // ANALOG I/O CLASSES
     // **********************************************************
@@ -781,7 +775,6 @@ public static void robotInitialize2018 ()
     // Gyro class
 
     // P/N ADW22307
-
 
     // Potentiometers
 
@@ -798,8 +791,6 @@ public static void robotInitialize2018 ()
     // **********************************************************
 
     // Axis/USB Camera class
-
-
 
     // -------------------------------------
     // declare the USB camera server and the

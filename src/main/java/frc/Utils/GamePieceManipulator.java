@@ -6,6 +6,8 @@ import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.LightSensor;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.HardwareInterfaces.QuickSwitch;
 
 public class GamePieceManipulator
 {
@@ -93,6 +95,7 @@ public boolean isDeployed ()
 public void masterUpdate ()
 {
     this.intake.update();
+    this.deployUpdate();
 }
 
 // =========================================================================
@@ -103,17 +106,47 @@ public void masterUpdate ()
 /**
  * call during teleop to move the arm up and down based on the joystick controls
  */
-
-public void moveArmByJoystick (Joystick armJoystick)
+public void moveArmByJoystick (Joystick armJoystick,
+        boolean overrideButton)
 {
     if (Math.abs(armJoystick
             .getY()) > DEPLOY_JOYSTICK_DEADBAND)
-    // if ((getCurrentArmPosition() < MAX_ARM_POSITION)
-    // && (getCurrentArmPosition() > MIN_ARM_POSITION))
         {
-        // TODO change to use the state machine
-        this.armMotor.set(armJoystick.getY());
+        // assuming up is a positive value
+        double speed = (armJoystick.getY() - DEPLOY_JOYSTICK_DEADBAND)
+                * DEPLOY_JOYSTICK_DEADBAND_SCALER;
+        // if override button is pressed, ignore potentiometer/ encoder.
+        if (overrideButton == true)
+            {
+            this.deployTargetSpeed = speed;
+            // force the lift state to be move by joysticks
+            this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
+            } else
+            {
+            // If we are trying to move up and past the max angle, or
+            // trying to move down and below the min height, tell the
+            // arm to stay where it is
+            if ((speed > 0
+                    && this.getCurrentArmPosition() > currentDeployMaxAngle)
+                    || (speed < 0 && this
+                            .getCurrentArmPosition() < currentDeployMinAngle))
+                {
+                this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
+                // return so we exit the method and do not accidentally set
+                // deployMovementState to MOVING_BY_JOY;
+                return;
+                }
+
+            // scales the speed based on whether it is going up or down
+            if (speed > 0)
+                deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
+            else
+                deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
+
+            this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
+            }
         }
+
 }
 
 /**
@@ -133,7 +166,7 @@ public double getCurrentArmPosition ()
 {
     if (armPot != null)
         {
-        double valueFromHorizontal = (armPotAdjusted()
+        double valueFromHorizontal = (this.armPotAdjusted()
                 - ARM_POT_RAW_HORIZONTAL_VALUE)
                 * ARM_POT_SCALE_TO_DEGREES;
 
@@ -152,34 +185,85 @@ public double getCurrentArmPosition ()
         }
 }
 
-// ready to test
-public void moveArmToPosition (int targetPosition)
+
+
+/**
+ * Method for setting the deploy arm to a preset angle using a button.
+ * For use in teleop. The button just needs to be pressed once (not held)
+ * and the dpeloy state machine will start moving to the necessary angle.
+ * This can be interruted at any time by moving the joysticks past their
+ * deadzones (causing joystick control to take over).
+ *
+ * This should be called directly as is in teleop and does not need to
+ * be surrounded by any if statements
+ *
+ *
+ * @param angle
+ *                     the angle the arm will be moved to
+ * @param armSpeed
+ *                     the desired speed the arm will be moved at
+ * @param button
+ *                     the QuickSwitch we are using to say when we want
+ *                     to move to the specified angle
+ *
+ */
+public void moveArmByButton (double angle,
+        double armSpeed, QuickSwitch button)
 {
-    if (getCurrentArmPosition() > targetPosition + ACCEPTABLE_ERROR)
+    // if the button is being held down and was not being held down before
+    if (button.getCurrentValue() == true)
         {
-        armMotor.set(LOWER_ARM_SPEED);
-        } else if (getCurrentArmPosition() < targetPosition
-                - ACCEPTABLE_ERROR)
-        {
-        armMotor.set(RAISE_ARM_SPEED);
-        } else
-        {
-        armMotor.set(HOLD_ARM_SPEED);
+        // tell the forklift state machine we want to move to a particular
+        // position
+        this.deployTargetAngle = angle;
+        this.deployTargetSpeed = Math.abs(armSpeed);
+        this.deployMovementState = DeployMovementState.MOVING_TO_POSITION;
         }
 }
 
-private double deployTargetAngle = 0.0;
+/**
+ * Function to move the deploy arm to a specified angle. For use
+ * in autonomous only (not in teleop). For teleop, please use
+ * moveArmByButton.
+ *
+ * @param angle
+ *                  the target angle the arm will move towards
+ *
+ * @param speed
+ *                  the speed the arm will move at
+ *
+ *
+ * @return true when the arm has finished moving to the proper
+ *         position, false otherwise
+ */
+public boolean moveArmToPosition (double angle, double speed)
+{
+    // Sets the target position and speed, enables "moving-to-position"
+    // state.
+    if (isSetDeployPositionInitReady == true)
+        {
+        this.deployTargetAngle = angle;
+        this.deployTargetSpeed = Math.abs(speed);
 
-private double deployTargetSpeed = 0.0;
+        this.deployMovementState = DeployMovementState.MOVING_TO_POSITION;
 
-private double currentDeployMaxAngle = 0.0;
+        isSetDeployPositionInitReady = false;
+        }
 
-private double currentDeployMinAngle = 0.0;
+    // return true is we are done moving, false is we are still going
+    if (this.deployMovementState == DeployMovementState.STAY_AT_POSITION)
+        {
+        isSetDeployPositionInitReady = true;
+        return true;
+        }
+    return false;
+}
 
-private boolean isSetDeployPositionInitReady = true;
+
 
 public void deployUpdate ()
 {
+    SmartDashboard.putString("Arm Potentiometer", "" + armPot.get());
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
@@ -347,7 +431,18 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
 // Constants
 // =========================================================================
 
+// ----- Joystick Constants -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
+
+// should be equal to 1/(1 - DEPLOY_JOYSTICK_DEADBAND)
+private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25;
+
+private static final double UP_JOYSTICK_SCALER = .5;
+
+private static final double DOWN_JOYSTICK_SCALER = .5;
+
+
+// ----- Deploy Constants -----
 
 private static final int MAX_ARM_POSITION = 170;
 
@@ -397,8 +492,15 @@ private DeployMovementDirection deployDirection = DeployMovementDirection.NEUTRA
 
 // The angle the manipulator is trying to move to; 0 is the start angle,
 // positive angles are above the start, negative angles are below the starts
-private double targetManipulatorAngle = 0;
+private double deployTargetAngle = 0.0;
 
+private double deployTargetSpeed = 0.0;
+
+private double currentDeployMaxAngle = 0.0;
+
+private double currentDeployMinAngle = 0.0;
+
+private boolean isSetDeployPositionInitReady = true;
 
 
 // =========================================================================
