@@ -149,8 +149,8 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
-    // TODO pls yell at me if I puch this
-    // teleopDrive();
+    // TODO pls yell at me if I push this commente out
+    teleopDrive();
 
     // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
