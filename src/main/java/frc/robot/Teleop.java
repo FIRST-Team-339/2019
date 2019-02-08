@@ -172,7 +172,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -236,13 +236,14 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    // Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.setRelayValue(Value.kOn);
 
-
-    if (Hardware.driveWithCamera.visionTest(.4))
-        {
-        System.out.println("ALigned amybe i hope");
-        }
+    System.out.println("Right or left: "
+            + Hardware.driveWithCamera.getTargetSide());
+    // if (Hardware.driveWithCamera.visionTest(.4))
+    // {
+    // System.out.println("ALigned amybe i hope");
+    // }
 
 }
 
