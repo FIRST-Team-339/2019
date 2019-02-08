@@ -406,7 +406,7 @@ public static void printStatements ()
         // System.out.println("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
-        // TODO resest right back IR
+        // TODO retest right back IR
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
