@@ -4,6 +4,9 @@ import frc.Hardware.Hardware;
 import frc.Utils.drive.*;
 import frc.Utils.GamePieceManipulator;
 
+
+
+
 public class DepositGamePiece
 {
 
@@ -28,6 +31,10 @@ INIT, DEPOSIT_HATCH, BACKUP_HATCH, STOP
 
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
 
+/**
+ *
+ *
+ */
 public boolean depositHatch ()
 {
     switch (depositHatchState)
