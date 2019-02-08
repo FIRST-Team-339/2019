@@ -182,12 +182,12 @@ public boolean driveToTarget (double speed)
     switch (state)
         {
         case INIT:
-            Hardware.axisCamera.setRelayValue(Value.kForward);
-            Hardware.autoTimer.reset();
+            Hardware.axisCamera.setRelayValue(Value.kOn);
+            Hardware.drive.resetEncoders();
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
 
-            // this.resetEncoders();
+
             double motorspeed = speed;
             double slowAmount;
             double slowestSpeed;
@@ -220,12 +220,18 @@ public boolean driveToTarget (double speed)
             motorspeed = speed * slowAmount;
 
             // adjust speed so that motors never reverse
-            if (motorspeed - DRIVE_CORRECTION <= 0)
+            if (motorspeed - DRIVE_CORRECTION <= 0
+                    && Hardware.rightFrontDriveEncoder
+                            .getDistance() > MIN_INCHES)
                 {
                 slowestSpeed = 0.05;
-                } else
+                } else if (Hardware.rightFrontDriveEncoder
+                        .getDistance() > MIN_INCHES)
                 {
                 slowestSpeed = motorspeed - DRIVE_CORRECTION;
+                } else
+                {
+                slowestSpeed = motorspeed;
                 }
 
             System.out.println("slowest speed: " + slowestSpeed);
@@ -235,9 +241,12 @@ public boolean driveToTarget (double speed)
             // turns on the ring light
 
 
+            System.out.println("center of blob" + centerX);
+            System.out
+                    .println("center of camera" + SWITCH_CAMERA_CENTER);
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (centerX > SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
+            if (this.getTargetSide() == Side.RIGHT)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
@@ -249,7 +258,7 @@ public boolean driveToTarget (double speed)
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-            else if (centerX < SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
+            else if (this.getTargetSide() == Side.LEFT)
                 {
                 // the switch's center is too far left, drive faster on the
                 // right
@@ -257,7 +266,7 @@ public boolean driveToTarget (double speed)
                 this.getTransmission().driveRaw(slowestSpeed,
                         motorspeed + DRIVE_CORRECTION);
 
-                } else
+                } else if (this.getTargetSide() == Side.CENTER)
                 {
                 System.out.println("Driving straight");
                 this.getTransmission().driveRaw(motorspeed, motorspeed);
@@ -265,7 +274,7 @@ public boolean driveToTarget (double speed)
 
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
-            /* && isAnyEncoderLargerThan(ENCODER_MIN_DISTANCE) */)
+                    && isAnyEncoderLargerThan(MIN_INCHES))
                 {
 
                 state = DriveWithCameraState.DRIVE_WITH_US;
@@ -274,7 +283,8 @@ public boolean driveToTarget (double speed)
 
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-            /* && Hardware.autoTimer.get() > .5 */)
+                    && Hardware.rightFrontDriveEncoder
+                            .getDistance() > MIN_INCHES)
                 {
                 state = DriveWithCameraState.STOP;
                 }
@@ -305,7 +315,7 @@ public boolean driveToTarget (double speed)
         default:
         case STOP:
             // Hardware.autoTimer.stop();
-            Hardware.axisCamera.setRelayValue(Value.kOn);
+            Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
             System.out.println("We are stopping");
@@ -316,12 +326,7 @@ public boolean driveToTarget (double speed)
     return false;
 }
 
-public static enum Side
-    {
-RIGHT, LEFT, NULL
-    }
 
-private Side side = Side.NULL;
 
 
 /**
@@ -343,11 +348,24 @@ public Side getTargetSide ()
         {
         side = Side.LEFT;
         return side;
+        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
+                - CAMERA_DEADBAND
+                && this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
+                        + CAMERA_DEADBAND)
+        {
+        side = Side.CENTER;
+        return side;
         }
     side = Side.NULL;
     return side;
 }
 
+public static enum Side
+    {
+RIGHT, LEFT, NULL, CENTER
+    }
+
+private Side side = Side.NULL;
 
 private DriveWithCameraState state = DriveWithCameraState.INIT;
 
@@ -571,16 +589,16 @@ public double getCameraCenterValue ()
         {
         center = (visionProcessor.getNthSizeBlob(0).center.x
                 + visionProcessor.getNthSizeBlob(1).center.x) / 2;
-        // System.out.println("blob center: " + center);
+        System.out.println("blob center: " + center);
 
-        // System.out.println("TWO BLOBS");
+        System.out.println("TWO BLOBS");
         }
     // if we only can detect one blob, the center is equal to the center x
     // position of the blob
     else if (visionProcessor.getParticleReports().length == 1)
         {
         center = visionProcessor.getNthSizeBlob(0).center.x;
-        // System.out.println("ONE BLOBS");
+        System.out.println("ONE BLOBS");
         }
     // if we don't have any blobs, set the center equal to the constanct
     // center,
@@ -588,7 +606,7 @@ public double getCameraCenterValue ()
     else
         {
         center = SWITCH_CAMERA_CENTER;
-        // System.out.println("NO BLOBS");
+        System.out.println("NO BLOBS");
         }
     return center;
 }

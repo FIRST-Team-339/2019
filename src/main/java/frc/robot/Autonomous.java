@@ -80,6 +80,7 @@ public static void init ()
     // Hardware.leftFrontDriveEncoder.reset();
     // Hardware.rightFrontDriveEncoder.reset();
     Hardware.gyro.reset();
+    Hardware.axisCamera.setRelayValue(Value.kOff);
 
     // TODO @ANE uncomment
     // if (Hardware.autoLevelSwitch.isOn() == true) {
@@ -300,6 +301,47 @@ private static void setPositionAndLevel ()
     // autoLevel = Level.LEVEL_ONE;
     // autoPosition = Position.RIGHT;
 }
+
+
+public static enum PrepState
+    {
+INIT, RAISE_FORKLIFT, DEPLOY_MANIPULATOR, STOP_PREP
+    }
+
+private static PrepState prepState = PrepState.INIT;
+
+/**
+ * Code to set up the forklift for autonomous for a hatch deposit
+ *
+ */
+public static boolean prepDepost ()
+{
+    switch (prepState)
+        {
+        case INIT:
+            prepState = PrepState.RAISE_FORKLIFT;
+            break;
+
+        case RAISE_FORKLIFT:
+            if (Hardware.lift
+                    .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
+                {
+                prepState = PrepState.DEPLOY_MANIPULATOR;
+                }
+            break;
+
+        case DEPLOY_MANIPULATOR:
+            // Hardware.manipulator
+            // .moveArmToPosition(260);// TODO constant
+            break;
+        case STOP_PREP:
+            prepState = PrepState.INIT;
+            return true;
+        }
+    return false;
+}
+
+
 
 // =====================================================================
 // Path Methods
@@ -543,7 +585,7 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
-            if (Hardware.manipulator.depositHatch())
+            if (true)
                 {
                 return true;
                 }
