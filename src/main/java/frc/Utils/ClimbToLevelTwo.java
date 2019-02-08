@@ -1,6 +1,5 @@
 package frc.Utils;
 
-import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -35,7 +34,7 @@ private Timer climbTimer = new Timer();
 // state of the climb state machine
 private static enum climberState
     {
-STANDBY, START_CLIMB, LOWER_FORKLIFT_TO_POSITION, DELAY_ONE, LOWER_ARM, DELAY_TWO, DEPLOY_BACK_WHEELS, DELAY_THREE, LOWER_FORKLIFT_COMPLETELY, DELAY_FOUR, DRIVE_FORWARD, DELAY_FIVE, RAISE_ARM, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, FINISH_DRIVING, DELAY_INIT, STOP
+    STANDBY, START_CLIMB, LOWER_FORKLIFT_TO_POSITION, DELAY_ONE, LOWER_ARM, DELAY_TWO, DEPLOY_BACK_WHEELS, DELAY_THREE, LOWER_FORKLIFT_COMPLETELY, DELAY_FOUR, DRIVE_FORWARD, DELAY_FIVE, RAISE_ARM, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, FINISH_DRIVING, DELAY_INIT, STOP
     }
 
 
@@ -337,25 +336,37 @@ public void climbUpdate ()
             if (prevState == climberState.LOWER_FORKLIFT_TO_POSITION)
                 {
                 climbState = climberState.DELAY_ONE;
-                } else if (prevState == climberState.LOWER_ARM)
-                {
-                climbState = climberState.DELAY_TWO;
-                } else if (prevState == climberState.DEPLOY_BACK_WHEELS)
-                {
-                climbState = climberState.DELAY_THREE;
-                } else if (prevState == climberState.LOWER_FORKLIFT_COMPLETELY)
-                {
-                climbState = climberState.DELAY_FOUR;
-                } else if (prevState == climberState.DRIVE_FORWARD)
-                {
-                climbState = climberState.DELAY_FIVE;
-                } else if (prevState == climberState.RAISE_ARM)
-                {
-                climbState = climberState.DELAY_SIX;
-                } else if (prevState == climberState.RETRACT_WHEELS)
-                {
-                climbState = climberState.DELAY_SEVEN;
                 }
+            else
+                if (prevState == climberState.LOWER_ARM)
+                    {
+                    climbState = climberState.DELAY_TWO;
+                    }
+                else
+                    if (prevState == climberState.DEPLOY_BACK_WHEELS)
+                        {
+                        climbState = climberState.DELAY_THREE;
+                        }
+                    else
+                        if (prevState == climberState.LOWER_FORKLIFT_COMPLETELY)
+                            {
+                            climbState = climberState.DELAY_FOUR;
+                            }
+                        else
+                            if (prevState == climberState.DRIVE_FORWARD)
+                                {
+                                climbState = climberState.DELAY_FIVE;
+                                }
+                            else
+                                if (prevState == climberState.RAISE_ARM)
+                                    {
+                                    climbState = climberState.DELAY_SIX;
+                                    }
+                                else
+                                    if (prevState == climberState.RETRACT_WHEELS)
+                                        {
+                                        climbState = climberState.DELAY_SEVEN;
+                                        }
             break;
 
         // welp heres a default just in case
@@ -383,7 +394,7 @@ public void climb ()
 // state of the climb state machine
 private static enum ReverseClimberState
     {
-STANDBY, START_REVERSE_CLIMB, DRIVE_BACKWARDS, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, LOWER_FORKLIFT_COMPLETELY, DELAY_THREE, LOWER_ARM, DELAY_FOUR, DRIVE_OFF_COMPLETELY, DELAY_FIVE, RAISE_FORKLIFT_TO_POSITION, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, RAISE_ARM, DELAY_INIT, STOP;
+    STANDBY, START_REVERSE_CLIMB, DRIVE_BACKWARDS, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, LOWER_FORKLIFT_COMPLETELY, DELAY_THREE, LOWER_ARM, DELAY_FOUR, DRIVE_OFF_COMPLETELY, DELAY_FIVE, RAISE_FORKLIFT_TO_POSITION, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, RAISE_ARM, DELAY_INIT, STOP;
     }
 
 
@@ -604,25 +615,37 @@ public void reverseClimbUpdate ()
             if (prevReverseState == ReverseClimberState.DRIVE_BACKWARDS)
                 {
                 reverseClimbState = ReverseClimberState.DELAY_ONE;
-                } else if (prevReverseState == ReverseClimberState.DEPLOY_BACK_WHEELS)
-                {
-                reverseClimbState = ReverseClimberState.DELAY_TWO;
-                } else if (prevReverseState == ReverseClimberState.LOWER_FORKLIFT_COMPLETELY)
-                {
-                reverseClimbState = ReverseClimberState.DELAY_THREE;
-                } else if (prevReverseState == ReverseClimberState.LOWER_ARM)
-                {
-                reverseClimbState = ReverseClimberState.DELAY_FOUR;
-                } else if (prevReverseState == ReverseClimberState.DRIVE_OFF_COMPLETELY)
-                {
-                reverseClimbState = ReverseClimberState.DELAY_FIVE;
-                } else if (prevReverseState == ReverseClimberState.RETRACT_WHEELS)
-                {
-                reverseClimbState = ReverseClimberState.DELAY_SIX;
-                } else if (prevReverseState == ReverseClimberState.RAISE_ARM)
-                {
-                reverseClimbState = ReverseClimberState.DELAY_SEVEN;
                 }
+            else
+                if (prevReverseState == ReverseClimberState.DEPLOY_BACK_WHEELS)
+                    {
+                    reverseClimbState = ReverseClimberState.DELAY_TWO;
+                    }
+                else
+                    if (prevReverseState == ReverseClimberState.LOWER_FORKLIFT_COMPLETELY)
+                        {
+                        reverseClimbState = ReverseClimberState.DELAY_THREE;
+                        }
+                    else
+                        if (prevReverseState == ReverseClimberState.LOWER_ARM)
+                            {
+                            reverseClimbState = ReverseClimberState.DELAY_FOUR;
+                            }
+                        else
+                            if (prevReverseState == ReverseClimberState.DRIVE_OFF_COMPLETELY)
+                                {
+                                reverseClimbState = ReverseClimberState.DELAY_FIVE;
+                                }
+                            else
+                                if (prevReverseState == ReverseClimberState.RETRACT_WHEELS)
+                                    {
+                                    reverseClimbState = ReverseClimberState.DELAY_SIX;
+                                    }
+                                else
+                                    if (prevReverseState == ReverseClimberState.RAISE_ARM)
+                                        {
+                                        reverseClimbState = ReverseClimberState.DELAY_SEVEN;
+                                        }
             break;
 
         // welp heres a default just in case
@@ -675,7 +698,8 @@ private boolean lowerArm ()
     if (this.armSensor.get() <= LOWERED_ARM_POSITION)
         {
         armMotor.set(LOWER_ARM_SPEED);
-        } else
+        }
+    else
         {
         armMotor.set(0.0);
         return true;
@@ -748,7 +772,8 @@ private boolean raiseArm ()
     if (armSensor.get() >= RAISED_ARM_POSITION)
         {
         armMotor.set(RAISE_ARM_SPEED);
-        } else
+        }
+    else
         {
         armMotor.set(0.0);
         return true;
@@ -786,7 +811,8 @@ private boolean finishDriving ()
         {
         this.drive.driveStraight(SPEED_TO_FINISH_DRIVING, .6, false);
         return false;
-        } else
+        }
+    else
         {
         stop();
         return true;

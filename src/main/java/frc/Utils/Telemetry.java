@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 
-
 public class Telemetry
 {
 /**
@@ -28,6 +27,8 @@ public Telemetry ()
  * timeBetweenPrints
  *
  * @param newTimeBetweenPrints
+ *                                 - passing in a time between prints overriding
+ *                                 the default
  */
 public Telemetry (double newTimeBetweenPrints)
 {
@@ -81,7 +82,8 @@ private double setLastTimePrinted (double newLastTimePrinted)
  * function dedicated to setting a new value for time between each print
  *
  * @param newTimeBetweenPrints
- * @return
+ *                                 - new time between each printed string
+ * @return - the updated Time between prints
  */
 public double setTimeBetweenPrints (double newTimeBetweenPrints)
 {
@@ -91,6 +93,10 @@ public double setTimeBetweenPrints (double newTimeBetweenPrints)
 
 /**
  * prints to console
+ *
+ * @param String
+ *                   - stringToPrint - string that will be displayed on the
+ *                   console
  *
  */
 public void printToConsole (String stringToPrint)
@@ -110,6 +116,12 @@ public void printToConsole (String stringToPrint)
 
 /**
  * prints to shuffleboard / smartboard
+ *
+ * @param String
+ *                   - dashboardKey - the name of the shuffleboard item to place
+ *                   the value into
+ * @param String
+ *                   - dashboardValue - the value to display
  *
  */
 public void printToShuffleboard (String dashboardKey,

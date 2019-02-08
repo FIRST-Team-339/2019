@@ -1,10 +1,7 @@
 package frc.Utils;
 
-import frc.Hardware.Hardware;
 import frc.Utils.drive.*;
 import frc.Utils.GamePieceManipulator;
-
-
 
 
 public class DepositGamePiece
@@ -26,7 +23,7 @@ public DepositGamePiece (Drive drive, Forklift forklift,
 
 public enum DepositHatchState
     {
-INIT, DEPOSIT_HATCH, BACKUP_HATCH, STOP
+    INIT, DEPOSIT_HATCH, BACKUP_HATCH, STOP
     }
 
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
@@ -43,7 +40,8 @@ public boolean depositHatch ()
             if (this.gamePieceManipulator.isDeployed())
                 {
                 depositHatchState = DepositHatchState.DEPOSIT_HATCH;
-                } else
+                }
+            else
                 {
                 // this.gamePieceManipulator
                 // .moveArmToPosition(LOWERED_ARM_POSITION);
@@ -71,10 +69,8 @@ public boolean depositHatch ()
 
 public boolean depositCargo ()
 {
-
-
     return false;
-}
+} // end depositCargo()
 
 private static boolean usingGyro = true;
 
@@ -87,9 +83,5 @@ private static final double BACKUP_SPEED = .4;
 private static final int LOWERED_ARM_POSITION = 260;
 
 private static final int RAISED_ARM_POSITION = 225;
-
-
-
-
 
 }

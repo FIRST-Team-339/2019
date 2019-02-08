@@ -1,6 +1,5 @@
 package frc.Utils.drive;
 
-import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.Transmission.MecanumTransmission;
 import frc.HardwareInterfaces.Transmission.SwerveTransmission;
@@ -271,11 +270,13 @@ public boolean arc (double speed, double radius, double arcLength,
         {
         leftSide = 1;
         rightSide = innerCircle / outerCircle;
-        } else if (radius < 0)
-        {
-        rightSide = 1;
-        leftSide = innerCircle / outerCircle;
         }
+    else
+        if (radius < 0)
+            {
+            rightSide = 1;
+            leftSide = innerCircle / outerCircle;
+            }
 
     double leftRate = getEncoderRate(MotorPosition.LEFT);
     double rightRate = getEncoderRate(MotorPosition.RIGHT);
@@ -291,7 +292,8 @@ public boolean arc (double speed, double radius, double arcLength,
             {
             leftSide -= driveStraightConstant;
             rightSide += driveStraightConstant;
-            } else
+            }
+        else
             {
             leftSide += driveStraightConstant;
             rightSide -= driveStraightConstant;
@@ -331,11 +333,12 @@ public boolean brake (BrakeType type)
         }
     // if Braketype is AFTER_TURN set the deadband to brakeTurnDeadband
     // and set power to brakeTurnPower
-    else if (type == BrakeType.AFTER_TURN)
-        {
-        deadband = brakeTurnDeadband;
-        power = brakeTurnPower;
-        }
+    else
+        if (type == BrakeType.AFTER_TURN)
+            {
+            deadband = brakeTurnDeadband;
+            power = brakeTurnPower;
+            }
 
     if (System.currentTimeMillis() - previousBrakeTime > INIT_TIMEOUT)
         {
@@ -397,7 +400,8 @@ public boolean brake (BrakeType type)
         {
         // Increase the iteration
         currentBrakeIteration++;
-        } else
+        }
+    else
         {
         // Reset the iteration. We want x times ~in a row~.
         currentBrakeIteration = 0;
@@ -487,18 +491,19 @@ public void drive (double leftVal, double rightVal)
         ((TankTransmission) transmission).drive(leftVal, rightVal);
     // If the transmission input into Drive is some sort of Omni-Directional,
     // then use tank drive on it.
-    else if (transmission.getType() == TransmissionType.OMNI_DIR)
-        {
-        double direction = 0;
-        double magnitude = (leftVal + rightVal) / 2.0;
-        double rotation = (leftVal - rightVal) / 2.0;
+    else
+        if (transmission.getType() == TransmissionType.OMNI_DIR)
+            {
+            double direction = 0;
+            double magnitude = (leftVal + rightVal) / 2.0;
+            double rotation = (leftVal - rightVal) / 2.0;
 
-        if (magnitude < 0)
-            direction = 180;
-        magnitude = Math.abs(magnitude);
+            if (magnitude < 0)
+                direction = 180;
+            magnitude = Math.abs(magnitude);
 
-        this.drive(magnitude, direction, rotation);
-        }
+            this.drive(magnitude, direction, rotation);
+            }
 }
 
 /**
@@ -541,20 +546,28 @@ public void drive (double magnitude, double direction, double rotation)
                 rotation);
     // IF the transmission type input is Swerve (as if it will ever be used),
     // then control it with that
-    else if (transmission instanceof SwerveTransmission)
-        ((SwerveTransmission) transmission).drive(magnitude, direction,
-                rotation);
-    // AHHH! we are a Tank transmission! ...Switching to arcade drive I guess?
-    else if (transmission instanceof TankTransmission)
-        {
-        // Arcade Drive
-        double yVal = magnitude * Math.cos(Math.toRadians(direction));
-        double xVal = magnitude * Math.sin(Math.toRadians(direction));
-        double leftVal = Math.min(Math.max(yVal + xVal, -1), 1);
-        double rightVal = Math.min(Math.max(yVal - xVal, -1), 1);
+    else
+        if (transmission instanceof SwerveTransmission)
+            ((SwerveTransmission) transmission).drive(magnitude,
+                    direction,
+                    rotation);
+        // AHHH! we are a Tank transmission! ...Switching to arcade drive I
+        // guess?
+        else
+            if (transmission instanceof TankTransmission)
+                {
+                // Arcade Drive
+                double yVal = magnitude
+                        * Math.cos(Math.toRadians(direction));
+                double xVal = magnitude
+                        * Math.sin(Math.toRadians(direction));
+                double leftVal = Math.min(Math.max(yVal + xVal, -1), 1);
+                double rightVal = Math.min(Math.max(yVal - xVal, -1),
+                        1);
 
-        ((TankTransmission) transmission).drive(leftVal, rightVal);
-        }
+                ((TankTransmission) transmission).drive(leftVal,
+                        rightVal);
+                }
 }
 
 /**
@@ -632,7 +645,8 @@ public void driveStraight (double speed, double acceleration,
                 * driveStraightConstant);
         rightSpeed = speed + (Math.signum(gyro.getAngle())
                 * driveStraightConstant);
-        } else
+        }
+    else
         {
         int delta = getEncoderTicks(MotorPosition.LEFT)
                 - getEncoderTicks(MotorPosition.RIGHT);
@@ -647,7 +661,8 @@ public void driveStraight (double speed, double acceleration,
     if (leftSpeed > rightSpeed)
         {
         rightSpeed = speed;
-        } else
+        }
+    else
         {
         leftSpeed = speed;
         }
@@ -998,10 +1013,12 @@ public boolean pivotTurnDegrees (int degrees, double power,
                         MotorPosition.LEFT)) > degreesToEncoderInches(
                                 degrees, true))
             finished = true;
-        else if (Math.abs(getEncoderDistanceAverage(
-                MotorPosition.RIGHT)) > degreesToEncoderInches(degrees,
-                        true))
-            finished = true;
+        else
+            if (Math.abs(getEncoderDistanceAverage(
+                    MotorPosition.RIGHT)) > degreesToEncoderInches(
+                            degrees,
+                            true))
+                finished = true;
         }
 
     // We have reached the angle, so stop.
@@ -1431,7 +1448,8 @@ public boolean turnDegrees (int angle, double speed)
     if (angle < 0)
         {
         this.transmission.driveRaw(-speed, speed);
-        } else
+        }
+    else
         {
         this.transmission.driveRaw(speed, -speed);
         }
@@ -1562,7 +1580,8 @@ public boolean turnDegrees (int degrees, double speed,
             {
             this.gyro.reset();
             turnDegreesInit = false;
-            } else
+            }
+        else
             {
             // System.out.print("not gyro");
             this.resetEncoders();
@@ -1583,27 +1602,32 @@ public boolean turnDegrees (int degrees, double speed,
         turnDegreesInit = true;
         return true;
         // not using gyro
-        } else if (!usingGyro && this.getEncoderDistanceAverage(
+        }
+    else
+        if (!usingGyro && this.getEncoderDistanceAverage(
                 MotorPosition.ALL) > degreesToEncoderInches(
                         Math.abs(degrees) - turnDegreesFudgeFactor,
                         false))
-        {
-        System.out
-                .println("encoder required: " + degreesToEncoderInches(
-                        Math.abs(degrees) - turnDegreesFudgeFactor,
-                        false));
+            {
+            System.out
+                    .println("encoder required: "
+                            + degreesToEncoderInches(
+                                    Math.abs(degrees)
+                                            - turnDegreesFudgeFactor,
+                                    false));
 
-        this.transmission.stop();
-        turnDegreesInit = true;
-        return true;
-        }
+            this.transmission.stop();
+            turnDegreesInit = true;
+            return true;
+            }
 
     // If degrees is positive, then turn left. If not, then turn right.
     if (degrees > 0)
         {
         // Hardware.drive.drive(speed, -speed);
         this.accelerateProportionaly(speed, -speed, acceleration);
-        } else
+        }
+    else
         {
         // Hardware.drive.drive(-speed, speed);
         this.accelerateProportionaly(-speed, speed, acceleration);
@@ -1626,10 +1650,10 @@ public boolean turnDegrees (int degrees, double speed,
  */
 public static enum BrakeType
     {
-/** Braking after driving in a direction */
-AFTER_DRIVE,
-/** Braking after turning */
-AFTER_TURN
+    /** Braking after driving in a direction */
+    AFTER_DRIVE,
+    /** Braking after turning */
+    AFTER_TURN
     }
 
 /**
@@ -1644,8 +1668,9 @@ private double inRange (double val, double lowerVal, double upperVal)
 {
     if (val > upperVal)
         return upperVal;
-    else if (val < lowerVal)
-        return lowerVal;
+    else
+        if (val < lowerVal)
+            return lowerVal;
 
     return val;
 }

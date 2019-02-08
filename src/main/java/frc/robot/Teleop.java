@@ -224,7 +224,7 @@ public static void periodic ()
             && Hardware.climbTwoButton.isOnCheckNow() == true)
         {
         Hardware.climber.climb();
-        }
+        } // end if
 
 
     // buttons to cancel everything
@@ -233,8 +233,7 @@ public static void periodic ()
         {
         Hardware.climber.finishEarly();
         Autonomous.endAutoPath();
-
-        }
+        } // end if
 
     // TODO pls yell at me if I puch this
     teleopDrive();
@@ -248,8 +247,7 @@ public static void periodic ()
     // Hardware.telemetry.printToConsole();
 
     printStatements();
-}
-// end Periodic()
+} // end Periodic()
 
 
 // Individual testing methods for each programmer. Each programmer should //put
@@ -266,7 +264,7 @@ private static void individualTest ()
     // annaTest();
     // meghanTest();
     // nithyaTest();
-}
+} // end individualTest()
 
 private static void ashleyTest ()
 {
@@ -666,7 +664,7 @@ public static void teleopDrive ()
     if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
         {
         Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        }
+        } // end if
 } // end teleopDrive()
 
 
@@ -707,7 +705,7 @@ final static int CYCLE_BACKGROUND_COLOR = 4;
 
 private static enum CurrentBackground
     {
-CLEAR, BLUE, ORANGE
+    CLEAR, BLUE, ORANGE
     }
 
 public static CurrentBackground backgroundColor = CurrentBackground.CLEAR;

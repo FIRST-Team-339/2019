@@ -70,7 +70,7 @@ public class Hardware
 // ------------------------------------
 public enum RobotYear
     {
-KILROY_2018, KILROY_2019, TEST_BOARD
+    KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
 public static final RobotYear whichRobot = RobotYear.KILROY_2018;
@@ -192,9 +192,7 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 // Red Light/IR Sensor class
 // -------------------------------------
-
 public static LightSensor armIR = null;
-// TODO check port for 2018 robot
 
 public static LightSensor leftBackIR = null;
 
@@ -223,7 +221,6 @@ public static Compressor compressor = null;
 // ------------------------------------
 // Double Solenoids
 // ------------------------------------
-
 public static DoubleSolenoid armIntakeSolenoid = null;
 
 // ------------------------------------
@@ -265,9 +262,7 @@ public static LVMaxSonarEZ frontUltraSonic = null;
 // exception is probably because there is not a gyro on the robot, and passing
 // in a false will tell the robot we do not have a gyro without requiring us to
 // comment out the gyro declaration.
-
 public static KilroySPIGyro gyro = null;
-
 
 // **********************************************************
 // roboRIO CONNECTIONS CLASSES
@@ -275,7 +270,6 @@ public static KilroySPIGyro gyro = null;
 // -------------------------------------
 // Axis/USB Camera class
 // -------------------------------------
-
 public static VisionProcessor axisCamera = null;
 
 public static String axisCameraIp = null;
@@ -284,7 +278,6 @@ public static String axisCameraIp = null;
 // declare the USB camera server and the
 // USB camera it serves at the same time
 // -------------------------------------
-
 public static UsbCamera USBCam = null;
 
 public static UsbCamera USBCamII = null;
@@ -328,7 +321,6 @@ public static JoystickButton intakeOverride = null;
 public static JoystickButton deployOverride = null;
 
 // ----- Right Operator -----
-
 public static JoystickButton chooseCargoRocketHeights = null;
 
 public static JoystickButton forkliftOverride = null;
@@ -341,7 +333,6 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
-
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
@@ -353,18 +344,11 @@ public static MomentarySwitch climbOneButton = null;
 
 public static MomentarySwitch climbTwoButton = null;
 
-
 // ----------Left Driver---------------
 public static JoystickButton cancelOneButton = null;
 
-
-
 // ----------Right Driver--------------
 public static JoystickButton cancelTwoButton = null;
-
-
-
-
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -395,13 +379,10 @@ public static TankTransmission transmission = null;
 // ------------------------------------
 // Drive system
 // ------------------------------------
-// @ANE
 public static Drive drive = null;
 
 public static DrivePID drivePID = null;
 
-// TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
-// TODO update with encoders once fixed
 public static DriveWithCamera driveWithCamera = null;
 
 // -------------------
@@ -477,14 +458,10 @@ public static void commonInitialization ()
     // ====================================
     pdp = new PowerDistributionPanel(2);
 
-
     // ====================================
     // Relay classes
     // ====================================
     ringLightRelay = new Relay(0);
-
-
-
 
     // ====================================
     // Digital Inputs
@@ -619,7 +596,6 @@ public static void commonInitialization ()
 
     deployOverride = new JoystickButton(leftOperator, 5);
 
-
     // ----- Right Operator -----
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
@@ -638,10 +614,8 @@ public static void commonInitialization ()
     // ----------Left Driver---------------
     cancelOneButton = new JoystickButton(leftDriver, 11);
 
-
     // ----------Right Driver--------------
     cancelTwoButton = new JoystickButton(rightDriver, 11);
-
 
     // Momentary Switches
 
@@ -652,8 +626,6 @@ public static void commonInitialization ()
     climbOneButton = new MomentarySwitch();
 
     climbTwoButton = new MomentarySwitch();
-
-
 
     // **********************************************************
     // Kilroy's Ancillary classes
@@ -667,8 +639,6 @@ public static void commonInitialization ()
 
     telemetry = new Telemetry(10000);
 
-
-    // Transmission class
     // Transmission class
     transmission = new TankTransmission(
             new SpeedControllerGroup(leftFrontCANMotor,
@@ -691,7 +661,6 @@ public static void commonInitialization ()
             transmission, null, null, frontUltraSonic,
             frontUltraSonic, gyro, axisCamera);
 
-
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
             armMotor, intakeDeploySensor/* armEncoder */,
@@ -708,8 +677,6 @@ public static void commonInitialization ()
             drive);
 
     depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
-
-
 
 } // end of commonInitialization
 
@@ -843,7 +810,6 @@ public static void robotInitialize2018 ()
 
     // ----- Right Operator -----
 
-    //
     // Momentary Switches
 
 
@@ -965,9 +931,6 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor("10.3.39.11",
-            CameraModel.AXIS_M1013,
-            ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
@@ -993,7 +956,7 @@ public static void robotInitialize2019 ()
 
     // Momentary Switches
 
-} // end robotInitialize2019
+} // end robotInitialize2019()
 
 /**
  * it's a switch statement for the current robot, a robot we don't have,
@@ -1018,7 +981,7 @@ public static void setHardwareSettings ()
             break;
         }
     commonHardwareSettings();
-}
+} // end setHardwareSettings()
 
 /**
  * This sets up the settings and resets for the hardware objects so we
@@ -1064,7 +1027,7 @@ public static void commonHardwareSettings ()
     // of the drive motors
     // --------------------------------------
 
-} // end commonHardwareSettings
+} // end commonHardwareSettings()
 
 /**
  * This sets up the settings and resets for the hardware objects so we
@@ -1107,7 +1070,7 @@ public static void setHardwareSettings2018 ()
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
-} // end setHardwareSettings2018
+} // end setHardwareSettings2018()
 
 /**
  * This sets up the settings and resets for the hardware objects so we
@@ -1157,7 +1120,7 @@ public static void setHardwareSettings2019 ()
     Hardware.leftRearDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
-} // end setHardwareSettings2019
+} // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
