@@ -62,7 +62,8 @@ public void robotInit ()
     // Teleop.printStatements();
 
     System.out.println(
-            "Kilroy XX is started.  All hardware items created.");
+            Hardware.whichRobot
+                    + " is started.  All hardware items created.");
 
 } // end robotInit()
 

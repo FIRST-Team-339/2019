@@ -28,6 +28,7 @@ import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
+import frc.Utils.drive.Drive.BrakeType;
 import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
@@ -194,7 +195,6 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 
 public static LightSensor armIR = null;
-// TODO check port for 2018 robot
 
 public static LightSensor leftBackIR = null;
 
@@ -223,7 +223,6 @@ public static Compressor compressor = null;
 // ------------------------------------
 // Double Solenoids
 // ------------------------------------
-
 public static DoubleSolenoid armIntakeSolenoid = null;
 
 // ------------------------------------
@@ -260,14 +259,13 @@ public static LVMaxSonarEZ frontUltraSonic = null;
 // -------------------------------------
 // Analog Interfaces
 // -------------------------------------
-// if you are getting a null pointer exception from the gyro, try setting the
-// parameter you are passing into this declaration to false. The null pointer
-// exception is probably because there is not a gyro on the robot, and passing
-// in a false will tell the robot we do not have a gyro without requiring us to
+// if you are getting a null pointer exception from the gyro,
+// try setting the parameter you are passing into this declaration
+// to false. The null pointer exception is probably because
+// there is not a gyro on the robot, and passing in a false will
+// tell the robot we do not have a gyro without requiring us to
 // comment out the gyro declaration.
-
 public static KilroySPIGyro gyro = null;
-
 
 // **********************************************************
 // roboRIO CONNECTIONS CLASSES
@@ -275,7 +273,6 @@ public static KilroySPIGyro gyro = null;
 // -------------------------------------
 // Axis/USB Camera class
 // -------------------------------------
-
 public static VisionProcessor axisCamera = null;
 
 public static String axisCameraIp = null;
@@ -284,7 +281,6 @@ public static String axisCameraIp = null;
 // declare the USB camera server and the
 // USB camera it serves at the same time
 // -------------------------------------
-
 public static UsbCamera USBCam = null;
 
 public static UsbCamera USBCamII = null;
@@ -350,8 +346,6 @@ public static QuickSwitch nextLowerLiftHeightButton = null;
 
 public static QuickSwitch autoRetractButton = null;
 
-
-
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
@@ -363,18 +357,11 @@ public static MomentarySwitch climbOneButton = null;
 
 public static MomentarySwitch climbTwoButton = null;
 
-
 // ----------Left Driver---------------
 public static JoystickButton cancelOneButton = null;
 
-
-
 // ----------Right Driver--------------
 public static JoystickButton cancelTwoButton = null;
-
-
-
-
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -405,19 +392,15 @@ public static TankTransmission transmission = null;
 // ------------------------------------
 // Drive system
 // ------------------------------------
-// @ANE
 public static Drive drive = null;
 
 public static DrivePID drivePID = null;
 
-// TODO CHANGE TO FRONT ENCODERS ON REAL ROBOT
-// TODO update with encoders once fixed
 public static DriveWithCamera driveWithCamera = null;
 
 // -------------------
 // Assembly classes (e.g. forklift)
 // -------------------
-
 public static GamePieceManipulator manipulator = null;
 
 public static Forklift lift = null;
@@ -464,7 +447,7 @@ public static void initialize ()
           // must follow all other hardware declarations
           // -------------------------
     commonInitialization();
-}
+} // end initialize()
 
 public static void commonInitialization ()
 {
@@ -487,14 +470,10 @@ public static void commonInitialization ()
     // ====================================
     pdp = new PowerDistributionPanel(2);
 
-
     // ====================================
     // Relay classes
     // ====================================
     ringLightRelay = new Relay(0);
-
-
-
 
     // ====================================
     // Digital Inputs
@@ -727,9 +706,7 @@ public static void commonInitialization ()
 
     depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
 
-
-
-} // end of commonInitialization
+} // end of commonInitialization()
 
 /**
  * This initializes all of the components in Hardware
@@ -864,8 +841,7 @@ public static void robotInitialize2018 ()
     //
     // Momentary Switches
 
-
-}  // end of robotInitialize2018
+}  // end of robotInitialize2018()
 
 /**
  * This initializes all of the components in Hardware
@@ -1011,7 +987,7 @@ public static void robotInitialize2019 ()
 
     // Momentary Switches
 
-} // end robotInitialize2019
+} // end robotInitialize2019()
 
 /**
  * it's a switch statement for the current robot, a robot we don't have,
@@ -1036,7 +1012,7 @@ public static void setHardwareSettings ()
             break;
         }
     commonHardwareSettings();
-}
+} // end setHardwareSettings()
 
 /**
  * This sets up the settings and resets for the hardware objects so we
@@ -1082,7 +1058,7 @@ public static void commonHardwareSettings ()
     // of the drive motors
     // --------------------------------------
 
-} // end commonHardwareSettings
+} // end commonHardwareSettings()
 
 /**
  * This sets up the settings and resets for the hardware objects so we
@@ -1092,6 +1068,8 @@ public static void commonHardwareSettings ()
  */
 public static void setHardwareSettings2018 ()
 {
+    Hardware.drive.setBrakeIterations(20);
+    Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
     // ----------------------------
     // motor initialization
     // ----------------------------
@@ -1126,7 +1104,7 @@ public static void setHardwareSettings2018 ()
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
     Hardware.manipulator.initiliazeConstantsFor2018();
-} // end setHardwareSettings2018
+} // end setHardwareSettings2018()
 
 /**
  * This sets up the settings and resets for the hardware objects so we
@@ -1136,6 +1114,8 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
+    Hardware.drive.setBrakeIterations(20);
+    Hardware.drive.setBrakeDeadband(50, BrakeType.AFTER_DRIVE);
     // ----------------------------
     // motor initialization
     // ----------------------------
@@ -1176,8 +1156,7 @@ public static void setHardwareSettings2019 ()
     Hardware.leftRearDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
-} // end setHardwareSettings2019
-
+} // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
