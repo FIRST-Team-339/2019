@@ -322,11 +322,7 @@ private static void connerTest ()
 {
     if (!started)
         {
-        if (Autonomous.prepDeposit())
-            {
-            started = true;
-            Hardware.depositGamePiece.depositHatch();
-            }
+
         }
     // Hardware.axisCamera.setRelayValue(Value.kOn);
 

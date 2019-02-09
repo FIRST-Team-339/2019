@@ -70,7 +70,7 @@ public class Hardware
 // ------------------------------------
 public enum RobotYear
     {
-KILROY_2018, KILROY_2019, TEST_BOARD
+    KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
 public static final RobotYear whichRobot = RobotYear.KILROY_2018;
@@ -965,7 +965,7 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor("10.3.39.11",
+    axisCamera = new VisionProcessor(axisCameraIp,
             CameraModel.AXIS_M1013,
             ringLightRelay);
 

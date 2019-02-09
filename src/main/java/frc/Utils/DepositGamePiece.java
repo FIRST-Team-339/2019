@@ -26,7 +26,7 @@ public DepositGamePiece (Drive drive, Forklift forklift,
 
 public enum DepositHatchState
     {
-INIT, DEPOSIT_HATCH, BACKUP_HATCH, STOP
+    INIT, DEPOSIT_HATCH, BACKUP_HATCH, STOP
     }
 
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
@@ -40,10 +40,12 @@ public boolean depositHatch ()
     switch (depositHatchState)
         {
         case INIT:
+            System.out.println("init deposit");
             if (this.gamePieceManipulator.isDeployed())
                 {
                 depositHatchState = DepositHatchState.DEPOSIT_HATCH;
-                } else
+                }
+            else
                 {
                 if (this.gamePieceManipulator
                         .moveArmToPosition(LOWERED_ARM_POSITION,
@@ -55,9 +57,11 @@ public boolean depositHatch ()
             break;
 
         case DEPOSIT_HATCH:
+            System.out.println("deposit deposit");
             depositHatchState = DepositHatchState.BACKUP_HATCH;
             break;
         case BACKUP_HATCH:
+            System.out.println("back deposit");
             if (this.drive.driveStraightInches(BACKUP_INCHES,
                     BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
                 {
@@ -75,7 +79,7 @@ public boolean depositHatch ()
 
 public enum DepositCargoState
     {
-INIT, RAISE_MANIPULATOR, DEPOSIT_CARGO, BACKUP_CARGO, STOP
+    INIT, RAISE_MANIPULATOR, DEPOSIT_CARGO, BACKUP_CARGO, STOP
     }
 
 public static DepositCargoState depositCargoState = DepositCargoState.INIT;
@@ -90,7 +94,8 @@ public boolean depositCargo ()
                 {
 
                 depositCargoState = DepositCargoState.RAISE_MANIPULATOR;
-                } else
+                }
+            else
                 {
                 if (this.gamePieceManipulator
                         .moveArmToPosition(CARGO_ARM_POSITION,
@@ -131,9 +136,9 @@ public boolean depositCargo ()
 
 private static boolean usingGyro = true;
 
-private static final double ARM_MOVE_SPEED = .4;
+private static final double ARM_MOVE_SPEED = -.4;
 
-private static final double BACKUP_INCHES = 6;// TODO
+private static final double BACKUP_INCHES = -10;// TODO
 
 private static final double BACKUP_ACCELERATION = .1;
 
