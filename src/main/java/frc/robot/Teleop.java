@@ -161,8 +161,15 @@ public static void initTeleop2019 ()
     // ---------------------------------
     // Encoder resetting
     // ---------------------------------
-    // Hardware.rightFrontDriveEncoder.reset();
-    // Hardware.leftFrontDriveEncoder.reset();
+    // -------------------------------------
+    // Resets encoder values
+    // -------------------------------------
+    Hardware.rightFrontDriveEncoder.reset();
+    Hardware.leftFrontDriveEncoder.reset();
+    Hardware.rightRearDriveEncoder.reset();
+    Hardware.leftRearDriveEncoder.reset();
+    Hardware.liftingEncoder.reset();
+
 
     // ---------------------------------
     // setup motors
@@ -350,15 +357,12 @@ private static void connerTest ()
 private static void coleTest ()
 {
 
-    // if (Hardware.outtakeButton.get())
-    // Hardware.armMotor.set(.7);
-    // else if (Hardware.intakeOverride.get())
-    // Hardware.armMotor.set(-.7);
-    // else
-    // Hardware.armMotor.set(0.0);
+    // TODO retest forklift with the new way the scaling factor works
+    // (applies even during override), and well as how manipulator
+    // should now have scaling factor apploied to override as well
+    // Then deployArm/ retractArm/ setDeplo45DegreeButton
 
     // Manipulator
-
 
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
@@ -373,6 +377,7 @@ private static void coleTest ()
     if (Hardware.autoRetractButton.getCurrentValue() == true)
         Hardware.manipulator.retractArm();
 
+    // TODO test with make break / IR
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
             Hardware.intakeTrigger.get(),
             Hardware.outtakeButton.get(),
@@ -608,8 +613,8 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Auto disable switch: "
         // + Hardware.autoDisableSwitch.isOn());
 
-        // System.out.println("Auto 6 position switch: "
-        // + Hardware.autoSixPosSwitch.getPosition());
+        System.out.println("Auto 6 position switch: "
+                + Hardware.autoSixPosSwitch.getPosition());
         // SmartDashboard.putNumber("Auto 6 position switch: ",
         // Hardware.autoSixPosSwitch.getPosition());
         // Hardware.telemetry.printToConsole("Auto 6 position switch: "
@@ -626,22 +631,22 @@ public static void printStatements ()
         // ---------------------------------
         // Encoders
         // ---------------------------------
-        // System.out.println("Left Front Encoder Inches = "
-        // + Hardware.leftFrontDriveEncoder.getDistance());
+        System.out.println("LF encoder Inches = "
+                + Hardware.leftFrontDriveEncoder.getDistance());
         // SmartDashboard.putNumber("Left Front Encoder Inches = ",
         // Hardware.leftFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
-        // System.out.println("Left front encoder ticks: "
+        // System.out.println("LF encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
         // SmartDashboard.putNumber("Left front encoder ticks: ",
         // Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
 
-        // System.out.println("Right Front Inches = "
-        // + Hardware.rightFrontDriveEncoder.getDistance());
+        System.out.println("Right Front Inches = "
+                + Hardware.rightFrontDriveEncoder.getDistance());
         // SmartDashboard.putNumber("Right Front Inches = ",
         // Hardware.rightFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Right Front Inches = "

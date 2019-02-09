@@ -104,14 +104,9 @@ public void moveForkliftWithController (Joystick operator,
 private void moveForkliftAtSpeed (double speed, boolean overrideButton)
 {
 
-    // if override button is pressed, ignore encoder.
-    if (overrideButton == true)
-        {
-        this.forkliftTargetSpeed = speed;
-        // force the lift state to be move by joysticks
-        this.liftState = ForkliftState.MOVE_JOY;
-        }
-    else
+    // if override button is pressed, ignore encoder and skip this if
+    // statement
+    if (overrideButton == false)
         {
         // If we are trying to move up and past the max height, or trying to
         // move down and below the min height, tell the forklift to stay where
@@ -126,15 +121,16 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
             // liftState to MOVE_JOY
             return;
             }
-        // Move the forklift the desired speed; the DOWN_JOYSTICK_SCALAR should
-        // usually be less than the UP_JOYSTICK_SCALAR because
-        if (speed > 0)
-            forkliftTargetSpeed = speed * UP_JOYSTICK_SCALAR;
-        else
-            forkliftTargetSpeed = speed * DOWN_JOYSTICK_SCALAR;
-
-        this.liftState = ForkliftState.MOVE_JOY;
         }
+    // Move the forklift the desired speed; the DOWN_JOYSTICK_SCALAR should
+    // usually be less than the UP_JOYSTICK_SCALAR because
+    if (speed > 0)
+        forkliftTargetSpeed = speed * UP_JOYSTICK_SCALAR;
+    else
+        forkliftTargetSpeed = speed * DOWN_JOYSTICK_SCALAR;
+
+    this.liftState = ForkliftState.MOVE_JOY;
+
 }
 
 /**

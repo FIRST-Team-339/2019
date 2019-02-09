@@ -502,7 +502,7 @@ public static void commonInitialization ()
     // -------------------------------------
     // Single and double throw switches
     // -------------------------------------
-    leftAutoSwitch = new SingleThrowSwitch(20);
+    leftAutoSwitch = new SingleThrowSwitch(24);
 
     rightAutoSwitch = new SingleThrowSwitch(25);
 
@@ -1158,16 +1158,16 @@ public static void setHardwareSettings2019 ()
     // -------------------------------------
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
-    // Hardware.leftFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.rightFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.leftFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.rightFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.liftingEncoder
-    // .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.liftingEncoder
+            .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
 
     // -------------------------------------
     // Resets encoder values
@@ -1185,8 +1185,8 @@ private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
-private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.84;
+private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.82;
 
-// private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 
 } // end class
