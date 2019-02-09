@@ -332,7 +332,13 @@ public static QuickSwitch cargoShipHatchButton = null;
 
 public static QuickSwitch setDeploy45DegreeButton = null;
 
+public static QuickSwitch autoDeployButton = null;
+
 // ----- Right Operator -----
+
+public static JoystickButton pictureButtonOne = null;
+
+public static JoystickButton pictureButtonTwo = null;
 
 public static JoystickButton chooseCargoRocketHeights = null;
 
@@ -342,6 +348,7 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
+public static QuickSwitch autoRetractButton = null;
 
 
 
@@ -620,13 +627,19 @@ public static void commonInitialization ()
 
     outtakeButton = new JoystickButton(leftOperator, 2);
 
-    intakeOverride = new JoystickButton(leftOperator, 3);
+    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
-    deployOverride = new JoystickButton(leftOperator, 5);
+    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 11);
+    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 10);
+
+    autoDeployButton = new QuickSwitch(leftOperator, 11);
 
     // ----- Right Operator -----
+
+    pictureButtonOne = new JoystickButton(rightOperator, 8);
+
+    pictureButtonTwo = new JoystickButton(rightOperator, 9);
 
     cancelTwoButton = new JoystickButton(rightOperator, 10);
 
@@ -634,14 +647,17 @@ public static void commonInitialization ()
 
     forkliftOverride = new JoystickButton(rightOperator, 5);
 
+    intakeOverride = forkliftOverride;
+
+    deployOverride = forkliftOverride;
+
     nextHigherLiftHeightButton = new QuickSwitch(rightOperator, 6);
 
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
+    autoRetractButton = new QuickSwitch(rightOperator, 11);
 
-    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
     // ----------Left Driver---------------
 
@@ -656,12 +672,6 @@ public static void commonInitialization ()
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
     // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
-
-
-
-
-
-
 
     // **********************************************************
     // Kilroy's Ancillary classes
@@ -1115,6 +1125,9 @@ public static void setHardwareSettings2018 ()
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
+    System.out.println(
+            "MADE IT TO THE PLACE FGJREGKESNT$WIEKNDVBFDrtihGKZDRKJLSMD>FSEDFNKZSRIKSFHRIGKSNFGHDXFIHKNGYT");
+    Hardware.manipulator.initiliazeConstantsFor2018();
 } // end setHardwareSettings2018
 
 /**

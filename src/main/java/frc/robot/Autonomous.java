@@ -270,11 +270,6 @@ private static void choosePath ()
  */
 private static void setPositionAndLevel ()
 {
-    // autoLevel = Level.LEVEL_ONE;
-    // (only needed if not testing the physical switch)
-    // sets the autoPosition enum to the correct side based on the
-    // state of the autoPositionSwitch
-
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
@@ -307,10 +302,7 @@ private static void setPositionAndLevel ()
             autoLevel = Level.LEVEL_TWO;
             }
 
-    // TEMP CODE FOR TEST PURPOSES ONLY
 
-    // autoLevel = Level.LEVEL_ONE;
-    // autoPosition = Position.RIGHT;
 }
 
 
@@ -371,20 +363,24 @@ public static void prepDeposit ()
 // =====================================================================
 // Path Methods
 // =====================================================================
-public static enum Cross
+public static enum CrossAutoState
     {
-    AWAKEN, L2_CLEAR_DATUM, NYOOM, SLAM_BRAKES, FINITE_INCANTATEM
+    INIT, L2_DESCEND, ONWARD, BRAKE, FINISH
     }
 
-private static Cross cross = Cross.AWAKEN;
+private static CrossAutoState cross = CrossAutoState.INIT;
 
+// TODO test this
 private static boolean crossAutoline ()
 {
     switch (cross)
         {
-        case AWAKEN:
+        case INIT:
             // initial state for crossing the autoline
+            Hardware.leftFrontDriveEncoder.reset();
+            Hardware.rightFrontDriveEncoder.reset();
             // setPositionAndLevel();
+            System.out.println("GOOD MORNING VIETNAM!");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -399,95 +395,57 @@ private static boolean crossAutoline ()
                 case NULL:
                     break;
                 }
-            Hardware.leftFrontDriveEncoder.reset();
-            Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("GOOD MORNING VIETNAM!");
-            cross = Cross.L2_CLEAR_DATUM;
+            cross = CrossAutoState.L2_DESCEND;
             break;
 
-        case L2_CLEAR_DATUM:
+        case L2_DESCEND:
+
             // only run if going off of level ii
+            System.out.println("Manoevering, clear the datum!");
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                descendFromLevelTwo(usingAlignByWall);
-                Hardware.leftFrontDriveEncoder.reset();
-                Hardware.rightFrontDriveEncoder.reset();
+                if (descendFromLevelTwo(usingAlignByWall) == true)
+                    {
+                    cross = CrossAutoState.ONWARD;
+                    }
+                // Hardware.leftFrontDriveEncoder.reset();
+                // Hardware.rightFrontDriveEncoder.reset();
                 }
             else
-                {
-                System.out.println("Manoevering, clear the datum!");
-                cross = Cross.NYOOM;
-                }
+                if (autoLevel == Level.LEVEL_ONE)
+                    {
+                    cross = CrossAutoState.ONWARD;
+                    }
             break;
 
-        case NYOOM:
+        case ONWARD:
+            // a.k.a. drive straight
+            // TODO figure out why the robot isn't braking properly
+            System.out.println("*distant screaming*");
             if (Hardware.drive.driveStraightInches(
-                    distanceToCrossAutoline,
-                    DRIVE_SPEED, ACCELERATION_TIME, false) == true)
+                    distanceToCrossAutoline
+                            - Hardware.drive.getBrakeStoppingDistance(),
+                    DRIVE_SPEED, ACCELERATION_TIME, true) == true)
                 {
-                System.out.println("*distant screaming*");
-                cross = Cross.SLAM_BRAKES;
+                cross = CrossAutoState.BRAKE;
                 }
             break;
 
-        case SLAM_BRAKES:
-            Hardware.drive.brake(BrakeType.AFTER_DRIVE);
+        case BRAKE:
             System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
-            cross = Cross.FINITE_INCANTATEM;
+            if ((Hardware.drive.brake(BrakeType.AFTER_DRIVE)) == true)
+                {
+                cross = CrossAutoState.FINISH;
+                }
             break;
 
-        case FINITE_INCANTATEM:
+        case FINISH:
             System.out.println(
                     "You have arrived at your final destination...the foreboding Vaaach homeworld.");
             break;
         }
     return false;
 }
-
-// non-state machine version
-// private static boolean crossAutoline ()
-// {
-// switch (autoPosition)
-// {
-// case LEFT:
-// distanceToCrossAutoline = 60;
-// break;
-// case CENTER:
-// distanceToCrossAutoline = 90;
-// break;
-// case RIGHT:
-// distanceToCrossAutoline = 120;
-// break;
-// }
-// if (autoLevel == Level.LEVEL_ONE)
-// {
-// // this actually works! 2 February 2019
-// if (Hardware.drive.driveStraightInches(
-// distanceToCrossAutoline,
-// DRIVE_SPEED, ACCELERATION_TIME,
-// false) == true)
-// {
-// Hardware.drive.brake(BrakeType.AFTER_DRIVE);
-// return true;
-// }
-// System.out.println(
-// "IT WORKED TOO WELL! SLAM THE BRAKES!");
-// }
-// if (autoLevel == Level.LEVEL_TWO)
-// {
-// System.out.println("Oof!");
-// descendFromLevelTwo(usingAlignByWall);
-// }
-// if (Hardware.drive.driveStraightInches(
-// distanceToCrossAutoline,
-// DRIVE_SPEED, ACCELERATION_TIME,
-// false) == true)
-// {
-// Hardware.drive.brake(BrakeType.AFTER_DRIVE);
-// return true;
-// }
-// return false;
-// }
 
 
 private static enum DepositCargoHatchState
@@ -1263,7 +1221,7 @@ public static void endAutoPath ()
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
     descentState = DescentState.FINISH;
-    cross = Cross.FINITE_INCANTATEM;
+    cross = CrossAutoState.FINISH;
 
 }
 
@@ -1310,10 +1268,6 @@ public static final double TURN_SPEED = .5;
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
 public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
-
-// TODO test cross autoline at 50% speed in the near future;
-// 2 February 2019
-// public static final double DRIVE_SPEED = .4;
 
 public static final boolean USING_GYRO = true;
 

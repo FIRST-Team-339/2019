@@ -3,6 +3,11 @@ package frc.HardwareInterfaces;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
+/**
+ * Class used to solve a common problem with buttons in teleop where
+ * the button only needs to return true for one loop
+ *
+ */
 public class QuickSwitch
 {
 
@@ -39,7 +44,8 @@ private void update ()
             this.isOn = false;
 
         wasPreviouslyOn = true;
-        } else
+        }
+    else
         {
         this.isOn = false;
         this.wasPreviouslyOn = false;

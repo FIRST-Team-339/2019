@@ -176,9 +176,8 @@ public void setLiftPositionByButton (double position,
         {
         // tell the forklift state machine we want to move to a particular
         // position
-        forkliftTargetHeight = position;
-        forkliftTargetSpeed = Math.abs(forkliftSpeed);
-        liftState = ForkliftState.MOVING_TO_POSITION;
+        setLiftPositionInit = true;
+        this.setLiftPosition(position, forkliftSpeed);
         }
 }
 
@@ -238,10 +237,22 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
     if (setLiftPositionInit == true)
         {
         forkliftTargetHeight = position;
+
+
         forkliftTargetSpeed = Math.abs(forkliftSpeed);
+        forkliftDirection = ForkliftDirectionState.NEUTRAL;
+        // if the forklift will move up
+        if (forkliftTargetHeight < this.getForkliftHeight())
+            {
+            forkliftTargetSpeed *= DOWNWARD_LIFT_MOVEMENT_SCALER;
+            }
+        else // if the forklift will move down
+            {
+            forkliftTargetSpeed *= UPWARD_LIFT_MOVEMENT_SCALER;
+            }
+
 
         liftState = ForkliftState.MOVING_TO_POSITION;
-
         setLiftPositionInit = false;
         }
 
@@ -339,9 +350,8 @@ public void setToNextHigherPreset (double forkliftSpeed,
             {
             // tell the forklift state machine we want to move to said
             // position
-            this.forkliftTargetHeight = position;
-            this.forkliftTargetSpeed = Math.abs(forkliftSpeed);
-            this.liftState = ForkliftState.MOVING_TO_POSITION;
+            setLiftPositionInit = true;
+            this.setLiftPosition(position, forkliftSpeed);
             }
         }
 }
@@ -433,9 +443,8 @@ public void setToNextLowerPreset (double forkliftSpeed,
             {
             // tell the forklift state machine we want to move to said
             // position
-            this.forkliftTargetHeight = position;
-            this.forkliftTargetSpeed = Math.abs(forkliftSpeed);
-            this.liftState = ForkliftState.MOVING_TO_POSITION;
+            setLiftPositionInit = true;
+            this.setLiftPosition(position, forkliftSpeed);
             }
         }
 }
@@ -496,7 +505,6 @@ public void update ()
                     break;
                     }
                 // we have NOT passed the value , keep going up.
-                forkliftTargetSpeed *= UPWARD_LIFT_MOVEMENT_SCALER;
                 this.forkliftMotor.set(forkliftTargetSpeed);
 
                 }
@@ -511,7 +519,6 @@ public void update ()
                     break;
                     }
                 // we have NOT passed the value , keep going down.
-                forkliftTargetSpeed *= DOWNWARD_LIFT_MOVEMENT_SCALER;
                 this.forkliftMotor.set(-forkliftTargetSpeed);
                 }
 
@@ -560,11 +567,12 @@ public void printDebugInfo ()
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
     // SmartDashboard.putNumber("FL Encoder Ticks: ",
     // this.forkliftEncoder.get());
-    // SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
-    // SmartDashboard.putString("FL Direction State: ",
-    // "" + this.forkliftDirection);
-    // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
-    // setLiftPositionInit);
+    SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
+    SmartDashboard.putString("FL Direction State: ",
+            "" + this.forkliftDirection);
+    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+            setLiftPositionInit);
+    SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
 }
 
 // ==================
@@ -616,7 +624,7 @@ private static final double UPWARD_LIFT_MOVEMENT_SCALER = 1.0;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private static final double DOWNWARD_LIFT_MOVEMENT_SCALER = 1.0;
+private static final double DOWNWARD_LIFT_MOVEMENT_SCALER = .5;
 
 
 private double currentMinLiftPosition = 0;
@@ -660,7 +668,7 @@ private final double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 private final double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
 
 // for use in teleop when we are calling setLiftPosition(position, speed)
-public static final double DEFAULT_TELEOP_BUTTON_SPEED = .6;
+public static final double DEFAULT_TELEOP_BUTTON_SPEED = 1.0;
 
 // speed sent to the forklift motor to hold position when we do not
 // have any game piece

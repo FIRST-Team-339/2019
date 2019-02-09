@@ -2,6 +2,7 @@ package frc.Utils;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.LightSensor;
@@ -62,7 +63,7 @@ public static enum GamePiece
 // used to tell us things also
 public static enum DeployState
     {
-
+    DEPLOYED, MIDDLE, RETRACTED
     }
 
 public static enum DeployMovementState
@@ -91,6 +92,25 @@ private static enum DeployMovementDirection
 // return GamePiece.NONE;
 // }
 
+
+public void initiliazeConstantsFor2018 ()
+{
+    UP_JOYSTICK_SCALER = UP_JOYSTICK_SCALER_2018;
+    DOWN_JOYSTICK_SCALER = DOWN_JOYSTICK_SCALER_2018;
+    UPWARD_ARM_MOVEMENT_SCALER = UPWARD_ARM_MOVEMENT_SCALER_2018;
+    DOWNWARD_ARM_MOVEMENT_SCALER = DOWNWARD_ARM_MOVEMENT_SCALER_2018;
+    MAX_ARM_POSITION_ADJUSTED = MAX_ARM_POSITION_ADJUSTED_2018;
+    MIN_ARM_POSITION_ADJUSTED = MIN_ARM_POSITION_ADJUSTED_2018;
+    RETRACTED_ARM_POSITION_ADJUSTED = RETRACTED_ARM_POSITION_ADJUSTED_2018;
+    PARALLEL_TO_GROUND_ADJUSTED = PARALLEL_TO_GROUND_ADJUSTED_2018;
+    ARM_POT_SCALE_TO_DEGREES = ARM_POT_SCALE_TO_DEGREES_2018;
+    STAY_UP_WITH_CARGO = STAY_UP_WITH_CARGO_2018;
+    STAY_UP_NO_PIECE = STAY_UP_NO_PIECE_2018;
+    ARM_POT_RAW_HORIZONTAL_VALUE = ARM_POT_RAW_HORIZONTAL_VALUE_2018;
+    DEPLOYED_ARM_POSITION_ADJUSTED = DEPLOYED_ARM_POSITION_ADJUSTED_2018;
+}
+
+
 public boolean hasCargo ()
 {
     return this.intake.hasCargo();
@@ -103,12 +123,25 @@ public boolean isDeployed ()
     return true;
 }
 
+public DeployState getDeployState ()
+{
+    if (this.getCurrentArmPosition() >= RETRACTED_ARM_POSITION_ADJUSTED
+            - ACCEPTABLE_ERROR)
+        return DeployState.RETRACTED;
+    if (this.getCurrentArmPosition() <= DEPLOYED_ARM_POSITION_ADJUSTED
+            + ACCEPTABLE_ERROR)
+        return DeployState.DEPLOYED;
+    return DeployState.MIDDLE;
+
+}
+
 /** Update all the states machines for this class */
 public void masterUpdate ()
 {
     this.intake.update();
     this.deployUpdate();
 }
+
 
 // =========================================================================
 // armMotor methods
@@ -152,16 +185,15 @@ public void moveArmByJoystick (Joystick armJoystick,
 
             // scales the speed based on whether it is going up or down
             if (speed > 0)
-                // deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
-                deployTargetSpeed = RAISE_ARM_SPEED;
+                deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
             else
-                deployTargetSpeed = LOWER_ARM_SPEED;
+                deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
 
             this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
             }
         }
-
 }
+
 
 public double getCurrentArmPosition ()
 {
@@ -216,11 +248,8 @@ public void moveArmByButton (double angle,
     // if the button is being held down and was not being held down before
     if (button.getCurrentValue() == true)
         {
-        // tell the forklift state machine we want to move to a particular
-        // position
-        this.deployTargetAngle = angle;
-        this.deployTargetSpeed = Math.abs(armSpeed);
-        this.deployMovementState = DeployMovementState.MOVING_TO_POSITION;
+        isSetDeployPositionInitReady = true;
+        this.moveArmToPosition(angle, armSpeed);
         }
 }
 
@@ -246,9 +275,20 @@ public boolean moveArmToPosition (double angle, double speed)
     if (isSetDeployPositionInitReady == true)
         {
         this.deployTargetAngle = angle;
+
         this.deployTargetSpeed = Math.abs(speed);
 
+        deployDirection = DeployMovementDirection.NEUTRAL;
         this.deployMovementState = DeployMovementState.MOVING_TO_POSITION;
+
+        if (deployTargetAngle < this.getCurrentArmPosition())
+            {
+            deployTargetSpeed *= DOWNWARD_ARM_MOVEMENT_SCALER;
+            }
+        else // if the forklift will move down
+            {
+            deployTargetSpeed *= UPWARD_ARM_MOVEMENT_SCALER;
+            }
 
         isSetDeployPositionInitReady = false;
         }
@@ -262,6 +302,28 @@ public boolean moveArmToPosition (double angle, double speed)
     return false;
 }
 
+
+public boolean deployArm ()
+{
+    if (this.getDeployState() != DeployState.DEPLOYED)
+        {
+        isSetDeployPositionInitReady = true;
+        return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED,
+                DEFAULT_DEPLOY_SPEED);
+        }
+    return true; // if we are already deployed
+}
+
+public boolean retractArm ()
+{
+    if (this.getDeployState() != DeployState.RETRACTED)
+        {
+        isSetDeployPositionInitReady = true;
+        return this.moveArmToPosition(RETRACTED_ARM_POSITION_ADJUSTED,
+                DEFAULT_RETRACT_SPEED);
+        }
+    return true; // if we are already deployed
+}
 
 /**
  * Update method for the deploy state machine. Is what actually tells
@@ -277,9 +339,21 @@ public void deployUpdate ()
             "" + this.getCurrentArmPosition());
     SmartDashboard.putString("Deploy Movement State",
             "" + this.deployMovementState);
+    SmartDashboard.putString("Arm Motor Value",
+            "" + this.armMotor.get());
+    SmartDashboard.putString("Deploy State",
+            "" + this.getDeployState());
+    SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
+
+
+    if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
+        this.stayAtPosition2018InitIsReady = true;
+
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
+            SmartDashboard.putString("Target Position",
+                    "" + this.deployTargetAngle);
             if ((this.deployTargetAngle > currentDeployMaxAngle)
                     || (this.deployTargetAngle < currentDeployMinAngle))
                 {
@@ -350,11 +424,31 @@ public void deployUpdate ()
             // If the manipulator has a cargo piece, send the appropriate
             // value to the motor so the forklift does not slide down due to
             // gravity
-
-            if (this.hasCargo() == true)
-                this.armMotor.set(STAY_UP_WITH_CARGO);
+            if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2018)
+                {
+                if (this.stayAtPosition2018InitIsReady == true)
+                    {
+                    if (this.hasCargo() == true)
+                        stayAtPositionTempSpeed = Math
+                                .abs(STAY_UP_WITH_CARGO_2018
+                                        * Math.cos(this
+                                                .getCurrentArmPosition()));
+                    else
+                        stayAtPositionTempSpeed = Math
+                                .abs(STAY_UP_NO_PIECE_2018
+                                        * Math.cos(this
+                                                .getCurrentArmPosition()));
+                    this.stayAtPosition2018InitIsReady = false;
+                    }
+                this.armMotor.set(stayAtPositionTempSpeed);
+                }
             else
-                this.armMotor.set(STAY_UP_NO_PIECE);
+                {
+                if (this.hasCargo() == true)
+                    this.armMotor.set(STAY_UP_WITH_CARGO);
+                else
+                    this.armMotor.set(STAY_UP_NO_PIECE);
+                }
             // Reset the direction for next move-to-position.
             deployDirection = DeployMovementDirection.NEUTRAL;
             isSetDeployPositionInitReady = true;
@@ -366,6 +460,8 @@ public void deployUpdate ()
 
         }
 }
+
+
 // =========================================================================
 // Hatch Panel Methods
 // =========================================================================
@@ -438,74 +534,117 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
 // Constants
 // =========================================================================
 
-// ----- Joystick Constants -----
+// ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 // should be equal to 1/(1 - DEPLOY_JOYSTICK_DEADBAND)
 private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25;
 
-private static final double UP_JOYSTICK_SCALER = .5;
+private static double UP_JOYSTICK_SCALER = .5;
 
-private static final double DOWN_JOYSTICK_SCALER = .5;
+private static double DOWN_JOYSTICK_SCALER = .1;
+
+// ----- Joystick Constants 2018 -----
+
+private static final double UP_JOYSTICK_SCALER_2018 = .5;
+
+private static final double DOWN_JOYSTICK_SCALER_2018 = .05;
 
 
 
-// ----- Deploy Position Constants -----
+// ----- Deploy Position Constants 2019 -----
+
+private static int MAX_ARM_POSITION_ADJUSTED = 85;
+
+private static int MIN_ARM_POSITION_ADJUSTED = 5;
+
+private static int DEPLOYED_ARM_POSITION_ADJUSTED = 10;
+
+private static int RETRACTED_ARM_POSITION_ADJUSTED = 80;
+
+private static int PARALLEL_TO_GROUND_ADJUSTED = 10;
+
+// value that the arm pot returns when the manipulator is
+// parallel to the floor
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 260; // placeholder
+
+private static final double ACCEPTABLE_ERROR = 0.0;
+
+// Temporary values; should be unnecessay on the 2019 robot
+
+// value that is multipled to the value from the arm pot to convert
+// it to degrees
+private static double ARM_POT_SCALE_TO_DEGREES = -0.428571; // placeholder
+
+// value that is multiplied by the number of ticks to convert it to degrees
+private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
 
 
-private static final int MAX_ARM_POSITION_ADJUSTED = 85;
+// ----- Deploy Position Constants 2018 -----
 
-private static final int MIN_ARM_POSITION_ADJUSTED = -5;
 
-private static final int RETRACTED_ARM_POSITION_ADJUSTED = 80;
+private static final int MAX_ARM_POSITION_ADJUSTED_2018 = 85;
 
-private static final int PARALLEL_TO_GROUND_ADJUSTED = 0;
+private static final int MIN_ARM_POSITION_ADJUSTED_2018 = 5;
 
-// private static final int MAX_ARM_POSITION = 170;
+private static final int RETRACTED_ARM_POSITION_ADJUSTED_2018 = 80;
 
-// private static final int MIN_ARM_POSITION = 0;
+private static final int DEPLOYED_ARM_POSITION_ADJUSTED_2018 = 10;
 
-// private static final int RETRACTED_ARM_POSITION = 150;
-
-// private static final int GROUND_ARM_POSITION = 10;
+private static final int PARALLEL_TO_GROUND_ADJUSTED_2018 = 10;
 
 // private static final int ACCEPTABLE_ERROR = 6;
 
 // Temporary values; should be unnecessay on the 2019 robot
 
-// private static final double LOWER_ARM_SPEED = -.3;
-
-private static final double RAISE_ARM_SPEED = .5;
-
-private static final double LOWER_ARM_SPEED = -.2;
-
-// private static final double HOLD_ARM_SPEED = .2;
-
-private static final double ARM_POT_RAW_RETRACTED_VALUE = 50;
+private static final double ARM_POT_RAW_RETRACTED_VALUE_2018 = 50;
 // no higher than 70
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static final double ARM_POT_RAW_HORIZONTAL_VALUE = 260; // placeholder
+private static final double ARM_POT_RAW_HORIZONTAL_VALUE_2018 = 260; // placeholder
 
 // value that the arm encoder returns when the manipulator is
 // parallel to the floor
-private static final double ARM_ENCODER_RAW_HORIZONTAL_VALUE = 0.0; // placeholder
+private static final double ARM_ENCODER_RAW_HORIZONTAL_VALUE_2018 = 0.0; // placeholder
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static final double ARM_POT_SCALE_TO_DEGREES = -0.428571; // placeholder
+private static final double ARM_POT_SCALE_TO_DEGREES_2018 = -0.428571; // placeholder
 
 // value that is multiplied by the number of ticks to convert it to degrees
-private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
+private static final double ARM_ENCODER_SCALE_TO_DEGREES_2018 = 0.0; // placeholder
 
-private static final double STAY_UP_WITH_CARGO = 0.2;
+// ----- Deploy Speed Constants 2019 -----
 
-private static final double STAY_UP_NO_PIECE = 0.2;
+private static double STAY_UP_WITH_CARGO = 0.2;
 
-private static final double UPWARD_ARM_MOVEMENT_SCALER = 1.0;
+private static double STAY_UP_NO_PIECE = 0.2;
 
-private static final double DOWNWARD_ARM_MOVEMENT_SCALER = -0.3;
+private static double UPWARD_ARM_MOVEMENT_SCALER = 1.0;
+
+private static double DOWNWARD_ARM_MOVEMENT_SCALER = 0.05;
+
+private static final double DEFAULT_DEPLOY_SPEED = .5;
+
+private static final double DEFAULT_RETRACT_SPEED = .5;
+
+
+// ----- Deploy Speed Constants 2018 -----
+
+// should be used in 2018 only
+private static final double CLOSE_ENOUGH_TO_PARALLEL_DEADBAND = 3;
+
+// should be used in 2018 only
+private static final double STAY_AT_PARALLEL_2018 = .1;
+
+private static final double STAY_UP_WITH_CARGO_2018 = 0.3;
+
+private static final double STAY_UP_NO_PIECE_2018 = 0.3;
+
+private static final double UPWARD_ARM_MOVEMENT_SCALER_2018 = 1.0;
+
+private static final double DOWNWARD_ARM_MOVEMENT_SCALER_2018 = 0.05;
 
 // =========================================================================
 // Variables
@@ -527,6 +666,12 @@ private double currentDeployMinAngle = MIN_ARM_POSITION_ADJUSTED;
 
 private boolean isSetDeployPositionInitReady = true;
 
+// 2018 requires different speeds depending on the position of the arm
+// this is used to determine whether or not we need to calculate a new
+// speed
+private boolean stayAtPosition2018InitIsReady = true;
+
+private double stayAtPositionTempSpeed = 0.0;
 
 // =========================================================================
 // Tuneables
