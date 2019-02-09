@@ -681,7 +681,7 @@ private static boolean depositRocketHatch ()
                     /* ACCELERATION_TIME */,
                     true) == true)
                 {
-
+                Hardware.drive.resetEncoders();
                 rocketHatchState = RocketHatchState.BREAKIE_AFTER_DRIVIE;
                 }
             break;
