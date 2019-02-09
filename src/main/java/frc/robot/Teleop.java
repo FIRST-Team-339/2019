@@ -225,7 +225,10 @@ public static void periodic ()
         {
         Hardware.climber.climb();
         }
-
+    else
+        {
+        teleopDrive();
+        }
 
     // buttons to cancel everything
     if (Hardware.cancelTwoButton.get() == true
@@ -237,7 +240,6 @@ public static void periodic ()
         }
 
     // TODO pls yell at me if I puch this
-    teleopDrive();
 
     // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
@@ -248,6 +250,12 @@ public static void periodic ()
     // Hardware.telemetry.printToConsole();
 
     printStatements();
+
+    // System.out.println(
+    // "auto level ONE" + Hardware.levelOneSwitch.isOn());
+
+    // System.out.println(
+    // "auto level TWO" + Hardware.levelTwoSwitch.isOn());
 }
 // end Periodic()
 
@@ -259,7 +267,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -707,7 +715,7 @@ final static int CYCLE_BACKGROUND_COLOR = 4;
 
 private static enum CurrentBackground
     {
-CLEAR, BLUE, ORANGE
+    CLEAR, BLUE, ORANGE
     }
 
 public static CurrentBackground backgroundColor = CurrentBackground.CLEAR;
