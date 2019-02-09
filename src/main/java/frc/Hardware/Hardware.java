@@ -1167,11 +1167,12 @@ public static void setHardwareSettings2019 ()
 
 } // end setHardwareSettings2019
 
+
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
-// private static final double KILROY_XX_DRIVE_ENCODER_DPP = 0.0346;
+private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.84;
 
 // private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 

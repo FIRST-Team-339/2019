@@ -663,9 +663,9 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // SmartDashboard.putNumber("F ultrasonic: ",
-        // Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        SmartDashboard.putNumber("F ultrasonic: ",
+                Hardware.frontUltraSonic
+                        .getDistanceFromNearestBumper());
         // System.out.println("ultrasonic " + Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
         // Hardware.telemetry.printToConsole("ultrasonic " +
