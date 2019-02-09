@@ -9,6 +9,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.HardwareInterfaces.QuickSwitch;
 
+/**
+ *
+ *
+ * @author Cole (mostly) 2019 build season
+ *         Other Contributors: Ashley
+ */
 public class GamePieceManipulator
 {
 
@@ -49,7 +55,7 @@ public GamePieceManipulator (SpeedController armMotor,
 
 public static enum GamePiece
     {
-HATCH_PANEL, CARGO, NONE, BOTH
+    HATCH_PANEL, CARGO, NONE, BOTH
     }
 
 // placeholder, will need to do something
@@ -61,12 +67,12 @@ public static enum DeployState
 
 public static enum DeployMovementState
     {
-MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP
+    MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP
     }
 
 private static enum DeployMovementDirection
     {
-MOVING_UP, MOVING_DOWN, NEUTRAL
+    MOVING_UP, MOVING_DOWN, NEUTRAL
     }
 
 // =========================================================================
@@ -75,15 +81,21 @@ MOVING_UP, MOVING_DOWN, NEUTRAL
 
 // placeholder function since Forklift will need to understand which piece
 // the manipulator has
-public GamePiece hasWhichGamePiece ()
-{
-    if (this.intake.hasCargo() /* and does not have a Hatch */)
-        {
-        return GamePiece.CARGO;
-        }
+// public GamePiece hasWhichGamePiece ()
+// {
+// if (this.intake.hasCargo() /* and does not have a Hatch */)
+// {
+// return GamePiece.CARGO;
+// }
 
-    return GamePiece.NONE;
+// return GamePiece.NONE;
+// }
+
+public boolean hasCargo ()
+{
+    return this.intake.hasCargo();
 }
+
 
 // placeholder, will need to be changed
 public boolean isDeployed ()
@@ -121,7 +133,8 @@ public void moveArmByJoystick (Joystick armJoystick,
             this.deployTargetSpeed = speed;
             // force the lift state to be move by joysticks
             this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
-            } else
+            }
+        else
             {
             // If we are trying to move up and past the max angle, or
             // trying to move down and below the min height, tell the
@@ -139,9 +152,10 @@ public void moveArmByJoystick (Joystick armJoystick,
 
             // scales the speed based on whether it is going up or down
             if (speed > 0)
-                deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
+                // deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
+                deployTargetSpeed = RAISE_ARM_SPEED;
             else
-                deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
+                deployTargetSpeed = LOWER_ARM_SPEED;
 
             this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
             }
@@ -149,40 +163,29 @@ public void moveArmByJoystick (Joystick armJoystick,
 
 }
 
-/**
- * Adjusts the arm potentiometer value so that it is zeroed
- * at the undeployed position and being below the undeployed
- * position has a negative value
- */
-private double armPotAdjusted ()
-{
-    // TODO no idea if this is the right value b/c I
-    // do not know if the potentiometer can be reset at
-    // robot init
-    return armPot.get();
-}
-
 public double getCurrentArmPosition ()
 {
-    if (armPot != null)
-        {
-        double valueFromHorizontal = (this.armPotAdjusted()
-                - ARM_POT_RAW_HORIZONTAL_VALUE)
-                * ARM_POT_SCALE_TO_DEGREES;
+    // if (armPot != null)
+    // {
+    // scales the value from the arm pot so parallet to the ground is
+    // zero, and perpenciular to the ground and pointing up is 90
+    return (this.armPot.get()
+            - ARM_POT_RAW_HORIZONTAL_VALUE)
+            * ARM_POT_SCALE_TO_DEGREES;
 
-        return valueFromHorizontal;
-        } else // if we are not using an armPot, we should be using an encoder
-        {
-        // assumes that the value from the encoder is reset to 0
-        // when the robot is started and negative when the manipulator
-        // is below the starting position
-        // TODO should getDistance be used instead of get?
-        double valueFromHorizontal = (armEncoder.get()
-                - ARM_ENCODER_RAW_HORIZONTAL_VALUE)
-                * ARM_ENCODER_SCALE_TO_DEGREES;
 
-        return valueFromHorizontal;
-        }
+    // } else // if we are not using an armPot, we should be using an encoder
+    // {
+    // // assumes that the value from the encoder is reset to 0
+    // // when the robot is started and negative when the manipulator
+    // // is below the starting position
+    // // TODO should getDistance be used instead of get?
+    // double valueFromHorizontal = (armEncoder.get()
+    // - ARM_ENCODER_RAW_HORIZONTAL_VALUE)
+    // * ARM_ENCODER_SCALE_TO_DEGREES;
+
+    // return valueFromHorizontal;
+    // }
 }
 
 
@@ -260,10 +263,20 @@ public boolean moveArmToPosition (double angle, double speed)
 }
 
 
-
+/**
+ * Update method for the deploy state machine. Is what actually tells
+ * the armMotor what to do based off the current deployMovementState.
+ * This method needs to be called in Teleop or Autonomous periodic
+ * in order for the deploy to be used in either function, respectively
+ */
 public void deployUpdate ()
 {
-    SmartDashboard.putString("Arm Potentiometer", "" + armPot.get());
+    SmartDashboard.putString("Arm Potentiometer Raw",
+            "" + armPot.get());
+    SmartDashboard.putString("Arm Angle Adjusted",
+            "" + this.getCurrentArmPosition());
+    SmartDashboard.putString("Deploy Movement State",
+            "" + this.deployMovementState);
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
@@ -295,10 +308,11 @@ public void deployUpdate ()
                     break;
                     }
                 // we have NOT passed the value , keep going up.
-
+                deployTargetSpeed *= UPWARD_ARM_MOVEMENT_SCALER;
                 this.armMotor.set(deployTargetSpeed);
 
-                } else
+                }
+            else
                 {
                 // If we have passed the value we wanted...
                 if (this.getCurrentArmPosition() < deployTargetAngle)
@@ -309,7 +323,8 @@ public void deployUpdate ()
                     break;
                     }
                 // we have NOT passed the value , keep going down.
-                this.armMotor.set(-deployTargetSpeed);
+                deployTargetSpeed *= DOWNWARD_ARM_MOVEMENT_SCALER;
+                this.armMotor.set(deployTargetSpeed);
                 }
             break;
         case MOVING_BY_JOY:
@@ -332,22 +347,14 @@ public void deployUpdate ()
             // Depending on what piece the manipulator has, send the appropriate
             // value to the motor so the forklift does not slide down due to
             // gravity
-            switch (this.hasWhichGamePiece())
-                {
-                case HATCH_PANEL:
-                    this.armMotor.set(STAY_UP_WITH_HATCH);
-                    break;
+            // If the manipulator has a cargo piece, send the appropriate
+            // value to the motor so the forklift does not slide down due to
+            // gravity
 
-                case CARGO:
-                    this.armMotor.set(STAY_UP_WITH_CARGO);
-                    break;
-
-                default:
-                case NONE:
-                    this.armMotor.set(STAY_UP_NO_PIECE);
-                    break;
-
-                }
+            if (this.hasCargo() == true)
+                this.armMotor.set(STAY_UP_WITH_CARGO);
+            else
+                this.armMotor.set(STAY_UP_NO_PIECE);
             // Reset the direction for next move-to-position.
             deployDirection = DeployMovementDirection.NEUTRAL;
             isSetDeployPositionInitReady = true;
@@ -442,27 +449,44 @@ private static final double UP_JOYSTICK_SCALER = .5;
 private static final double DOWN_JOYSTICK_SCALER = .5;
 
 
-// ----- Deploy Constants -----
 
-private static final int MAX_ARM_POSITION = 170;
+// ----- Deploy Position Constants -----
 
-private static final int MIN_ARM_POSITION = 0;
 
-private static final int RETRACTED_ARM_POSITION = 150;
+private static final int MAX_ARM_POSITION_ADJUSTED = 85;
 
-private static final int GROUND_ARM_POSITION = 10;
+private static final int MIN_ARM_POSITION_ADJUSTED = -5;
 
-private static final int ACCEPTABLE_ERROR = 6;
+private static final int RETRACTED_ARM_POSITION_ADJUSTED = 80;
 
-private static final double LOWER_ARM_SPEED = -.3;
+private static final int PARALLEL_TO_GROUND_ADJUSTED = 0;
+
+// private static final int MAX_ARM_POSITION = 170;
+
+// private static final int MIN_ARM_POSITION = 0;
+
+// private static final int RETRACTED_ARM_POSITION = 150;
+
+// private static final int GROUND_ARM_POSITION = 10;
+
+// private static final int ACCEPTABLE_ERROR = 6;
+
+// Temporary values; should be unnecessay on the 2019 robot
+
+// private static final double LOWER_ARM_SPEED = -.3;
 
 private static final double RAISE_ARM_SPEED = .5;
 
-private static final double HOLD_ARM_SPEED = .2;
+private static final double LOWER_ARM_SPEED = -.2;
+
+// private static final double HOLD_ARM_SPEED = .2;
+
+private static final double ARM_POT_RAW_RETRACTED_VALUE = 50;
+// no higher than 70
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static final double ARM_POT_RAW_HORIZONTAL_VALUE = -90; // placeholder
+private static final double ARM_POT_RAW_HORIZONTAL_VALUE = 260; // placeholder
 
 // value that the arm encoder returns when the manipulator is
 // parallel to the floor
@@ -470,17 +494,18 @@ private static final double ARM_ENCODER_RAW_HORIZONTAL_VALUE = 0.0; // placehold
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static final double ARM_POT_SCALE_TO_DEGREES = 1.0; // placeholder
+private static final double ARM_POT_SCALE_TO_DEGREES = -0.428571; // placeholder
 
-// value that is multiplied by the number of ticks to convert it to degreesf
+// value that is multiplied by the number of ticks to convert it to degrees
 private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
 
-private static double STAY_UP_WITH_HATCH = 0.0;
+private static final double STAY_UP_WITH_CARGO = 0.2;
 
-private static double STAY_UP_WITH_CARGO = 0.0;
+private static final double STAY_UP_NO_PIECE = 0.2;
 
-private static double STAY_UP_NO_PIECE = 0.0;
+private static final double UPWARD_ARM_MOVEMENT_SCALER = 1.0;
 
+private static final double DOWNWARD_ARM_MOVEMENT_SCALER = -0.3;
 
 // =========================================================================
 // Variables
@@ -496,9 +521,9 @@ private double deployTargetAngle = 0.0;
 
 private double deployTargetSpeed = 0.0;
 
-private double currentDeployMaxAngle = 0.0;
+private double currentDeployMaxAngle = MAX_ARM_POSITION_ADJUSTED;
 
-private double currentDeployMinAngle = 0.0;
+private double currentDeployMinAngle = MIN_ARM_POSITION_ADJUSTED;
 
 private boolean isSetDeployPositionInitReady = true;
 
@@ -506,8 +531,6 @@ private boolean isSetDeployPositionInitReady = true;
 // =========================================================================
 // Tuneables
 // =========================================================================
-
-private Timer rollerTimer = new Timer();
 
 /**
  * Deploy goals:

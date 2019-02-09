@@ -188,6 +188,9 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
+    SmartDashboard.putString("Arm Potentiometer",
+            "" + Hardware.intakeDeploySensor.get());
+
     // Forklifts
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
@@ -210,6 +213,8 @@ public static void periodic ()
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
             Hardware.nextLowerLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
+
+
 
 
     // =================================================================
@@ -259,7 +264,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -337,12 +342,20 @@ private static void connerTest ()
 private static void coleTest ()
 {
 
+    // if (Hardware.outtakeButton.get())
+    // Hardware.armMotor.set(.7);
+    // else if (Hardware.intakeOverride.get())
+    // Hardware.armMotor.set(-.7);
+    // else
+    // Hardware.armMotor.set(0.0);
+
     // Manipulator
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    // Hardware.manipulator.moveArmByButton();
+    Hardware.manipulator.moveArmByButton(45, .5,
+            Hardware.setDeploy45DegreeButton);
 
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
             Hardware.intakeTrigger.get(),
@@ -707,7 +720,7 @@ final static int CYCLE_BACKGROUND_COLOR = 4;
 
 private static enum CurrentBackground
     {
-CLEAR, BLUE, ORANGE
+    CLEAR, BLUE, ORANGE
     }
 
 public static CurrentBackground backgroundColor = CurrentBackground.CLEAR;

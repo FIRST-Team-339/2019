@@ -70,7 +70,7 @@ public class Hardware
 // ------------------------------------
 public enum RobotYear
     {
-KILROY_2018, KILROY_2019, TEST_BOARD
+    KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
 public static final RobotYear whichRobot = RobotYear.KILROY_2018;
@@ -318,7 +318,6 @@ public static Joystick rightOperator = null;
 // ------------------------------------
 // ----- Left Operator -----
 
-// left trigger
 public static JoystickButton intakeTrigger = null;
 
 public static JoystickButton outtakeButton = null;
@@ -326,6 +325,12 @@ public static JoystickButton outtakeButton = null;
 public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
+
+public static QuickSwitch cargoShipCargoButton = null;
+
+public static QuickSwitch cargoShipHatchButton = null;
+
+public static QuickSwitch setDeploy45DegreeButton = null;
 
 // ----- Right Operator -----
 
@@ -337,9 +342,7 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
-public static QuickSwitch cargoShipCargoButton = null;
 
-public static QuickSwitch cargoShipHatchButton = null;
 
 
 // ------------------------------------
@@ -619,6 +622,7 @@ public static void commonInitialization ()
 
     deployOverride = new JoystickButton(leftOperator, 5);
 
+    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 11);
 
     // ----- Right Operator -----
 
