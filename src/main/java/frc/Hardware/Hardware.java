@@ -1125,8 +1125,6 @@ public static void setHardwareSettings2018 ()
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
-    System.out.println(
-            "MADE IT TO THE PLACE FGJREGKESNT$WIEKNDVBFDrtihGKZDRKJLSMD>FSEDFNKZSRIKSFHRIGKSNFGHDXFIHKNGYT");
     Hardware.manipulator.initiliazeConstantsFor2018();
 } // end setHardwareSettings2018
 

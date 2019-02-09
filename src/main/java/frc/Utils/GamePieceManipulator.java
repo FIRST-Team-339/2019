@@ -108,21 +108,36 @@ public void initiliazeConstantsFor2018 ()
     STAY_UP_NO_PIECE = STAY_UP_NO_PIECE_2018;
     ARM_POT_RAW_HORIZONTAL_VALUE = ARM_POT_RAW_HORIZONTAL_VALUE_2018;
     DEPLOYED_ARM_POSITION_ADJUSTED = DEPLOYED_ARM_POSITION_ADJUSTED_2018;
+    DEPLOY_JOYSTICK_DEADBAND_SCALER = DEPLOY_JOYSTICK_DEADBAND_SCALER_2018;
 }
 
-
+/**
+ * Returns true is the manipulator is holding cargo, based on the photo
+ * switch. False otherwise
+ */
 public boolean hasCargo ()
 {
     return this.intake.hasCargo();
 }
 
 
-// placeholder, will need to be changed
+/**
+ * Returns true is the deploy mechanism has been deployed (based on the
+ * deploy potentiometer/ encoder), false otherwise
+ */
 public boolean isDeployed ()
 {
     return this.getDeployState() == DeployState.DEPLOYED;
 }
 
+/**
+ * Gets the current state of the deploy mechanism (DEPLOYED, MIDDLE
+ * (not deployed or retracted), and RETRACTED). Not to be confused
+ * with the deployMovementState, which is used by the state machine
+ * to determine how the deploy should be moving
+ *
+ * @return the current state of the deploy mechanism
+ */
 public DeployState getDeployState ()
 {
     if (this.getCurrentArmPosition() >= RETRACTED_ARM_POSITION_ADJUSTED
@@ -191,7 +206,14 @@ public void moveArmByJoystick (Joystick armJoystick,
 
 }
 
-
+/**
+ * Returns angle of the arm by scaling the potentiometer value
+ * for the deploy.
+ *
+ * @returns the angle of the arm in degrees, with 0 representing when
+ *          the arm is parallel to the ground, and +90 when the arm
+ *          is straight up and down
+ */
 public double getCurrentArmPosition ()
 {
     // if (armPot != null)
@@ -299,7 +321,16 @@ public boolean moveArmToPosition (double angle, double speed)
     return false;
 }
 
-
+/**
+ * Tells the state machine to deploy the arm, if it is not
+ * already retracted
+ *
+ * Can be called once to tell the deploy to move using the state
+ * machine in the background, or called continually for autonomous
+ * code that waits until the arm deploys before moving on
+ *
+ * @returns true if the arm finished deploying, or was already deployed
+ */
 public boolean deployArm ()
 {
     if (this.getDeployState() != DeployState.DEPLOYED)
@@ -311,6 +342,16 @@ public boolean deployArm ()
     return true; // if we are already deployed
 }
 
+/**
+ * Tells the state machine to retract the arm, if it is not
+ * already retracted
+ *
+ * Can be called once to tell the deploy to move using the state
+ * machine in the background, or called continually for autonomous
+ * code that waits until the arm retracts before moving on
+ *
+ * @returns true if the arm finished retracting, or was already retracted
+ */
 public boolean retractArm ()
 {
     if (this.getDeployState() != DeployState.RETRACTED)
@@ -536,7 +577,7 @@ private static double MAX_DEPLOY_SPEED_2019 = .2;
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 // should be equal to 1/(1 - DEPLOY_JOYSTICK_DEADBAND)
-private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25
+private static double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25
         * MAX_DEPLOY_SPEED_2019;
 
 private static double UP_JOYSTICK_SCALER = .5;
@@ -544,6 +585,7 @@ private static double UP_JOYSTICK_SCALER = .5;
 private static double DOWN_JOYSTICK_SCALER = .1;
 
 // ----- Joystick Constants 2018 -----
+private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER_2018 = 1.25;
 
 private static final double UP_JOYSTICK_SCALER_2018 = .5;
 

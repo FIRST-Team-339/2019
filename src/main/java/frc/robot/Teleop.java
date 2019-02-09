@@ -364,7 +364,6 @@ private static void coleTest ()
 
     // Manipulator
 
-
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 

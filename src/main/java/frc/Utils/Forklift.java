@@ -461,6 +461,7 @@ private final double NEXT_LOWER_POSITION_DEADBAND = 1;
  */
 public void update ()
 {
+
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
     if (manipulator.isDeployed() == false)
