@@ -188,9 +188,6 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    SmartDashboard.putString("Arm Potentiometer",
-            "" + Hardware.intakeDeploySensor.get());
-
     // Forklifts
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
@@ -244,9 +241,7 @@ public static void periodic ()
 
         }
 
-    // TODO pls yell at me if I puch this
 
-    // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
     individualTest();
 
@@ -360,11 +355,19 @@ private static void coleTest ()
 
     // Manipulator
 
+
+
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    Hardware.manipulator.moveArmByButton(45, .5,
+    Hardware.manipulator.moveArmByButton(45, .6,
             Hardware.setDeploy45DegreeButton);
+
+    if (Hardware.autoDeployButton.getCurrentValue() == true)
+        Hardware.manipulator.deployArm();
+
+    if (Hardware.autoRetractButton.getCurrentValue() == true)
+        Hardware.manipulator.retractArm();
 
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
             Hardware.intakeTrigger.get(),
