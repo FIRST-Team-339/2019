@@ -9,6 +9,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Hardware.Hardware;
 
@@ -50,6 +51,7 @@ public void robotInit ()
     Hardware.initialize();
 
     Hardware.setHardwareSettings();
+
 
     // User code goes above here
     // =========================================================

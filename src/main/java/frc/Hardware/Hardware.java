@@ -336,6 +336,10 @@ public static QuickSwitch autoDeployButton = null;
 
 // ----- Right Operator -----
 
+public static JoystickButton pictureButtonOne = null;
+
+public static JoystickButton pictureButtonTwo = null;
+
 public static JoystickButton chooseCargoRocketHeights = null;
 
 public static JoystickButton forkliftOverride = null;
@@ -633,6 +637,10 @@ public static void commonInitialization ()
 
     // ----- Right Operator -----
 
+    pictureButtonOne = new JoystickButton(rightOperator, 8);
+
+    pictureButtonTwo = new JoystickButton(rightOperator, 9);
+
     cancelTwoButton = new JoystickButton(rightOperator, 10);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
@@ -664,12 +672,6 @@ public static void commonInitialization ()
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
     // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
-
-
-
-
-
-
 
     // **********************************************************
     // Kilroy's Ancillary classes
