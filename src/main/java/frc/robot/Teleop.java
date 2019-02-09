@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
+import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -182,6 +183,7 @@ public static void initTeleop2019 ()
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
+
 public static void periodic ()
 {
     // =================================================================
@@ -225,15 +227,6 @@ public static void periodic ()
     Hardware.climber.climbUpdate();
 
     // buttons
-    if (Hardware.climbOneButton.isOnCheckNow() == true
-            && Hardware.climbTwoButton.isOnCheckNow() == true)
-        {
-        Hardware.climber.climb();
-        }
-    else
-        {
-        teleopDrive();
-        }
 
     // buttons to cancel everything
     if (Hardware.cancelTwoButton.get() == true
@@ -243,6 +236,13 @@ public static void periodic ()
         Autonomous.endAutoPath();
 
         }
+
+
+    // if (Hardware.pictureButtonOne.get() == true
+    // && Hardware.pictureButtonTwo.get() == true)
+    // {
+    // Hardware.axisCamera.saveImage(ImageType.RAW);
+    // }
 
     // TODO pls yell at me if I puch this
 
@@ -254,13 +254,18 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
+    if (Hardware.climbOneButton.isOnCheckNow() == true
+            && Hardware.climbTwoButton.isOnCheckNow() == true)
+        {
+        Hardware.climber.climb();
+        }
+    else
+        {
+        teleopDrive();
+        }
+
     printStatements();
 
-    // System.out.println(
-    // "auto level ONE" + Hardware.levelOneSwitch.isOn());
-
-    // System.out.println(
-    // "auto level TWO" + Hardware.levelTwoSwitch.isOn());
 }
 // end Periodic()
 
