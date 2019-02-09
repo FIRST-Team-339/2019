@@ -350,15 +350,12 @@ private static void connerTest ()
 private static void coleTest ()
 {
 
-    // if (Hardware.outtakeButton.get())
-    // Hardware.armMotor.set(.7);
-    // else if (Hardware.intakeOverride.get())
-    // Hardware.armMotor.set(-.7);
-    // else
-    // Hardware.armMotor.set(0.0);
+    // TODO retest forklift with the new way the scaling factor works
+    // (applies even during override), and well as how manipulator
+    // should now have scaling factor apploied to override as well
+    // Then deployArm/ retractArm/ setDeplo45DegreeButton
 
     // Manipulator
-
 
 
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
@@ -373,6 +370,7 @@ private static void coleTest ()
     if (Hardware.autoRetractButton.getCurrentValue() == true)
         Hardware.manipulator.retractArm();
 
+    // TODO test with make break / IR
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
             Hardware.intakeTrigger.get(),
             Hardware.outtakeButton.get(),

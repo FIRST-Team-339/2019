@@ -120,7 +120,7 @@ public boolean hasCargo ()
 // placeholder, will need to be changed
 public boolean isDeployed ()
 {
-    return true;
+    return this.getDeployState() == DeployState.DEPLOYED;
 }
 
 public DeployState getDeployState ()
@@ -161,17 +161,12 @@ public void moveArmByJoystick (Joystick armJoystick,
         double speed = (armJoystick.getY() - DEPLOY_JOYSTICK_DEADBAND)
                 * DEPLOY_JOYSTICK_DEADBAND_SCALER;
         // if override button is pressed, ignore potentiometer/ encoder.
-        if (overrideButton == true)
+
+        // If we are trying to move up and past the max angle, or
+        // trying to move down and below the min height, tell the
+        // arm to stay where it is
+        if (overrideButton == false)
             {
-            this.deployTargetSpeed = speed;
-            // force the lift state to be move by joysticks
-            this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
-            }
-        else
-            {
-            // If we are trying to move up and past the max angle, or
-            // trying to move down and below the min height, tell the
-            // arm to stay where it is
             if ((speed > 0
                     && this.getCurrentArmPosition() > currentDeployMaxAngle)
                     || (speed < 0 && this
@@ -182,16 +177,18 @@ public void moveArmByJoystick (Joystick armJoystick,
                 // deployMovementState to MOVING_BY_JOY;
                 return;
                 }
-
-            // scales the speed based on whether it is going up or down
-            if (speed > 0)
-                deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
-            else
-                deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
-
-            this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
             }
+
+        // scales the speed based on whether it is going up or down
+        if (speed > 0)
+            deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
+        else
+            deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
+
+        this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
+
         }
+
 }
 
 
@@ -309,7 +306,7 @@ public boolean deployArm ()
         {
         isSetDeployPositionInitReady = true;
         return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED,
-                DEFAULT_DEPLOY_SPEED);
+                DEFAULT_DEPLOY_SPEED_UNSCALED);
         }
     return true; // if we are already deployed
 }
@@ -320,7 +317,7 @@ public boolean retractArm ()
         {
         isSetDeployPositionInitReady = true;
         return this.moveArmToPosition(RETRACTED_ARM_POSITION_ADJUSTED,
-                DEFAULT_RETRACT_SPEED);
+                DEFAULT_RETRACT_SPEED_UNSCALED);
         }
     return true; // if we are already deployed
 }
@@ -344,7 +341,6 @@ public void deployUpdate ()
     SmartDashboard.putString("Deploy State",
             "" + this.getDeployState());
     SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
-
 
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
         this.stayAtPosition2018InitIsReady = true;
@@ -382,7 +378,6 @@ public void deployUpdate ()
                     break;
                     }
                 // we have NOT passed the value , keep going up.
-                deployTargetSpeed *= UPWARD_ARM_MOVEMENT_SCALER;
                 this.armMotor.set(deployTargetSpeed);
 
                 }
@@ -397,7 +392,6 @@ public void deployUpdate ()
                     break;
                     }
                 // we have NOT passed the value , keep going down.
-                deployTargetSpeed *= DOWNWARD_ARM_MOVEMENT_SCALER;
                 this.armMotor.set(deployTargetSpeed);
                 }
             break;
@@ -534,11 +528,16 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
 // Constants
 // =========================================================================
 
+// used to scale all relevant values for 2019 since the max speed
+// the 2019 deploy arm can go is .2
+private static double MAX_DEPLOY_SPEED_2019 = .2;
+
 // ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 // should be equal to 1/(1 - DEPLOY_JOYSTICK_DEADBAND)
-private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25;
+private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25
+        * MAX_DEPLOY_SPEED_2019;
 
 private static double UP_JOYSTICK_SCALER = .5;
 
@@ -621,13 +620,15 @@ private static double STAY_UP_WITH_CARGO = 0.2;
 
 private static double STAY_UP_NO_PIECE = 0.2;
 
-private static double UPWARD_ARM_MOVEMENT_SCALER = 1.0;
+private static double UPWARD_ARM_MOVEMENT_SCALER = 1.0
+        * MAX_DEPLOY_SPEED_2019;
 
-private static double DOWNWARD_ARM_MOVEMENT_SCALER = 0.05;
+private static double DOWNWARD_ARM_MOVEMENT_SCALER = 0.05
+        * MAX_DEPLOY_SPEED_2019;
 
-private static final double DEFAULT_DEPLOY_SPEED = .5;
+private static final double DEFAULT_DEPLOY_SPEED_UNSCALED = .5;
 
-private static final double DEFAULT_RETRACT_SPEED = .5;
+private static final double DEFAULT_RETRACT_SPEED_UNSCALED = .5;
 
 
 // ----- Deploy Speed Constants 2018 -----
@@ -642,7 +643,7 @@ private static final double STAY_UP_WITH_CARGO_2018 = 0.3;
 
 private static final double STAY_UP_NO_PIECE_2018 = 0.3;
 
-private static final double UPWARD_ARM_MOVEMENT_SCALER_2018 = 1.0;
+private static final double UPWARD_ARM_MOVEMENT_SCALER_2018 = .5;
 
 private static final double DOWNWARD_ARM_MOVEMENT_SCALER_2018 = 0.05;
 
