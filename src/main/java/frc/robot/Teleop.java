@@ -430,10 +430,37 @@ private static void patrickTest ()
     SmartDashboard.putBoolean("Blue", isBlue);
     SmartDashboard.putBoolean("Orange", isOrange);
 
-    if (Hardware.rightDriver.getRawButton(4) == false)
+
+    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR == 0
+            && isCurrentlyChanging == false)
+        {
+        switch (backgroundColor)
+            {
+            case CLEAR:
+                backgroundColor = CurrentBackground.BLUE;
+                isCurrentlyChanging = true;
+                break;
+
+            case BLUE:
+                backgroundColor = CurrentBackground.ORANGE;
+                isCurrentlyChanging = true;
+                break;
+
+            case ORANGE:
+                backgroundColor = CurrentBackground.CLEAR;
+                isCurrentlyChanging = true;
+                break;
+            }
+        }
+    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR != 0)
         {
         isCurrentlyChanging = false;
         }
+
+    // if (Hardware.rightDriver.getRawButton(4) == false)
+    // {
+    // isCurrentlyChanging = false;
+    // }
 } // end patrickTest()
 
 private static void annaTest ()
@@ -909,6 +936,8 @@ private static boolean isBlue = true;
 private static boolean isOrange = true;
 
 private static boolean isCurrentlyChanging = false;
+
+public static final double FORKLIFT_DIVISOR = 4;
 
 // ================================
 // Variables
