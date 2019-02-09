@@ -225,7 +225,10 @@ public static void periodic ()
         {
         Hardware.climber.climb();
         }
-
+    else
+        {
+        teleopDrive();
+        }
 
     // buttons to cancel everything
     if (Hardware.cancelTwoButton.get() == true
@@ -237,7 +240,7 @@ public static void periodic ()
         }
 
     // TODO pls yell at me if I puch this
-    teleopDrive();
+
 
     // Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator);
 
@@ -259,7 +262,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -442,21 +445,35 @@ public static void printStatements ()
         // "Arm motor: " + Hardware.armMotor.get());
         // System.out.println("Lift Motor One "
         // + Hardware.liftMotor.get());
+        // Hardware.telemetry.printToConsole("Lift Motor One "
+        // + Hardware.liftMotor.get());
         // System.out.println("RF Drive Motor " +
+        // Hardware.rightFrontCANMotor.get());
+        // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
         // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
+        // Hardware.telemetry.printToConsole("LF Drive Motor "
+        // + Hardware.leftFrontCANMotor.get());
         // System.out.println("RR Drive Motor " +
+        // Hardware.rightRearCANMotor.get());
+        // Hardware.telemetry.printToConsole("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
+        // Hardware.telemetry.printToConsole("LR Drive Motor "
+        // + Hardware.leftRearCANMotor.get());
         // System.out.println("Arm Roller "
+        // + Hardware.armRoller.get());
+        // Hardware.telemetry.printToConsole("Arm Roller "
         // + Hardware.armRoller.get());
 
         // =================================
         // Relay
         // =================================
         // System.out.println(
+        // "Ring light relay: " + Hardware.ringLightRelay.get());
+        // Hardware.telemetry.printToConsole(
         // "Ring light relay: " + Hardware.ringLightRelay.get());
 
 
@@ -470,56 +487,94 @@ public static void printStatements ()
         // prints state of switches
         // System.out.println(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        // Hardware.telemetry.printToConsole(
+        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
         // System.out.println(
+        // "Right auto switch: "
+        // + Hardware.rightAutoSwitch.isOn());
+        // Hardware.telemetry.printToConsole(
         // "Right auto switch: "
         // + Hardware.rightAutoSwitch.isOn());
         // System.out.println("Center auto switch: "
         // + Hardware.autoCenterSwitch.isOn());
+        // Hardware.telemetry.printToConsole("Center auto switch: "
+        // + Hardware.autoCenterSwitch.isOn());
         // System.out.println(
+        // "Level one switch: " + Hardware.levelOneSwitch.isOn());
+        // Hardware.telemetry.printToConsole(
         // "Level one switch: " + Hardware.levelOneSwitch.isOn());
         // System.out.println(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
+        // Hardware.telemetry.printToConsole(
+        // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
         // System.out.println("Auto disable switch: "
         // + Hardware.autoDisableSwitch.isOn());
+        // Hardware.telemetry.printToConsole("Auto disable switch: "
+        // + Hardware.autoDisableSwitch.isOn());
         // System.out.println("Auto 6 position switch: "
+        // + Hardware.autoSixPosSwitch.getPosition());
+        // Hardware.telemetry.printToConsole("Auto 6 position switch: "
         // + Hardware.autoSixPosSwitch.getPosition());
 
         // ---------------------------------
 
         // SmartDashboard.putBoolean("Disable SW",
-        // Hardware.autoLevelSwitch.isOn());
+        // Hardware.autoDisableSwitch.isOn());
+        // Hardware.telemetry.printToConsole("Disable SW" +
+        // Hardware.autoDisableSwitch.isOn());
 
         // ---------------------------------
         // Encoders
         // ---------------------------------
         // System.out.println("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
+        // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
+        // + Hardware.leftFrontDriveEncoder.getDistance());
 
         // System.out.println("Left front encoder ticks: "
+        // + Hardware.leftFrontDriveEncoder.get());
+        // Hardware.telemetry.printToConsole("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
+        // Hardware.telemetry.printToConsole("Right Front Inches = "
+        // + Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
+        // + Hardware.rightFrontDriveEncoder.get());
+        // Hardware.telemetry.printToConsole("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
 
         // System.out.println("Left rear encoder inches: "
         // + Hardware.leftRearDriveEncoder.getDistance());
+        // Hardware.telemetry.printToConsole("Left rear encoder inches: "
+        // + Hardware.leftRearDriveEncoder.getDistance());
 
         // System.out.println("Left rear encoder ticks: "
+        // + Hardware.leftRearDriveEncoder.get());
+        // Hardware.telemetry.printToConsole("Left rear encoder ticks: "
         // + Hardware.leftRearDriveEncoder.get());
 
         // System.out.println("Right rear encoder distance: "
         // + Hardware.rightRearDriveEncoder.getDistance());
+        // Hardware.telemetry
+        // .printToConsole("Right rear encoder distance: "
+        // + Hardware.rightRearDriveEncoder.getDistance());
 
         // System.out.println("Right rear encoder ticks: "
+        // + Hardware.rightRearDriveEncoder.get());
+        // Hardware.telemetry.printToConsole("Right rear encoder ticks: "
         // + Hardware.rightRearDriveEncoder.get());
 
         // System.out.println("Lift encoder inches: "
         // + Hardware.liftingEncoder.getDistance());
+        // Hardware.telemetry.printToConsole("Lift encoder inches: "
+        // + Hardware.liftingEncoder.getDistance());
 
         // System.out.println(
+        // "Lift encoder ticks: " + Hardware.liftingEncoder.get());
+        // Hardware.telemetry.printToConsole(
         // "Lift encoder ticks: " + Hardware.liftingEncoder.get());
 
         // ---------------------------------
@@ -527,10 +582,16 @@ public static void printStatements ()
         // prints the state of the sensor
         // ---------------------------------
         // System.out.println("Arm IR: " + Hardware.armIR.get());
+        // Hardware.telemetry
+        // .printToConsole("Arm IR: " + Hardware.armIR.get());
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // Hardware.telemetry.printToConsole("Left back IR: " +
+        // Hardware.leftBackIR.get());
 
         // System.out.println(
+        // "Right back IR: " + Hardware.rightBackIR.get());
+        // Hardware.telemetry.printToConsole(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
         // Pneumatics
@@ -544,10 +605,16 @@ public static void printStatements ()
         // ---------------------------------
         // Solenoids
         // ---------------------------------
-        // TODO test arm intake solenoid
+
         // System.out.println("Arm intake solenoid forward: "
         // + Hardware.armIntakeSolenoid.getForward());
+        // Hardware.telemetry
+        // .printToConsole("Arm intake solenoid forward: "
+        // + Hardware.armIntakeSolenoid.getForward());
         // System.out.println("Arm intake solenoid reverse: "
+        // + Hardware.armIntakeSolenoid.getReverse());
+        // Hardware.telemetry
+        // .printToConsole("Arm intake solenoid reverse: "
         // + Hardware.armIntakeSolenoid.getReverse());
 
         // Analogs
@@ -561,17 +628,29 @@ public static void printStatements ()
         // ----------------------------------
         // Potentiometers
         // ----------------------------------
-        // TODO test potentiometers
+
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // Hardware.telemetry.printToConsole("Delay pot: " +
+        // Hardware.delayPot.get());
         // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
+        // Hardware.telemetry.printToConsole("delay pot: " +
+        // Hardware.delayPot.get(0, 5));
         // System.out.println("Intake deploy sensor: "
+        // + Hardware.intakeDeploySensor.get());
+        // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
         // ---------------------------------
         // Sonar/UltraSonic
         // ---------------------------------
 
+        // SmartDashboard.putNumber("F ultrasonic: ",
+        // Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
         // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
+        // Hardware.telemetry.printToConsole("ultrasonic " +
+        // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
 
         // =========================
@@ -591,6 +670,8 @@ public static void printStatements ()
         // ---------------------------------
 
         // System.out.println("Gyro: " + Hardware.gyro.getAngle());
+        // Hardware.telemetry.printToConsole("Gyro: " +
+        // Hardware.gyro.getAngle());
 
         // =================================
         // Connection Items
@@ -707,7 +788,7 @@ final static int CYCLE_BACKGROUND_COLOR = 4;
 
 private static enum CurrentBackground
     {
-CLEAR, BLUE, ORANGE
+    CLEAR, BLUE, ORANGE
     }
 
 public static CurrentBackground backgroundColor = CurrentBackground.CLEAR;
