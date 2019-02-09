@@ -460,30 +460,50 @@ public static void printStatements ()
         // =================================
 
         // System.out.println("Arm motor: " + Hardware.armMotor.get());
+        // SmartDashboard.putNumber("Arm motor: ",
+        // Hardware.armMotor.get());
         // Hardware.telemetry.printToConsole(
         // "Arm motor: " + Hardware.armMotor.get());
+
         // System.out.println("Lift Motor One "
         // + Hardware.liftMotor.get());
+        // SmartDashboard.putNumber("Lift Motor One ",
+        // Hardware.liftMotor.get());
         // Hardware.telemetry.printToConsole("Lift Motor One "
         // + Hardware.liftMotor.get());
+
         // System.out.println("RF Drive Motor " +
+        // Hardware.rightFrontCANMotor.get());
+        // SmartDashboard.putNumber("RF Drive Motor ",
         // Hardware.rightFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
+
         // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
+        // SmartDashboard.putNumber("LF Drive Motor ",
+        // Hardware.leftFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
+
         // System.out.println("RR Drive Motor " +
+        // Hardware.rightRearCANMotor.get());
+        // SmartDashboard.putNumber("RR Drive Motor ",
         // Hardware.rightRearCANMotor.get());
         // Hardware.telemetry.printToConsole("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
+
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
+        // SmartDashboard.putNumber("LR Drive Motor ",
+        // Hardware.leftRearCANMotor.get());
         // Hardware.telemetry.printToConsole("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
+
         // System.out.println("Arm Roller "
         // + Hardware.armRoller.get());
+        // SmartDashboard.putNumber("Arm Roller ",
+        // Hardware.armRoller.get());
         // Hardware.telemetry.printToConsole("Arm Roller "
         // + Hardware.armRoller.get());
 
@@ -492,9 +512,11 @@ public static void printStatements ()
         // =================================
         // System.out.println(
         // "Ring light relay: " + Hardware.ringLightRelay.get());
+        // SmartDashboard.putString(
+        // "Ring light relay: ",
+        // "" + Hardware.ringLightRelay.get());
         // Hardware.telemetry.printToConsole(
         // "Ring light relay: " + Hardware.ringLightRelay.get());
-
 
         // =================================
         // Digital Inputs
@@ -504,39 +526,64 @@ public static void printStatements ()
 
         // Switches
         // prints state of switches
+
         // System.out.println(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        // SmartDashboard.putBoolean(
+        // "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+
         // System.out.println(
         // "Right auto switch: "
         // + Hardware.rightAutoSwitch.isOn());
+        // SmartDashboard.putString(
+        // "Right auto switch: ",
+        // "" + Hardware.rightAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Right auto switch: "
         // + Hardware.rightAutoSwitch.isOn());
+
         // System.out.println("Center auto switch: "
         // + Hardware.autoCenterSwitch.isOn());
+        // SmartDashboard.putString("Center auto switch: ",
+        // "" + Hardware.autoCenterSwitch.isOn());
         // Hardware.telemetry.printToConsole("Center auto switch: "
         // + Hardware.autoCenterSwitch.isOn());
+
         // System.out.println(
         // "Level one switch: " + Hardware.levelOneSwitch.isOn());
+        // SmartDashboard.putString(
+        // "Level one switch: ",
+        // "" + Hardware.levelOneSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Level one switch: " + Hardware.levelOneSwitch.isOn());
+
         // System.out.println(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
+        // SmartDashboard.putString(
+        // "Level two switch: ",
+        // "" + Hardware.levelTwoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
+
         // System.out.println("Auto disable switch: "
         // + Hardware.autoDisableSwitch.isOn());
+        // SmartDashboard.putString("Auto disable switch: ",
+        // "" + Hardware.autoDisableSwitch.isOn());
         // Hardware.telemetry.printToConsole("Auto disable switch: "
         // + Hardware.autoDisableSwitch.isOn());
+
         // System.out.println("Auto 6 position switch: "
         // + Hardware.autoSixPosSwitch.getPosition());
+        // SmartDashboard.putNumber("Auto 6 position switch: ",
+        // Hardware.autoSixPosSwitch.getPosition());
         // Hardware.telemetry.printToConsole("Auto 6 position switch: "
         // + Hardware.autoSixPosSwitch.getPosition());
 
         // ---------------------------------
-
+        // System.out.println("Disable SW" +
+        // Hardware.autoDisableSwitch.isOn());
         // SmartDashboard.putBoolean("Disable SW",
         // Hardware.autoDisableSwitch.isOn());
         // Hardware.telemetry.printToConsole("Disable SW" +
@@ -547,52 +594,72 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
+        // SmartDashboard.putNumber("Left Front Encoder Inches = ",
+        // Hardware.leftFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
         // System.out.println("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
+        // SmartDashboard.putNumber("Left front encoder ticks: ",
+        // Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
+        // SmartDashboard.putNumber("Right Front Inches = ",
+        // Hardware.rightFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
+        // SmartDashboard.putNumber("Right Front Ticks ",
+        // Hardware.rightFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
 
         // System.out.println("Left rear encoder inches: "
         // + Hardware.leftRearDriveEncoder.getDistance());
+        // SmartDashboard.putNumber("Left rear encoder inches: ",
+        // Hardware.leftRearDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Left rear encoder inches: "
         // + Hardware.leftRearDriveEncoder.getDistance());
 
         // System.out.println("Left rear encoder ticks: "
         // + Hardware.leftRearDriveEncoder.get());
+        // SmartDashboard.putNumber("Left rear encoder ticks: ",
+        // Hardware.leftRearDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left rear encoder ticks: "
         // + Hardware.leftRearDriveEncoder.get());
 
         // System.out.println("Right rear encoder distance: "
         // + Hardware.rightRearDriveEncoder.getDistance());
+        // SmartDashboard.putNumber("Right rear encoder distance: ",
+        // Hardware.rightRearDriveEncoder.getDistance());
         // Hardware.telemetry
         // .printToConsole("Right rear encoder distance: "
         // + Hardware.rightRearDriveEncoder.getDistance());
 
         // System.out.println("Right rear encoder ticks: "
         // + Hardware.rightRearDriveEncoder.get());
+        // SmartDashboard.putNumber("Right rear encoder ticks: ",
+        // Hardware.rightRearDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right rear encoder ticks: "
         // + Hardware.rightRearDriveEncoder.get());
 
         // System.out.println("Lift encoder inches: "
         // + Hardware.liftingEncoder.getDistance());
+        // SmartDashboard.putNumber("Lift encoder inches: ",
+        // Hardware.liftingEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Lift encoder inches: "
         // + Hardware.liftingEncoder.getDistance());
 
         // System.out.println(
         // "Lift encoder ticks: " + Hardware.liftingEncoder.get());
+        // SmartDashboard.putNumber(
+        // "Lift encoder ticks: ", Hardware.liftingEncoder.get());
         // Hardware.telemetry.printToConsole(
         // "Lift encoder ticks: " + Hardware.liftingEncoder.get());
 
@@ -601,15 +668,21 @@ public static void printStatements ()
         // prints the state of the sensor
         // ---------------------------------
         // System.out.println("Arm IR: " + Hardware.armIR.get());
+        // SmartDashboard.putBoolean("Arm IR: ", Hardware.armIR.get());
         // Hardware.telemetry
         // .printToConsole("Arm IR: " + Hardware.armIR.get());
+
         // System.out
         // .println("Left back IR: " + Hardware.leftBackIR.get());
+        // SmartDashboard.putBoolean(
+        // "Left back IR: ", Hardware.leftBackIR.get());
         // Hardware.telemetry.printToConsole("Left back IR: " +
         // Hardware.leftBackIR.get());
 
         // System.out.println(
         // "Right back IR: " + Hardware.rightBackIR.get());
+        // SmartDashboard.putBoolean(
+        // "Right back IR: ", Hardware.rightBackIR.get());
         // Hardware.telemetry.printToConsole(
         // "Right back IR: " + Hardware.rightBackIR.get());
         // =================================
@@ -627,11 +700,16 @@ public static void printStatements ()
 
         // System.out.println("Arm intake solenoid forward: "
         // + Hardware.armIntakeSolenoid.getForward());
+        // SmartDashboard.putBoolean("Arm intake solenoid forward: ",
+        // Hardware.armIntakeSolenoid.getForward());
         // Hardware.telemetry
         // .printToConsole("Arm intake solenoid forward: "
         // + Hardware.armIntakeSolenoid.getForward());
+
         // System.out.println("Arm intake solenoid reverse: "
         // + Hardware.armIntakeSolenoid.getReverse());
+        // SmartDashboard.putBoolean("Arm intake solenoid reverse: ",
+        // Hardware.armIntakeSolenoid.getReverse());
         // Hardware.telemetry
         // .printToConsole("Arm intake solenoid reverse: "
         // + Hardware.armIntakeSolenoid.getReverse());
@@ -649,13 +727,21 @@ public static void printStatements ()
         // ----------------------------------
 
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // SmartDashboard.putNumber("Delay pot: ",
+        // Hardware.delayPot.get());
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
+
         // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
+        // SmartDashboard.putNumber("delay pot: ",
+        // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("delay pot: " +
         // Hardware.delayPot.get(0, 5));
+
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
+        // SmartDashboard.putNumber("Intake deploy sensor: ",
+        // Hardware.intakeDeploySensor.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -663,10 +749,10 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
         // Hardware.telemetry.printToConsole("ultrasonic " +
         // Hardware.frontUltraSonic
@@ -689,6 +775,7 @@ public static void printStatements ()
         // ---------------------------------
 
         // System.out.println("Gyro: " + Hardware.gyro.getAngle());
+        // SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
         // Hardware.telemetry.printToConsole("Gyro: " +
         // Hardware.gyro.getAngle());
 
