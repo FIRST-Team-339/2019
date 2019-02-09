@@ -110,7 +110,8 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         this.forkliftTargetSpeed = speed;
         // force the lift state to be move by joysticks
         this.liftState = ForkliftState.MOVE_JOY;
-        } else
+        }
+    else
         {
         // If we are trying to move up and past the max height, or trying to
         // move down and below the min height, tell the forklift to stay where
@@ -299,27 +300,36 @@ public void setToNextHigherPreset (double forkliftSpeed,
             if (forkliftHeight < LOWER_ROCKET_CARGO)
                 {
                 position = LOWER_ROCKET_CARGO;
-                } else if (forkliftHeight < MIDDLE_ROCKET_CARGO)
-                {
-                position = MIDDLE_ROCKET_CARGO;
-                } else if (forkliftHeight < TOP_ROCKET_CARGO)
-                {
-                position = TOP_ROCKET_CARGO;
                 }
-            } else
+            else
+                if (forkliftHeight < MIDDLE_ROCKET_CARGO)
+                    {
+                    position = MIDDLE_ROCKET_CARGO;
+                    }
+                else
+                    if (forkliftHeight < TOP_ROCKET_CARGO)
+                        {
+                        position = TOP_ROCKET_CARGO;
+                        }
+            }
+        else
             {
             // set position to the next preset hatch height on the rocket
             // above the forklift's current height
             if (forkliftHeight < LOWER_ROCKET_HATCH)
                 {
                 position = LOWER_ROCKET_HATCH;
-                } else if (forkliftHeight < MIDDLE_ROCKET_HATCH)
-                {
-                position = MIDDLE_ROCKET_HATCH;
-                } else if (forkliftHeight < TOP_ROCKET_HATCH)
-                {
-                position = TOP_ROCKET_HATCH;
                 }
+            else
+                if (forkliftHeight < MIDDLE_ROCKET_HATCH)
+                    {
+                    position = MIDDLE_ROCKET_HATCH;
+                    }
+                else
+                    if (forkliftHeight < TOP_ROCKET_HATCH)
+                        {
+                        position = TOP_ROCKET_HATCH;
+                        }
             }
 
         System.out.println("Next Highest Position: " + position);
@@ -384,27 +394,36 @@ public void setToNextLowerPreset (double forkliftSpeed,
             if (forkliftHeight > TOP_ROCKET_CARGO)
                 {
                 position = TOP_ROCKET_CARGO;
-                } else if (forkliftHeight > MIDDLE_ROCKET_CARGO)
-                {
-                position = MIDDLE_ROCKET_CARGO;
-                } else if (forkliftHeight > LOWER_ROCKET_CARGO)
-                {
-                position = LOWER_ROCKET_CARGO;
                 }
-            } else
+            else
+                if (forkliftHeight > MIDDLE_ROCKET_CARGO)
+                    {
+                    position = MIDDLE_ROCKET_CARGO;
+                    }
+                else
+                    if (forkliftHeight > LOWER_ROCKET_CARGO)
+                        {
+                        position = LOWER_ROCKET_CARGO;
+                        }
+            }
+        else
             {
             // set position to the next preset hatch height on the rocket
             // below the forklift's current height
             if (forkliftHeight > TOP_ROCKET_HATCH)
                 {
                 position = TOP_ROCKET_HATCH;
-                } else if (forkliftHeight > MIDDLE_ROCKET_HATCH)
-                {
-                position = MIDDLE_ROCKET_HATCH;
-                } else if (forkliftHeight > LOWER_ROCKET_HATCH)
-                {
-                position = LOWER_ROCKET_HATCH;
                 }
+            else
+                if (forkliftHeight > MIDDLE_ROCKET_HATCH)
+                    {
+                    position = MIDDLE_ROCKET_HATCH;
+                    }
+                else
+                    if (forkliftHeight > LOWER_ROCKET_HATCH)
+                        {
+                        position = LOWER_ROCKET_HATCH;
+                        }
             }
 
         SmartDashboard.putNumber("Next Lower Position:", position);
@@ -477,10 +496,11 @@ public void update ()
                     break;
                     }
                 // we have NOT passed the value , keep going up.
-
+                forkliftTargetSpeed *= UPWARD_LIFT_MOVEMENT_SCALER;
                 this.forkliftMotor.set(forkliftTargetSpeed);
 
-                } else
+                }
+            else
                 {
                 // If we have passed the value we wanted...
                 if (this.getForkliftHeight() < forkliftTargetHeight)
@@ -491,6 +511,7 @@ public void update ()
                     break;
                     }
                 // we have NOT passed the value , keep going down.
+                forkliftTargetSpeed *= DOWNWARD_LIFT_MOVEMENT_SCALER;
                 this.forkliftMotor.set(-forkliftTargetSpeed);
                 }
 
@@ -512,27 +533,15 @@ public void update ()
                     "Reached default in the liftState switch in "
                             + "forkliftUpdate in Forklift");
         case STAY_AT_POSITION:
-            // Depending on what piece the manipulator has, send the appropriate
+            // If the manipulator has a cargo piece, send the appropriate
             // value to the motor so the forklift does not slide down due to
             // gravity
-            switch (manipulator.hasWhichGamePiece())
-                {
-                case HATCH_PANEL:
-                    this.forkliftMotor.set(STAY_UP_WITH_HATCH);
-                    break;
 
-                case CARGO:
-                    this.forkliftMotor.set(STAY_UP_WITH_CARGO);
-                    break;
+            if (manipulator.hasCargo() == true)
+                this.forkliftMotor.set(STAY_UP_WITH_CARGO);
+            else
+                this.forkliftMotor.set(STAY_UP_NO_PIECE);
 
-                default:
-                    System.out.println(
-                            "Reached default in the GamePiece switch in STAY_AY_POSITION in liftState switch in forkliftUpdate in Forklift");
-                case NONE:
-                    this.forkliftMotor.set(STAY_UP_NO_PIECE);
-                    break;
-
-                }
             // Reset the direction for next move-to-position.
             forkliftDirection = ForkliftDirectionState.NEUTRAL;
             setLiftPositionInit = true;
@@ -566,13 +575,13 @@ public void printDebugInfo ()
 // enum for defining the overall states of the forklift
 public static enum ForkliftState
     {
-MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
+    MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
     }
 
 // enum for holding which way the forklift needs to move.
 public static enum ForkliftDirectionState
     {
-NEUTRAL, MOVING_DOWN, MOVING_UP
+    NEUTRAL, MOVING_DOWN, MOVING_UP
     }
 
 // Variable for defining the overall state of the forklift
@@ -602,6 +611,13 @@ private double forkliftTargetHeight = 0.0;
 // used by the MOVING_TO_POSITION state in the state machine to determine what
 // speed to move at
 private double forkliftTargetSpeed = 0.0;
+
+private static final double UPWARD_LIFT_MOVEMENT_SCALER = 1.0;
+
+// leave this positive even though it is the downward scalar;
+// the speed is multipled by a negative value
+private static final double DOWNWARD_LIFT_MOVEMENT_SCALER = 1.0;
+
 
 private double currentMinLiftPosition = 0;
 
@@ -649,10 +665,6 @@ public static final double DEFAULT_TELEOP_BUTTON_SPEED = .6;
 // speed sent to the forklift motor to hold position when we do not
 // have any game piece
 private final double STAY_UP_NO_PIECE = 0.05;
-
-// speed sent to the forklift motor to hold position when we have a
-// hatch
-private final double STAY_UP_WITH_HATCH = .1;
 
 // speed sent to the forklift motor to hold position when we have a
 // cargo
