@@ -620,6 +620,7 @@ private static DriveWithCameraStates driveWithCameraStates = DriveWithCameraStat
 
 private static boolean depositRocketHatch ()
 {
+    Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
     System.out.println(rocketHatchState);
     if (rocketHatchState == RocketHatchState.STANDBY)
         {
