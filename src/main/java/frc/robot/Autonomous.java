@@ -320,31 +320,45 @@ private static PrepState prepState = PrepState.INIT;
  * Code to set up the forklift for autonomous for a hatch deposit
  *
  */
-public static boolean prepDepost ()
+public static void prepDeposit ()
 {
-    switch (prepState)
+
+    if (Hardware.lift
+            .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
         {
-        case INIT:
-            prepState = PrepState.RAISE_FORKLIFT;
-            break;
-
-        case RAISE_FORKLIFT:
-            if (Hardware.lift
-                    .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
-                {
-                prepState = PrepState.DEPLOY_MANIPULATOR;
-                }
-            break;
-
-        case DEPLOY_MANIPULATOR:
-            // Hardware.manipulator
-            // .moveArmToPosition(260);// TODO constant
-            break;
-        case STOP_PREP:
-            prepState = PrepState.INIT;
-            return true;
+        Hardware.manipulator.moveArmToPosition(
+                260, -.4);
         }
-    return false;
+    // switch (prepState)
+    // {
+    // case INIT:
+    // prepState = PrepState.RAISE_FORKLIFT;
+    // break;
+
+    // case RAISE_FORKLIFT:
+    // System.out.println("RaIsE fORklLiFt");
+    // if (Hardware.lift
+    // .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
+    // {
+    // prepState = PrepState.DEPLOY_MANIPULATOR;
+    // }
+    // break;
+
+    // case DEPLOY_MANIPULATOR:
+    // System.out.println("Deploy");
+    // // TODO put variables in constants once tested
+    // if (Hardware.manipulator.moveArmToPosition(
+    // 260, -.4))
+    // {
+    // prepState = PrepState.STOP_PREP;
+    // }
+    // break;
+    // case STOP_PREP:
+    // System.out.println("stop");
+    // prepState = PrepState.INIT;
+    // break;
+    // }
+
 }
 
 
@@ -576,6 +590,14 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_DRIVE_3:
+            System.out.println(
+                    "Ultrasosnic" + Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper());
+            System.out.println(
+                    "encoders" + Hardware.rightFrontDriveEncoder
+                            .getDistance());
+
+            Autonomous.prepDeposit();
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -583,27 +605,37 @@ private static boolean depositCargoHatch ()
                     || Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper() < 20)
                 {
-
+                System.out
+                        .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
                 }
 
+            Autonomous.prepDeposit();
+
             break;
         case STRAIGHT_DEPOSIT_ALIGN_TO_CARGO:
+
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
                 }
+            else
+                {
+                Autonomous.prepDeposit();
+                }
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
-            if (true)
+            System.out.println("Deposit");
+            if (Hardware.depositGamePiece.depositHatch())
                 {
-                return true;
+                depositCargoHatchState = DepositCargoHatchState.FINISHED;
                 }
             break;
         case FINISHED:
-            break;
+            return true;
+
         }
     return false;
 }
@@ -1172,7 +1204,7 @@ private static boolean usingVision = true;
 private static boolean usingAlignByWall = false;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = true;
+private static boolean usingVisionOnStraight = false;
 
 private static boolean descendInit = false;
 
@@ -1267,7 +1299,7 @@ public static final double CAMERA_TURN_SPEED = .5;
 public static final double CAMERA_ACCELERATION = .2;
 
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .3;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
 public static final int TURN_FOR_CAMERA_DEGREES = 80;
 

@@ -70,7 +70,7 @@ public class Hardware
 // ------------------------------------
 public enum RobotYear
     {
-KILROY_2018, KILROY_2019, TEST_BOARD
+    KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
 public static final RobotYear whichRobot = RobotYear.KILROY_2018;
@@ -318,7 +318,6 @@ public static Joystick rightOperator = null;
 // ------------------------------------
 // ----- Left Operator -----
 
-// left trigger
 public static JoystickButton intakeTrigger = null;
 
 public static JoystickButton outtakeButton = null;
@@ -326,6 +325,12 @@ public static JoystickButton outtakeButton = null;
 public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
+
+public static QuickSwitch cargoShipCargoButton = null;
+
+public static QuickSwitch cargoShipHatchButton = null;
+
+public static QuickSwitch setDeploy45DegreeButton = null;
 
 // ----- Right Operator -----
 
@@ -337,9 +342,7 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
-public static QuickSwitch cargoShipCargoButton = null;
 
-public static QuickSwitch cargoShipHatchButton = null;
 
 
 // ------------------------------------
@@ -610,6 +613,8 @@ public static void commonInitialization ()
     // Buttons classes
     // ----- Left Operator -----
 
+    cancelOneButton = new JoystickButton(leftOperator, 10);
+
     // left trigger
     intakeTrigger = new JoystickButton(leftOperator, 1);
 
@@ -619,8 +624,11 @@ public static void commonInitialization ()
 
     deployOverride = new JoystickButton(leftOperator, 5);
 
+    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 11);
 
     // ----- Right Operator -----
+
+    cancelTwoButton = new JoystickButton(rightOperator, 10);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
@@ -636,12 +644,12 @@ public static void commonInitialization ()
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
     // ----------Left Driver---------------
-    cancelOneButton = new JoystickButton(leftDriver, 11);
 
+    climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
 
     // ----------Right Driver--------------
-    cancelTwoButton = new JoystickButton(rightDriver, 11);
 
+    climbOneButton = new MomentarySwitch(rightDriver, 11, false);
 
     // Momentary Switches
 
@@ -649,9 +657,9 @@ public static void commonInitialization ()
 
     // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
 
-    climbOneButton = new MomentarySwitch();
 
-    climbTwoButton = new MomentarySwitch();
+
+
 
 
 
@@ -965,7 +973,7 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor("10.3.39.11",
+    axisCamera = new VisionProcessor(axisCameraIp,
             CameraModel.AXIS_M1013,
             ringLightRelay);
 
