@@ -560,16 +560,16 @@ public static void printStatements ()
         // Switches
         // prints state of switches
 
-        // System.out.println(
-        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        System.out.println(
+                "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
         // SmartDashboard.putBoolean(
         // "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
 
-        // System.out.println(
-        // "Right auto switch: "
-        // + Hardware.rightAutoSwitch.isOn());
+        System.out.println(
+                "Right auto switch: "
+                        + Hardware.rightAutoSwitch.isOn());
         // SmartDashboard.putString(
         // "Right auto switch: ",
         // "" + Hardware.rightAutoSwitch.isOn());
@@ -594,7 +594,7 @@ public static void printStatements ()
 
         // System.out.println(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
-        // SmartDashboard.putString(
+        // // SmartDashboard.putString(
         // "Level two switch: ",
         // "" + Hardware.levelTwoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
@@ -615,11 +615,11 @@ public static void printStatements ()
         // + Hardware.autoSixPosSwitch.getPosition());
 
         // ---------------------------------
-        // System.out.println("Disable SW" +
+        // System.out.println("Disable SW " +
         // Hardware.autoDisableSwitch.isOn());
-        // SmartDashboard.putBoolean("Disable SW",
+        // SmartDashboard.putBoolean("Disable SW ",
         // Hardware.autoDisableSwitch.isOn());
-        // Hardware.telemetry.printToConsole("Disable SW" +
+        // Hardware.telemetry.printToConsole("Disable SW " +
         // Hardware.autoDisableSwitch.isOn());
 
         // ---------------------------------
@@ -765,7 +765,7 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
-        // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
+        System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
         // SmartDashboard.putNumber("delay pot: ",
         // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("delay pot: " +

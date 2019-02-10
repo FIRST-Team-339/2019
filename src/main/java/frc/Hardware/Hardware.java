@@ -547,9 +547,9 @@ public static void commonInitialization ()
 
     // Potentiometers
 
-    delayPot = new RobotPotentiometer(2, 270);
+    delayPot = new RobotPotentiometer(2, 300);
 
-    intakeDeploySensor = new RobotPotentiometer(0, 270);
+    intakeDeploySensor = new RobotPotentiometer(0, 300);
 
     // Sonar/Ultrasonic
     frontUltraSonic = new LVMaxSonarEZ(3);
