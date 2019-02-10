@@ -47,6 +47,31 @@ public Forklift (SpeedController liftMotor, KilroyEncoder liftEncoder,
 // ----- Methods -----
 // ===================
 
+public void initiliazeConstantsFor2018 ()
+{
+    SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER_2018;
+
+    SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER_2018;
+
+    DOWN_JOYSTICK_SCALAR = DOWN_JOYSTICK_SCALAR_2018;
+
+    UP_JOYSTICK_SCALAR = UP_JOYSTICK_SCALAR_2018;
+
+    DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED = DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED_2018;
+
+    STAY_UP_NO_PIECE = STAY_UP_NO_PIECE_2018;
+
+    STAY_UP_WITH_CARGO = STAY_UP_WITH_CARGO_2018;
+
+    DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
+
+    DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
+
+}
+
+
+
+
 /**
  * Gets the forklift encoder's value, scaled to inches based on what the
  * distance per pulse was set (should have been set in robot init). This
@@ -77,7 +102,8 @@ public double getForkliftHeight ()
 public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
-
+    // TODO scale the speed so it doesn't jump up as soon as the deaband is
+    // exceeded?
     if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
         this.moveForkliftAtSpeed(operator.getY(), overrideButton);
 
@@ -122,6 +148,7 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
             return;
             }
         }
+
     // Move the forklift the desired speed; the DOWN_JOYSTICK_SCALAR should
     // usually be less than the UP_JOYSTICK_SCALAR because
     if (speed > 0)
@@ -240,11 +267,11 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
         // if the forklift will move up
         if (forkliftTargetHeight < this.getForkliftHeight())
             {
-            forkliftTargetSpeed *= DOWNWARD_LIFT_MOVEMENT_SCALER;
+            forkliftTargetSpeed *= SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER;
             }
         else // if the forklift will move down
             {
-            forkliftTargetSpeed *= UPWARD_LIFT_MOVEMENT_SCALER;
+            forkliftTargetSpeed *= SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER;
             }
 
 
@@ -575,7 +602,16 @@ public void printDebugInfo ()
 // ==================
 // ----- Fields -----
 // ==================
-// Enums
+
+// ===== Hardware =====
+
+private SpeedController forkliftMotor;
+
+private KilroyEncoder forkliftEncoder;
+
+private GamePieceManipulator manipulator;
+
+// ===== Enum Declarations =====
 
 // enum for defining the overall states of the forklift
 public static enum ForkliftState
@@ -589,21 +625,14 @@ public static enum ForkliftDirectionState
     NEUTRAL, MOVING_DOWN, MOVING_UP
     }
 
+// ===== Variables =====
+
 // Variable for defining the overall state of the forklift
 public ForkliftState liftState = ForkliftState.STAY_AT_POSITION;
 
 // Variable for holding which way the forklift needs to move. Used by the
 // MOVING_TO_POSITION state of liftState
 private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRAL;
-
-// Hardware
-private SpeedController forkliftMotor;
-
-private KilroyEncoder forkliftEncoder;
-
-private GamePieceManipulator manipulator;
-
-// Variables
 
 private boolean setLiftPositionInit = true;
 
@@ -617,16 +646,40 @@ private double forkliftTargetHeight = 0.0;
 // speed to move at
 private double forkliftTargetSpeed = 0.0;
 
-private static final double UPWARD_LIFT_MOVEMENT_SCALER = 1.0;
+private double currentMinLiftPosition = 0;
+
+// ===== Constants =====
+
+// ----- Speed Constants -----
+
+private static final double JOYSTICK_DEADBAND = .2;
+
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.8;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private static final double DOWNWARD_LIFT_MOVEMENT_SCALER = .5;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = .55;
 
+private double UP_JOYSTICK_SCALAR = 0.8;
 
-private double currentMinLiftPosition = 0;
+private double DOWN_JOYSTICK_SCALAR = .55;
 
-// Constants
+private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
+
+private double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
+
+// for use in teleop when we are calling setLiftPosition(position, speed)
+public static double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED = 1.0;
+
+// speed sent to the forklift motor to hold position when we do not
+// have any game piece
+private double STAY_UP_NO_PIECE = 0.05;
+
+// speed sent to the forklift motor to hold position when we have a
+// cargo
+private double STAY_UP_WITH_CARGO = .1;
+
+// ----- Preset Heights -----
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
@@ -652,31 +705,32 @@ public final static double CARGO_SHIP_HATCH = 40;// placeholder value
 
 private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
-private final double DOWN_JOYSTICK_SCALAR = .55;
-
-private final double UP_JOYSTICK_SCALAR = 1.0;
-
 private final double NO_PIECE_MIN_HEIGHT = 0;
 
 private final double DEPLOY_FOLDED_MIN_HEIGHT = 15;
 
-private final double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
-private final double DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
+// ----- Forklift Speed Constants 2018 ------
 
-// for use in teleop when we are calling setLiftPosition(position, speed)
-public static final double DEFAULT_TELEOP_BUTTON_SPEED = 1.0;
+private static final double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER_2018 = 1.0;
 
-// speed sent to the forklift motor to hold position when we do not
-// have any game piece
-private final double STAY_UP_NO_PIECE = 0.05;
+// leave this positive even though it is the downward scalar;
+// the speed is multipled by a negative value
+private static final double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER_2018 = .55;
 
-// speed sent to the forklift motor to hold position when we have a
-// cargo
-private final double STAY_UP_WITH_CARGO = .1;
+private final double UP_JOYSTICK_SCALAR_2018 = 1.0;
 
-private static final double JOYSTICK_DEADBAND = .2;
+private final double DOWN_JOYSTICK_SCALAR_2018 = .55;
 
+private final double DEFAULT_SPEED_UP_2018 = UP_JOYSTICK_SCALAR_2018;
+
+private final double DEFAULT_SPEED_DOWN_2018 = DOWN_JOYSTICK_SCALAR_2018;
+
+public static final double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED_2018 = 1.0;
+
+private final double STAY_UP_NO_PIECE_2018 = 0.05;
+
+private final double STAY_UP_WITH_CARGO_2018 = .1;
 
 /**
  * ROCKET information from the game manual.
