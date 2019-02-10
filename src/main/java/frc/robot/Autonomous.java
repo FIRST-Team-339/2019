@@ -694,7 +694,7 @@ private static boolean depositRocketHatch ()
                     "right : " + Hardware.rightFrontCANMotor.get());
             if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
                 {
-                rocketHatchState = RocketHatchState.TURN_TOWARDS_FIELD_WALL;
+                rocketHatchState = RocketHatchState.FINISH;
                 }
 
             break;// ironic I know
