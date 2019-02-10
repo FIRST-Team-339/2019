@@ -238,11 +238,40 @@ public static void periodic ()
         }
 
 
-    // if (Hardware.pictureButtonOne.get() == true
-    // && Hardware.pictureButtonTwo.get() == true)
-    // {
-    // Hardware.axisCamera.saveImage(ImageType.RAW);
-    // }
+    if ((Hardware.pictureButtonOne.get() == true
+            && Hardware.pictureButtonTwo.get() == true)
+            || (pictureButton1 == true && pictureButton2 == true))
+        {
+        if (firstPress == true)
+            {
+            pictureButton1 = true;
+            pictureButton2 = true;
+            Hardware.deployTimer.reset();
+            Hardware.ringLightRelay.set(Value.kOn);
+            firstPress = false;
+            System.out.println("Relay turned on");
+            Hardware.deployTimer.start();
+            }
+        if (Hardware.deployTimer.get() >= 1.0 && imageTaken == false)
+            {
+
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+            System.out.println("Image taken");
+
+            imageTaken = true;
+            }
+        if (Hardware.deployTimer.get() >= 3.0)
+            {
+            Hardware.ringLightRelay.set(Value.kOff);
+            System.out.println("Relay turned off");
+            firstPress = true;
+            pictureButton1 = false;
+            pictureButton2 = false;
+            }
+
+
+        }
+
 
     individualTest();
 
@@ -863,6 +892,8 @@ public static void printStatements ()
         // timers
         // what time does the timer have now
         // ---------------------------------
+
+
         }
 } // end printStatements()
 
@@ -943,6 +974,15 @@ public static final double FORKLIFT_DIVISOR = 4;
 // ================================
 // Variables
 // ================================
+private static boolean firstPress = true;
+
+private static boolean imageTaken = false;
+
+private static boolean pictureButton1;
+
+private static boolean pictureButton2;
+
+
 
 
 } // end class
