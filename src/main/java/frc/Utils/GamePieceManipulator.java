@@ -183,8 +183,6 @@ public void moveArmByJoystick (Joystick armJoystick,
 
         // if override button is pressed, ignore potentiometer/ encoder.
 
-        System.out.println("Joy stick speed pre scale: " + speed);
-
         // If we are trying to move up and past the max angle, or
         // trying to move down and below the min height, tell the
         // arm to stay where it is
