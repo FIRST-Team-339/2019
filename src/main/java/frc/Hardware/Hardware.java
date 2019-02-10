@@ -1099,10 +1099,10 @@ public static void setHardwareSettings2018 ()
             .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
     Hardware.rightFrontDriveEncoder
             .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
-
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
+    Hardware.lift.initiliazeConstantsFor2018();
     Hardware.manipulator.initiliazeConstantsFor2018();
 } // end setHardwareSettings2018()
 
