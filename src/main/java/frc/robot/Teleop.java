@@ -202,20 +202,20 @@ public static void periodic ()
             Hardware.forkliftOverride.get());
 
     Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipCargoButton);
 
     Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipHatchButton);
 
     Hardware.lift.setToNextHigherPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextHigherLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
 
     Hardware.lift.setToNextLowerPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextLowerLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
 
