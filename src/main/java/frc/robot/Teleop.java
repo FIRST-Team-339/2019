@@ -249,21 +249,18 @@ public static void periodic ()
             Hardware.deployTimer.reset();
             Hardware.ringLightRelay.set(Value.kOn);
             firstPress = false;
-            System.out.println("Relay turned on");
             Hardware.deployTimer.start();
             }
         if (Hardware.deployTimer.get() >= 1.0 && imageTaken == false)
             {
 
             Hardware.axisCamera.saveImage(ImageType.RAW);
-            System.out.println("Image taken");
 
             imageTaken = true;
             }
         if (Hardware.deployTimer.get() >= 3.0)
             {
             Hardware.ringLightRelay.set(Value.kOff);
-            System.out.println("Relay turned off");
             firstPress = true;
             pictureButton1 = false;
             pictureButton2 = false;
