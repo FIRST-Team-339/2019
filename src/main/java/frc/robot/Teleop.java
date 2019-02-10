@@ -202,20 +202,20 @@ public static void periodic ()
             Hardware.forkliftOverride.get());
 
     Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipCargoButton);
 
     Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipHatchButton);
 
     Hardware.lift.setToNextHigherPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextHigherLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
 
     Hardware.lift.setToNextLowerPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextLowerLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
 
@@ -238,11 +238,37 @@ public static void periodic ()
         }
 
 
-    // if (Hardware.pictureButtonOne.get() == true
-    // && Hardware.pictureButtonTwo.get() == true)
-    // {
-    // Hardware.axisCamera.saveImage(ImageType.RAW);
-    // }
+    if ((Hardware.pictureButtonOne.get() == true
+            && Hardware.pictureButtonTwo.get() == true)
+            || (pictureButton1 == true && pictureButton2 == true))
+        {
+        if (firstPress == true)
+            {
+            pictureButton1 = true;
+            pictureButton2 = true;
+            Hardware.deployTimer.reset();
+            Hardware.ringLightRelay.set(Value.kOn);
+            firstPress = false;
+            Hardware.deployTimer.start();
+            }
+        if (Hardware.deployTimer.get() >= 1.0 && imageTaken == false)
+            {
+
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+
+            imageTaken = true;
+            }
+        if (Hardware.deployTimer.get() >= 3.0)
+            {
+            Hardware.ringLightRelay.set(Value.kOff);
+            firstPress = true;
+            pictureButton1 = false;
+            pictureButton2 = false;
+            }
+
+
+        }
+
 
     individualTest();
 
@@ -560,16 +586,16 @@ public static void printStatements ()
         // Switches
         // prints state of switches
 
-        // System.out.println(
-        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        System.out.println(
+                "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
         // SmartDashboard.putBoolean(
         // "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
 
-        // System.out.println(
-        // "Right auto switch: "
-        // + Hardware.rightAutoSwitch.isOn());
+        System.out.println(
+                "Right auto switch: "
+                        + Hardware.rightAutoSwitch.isOn());
         // SmartDashboard.putString(
         // "Right auto switch: ",
         // "" + Hardware.rightAutoSwitch.isOn());
@@ -594,7 +620,7 @@ public static void printStatements ()
 
         // System.out.println(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
-        // SmartDashboard.putString(
+        // // SmartDashboard.putString(
         // "Level two switch: ",
         // "" + Hardware.levelTwoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
@@ -615,11 +641,11 @@ public static void printStatements ()
         // + Hardware.autoSixPosSwitch.getPosition());
 
         // ---------------------------------
-        // System.out.println("Disable SW" +
+        // System.out.println("Disable SW " +
         // Hardware.autoDisableSwitch.isOn());
-        // SmartDashboard.putBoolean("Disable SW",
+        // SmartDashboard.putBoolean("Disable SW ",
         // Hardware.autoDisableSwitch.isOn());
-        // Hardware.telemetry.printToConsole("Disable SW" +
+        // Hardware.telemetry.printToConsole("Disable SW " +
         // Hardware.autoDisableSwitch.isOn());
 
         // ---------------------------------
@@ -765,7 +791,7 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
-        // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
+        System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
         // SmartDashboard.putNumber("delay pot: ",
         // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("delay pot: " +
@@ -863,6 +889,8 @@ public static void printStatements ()
         // timers
         // what time does the timer have now
         // ---------------------------------
+
+
         }
 } // end printStatements()
 
@@ -943,6 +971,15 @@ public static final double FORKLIFT_DIVISOR = 4;
 // ================================
 // Variables
 // ================================
+private static boolean firstPress = true;
+
+private static boolean imageTaken = false;
+
+private static boolean pictureButton1;
+
+private static boolean pictureButton2;
+
+
 
 
 } // end class

@@ -108,7 +108,8 @@ public void initiliazeConstantsFor2018 ()
     STAY_UP_NO_PIECE = STAY_UP_NO_PIECE_2018;
     ARM_POT_RAW_HORIZONTAL_VALUE = ARM_POT_RAW_HORIZONTAL_VALUE_2018;
     DEPLOYED_ARM_POSITION_ADJUSTED = DEPLOYED_ARM_POSITION_ADJUSTED_2018;
-    DEPLOY_JOYSTICK_DEADBAND_SCALER = DEPLOY_JOYSTICK_DEADBAND_SCALER_2018;
+    DEFAULT_DEPLOY_SPEED_UNSCALED = DEFAULT_DEPLOY_SPEED_UNSCALED_2018;
+    DEFAULT_RETRACT_SPEED_UNSCALED = DEFAULT_RETRACT_SPEED_UNSCALED_2018;
 }
 
 /**
@@ -147,7 +148,6 @@ public DeployState getDeployState ()
             + ACCEPTABLE_ERROR)
         return DeployState.DEPLOYED;
     return DeployState.MIDDLE;
-
 }
 
 /** Update all the states machines for this class */
@@ -173,9 +173,17 @@ public void moveArmByJoystick (Joystick armJoystick,
             .getY()) > DEPLOY_JOYSTICK_DEADBAND)
         {
         // assuming up is a positive value
-        double speed = (armJoystick.getY() - DEPLOY_JOYSTICK_DEADBAND)
-                * DEPLOY_JOYSTICK_DEADBAND_SCALER;
+        // speed is not scaled based off the DEADBAND_BAND
+        // because if it was, we might give it too weak of
+        // a value at low joystick values outside the deadband
+        // (i.e.: if we are just .01 outside the deadband, and
+        // we sent the motor .01, then it might actually move
+        // down due to gravity)
+        double speed = armJoystick.getY();
+
         // if override button is pressed, ignore potentiometer/ encoder.
+
+        System.out.println("Joy stick speed pre scale: " + speed);
 
         // If we are trying to move up and past the max angle, or
         // trying to move down and below the min height, tell the
@@ -371,17 +379,7 @@ public boolean retractArm ()
  */
 public void deployUpdate ()
 {
-    SmartDashboard.putString("Arm Potentiometer Raw",
-            "" + armPot.get());
-    SmartDashboard.putString("Arm Angle Adjusted",
-            "" + this.getCurrentArmPosition());
-    SmartDashboard.putString("Deploy Movement State",
-            "" + this.deployMovementState);
-    SmartDashboard.putString("Arm Motor Value",
-            "" + this.armMotor.get());
-    SmartDashboard.putString("Deploy State",
-            "" + this.getDeployState());
-    SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
+    this.printDeployDebugInfo();
 
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
         this.stayAtPosition2018InitIsReady = true;
@@ -420,7 +418,6 @@ public void deployUpdate ()
                     }
                 // we have NOT passed the value , keep going up.
                 this.armMotor.set(deployTargetSpeed);
-
                 }
             else
                 {
@@ -433,7 +430,7 @@ public void deployUpdate ()
                     break;
                     }
                 // we have NOT passed the value , keep going down.
-                this.armMotor.set(deployTargetSpeed);
+                this.armMotor.set(-deployTargetSpeed);
                 }
             break;
         case MOVING_BY_JOY:
@@ -496,6 +493,28 @@ public void deployUpdate ()
         }
 }
 
+public void printDeployDebugInfo ()
+{
+    SmartDashboard.putString("Arm Potentiometer Raw",
+            "" + armPot.get());
+    SmartDashboard.putString("Arm Angle Adjusted",
+            "" + this.getCurrentArmPosition());
+    SmartDashboard.putString("Deploy Movement State",
+            "" + this.deployMovementState);
+    SmartDashboard.putString("Arm Motor Value",
+            "" + this.armMotor.get());
+    SmartDashboard.putString("Deploy State",
+            "" + this.getDeployState());
+    SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
+    SmartDashboard.putNumber("Left Operator",
+            Hardware.leftOperator.getY());
+    SmartDashboard.putNumber("UP_JOYSTICK_SCALER",
+            UP_JOYSTICK_SCALER);
+    SmartDashboard.putNumber("DOWN_JOYSTICK_SCALER",
+            DOWN_JOYSTICK_SCALER);
+    SmartDashboard.putNumber("deployTargetSpeed",
+            deployTargetSpeed);
+}
 
 // =========================================================================
 // Hatch Panel Methods
@@ -506,7 +525,7 @@ public void deployUpdate ()
 
 
 // =========================================================================
-// roller methods
+// Roller methods
 // =========================================================================
 
 // TODO do we just want it so if you hit the override, even without pulling
@@ -576,20 +595,15 @@ private static double MAX_DEPLOY_SPEED_2019 = .2;
 // ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
-// should be equal to 1/(1 - DEPLOY_JOYSTICK_DEADBAND)
-private static double DEPLOY_JOYSTICK_DEADBAND_SCALER = 1.25
-        * MAX_DEPLOY_SPEED_2019;
+private static double UP_JOYSTICK_SCALER = .5 * MAX_DEPLOY_SPEED_2019;
 
-private static double UP_JOYSTICK_SCALER = .5;
-
-private static double DOWN_JOYSTICK_SCALER = .1;
+private static double DOWN_JOYSTICK_SCALER = .5 * MAX_DEPLOY_SPEED_2019;
 
 // ----- Joystick Constants 2018 -----
-private static final double DEPLOY_JOYSTICK_DEADBAND_SCALER_2018 = 1.25;
 
-private static final double UP_JOYSTICK_SCALER_2018 = .5;
+private static final double UP_JOYSTICK_SCALER_2018 = .65;
 
-private static final double DOWN_JOYSTICK_SCALER_2018 = .05;
+private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
 
 
@@ -638,12 +652,12 @@ private static final int PARALLEL_TO_GROUND_ADJUSTED_2018 = 10;
 
 // Temporary values; should be unnecessay on the 2019 robot
 
-private static final double ARM_POT_RAW_RETRACTED_VALUE_2018 = 50;
+private static final double ARM_POT_RAW_RETRACTED_VALUE_2018 = 45;
 // no higher than 70
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static final double ARM_POT_RAW_HORIZONTAL_VALUE_2018 = 260; // placeholder
+private static final double ARM_POT_RAW_HORIZONTAL_VALUE_2018 = 225; // placeholder
 
 // value that the arm encoder returns when the manipulator is
 // parallel to the floor
@@ -651,7 +665,7 @@ private static final double ARM_ENCODER_RAW_HORIZONTAL_VALUE_2018 = 0.0; // plac
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static final double ARM_POT_SCALE_TO_DEGREES_2018 = -0.428571; // placeholder
+private static final double ARM_POT_SCALE_TO_DEGREES_2018 = -0.486486; // placeholder
 
 // value that is multiplied by the number of ticks to convert it to degrees
 private static final double ARM_ENCODER_SCALE_TO_DEGREES_2018 = 0.0; // placeholder
@@ -668,9 +682,9 @@ private static double UPWARD_ARM_MOVEMENT_SCALER = 1.0
 private static double DOWNWARD_ARM_MOVEMENT_SCALER = 0.05
         * MAX_DEPLOY_SPEED_2019;
 
-private static final double DEFAULT_DEPLOY_SPEED_UNSCALED = .5;
+private static double DEFAULT_DEPLOY_SPEED_UNSCALED = 1.0;
 
-private static final double DEFAULT_RETRACT_SPEED_UNSCALED = .5;
+private static double DEFAULT_RETRACT_SPEED_UNSCALED = 1.0;
 
 
 // ----- Deploy Speed Constants 2018 -----
@@ -685,9 +699,13 @@ private static final double STAY_UP_WITH_CARGO_2018 = 0.3;
 
 private static final double STAY_UP_NO_PIECE_2018 = 0.3;
 
-private static final double UPWARD_ARM_MOVEMENT_SCALER_2018 = .5;
+private static final double UPWARD_ARM_MOVEMENT_SCALER_2018 = .65;
 
 private static final double DOWNWARD_ARM_MOVEMENT_SCALER_2018 = 0.05;
+
+private static final double DEFAULT_DEPLOY_SPEED_UNSCALED_2018 = 1.0;
+
+private static final double DEFAULT_RETRACT_SPEED_UNSCALED_2018 = 1.0;
 
 // =========================================================================
 // Variables
