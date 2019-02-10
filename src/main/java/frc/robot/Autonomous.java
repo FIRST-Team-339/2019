@@ -136,8 +136,8 @@ public static Level autoLevel = Level.NULL;
  * @written Jan 13, 2015
  *
  *          FYI: drive.stop cuts power to the motors, causing the robot to
- *          coast. drive.brake results in a complete (? IDK, McGee rewrote much
- *          of the drive class.) stop
+ *          coast. drive(PID).brake results in a more complete stop.
+ *          Meghan Brown; 10 February 2019
  *
  */
 public static void periodic ()
@@ -370,7 +370,6 @@ public static enum CrossAutoState
 
 private static CrossAutoState cross = CrossAutoState.INIT;
 
-// TODO test this
 private static boolean crossAutoline ()
 {
     switch (cross)
@@ -379,7 +378,6 @@ private static boolean crossAutoline ()
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            // setPositionAndLevel();
             System.out.println("GOOD MORNING VIETNAM!");
             switch (autoPosition)
                 {
@@ -432,6 +430,8 @@ private static boolean crossAutoline ()
             break;
 
         case BRAKE:
+            // don't ever use drive.stop to break - leaves you coasting for
+            // another foot and a half.
             System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
             if ((Hardware.drive.brake(BrakeType.AFTER_DRIVE)) == true)
                 {
