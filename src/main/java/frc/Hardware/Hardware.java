@@ -28,6 +28,7 @@ import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
+import frc.Utils.drive.Drive.BrakeType;
 import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
@@ -257,10 +258,11 @@ public static LVMaxSonarEZ frontUltraSonic = null;
 // -------------------------------------
 // Analog Interfaces
 // -------------------------------------
-// if you are getting a null pointer exception from the gyro, try setting the
-// parameter you are passing into this declaration to false. The null pointer
-// exception is probably because there is not a gyro on the robot, and passing
-// in a false will tell the robot we do not have a gyro without requiring us to
+// if you are getting a null pointer exception from the gyro,
+// try setting the parameter you are passing into this declaration
+// to false. The null pointer exception is probably because
+// there is not a gyro on the robot, and passing in a false will
+// tell the robot we do not have a gyro without requiring us to
 // comment out the gyro declaration.
 public static KilroySPIGyro gyro = null;
 
@@ -311,7 +313,6 @@ public static Joystick rightOperator = null;
 // ------------------------------------
 // ----- Left Operator -----
 
-// left trigger
 public static JoystickButton intakeTrigger = null;
 
 public static JoystickButton outtakeButton = null;
@@ -320,7 +321,20 @@ public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
 
+public static QuickSwitch cargoShipCargoButton = null;
+
+public static QuickSwitch cargoShipHatchButton = null;
+
+public static QuickSwitch setDeploy45DegreeButton = null;
+
+public static QuickSwitch autoDeployButton = null;
+
 // ----- Right Operator -----
+
+public static JoystickButton pictureButtonOne = null;
+
+public static JoystickButton pictureButtonTwo = null;
+
 public static JoystickButton chooseCargoRocketHeights = null;
 
 public static JoystickButton forkliftOverride = null;
@@ -329,9 +343,7 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
-public static QuickSwitch cargoShipCargoButton = null;
-
-public static QuickSwitch cargoShipHatchButton = null;
+public static QuickSwitch autoRetractButton = null;
 
 // ------------------------------------
 // Momentary Switches
@@ -388,7 +400,6 @@ public static DriveWithCamera driveWithCamera = null;
 // -------------------
 // Assembly classes (e.g. forklift)
 // -------------------
-
 public static GamePieceManipulator manipulator = null;
 
 public static Forklift lift = null;
@@ -435,7 +446,7 @@ public static void initialize ()
           // must follow all other hardware declarations
           // -------------------------
     commonInitialization();
-}
+} // end initialize()
 
 public static void commonInitialization ()
 {
@@ -469,7 +480,7 @@ public static void commonInitialization ()
     // -------------------------------------
     // Single and double throw switches
     // -------------------------------------
-    leftAutoSwitch = new SingleThrowSwitch(20);
+    leftAutoSwitch = new SingleThrowSwitch(24);
 
     rightAutoSwitch = new SingleThrowSwitch(25);
 
@@ -535,9 +546,9 @@ public static void commonInitialization ()
 
     // Potentiometers
 
-    delayPot = new RobotPotentiometer(2, 270);
+    delayPot = new RobotPotentiometer(2, 300);
 
-    intakeDeploySensor = new RobotPotentiometer(0, 270);
+    intakeDeploySensor = new RobotPotentiometer(0, 300);
 
     // Sonar/Ultrasonic
     frontUltraSonic = new LVMaxSonarEZ(3);
@@ -587,45 +598,58 @@ public static void commonInitialization ()
     // Buttons classes
     // ----- Left Operator -----
 
+    cancelOneButton = new JoystickButton(leftOperator, 10);
+
     // left trigger
     intakeTrigger = new JoystickButton(leftOperator, 1);
 
     outtakeButton = new JoystickButton(leftOperator, 2);
 
-    intakeOverride = new JoystickButton(leftOperator, 3);
+    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
-    deployOverride = new JoystickButton(leftOperator, 5);
+    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+
+    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 10);
+
+    autoDeployButton = new QuickSwitch(leftOperator, 11);
 
     // ----- Right Operator -----
+
+    pictureButtonOne = new JoystickButton(rightOperator, 8);
+
+    pictureButtonTwo = new JoystickButton(rightOperator, 9);
+
+    cancelTwoButton = new JoystickButton(rightOperator, 10);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
     forkliftOverride = new JoystickButton(rightOperator, 5);
+
+    intakeOverride = forkliftOverride;
+
+    deployOverride = forkliftOverride;
 
     nextHigherLiftHeightButton = new QuickSwitch(rightOperator, 6);
 
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
+    autoRetractButton = new QuickSwitch(rightOperator, 11);
 
-    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
     // ----------Left Driver---------------
-    cancelOneButton = new JoystickButton(leftDriver, 11);
+
+    climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
 
     // ----------Right Driver--------------
-    cancelTwoButton = new JoystickButton(rightDriver, 11);
+
+    climbOneButton = new MomentarySwitch(rightDriver, 11, false);
 
     // Momentary Switches
 
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
     // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
-
-    climbOneButton = new MomentarySwitch();
-
-    climbTwoButton = new MomentarySwitch();
 
     // **********************************************************
     // Kilroy's Ancillary classes
@@ -678,7 +702,7 @@ public static void commonInitialization ()
 
     depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
 
-} // end of commonInitialization
+} // end of commonInitialization()
 
 /**
  * This initializes all of the components in Hardware
@@ -812,8 +836,7 @@ public static void robotInitialize2018 ()
 
     // Momentary Switches
 
-
-}  // end of robotInitialize2018
+}  // end of robotInitialize2018()
 
 /**
  * This initializes all of the components in Hardware
@@ -931,6 +954,9 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
+    axisCamera = new VisionProcessor(axisCameraIp,
+            CameraModel.AXIS_M1013,
+            ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
@@ -1037,6 +1063,8 @@ public static void commonHardwareSettings ()
  */
 public static void setHardwareSettings2018 ()
 {
+    Hardware.drive.setBrakeIterations(4);
+    Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
     // ----------------------------
     // motor initialization
     // ----------------------------
@@ -1066,10 +1094,11 @@ public static void setHardwareSettings2018 ()
             .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
     Hardware.rightFrontDriveEncoder
             .setDistancePerPulse(KILROY_XIX_DRIVE_ENCODER_DPP);
-
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XIX_LIFT_ENCODER_DPP);
 
+    Hardware.lift.initiliazeConstantsFor2018();
+    Hardware.manipulator.initiliazeConstantsFor2018();
 } // end setHardwareSettings2018()
 
 /**
@@ -1080,6 +1109,8 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
+    Hardware.drive.setBrakeIterations(20);
+    Hardware.drive.setBrakeDeadband(50, BrakeType.AFTER_DRIVE);
     // ----------------------------
     // motor initialization
     // ----------------------------
@@ -1100,16 +1131,16 @@ public static void setHardwareSettings2019 ()
     // -------------------------------------
     // Manually sets encoders Distance per Pulse
     // -------------------------------------
-    // Hardware.leftFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.rightFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.leftFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.rightFrontDriveEncoder
-    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    // Hardware.liftingEncoder
-    // .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.leftFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.rightFrontDriveEncoder
+            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    Hardware.liftingEncoder
+            .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
 
     // -------------------------------------
     // Resets encoder values
@@ -1126,8 +1157,8 @@ private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
-// private static final double KILROY_XX_DRIVE_ENCODER_DPP = 0.0346;
+private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.82;
 
-// private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
 
 } // end class

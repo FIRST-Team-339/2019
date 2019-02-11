@@ -9,6 +9,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Hardware.Hardware;
 
@@ -51,6 +52,7 @@ public void robotInit ()
 
     Hardware.setHardwareSettings();
 
+
     // User code goes above here
     // =========================================================
     // ---------------------------------------
@@ -60,7 +62,8 @@ public void robotInit ()
     // Teleop.printStatements();
 
     System.out.println(
-            "Kilroy XX is started.  All hardware items created.");
+            Hardware.whichRobot
+                    + " is started.  All hardware items created.");
 
 } // end robotInit()
 

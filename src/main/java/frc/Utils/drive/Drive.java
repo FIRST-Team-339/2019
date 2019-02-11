@@ -345,18 +345,35 @@ public boolean brake (BrakeType type)
         brakePrevEncoderVals = new int[4];
 
         // Get the direction of the motor values on the first start.
-        brakeMotorDirection[0] = (int) Math
-                .signum(encoders[0].getRate());
-        brakeMotorDirection[1] = (int) Math
-                .signum(encoders[1].getRate());
+        // brakeMotorDirection[0] = (int) Math
+        // .signum(encoders[0].getRate());
+        // brakeMotorDirection[1] = (int) Math
+        // .signum(encoders[1].getRate());
+        // brakeMotorDirection[2] = (int)
+        // transmission.getSpeedController(MotorPosition.RIGHT_FRONT).
+
+        if (transmission.getSpeedController(MotorPosition.LEFT_REAR)
+                .getInverted() == true)
+            brakeMotorDirection[0] = -1;
+
+        if (transmission.getSpeedController(MotorPosition.RIGHT_REAR)
+                .getInverted() == true)
+            brakeMotorDirection[1] = -1;
+
+
         // If it's not a 2 wheel drive, get the direction of the other 2
         // wheels.
         if (encoders.length >= 4)
             {
-            brakeMotorDirection[2] = (int) Math
-                    .signum(encoders[3].getRate());
-            brakeMotorDirection[3] = (int) Math
-                    .signum(encoders[4].getRate());
+            if (transmission
+                    .getSpeedController(MotorPosition.LEFT_FRONT)
+                    .getInverted() == true)
+                brakeMotorDirection[2] = -1;
+
+            if (transmission
+                    .getSpeedController(MotorPosition.RIGHT_FRONT)
+                    .getInverted() == true)
+                brakeMotorDirection[3] = -1;
             }
         }
 
@@ -407,8 +424,11 @@ public boolean brake (BrakeType type)
         currentBrakeIteration = 0;
         }
 
+    brakeLoopThroughs = brakeLoopThroughs++;
+
     // If we have been within the deadband for x times, return true.
-    if (currentBrakeIteration >= totalBrakeIterations)
+    if (currentBrakeIteration >= totalBrakeIterations
+            || brakeLoopThroughs >= maxBrakeIterations)
         {
         currentBrakeIteration = 0;
         transmission.stop();
@@ -1708,6 +1728,10 @@ private boolean strafeStraightInchesInit = true;
 
 private int currentBrakeIteration = 0;
 
+private int brakeLoopThroughs = 0;
+
+private int maxBrakeIterations = 100000000;
+
 private long driveStraightLastTime = 0;
 
 private long lastAccelerateTime = 0; // Milliseconds
@@ -1725,7 +1749,8 @@ private int brakeDriveDeadband = 50; // ticks
 
 private double brakeDrivePower = .9;
 
-private int[] brakeMotorDirection = new int[4];
+private int[] brakeMotorDirection = new int[]
+    {1, 1, 1, 1};
 
 private int[] brakePrevEncoderVals = new int[4];
 

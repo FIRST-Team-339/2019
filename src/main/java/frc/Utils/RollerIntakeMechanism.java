@@ -29,7 +29,7 @@ private SpeedController armRollers = null;
 
 private LightSensor photoSwitch = null;
 
-private Timer depositTimer = new Timer();
+private Timer outakeTimer = new Timer();
 
 public RollerIntakeMechanism (SpeedController armRollers,
         LightSensor photoSwitch)
@@ -67,11 +67,13 @@ public void intakeOuttakeByButtons (boolean intakeButtonValue,
         if (reverseIntakeButtonValue == true)
             {
             intakeState = IntakeState.OUTTAKE;
-            } else if (intakeOverrideButtonValue == true
-                    || this.hasCargo() == false)
-            {
-            intakeState = IntakeState.INTAKE;
             }
+        else
+            if (intakeOverrideButtonValue == true
+                    || this.hasCargo() == false)
+                {
+                intakeState = IntakeState.INTAKE;
+                }
         }
 }
 
@@ -99,10 +101,12 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
             || intakeOverrideButtonValue == true))
         {
         armRollers.set(INTAKE_ROLLER_SPEED);
-        } else if (outtakeButtonValue == true)
-        {
-        armRollers.set(OUTTAKE_ROLLER_SPEED);
         }
+    else
+        if (outtakeButtonValue == true)
+            {
+            armRollers.set(OUTTAKE_ROLLER_SPEED);
+            }
 }
 
 /**
@@ -135,10 +139,8 @@ public boolean spinOutCargo ()
 /** Returns whether or not the manipulator has cargo */
 public boolean hasCargo ()
 {
-    SmartDashboard.putBoolean("Has cube",
-            Hardware.rightOperator.getRawButton(1));
-    return Hardware.rightOperator.getRawButton(1);
-
+    // return this.photoSwitch.isOn();
+    return false;
 }
 
 
@@ -175,8 +177,8 @@ public void update ()
 
             if (depositInit == false)
                 {
-                depositTimer.reset();
-                depositTimer.start();
+                outakeTimer.reset();
+                outakeTimer.start();
                 // Sets depositInit to true so the timer is not
                 // continually reset. depositInit is reset by the
                 // the spinOutCargo method, which should be continually
@@ -185,9 +187,9 @@ public void update ()
                 // expelled autonomously
                 depositInit = true;
                 }
-            if (depositTimer.get() >= DEPOSIT_CARGO_TIME)
+            if (outakeTimer.get() >= DEPOSIT_CARGO_TIME)
                 {
-                depositTimer.stop();
+                outakeTimer.stop();
                 armRollers.set(HOLD_INTAKE_SPEED_NO_CARGO);
                 intakeState = IntakeState.HOLD;
                 }
@@ -201,7 +203,8 @@ public void update ()
             if (this.hasCargo() == true)
                 {
                 this.armRollers.set(HOLD_INTAKE_SPEED_WITH_CARGO);
-                } else
+                }
+            else
                 {
                 this.armRollers.set(HOLD_INTAKE_SPEED_NO_CARGO);
                 }
@@ -234,7 +237,7 @@ private static final double OUTTAKE_ROLLER_SPEED = .6;
 
 public static enum IntakeState
     {
-INTAKE, OUTTAKE, HOLD, OUTTAKE_BY_TIMER
+    INTAKE, OUTTAKE, HOLD, OUTTAKE_BY_TIMER
     }
 
 private IntakeState intakeState = IntakeState.HOLD;
