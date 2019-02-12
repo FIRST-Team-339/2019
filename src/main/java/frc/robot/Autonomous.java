@@ -1027,7 +1027,7 @@ private static boolean depositSideCargoHatch ()
             break;
         }
     return false;
-}
+} // end depositSideCargoHatch()
 
 private static void driverControl ()
 {
@@ -1039,7 +1039,7 @@ private static void driverControl ()
     // Hardware.leftFrontCANMotor.set(0);
     // }
     Teleop.periodic();
-}
+} // end driverControl()
 
 public static enum DescentState
     {
@@ -1076,8 +1076,8 @@ public static boolean driveOffStraightLevel1 (LightSensor backIR1,
         {
         drive.stop();
         return true;
-        }
-}
+        } // else
+} // end driveOffStraightLevel1()
 
 
 public static DescentState descentState = DescentState.STANDBY;
@@ -1095,7 +1095,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
     if (descentState == DescentState.STANDBY)
         {
         descentState = DescentState.INIT;
-        }
+        } // if
 
 
     System.out.println(descentState);
@@ -1194,9 +1194,9 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
         default:
             break;
 
-        }
+        } // ens switch
     return false;
-}
+} // end descendFromLevelTwo()
 
 
 /**
@@ -1211,9 +1211,9 @@ public static boolean prepToDeposit ()
         System.out.println(
                 "NOW WE WOULD MOVE THE ARM IF THAT CODE WAS ACTUALLY WRITTEN");
         return true;
-        }
+        } // end if
     return false;
-}
+} // end prepToDeposit()
 
 
 public static void endAutoPath ()
@@ -1224,7 +1224,7 @@ public static void endAutoPath ()
     descentState = DescentState.FINISH;
     cross = CrossAutoState.FINISH;
 
-}
+} // end endAutoPath()
 
 
 // =========================================================================
@@ -1241,10 +1241,6 @@ private static boolean usingVisionOnStraight = false;
 private static boolean descendInit = false;
 
 public static Timer descentTimer = new Timer();
-
-
-
-
 
 public static int distanceToCrossAutoline;
 /*
