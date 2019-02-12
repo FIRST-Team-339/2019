@@ -385,6 +385,17 @@ public boolean brake_new (BrakeType type)
     // -------------------------------------
     if (this.currentBrakeIteration == 1)
         {
+        if (this.getDebugOnStatus() == true)
+            System.out.print("MC power = "
+                    + getEncoderTicks(MotorPosition.LEFT_REAR) + " "
+                    + getEncoderTicks(MotorPosition.RIGHT_REAR));
+        if (this.getDebugOnStatus() == true
+                && this.brakeMotorDirection.length > 2)
+            System.out.print(" "
+                    + getEncoderTicks(MotorPosition.LEFT_FRONT) + " "
+                    + getEncoderTicks(MotorPosition.RIGHT_FRONT));
+        if (this.getDebugOnStatus() == true)
+            System.out.println();
         // ==================================
         // First time through save the initial
         // value of the encoders. This will be
@@ -434,7 +445,7 @@ public boolean brake_new (BrakeType type)
             System.out.print("brake motor direction = "
                     + this.brakeMotorDirection[0] + " "
                     + this.brakeMotorDirection[1]);
-        if (this.brakeMotorDirection.length >= 4)
+        if (this.brakeMotorDirection.length > 2)
             {
             if (this.transmission
                     .getSpeedController(MotorPosition.LEFT_FRONT)
