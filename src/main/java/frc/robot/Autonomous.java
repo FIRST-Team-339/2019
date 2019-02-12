@@ -664,7 +664,7 @@ private static boolean depositRocketHatch ()
                     "right : " + Hardware.rightFrontCANMotor.get());
             if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
                 {
-                rocketHatchState = RocketHatchState.FINISH;// TURN_TOWARDS_FIELD_WALL;
+                rocketHatchState = RocketHatchState.TURN_TOWARDS_FIELD_WALL;
                 }
 
             break;// ironic I know
@@ -675,7 +675,7 @@ private static boolean depositRocketHatch ()
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
-                rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
+                rocketHatchState = RocketHatchState.FINISH;// .DRIVE_TOWARDS_FIELD_WALL;
                 }
             // turn for if we are on the left side of th field
             else
@@ -683,7 +683,7 @@ private static boolean depositRocketHatch ()
                         && Hardware.drive.turnDegrees(TURN_LEFT90,
                                 TURN_SPEED, ACCELERATION_TIME, true))
                     {
-                    rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
+                    rocketHatchState = RocketHatchState.FINISH;// .DRIVE_TOWARDS_FIELD_WALL;
                     }
             break;
         case DRIVE_TOWARDS_FIELD_WALL:
