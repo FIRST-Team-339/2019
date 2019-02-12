@@ -100,12 +100,12 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
     if (intakeButtonValue == true && (this.hasCargo() == false
             || intakeOverrideButtonValue == true))
         {
-        armRollers.set(INTAKE_ROLLER_SPEED);
+        intakeState = IntakeState.INTAKE;
         }
     else
         if (outtakeButtonValue == true)
             {
-            armRollers.set(OUTTAKE_ROLLER_SPEED);
+            intakeState = IntakeState.OUTTAKE;
             }
 }
 
@@ -118,7 +118,7 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
  * @return true if it has finished and spit out the cargo
  *         (enough time has passed), false otherwise
  */
-public boolean spinOutCargo ()
+public boolean spinOutCargoByTimer ()
 {
     if (depositInit == false)
         {
@@ -139,10 +139,19 @@ public boolean spinOutCargo ()
 /** Returns whether or not the manipulator has cargo */
 public boolean hasCargo ()
 {
-    // return this.photoSwitch.isOn();
-    return false;
+    return !this.photoSwitch.isOn();
 }
 
+
+/**
+ * Resets the state machine so the intake does not keep trying to run
+ * code from a previous enable after a disable. Should be called in teleop
+ * init ONLY.
+ */
+public void resetStateMachine ()
+{
+    intakeState = IntakeState.HOLD;
+}
 
 /**
  * Update method for the intake/ outtake device and state machine on the
@@ -153,6 +162,9 @@ public boolean hasCargo ()
 public void update ()
 {
     SmartDashboard.putString("Intake State", "" + intakeState);
+    SmartDashboard.putString("Intake Arm IR",
+            "" + this.photoSwitch.get());
+
     switch (intakeState) // main state machine of intake
         {
         // sets the motors to bring in a cargo
@@ -225,7 +237,7 @@ private static final double HOLD_INTAKE_SPEED_WITH_CARGO = 0.0;
 // speed given to the armRollers when not in use. Should be 0
 private static final double HOLD_INTAKE_SPEED_NO_CARGO = 0.0;
 
-private static final double DEPOSIT_CARGO_TIME = 3;
+private static final double DEPOSIT_CARGO_TIME = 2.0;
 
 private static final double INTAKE_ROLLER_SPEED = -.6;
 

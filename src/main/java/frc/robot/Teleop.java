@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
+import frc.Utils.GamePieceManipulator;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -123,6 +124,9 @@ public static void initTeleop2018 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+    Hardware.lift.resetStateMachine();
+    Hardware.manipulator.resetStateMachine();
+
 } // end initTeleop2018()
 
 /**
@@ -176,6 +180,8 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+    Hardware.lift.resetStateMachine();
+    Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
 
 // tune pid loop
@@ -303,7 +309,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    // coleTest();
+    coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -391,7 +397,8 @@ private static void coleTest ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    Hardware.manipulator.moveArmByButton(45, .6,
+    Hardware.manipulator.moveArmByButton(45,
+            GamePieceManipulator.DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED,
             Hardware.setDeploy45DegreeButton);
 
     if (Hardware.autoDeployButton.getCurrentValue() == true)
@@ -406,7 +413,12 @@ private static void coleTest ()
             Hardware.outtakeButton.get(),
             Hardware.intakeOverride.get());
 
+
+    SmartDashboard.putString("Hardware Arm IR",
+            "" + Hardware.armIR.get());
 } // end coleTest()
+
+private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {
@@ -589,16 +601,16 @@ public static void printStatements ()
         // Switches
         // prints state of switches
 
-        System.out.println(
-                "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        // System.out.println(
+        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
         // SmartDashboard.putBoolean(
         // "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
 
-        System.out.println(
-                "Right auto switch: "
-                        + Hardware.rightAutoSwitch.isOn());
+        // System.out.println(
+        // "Right auto switch: "
+        // + Hardware.rightAutoSwitch.isOn());
         // SmartDashboard.putString(
         // "Right auto switch: ",
         // "" + Hardware.rightAutoSwitch.isOn());
@@ -794,7 +806,7 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
-        System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
+        // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
         // SmartDashboard.putNumber("delay pot: ",
         // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("delay pot: " +
