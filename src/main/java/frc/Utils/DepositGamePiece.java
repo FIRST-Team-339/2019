@@ -23,7 +23,7 @@ public DepositGamePiece (Drive drive, Forklift forklift,
 
 public enum DepositHatchState
     {
-    INIT, DEPOSIT_HATCH, BACKUP_HATCH, STOP
+    INIT, DEPOSIT_HATCH, BACKUP_HATCH, LOWER_FORKLIFT_HATCH, STOP
     }
 
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
@@ -56,6 +56,12 @@ public boolean depositHatch ()
         case DEPOSIT_HATCH:
             System.out.println("deposit deposit");
             depositHatchState = DepositHatchState.BACKUP_HATCH;
+            break;
+        case LOWER_FORKLIFT_HATCH:
+            if (this.gamePieceManipulator.moveArmToPosition(
+                    LOWERED_ARM_AFTER_DEPOSIT_POSITION, ARM_MOVE_SPEED))
+                {
+                }
             break;
         case BACKUP_HATCH:
             System.out.println("back deposit");
@@ -130,9 +136,25 @@ public boolean depositCargo ()
     return false;
 } // end depositCargo()
 
+
+// Hatch constants======================
+
+private static final int LOWERED_ARM_POSITION = 260;// TODO
+
+private static final int LOWERED_ARM_AFTER_DEPOSIT_POSITION = 250;// TODO
+
+private static final int RAISED_ARM_POSITION = 225;// TODO
+
+
+// Cargo constants=========================
+private static final int CARGO_ARM_POSITION = 245;// TODO magic number
+
+
+
+// otro constants===========================
 private static boolean usingGyro = true;
 
-private static final double ARM_MOVE_SPEED = -.4;
+private static final double ARM_MOVE_SPEED = .4;
 
 private static final double BACKUP_INCHES = -10;// TODO
 
@@ -140,10 +162,5 @@ private static final double BACKUP_ACCELERATION = .1;
 
 private static final double BACKUP_SPEED = .4;
 
-private static final int LOWERED_ARM_POSITION = 260;
-
-private static final int RAISED_ARM_POSITION = 225;
-
-private static final int CARGO_ARM_POSITION = 245;// TODO magic number
 
 }

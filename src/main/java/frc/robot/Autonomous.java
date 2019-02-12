@@ -323,8 +323,9 @@ public static void prepDeposit ()
     if (Hardware.lift
             .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
         {
-        Hardware.manipulator.moveArmToPosition(
-                260, -.4);
+        // get correct code
+        // Hardware.manipulator.moveArmToPosition(
+        // 260, -.4);
         }
     // switch (prepState)
     // {
@@ -573,21 +574,20 @@ private static boolean depositCargoHatch ()
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
                 }
 
-            Autonomous.prepDeposit();
 
             break;
         case STRAIGHT_DEPOSIT_ALIGN_TO_CARGO:
 
+            Autonomous.prepDeposit();
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
                 }
-            else
-                {
-                Autonomous.prepDeposit();
-                }
+
+
+
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
             System.out.println("Deposit");
@@ -1236,7 +1236,7 @@ private static boolean usingVision = true;
 private static boolean usingAlignByWall = false;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = false;
+private static boolean usingVisionOnStraight = true;
 
 private static boolean descendInit = false;
 

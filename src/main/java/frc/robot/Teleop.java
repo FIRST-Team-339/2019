@@ -265,6 +265,7 @@ public static void periodic ()
             }
         if (Hardware.deployTimer.get() >= 3.0)
             {
+
             Hardware.ringLightRelay.set(Value.kOff);
             firstPress = true;
             pictureButton1 = false;
@@ -291,7 +292,7 @@ public static void periodic ()
         teleopDrive();
         }
 
-    printStatements();
+    // printStatements();
 } // end Periodic()
 
 
@@ -302,7 +303,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -363,14 +364,13 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    if (!started)
-        {
 
-        }
-    // Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.setRelayValue(Value.kOn);
 
-    // System.out.println("Right or left: "
-    // + Hardware.driveWithCamera.getTargetSide());
+    System.out.println("Right or left: "
+            + Hardware.driveWithCamera.getTargetSide());
+    System.out.println(
+            "vision has blobs: " + Hardware.axisCamera.hasBlobs());
     // if (Hardware.driveWithCamera.visionTest(.4))
     // {
     // System.out.println("ALigned amybe i hope");

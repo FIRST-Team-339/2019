@@ -196,10 +196,6 @@ public boolean driveToTarget (double speed)
         case DRIVE_WITH_CAMERA:
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
-            System.out.println("ultrasonic: " + this.frontUltrasonic
-                    .getDistanceFromNearestBumper());
-
-
             // adjust speed based on distance
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
@@ -207,14 +203,17 @@ public boolean driveToTarget (double speed)
                             .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
-                } else if (this.frontUltrasonic
-                        .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
-                {
-                slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
-                } else
-                {
-                slowAmount = 1;
                 }
+            else
+                if (this.frontUltrasonic
+                        .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
+                    {
+                    slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
+                    }
+                else
+                    {
+                    slowAmount = 1;
+                    }
             System.out.println("slow amount: " + slowAmount);
 
             motorspeed = speed * slowAmount;
@@ -225,14 +224,17 @@ public boolean driveToTarget (double speed)
                             .getDistance() > MIN_INCHES)
                 {
                 slowestSpeed = 0.05;
-                } else if (Hardware.rightFrontDriveEncoder
-                        .getDistance() > MIN_INCHES)
-                {
-                slowestSpeed = motorspeed - DRIVE_CORRECTION;
-                } else
-                {
-                slowestSpeed = motorspeed;
                 }
+            else
+                if (Hardware.rightFrontDriveEncoder
+                        .getDistance() > MIN_INCHES)
+                    {
+                    slowestSpeed = motorspeed - DRIVE_CORRECTION;
+                    }
+                else
+                    {
+                    slowestSpeed = motorspeed;
+                    }
 
             System.out.println("slowest speed: " + slowestSpeed);
             System.out.println("motorspeed: " + motorspeed);
@@ -241,9 +243,8 @@ public boolean driveToTarget (double speed)
             // turns on the ring light
 
 
-            System.out.println("center of blob" + centerX);
-            System.out
-                    .println("center of camera" + SWITCH_CAMERA_CENTER);
+
+
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
             if (this.getTargetSide() == Side.RIGHT)
@@ -258,20 +259,31 @@ public boolean driveToTarget (double speed)
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-            else if (this.getTargetSide() == Side.LEFT)
-                {
-                // the switch's center is too far left, drive faster on the
-                // right
-                System.out.println("WE ARE TOO Right");
-                this.getTransmission().driveRaw(slowestSpeed,
-                        motorspeed + DRIVE_CORRECTION);
+            else
+                if (this.getTargetSide() == Side.LEFT)
+                    {
+                    // the switch's center is too far left, drive faster on the
+                    // right
+                    System.out.println("WE ARE TOO Right");
+                    this.getTransmission().driveRaw(slowestSpeed,
+                            motorspeed + DRIVE_CORRECTION);
 
-                } else if (this.getTargetSide() == Side.CENTER)
-                {
-                System.out.println("Driving straight");
-                this.getTransmission().driveRaw(motorspeed, motorspeed);
-                }
-
+                    }
+                else
+                    if (this.getTargetSide() == Side.CENTER)
+                        {
+                        System.out.println(
+                                "Driving straight center of blobs");
+                        Hardware.drive.driveStraight(speed, .2,
+                                true);
+                        }
+                    else
+                        {
+                        System.out.println("Driving straight no blobs");
+                        Hardware.drive.driveStraight(speed, .2,
+                                true);
+                        }
+            // if we lose camera before aligned
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
                     && isAnyEncoderLargerThan(MIN_INCHES))
@@ -280,7 +292,7 @@ public boolean driveToTarget (double speed)
                 state = DriveWithCameraState.DRIVE_WITH_US;
                 }
 
-
+            // if we get close enought to the target and have to stop
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
                     && Hardware.rightFrontDriveEncoder
@@ -293,8 +305,8 @@ public boolean driveToTarget (double speed)
         case DRIVE_WITH_US:
 
 
-            // driveStraight(speed, 0, USING_GYRO);
-            Hardware.drive.drive(speed, speed);
+            driveStraight(speed, 2, true);
+
 
             // take a picture when we start to drive with ultrasonic
 
@@ -343,26 +355,30 @@ public Side getTargetSide ()
         {
         side = Side.RIGHT;
         return side;
-        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
-                + CAMERA_DEADBAND)
-        {
-        side = Side.LEFT;
-        return side;
-        } else if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
-                - CAMERA_DEADBAND
-                && this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
-                        + CAMERA_DEADBAND)
-        {
-        side = Side.CENTER;
-        return side;
         }
+    else
+        if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
+                + CAMERA_DEADBAND)
+            {
+            side = Side.LEFT;
+            return side;
+            }
+        else
+            if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
+                    - CAMERA_DEADBAND
+                    && this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
+                            + CAMERA_DEADBAND)
+                {
+                side = Side.CENTER;
+                return side;
+                }
     side = Side.NULL;
     return side;
 }
 
 public static enum Side
     {
-RIGHT, LEFT, NULL, CENTER
+    RIGHT, LEFT, NULL, CENTER
     }
 
 private Side side = Side.NULL;
@@ -373,7 +389,7 @@ private DriveWithCameraState state = DriveWithCameraState.INIT;
 
 private enum DriveWithCameraState
     {
-INIT, DRIVE_WITH_CAMERA, DRIVE_WITH_US, STOP
+    INIT, DRIVE_WITH_CAMERA, DRIVE_WITH_US, STOP
     }
 
 /**
@@ -495,14 +511,17 @@ public boolean visionTest (double speed)
                             .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
-                } else if (this.frontUltrasonic
-                        .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
-                {
-                slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
-                } else
-                {
-                slowAmount = 1;
                 }
+            else
+                if (this.frontUltrasonic
+                        .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
+                    {
+                    slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
+                    }
+                else
+                    {
+                    slowAmount = 1;
+                    }
             System.out.println("slow amount: " + slowAmount);
 
             motorspeed = speed * slowAmount;
@@ -511,7 +530,8 @@ public boolean visionTest (double speed)
             if (motorspeed - compensateFactor <= 0)
                 {
                 slowestSpeed = 0.05;
-                } else
+                }
+            else
                 {
                 slowestSpeed = motorspeed - compensateFactor;
                 }
@@ -520,28 +540,33 @@ public boolean visionTest (double speed)
 
             if (Math.abs(angle) > 70)
                 compensateFactor = TEST_COMPENSATE_1;
-            else if (Math.abs(angle) > 45)
-                compensateFactor = TEST_COMPENSATE_2;
-            else if (Math.abs(angle) > 20)
-                compensateFactor = TEST_COMPENSATE_3;
             else
-                compensateFactor = DEFAULT_COMPENSTATE_TEST;
+                if (Math.abs(angle) > 45)
+                    compensateFactor = TEST_COMPENSATE_2;
+                else
+                    if (Math.abs(angle) > 20)
+                        compensateFactor = TEST_COMPENSATE_3;
+                    else
+                        compensateFactor = DEFAULT_COMPENSTATE_TEST;
 
             if (this.getTargetSide() == Side.RIGHT)
                 {
                 this.getTransmission()
                         .driveRaw(motorspeed + compensateFactor,
                                 slowAmount);
-                } else if (this.getTargetSide() == Side.RIGHT)
-                {
-                this.getTransmission()
-                        .driveRaw(slowestSpeed,
-                                motorspeed + compensateFactor);
-                } else
-                {
-                this.getTransmission()
-                        .driveRaw(motorspeed, motorspeed);
                 }
+            else
+                if (this.getTargetSide() == Side.RIGHT)
+                    {
+                    this.getTransmission()
+                            .driveRaw(slowestSpeed,
+                                    motorspeed + compensateFactor);
+                    }
+                else
+                    {
+                    this.getTransmission()
+                            .driveRaw(motorspeed, motorspeed);
+                    }
 
 
 
@@ -563,7 +588,7 @@ public boolean visionTest (double speed)
 
 private enum TestState
     {
-INIT_TEST, ALIGN_TEST, STOP_TEST
+    INIT_TEST, ALIGN_TEST, STOP_TEST
 
     }
 
@@ -589,25 +614,28 @@ public double getCameraCenterValue ()
         {
         center = (visionProcessor.getNthSizeBlob(0).center.x
                 + visionProcessor.getNthSizeBlob(1).center.x) / 2;
-        System.out.println("blob center: " + center);
+
 
         System.out.println("TWO BLOBS");
+        System.out.println("blob center: " + center);
         }
     // if we only can detect one blob, the center is equal to the center x
     // position of the blob
-    else if (visionProcessor.getParticleReports().length == 1)
-        {
-        center = visionProcessor.getNthSizeBlob(0).center.x;
-        System.out.println("ONE BLOBS");
-        }
-    // if we don't have any blobs, set the center equal to the constanct
-    // center,
-    // we can use this to just drive straight
     else
-        {
-        center = SWITCH_CAMERA_CENTER;
-        System.out.println("NO BLOBS");
-        }
+        if (visionProcessor.getParticleReports().length == 1)
+            {
+            center = visionProcessor.getNthSizeBlob(0).center.x;
+            System.out.println("ONE BLOBS");
+            System.out.println("blob center: " + center);
+            }
+        // if we don't have any blobs, set the center equal to the constanct
+        // center,
+        // we can use this to just drive straight
+        else
+            {
+            center = SWITCH_CAMERA_CENTER;
+            System.out.println("NO BLOBS");
+            }
     return center;
 }
 
@@ -635,7 +663,7 @@ private final double CAMERA_NO_LONGER_WORKS = 3;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 25;
+private final double DISTANCE_FROM_WALL_TO_STOP = 35;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 80;
 
