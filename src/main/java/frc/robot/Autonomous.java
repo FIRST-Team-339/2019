@@ -681,7 +681,7 @@ private static boolean depositRocketHatch ()
                     /* ACCELERATION_TIME */,
                     true) == true)
                 {
-                Hardware.drive.resetEncoders();
+                // Hardware.drive.resetEncoders();
                 rocketHatchState = RocketHatchState.BREAKIE_AFTER_DRIVIE;
                 }
             break;
@@ -694,7 +694,7 @@ private static boolean depositRocketHatch ()
                     "right : " + Hardware.rightFrontCANMotor.get());
             if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
                 {
-                rocketHatchState = RocketHatchState.FINISH;
+                rocketHatchState = RocketHatchState.FINISH;// TURN_TOWARDS_FIELD_WALL;
                 }
 
             break;// ironic I know
@@ -719,7 +719,7 @@ private static boolean depositRocketHatch ()
         case DRIVE_TOWARDS_FIELD_WALL:
 
             if (Hardware.drive.driveStraightInches(
-                    60 - Hardware.drive.getBrakeStoppingDistance(),
+                    75 - Hardware.drive.getBrakeStoppingDistance(),
                     DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
@@ -766,7 +766,7 @@ private static boolean depositRocketHatch ()
         case TURN_ALONG_FIELD_WALL:
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
-                    && Hardware.drive.turnDegrees(-45/* TURN_LEFT90 */,
+                    && Hardware.drive.turnDegrees(-53/* TURN_LEFT90 */,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 // currently bypasses the align state
@@ -776,7 +776,7 @@ private static boolean depositRocketHatch ()
             else
                 if (autoPosition == Position.LEFT
                         && Hardware.drive.turnDegrees(
-                                45/* TURN_RIGHT90 */,
+                                53/* TURN_RIGHT90 */,
                                 TURN_SPEED, ACCELERATION_TIME, true))
                     {
                     // currently bypasses the align state
@@ -796,7 +796,7 @@ private static boolean depositRocketHatch ()
 
         case DRIVE_TO_ROCKET_TAPE:
 
-            if (Hardware.drive.driveStraightInches(105, DRIVE_SPEED,
+            if (Hardware.drive.driveStraightInches(112.5, DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 rocketHatchState = RocketHatchState.FINISH;
@@ -1260,7 +1260,7 @@ public static final int TURN_RIGHT90 = 90;
 
 public static final int TURN_LEFT90 = -90;
 
-public static final double TURN_SPEED = .5;
+public static final double TURN_SPEED = .4;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code

@@ -367,9 +367,10 @@ public boolean arc (double speed, double radius, double arcLength,
 
 public boolean brake_new (BrakeType type)
 {
-    // sets deadband and power to zero
+    // sets deadband and power to brakePrevEncoderValszero
     int deadband = 0;
     double power = 0;
+    int[] brakeDeltas = new int[4];
 
     // -------------------------------------
     // data initialization
@@ -451,6 +452,13 @@ public boolean brake_new (BrakeType type)
             } // if
         if (this.getDebugOnStatus() == true)
             System.out.println();
+        brakeDeltas[0] = getEncoderTicks(MotorPosition.LEFT_REAR);
+        brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR);
+        if (this.encoders.length > 2)
+            {
+            brakeDeltas[2] = getEncoderTicks(MotorPosition.LEFT_FRONT);
+            brakeDeltas[3] = getEncoderTicks(MotorPosition.RIGHT_FRONT);
+            }
         } // if
 
     // if BrakeType is AFTER_DRIVE then set deadband to brakeDriveDeadband
@@ -475,32 +483,33 @@ public boolean brake_new (BrakeType type)
         System.out.println(
                 "deadband = " + deadband + "\npower =" + power);
 
-    int[] brakeDeltas = new int[4];
-    // sets values of brakeDelta array to the change in encoder ticks
-    // between the current value and the brakePrevEncoderVals
-    // in the order left rear, right rear, left front, right front
-    brakeDeltas[0] = getEncoderTicks(MotorPosition.LEFT_REAR)
-            - brakePrevEncoderVals[0];
-    brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR)
-            - brakePrevEncoderVals[1];
-    if (this.getDebugOnStatus() == true)
-        System.out.print("brake deltas = "
-                + brakeDeltas[0] + " "
-                + brakeDeltas[1]);
-    if (this.encoders.length > 2)
+    if (this.currentBrakeIteration > 1)
         {
-        brakeDeltas[2] = getEncoderTicks(MotorPosition.LEFT_FRONT)
-                - brakePrevEncoderVals[2];
-        brakeDeltas[3] = getEncoderTicks(MotorPosition.RIGHT_FRONT)
-                - brakePrevEncoderVals[3];
+        // sets values of brakeDelta array to the change in encoder ticks
+        // between the current value and the brakePrevEncoderVals
+        // in the order left rear, right rear, left front, right front
+        brakeDeltas[0] = getEncoderTicks(MotorPosition.LEFT_REAR)
+                - brakePrevEncoderVals[0];
+        brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR)
+                - brakePrevEncoderVals[1];
         if (this.getDebugOnStatus() == true)
-            System.out.print(" "
-                    + brakeDeltas[2] + " "
-                    + brakeDeltas[3]);
-        } // if
-    if (this.getDebugOnStatus() == true)
-        System.out.println();
-
+            System.out.print("brake deltas = "
+                    + brakeDeltas[0] + " "
+                    + brakeDeltas[1]);
+        if (this.encoders.length > 2)
+            {
+            brakeDeltas[2] = getEncoderTicks(MotorPosition.LEFT_FRONT)
+                    - brakePrevEncoderVals[2];
+            brakeDeltas[3] = getEncoderTicks(MotorPosition.RIGHT_FRONT)
+                    - brakePrevEncoderVals[3];
+            if (this.getDebugOnStatus() == true)
+                System.out.print(" "
+                        + brakeDeltas[2] + " "
+                        + brakeDeltas[3]);
+            } // if
+        if (this.getDebugOnStatus() == true)
+            System.out.println();
+        }
     // -------------------------------------
     // finish
     // -------------------------------------

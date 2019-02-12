@@ -1063,8 +1063,9 @@ public static void commonHardwareSettings ()
  */
 public static void setHardwareSettings2018 ()
 {
-    Hardware.drive.setBrakeIterations(4);
-    Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
+    // Hardware.drive.setBrakeIterations(4);
+    // Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
+    Hardware.drive.setDebugOnStatus(true);
     // ----------------------------
     // motor initialization
     // ----------------------------
@@ -1109,8 +1110,8 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
-    Hardware.drive.setBrakeIterations(20);
-    Hardware.drive.setBrakeDeadband(50, BrakeType.AFTER_DRIVE);
+    // Hardware.drive.setBrakeIterations(20);
+    // Hardware.drive.setBrakeDeadband(50, BrakeType.AFTER_DRIVE);
     // ----------------------------
     // motor initialization
     // ----------------------------
