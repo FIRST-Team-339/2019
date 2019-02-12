@@ -193,7 +193,6 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 // Red Light/IR Sensor class
 // -------------------------------------
-
 public static LightSensor armIR = null;
 
 public static LightSensor leftBackIR = null;
@@ -664,8 +663,6 @@ public static void commonInitialization ()
 
     telemetry = new Telemetry(10000);
 
-
-    // Transmission class
     // Transmission class
     transmission = new TankTransmission(
             new SpeedControllerGroup(leftFrontCANMotor,
@@ -687,7 +684,6 @@ public static void commonInitialization ()
     driveWithCamera = new DriveWithCamera(
             transmission, null, null, frontUltraSonic,
             frontUltraSonic, gyro, axisCamera);
-
 
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
@@ -838,7 +834,6 @@ public static void robotInitialize2018 ()
 
     // ----- Right Operator -----
 
-    //
     // Momentary Switches
 
 }  // end of robotInitialize2018()

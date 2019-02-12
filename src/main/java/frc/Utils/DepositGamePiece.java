@@ -1,10 +1,7 @@
 package frc.Utils;
 
-import frc.Hardware.Hardware;
 import frc.Utils.drive.*;
 import frc.Utils.GamePieceManipulator;
-
-
 
 
 public class DepositGamePiece
@@ -86,7 +83,6 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
 
 public boolean depositCargo ()
 {
-
     switch (depositCargoState)
         {
         case INIT:
@@ -132,7 +128,7 @@ public boolean depositCargo ()
             return true;
         }
     return false;
-}
+} // end depositCargo()
 
 private static boolean usingGyro = true;
 
@@ -149,9 +145,5 @@ private static final int LOWERED_ARM_POSITION = 260;
 private static final int RAISED_ARM_POSITION = 225;
 
 private static final int CARGO_ARM_POSITION = 245;// TODO magic number
-
-
-
-
 
 }

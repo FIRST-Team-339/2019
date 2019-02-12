@@ -227,6 +227,12 @@ public static void periodic ()
     Hardware.climber.climbUpdate();
 
     // buttons
+    if (Hardware.climbOneButton.isOnCheckNow() == true
+            && Hardware.climbTwoButton.isOnCheckNow() == true)
+        {
+        Hardware.climber.climb();
+        } // end if
+
 
     // buttons to cancel everything
     if (Hardware.cancelTwoButton.get() == true
@@ -234,8 +240,7 @@ public static void periodic ()
         {
         Hardware.climber.finishEarly();
         Autonomous.endAutoPath();
-
-        }
+        } // end if
 
 
 
@@ -258,9 +263,7 @@ public static void periodic ()
         }
 
     printStatements();
-
-}
-// end Periodic()
+} // end Periodic()
 
 
 // Individual testing methods for each programmer. Each programmer should //put
@@ -277,7 +280,7 @@ private static void individualTest ()
     // annaTest();
     // meghanTest();
     // nithyaTest();
-}
+} // end individualTest()
 
 private static void ashleyTest ()
 {
@@ -429,7 +432,9 @@ private static void patrickTest ()
     SmartDashboard.putBoolean("Orange", isOrange);
 
 
-    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR == 0
+    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR >= 0.0
+            && Hardware.lift.getForkliftHeight()
+                    % FORKLIFT_DIVISOR <= 0.2
             && isCurrentlyChanging == false)
         {
         switch (backgroundColor)
@@ -929,7 +934,7 @@ public static void teleopDrive ()
     if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
         {
         Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        }
+        } // end if
 } // end teleopDrive()
 
 
@@ -993,8 +998,5 @@ private static boolean imageTaken = false;
 private static boolean pictureButton1;
 
 private static boolean pictureButton2;
-
-
-
 
 } // end class

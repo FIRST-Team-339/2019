@@ -79,7 +79,7 @@ public void robotInit ()
 @Override
 public void robotPeriodic ()
 {
-}
+} // end robotPeriodic()
 
 /**
  * ------------------------------------------------------- Initialization code
@@ -115,7 +115,7 @@ public void autonomousInit ()
     // setup
     // ---------------------------------------
     System.out.println("Completed AutonousInit().");
-} // end autonomousInit
+} // end autonomousInit()
 
 /**
  * ------------------------------------------------------- Non-User Periodic
@@ -140,7 +140,7 @@ public void autonomousPeriodic ()
     // =========================================================
     // User code goes above here
     // =========================================================
-}// end autonomousPeriodic
+}// end autonomousPeriodic()
 
 /**
  * ------------------------------------------------------- Initialization code
@@ -170,7 +170,7 @@ public void disabledInit ()
     // setup
     // ---------------------------------------
     System.out.println("Completed DisabledInit().");
-} // end disabledInit
+} // end disabledInit()
 
 /**
  * ------------------------------------------------------- Periodic code for
@@ -192,7 +192,7 @@ public void disabledPeriodic ()
     // =========================================================
     // User code goes above here
     // =========================================================
-} // end disabledPeriodic
+} // end disabledPeriodic()
 
 /**
  * ------------------------------------------------------ Non-User
@@ -224,7 +224,7 @@ public void teleopInit ()
     // setup
     // ---------------------------------------
     System.out.println("Completed TeleopInit().");
-} // end teleopInit
+} // end teleopInit()
 
 /**
  * ------------------------------------------------------- Non-User Periodic
@@ -252,7 +252,7 @@ public void teleopPeriodic ()
     // User code goes above here
     // =========================================================
 
-} // end teleopPeriodic
+} // end teleopPeriodic()
 
 /**
  * ------------------------------------------------------- Initialization code
@@ -273,7 +273,7 @@ public void testInit ()
     // User code goes above here
     // =========================================================
 
-} // end testInit
+} // end testInit()
 
 /**
  * This function is called periodically during test mode.
@@ -281,11 +281,11 @@ public void testInit ()
 @Override
 public void testPeriodic ()
 {
-} // end testPeriodic
+} // end testPeriodic()
 
 // ==========================================
 // TUNEABLES
 // ==========================================
 
 
-}
+} // end robot class
