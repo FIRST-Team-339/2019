@@ -584,6 +584,17 @@ public void update ()
         }
 }
 
+/**
+ * Resets the state machine so the forklift does not keep trying to run
+ * code from a previous enable after a disable. Should be called in teleop
+ * init ONLY.
+ */
+public void resetStateMachine ()
+{
+    System.out.println("Resetting forklift state machine");
+    this.liftState = ForkliftState.STAY_AT_POSITION;
+}
+
 // Useful forklift infromation that can be sent to smart dashboard when we
 // are testing
 public void printDebugInfo ()

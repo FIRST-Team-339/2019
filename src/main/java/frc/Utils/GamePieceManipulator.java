@@ -110,6 +110,7 @@ public void initiliazeConstantsFor2018 ()
     DEPLOYED_ARM_POSITION_ADJUSTED = DEPLOYED_ARM_POSITION_ADJUSTED_2018;
     DEFAULT_DEPLOY_SPEED_UNSCALED = DEFAULT_DEPLOY_SPEED_UNSCALED_2018;
     DEFAULT_RETRACT_SPEED_UNSCALED = DEFAULT_RETRACT_SPEED_UNSCALED_2018;
+    DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED = DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED_2018;
 }
 
 /**
@@ -259,7 +260,9 @@ public double getCurrentArmPosition ()
  *
  *
  * @param angle
- *                     the angle the arm will be moved to
+ *                     the angle the arm will be moved to, in degrees; 0 is
+ *                     parallel to the ground and 90 is perpendicualr to the
+ *                     ground.
  * @param armSpeed
  *                     the desired speed the arm will be moved at
  * @param button
@@ -284,7 +287,9 @@ public void moveArmByButton (double angle,
  * moveArmByButton.
  *
  * @param angle
- *                  the target angle the arm will move towards
+ *                  the angle the arm will be moved to, in degrees; 0 is
+ *                  parallel to the ground and 90 is perpendicualr to the
+ *                  ground.
  *
  * @param speed
  *                  the speed the arm will move at
@@ -491,6 +496,7 @@ public void deployUpdate ()
         }
 }
 
+/** Puts various debug into smart dashboard */
 public void printDeployDebugInfo ()
 {
     SmartDashboard.putString("Arm Potentiometer Raw",
@@ -506,10 +512,6 @@ public void printDeployDebugInfo ()
     SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
     SmartDashboard.putNumber("Left Operator",
             Hardware.leftOperator.getY());
-    SmartDashboard.putNumber("UP_JOYSTICK_SCALER",
-            UP_JOYSTICK_SCALER);
-    SmartDashboard.putNumber("DOWN_JOYSTICK_SCALER",
-            DOWN_JOYSTICK_SCALER);
     SmartDashboard.putNumber("deployTargetSpeed",
             deployTargetSpeed);
 }
@@ -580,7 +582,30 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
 }
 
 
+/**
+ * Autonomously spins out the cargo based on a timer.
+ * For use in autonomous.
+ *
+ * @return true if the function has finished, false
+ *         if it is still going
+ */
+public boolean spinOutCargoByTimer ()
+{
+    return this.intake.spinOutCargoByTimer();
+}
 
+
+/**
+ * Resets the state machine so the manipulator does not keep trying to run
+ * code from a previous enable after a disable. Should be called in teleop
+ * init ONLY.
+ */
+public void resetStateMachine ()
+{
+    System.out.println("Resetting manipulator state machine");
+    this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
+    this.intake.resetStateMachine();
+}
 
 // =========================================================================
 // Constants
@@ -684,6 +709,7 @@ private static double DEFAULT_DEPLOY_SPEED_UNSCALED = 1.0;
 
 private static double DEFAULT_RETRACT_SPEED_UNSCALED = 1.0;
 
+public static double DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED = 1.0;
 
 // ----- Deploy Speed Constants 2018 -----
 
@@ -704,6 +730,8 @@ private static final double DOWNWARD_ARM_MOVEMENT_SCALER_2018 = 0.05;
 private static final double DEFAULT_DEPLOY_SPEED_UNSCALED_2018 = 1.0;
 
 private static final double DEFAULT_RETRACT_SPEED_UNSCALED_2018 = 1.0;
+
+private static final double DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED_2018 = 1.0;
 
 // =========================================================================
 // Variables
