@@ -458,7 +458,9 @@ private static void patrickTest ()
     SmartDashboard.putBoolean("Orange", isOrange);
 
 
-    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR == 0
+    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR >= 0.0
+            && Hardware.lift.getForkliftHeight()
+                    % FORKLIFT_DIVISOR <= 0.2
             && isCurrentlyChanging == false)
         {
         switch (backgroundColor)
