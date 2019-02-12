@@ -243,39 +243,10 @@ public static void periodic ()
         } // end if
 
 
-    if ((Hardware.pictureButtonOne.get() == true
-            && Hardware.pictureButtonTwo.get() == true)
-            || (pictureButton1 == true && pictureButton2 == true))
-        {
-        if (firstPress == true)
-            {
-            pictureButton1 = true;
-            pictureButton2 = true;
-            Hardware.deployTimer.reset();
-            Hardware.ringLightRelay.set(Value.kOn);
-            firstPress = false;
-            Hardware.deployTimer.start();
-            }
-        if (Hardware.deployTimer.get() >= 1.0 && imageTaken == false)
-            {
-
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-
-            imageTaken = true;
-            }
-        if (Hardware.deployTimer.get() >= 3.0)
-            {
-            Hardware.ringLightRelay.set(Value.kOff);
-            firstPress = true;
-            pictureButton1 = false;
-            pictureButton2 = false;
-            }
-
-
-        }
-
 
     individualTest();
+
+    takePicture();
 
     // Hardware.telemetry.printToShuffleboard();
 
@@ -461,7 +432,9 @@ private static void patrickTest ()
     SmartDashboard.putBoolean("Orange", isOrange);
 
 
-    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR == 0
+    if (Hardware.lift.getForkliftHeight() % FORKLIFT_DIVISOR >= 0.0
+            && Hardware.lift.getForkliftHeight()
+                    % FORKLIFT_DIVISOR <= 0.2
             && isCurrentlyChanging == false)
         {
         switch (backgroundColor)
@@ -896,6 +869,50 @@ public static void printStatements ()
 
         }
 } // end printStatements()
+
+public static void takePicture ()
+{
+    // Takes a picture if buttons 8 and 9 are pressed on the right operator at
+    // the same time
+    if ((Hardware.pictureButtonOne.get() == true
+            && Hardware.pictureButtonTwo.get() == true)
+            || (pictureButton1 == true && pictureButton2 == true))
+        {
+        // Checks is this is the first time pressing the button or the button is
+        // held down
+        // Turns on ring light relay and resets and starts timer
+        if (firstPress == true)
+            {
+            pictureButton1 = true;
+            pictureButton2 = true;
+            Hardware.takePictureTimer.reset();
+            Hardware.ringLightRelay.set(Value.kOn);
+            firstPress = false;
+            Hardware.takePictureTimer.start();
+            }
+        // Takes a picture after 1 second of the ring light relay being on
+        if (Hardware.takePictureTimer.get() >= 1.0
+                && imageTaken == false)
+            {
+
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+
+            imageTaken = true;
+            }
+        // If three seconds have passed resets all variables used and turns off
+        // ring light relay
+        if (Hardware.takePictureTimer.get() >= 3.0)
+            {
+            Hardware.ringLightRelay.set(Value.kOff);
+            firstPress = true;
+            pictureButton1 = false;
+            pictureButton2 = false;
+            }
+
+
+        }
+
+}
 
 /**
  * Calls drive's main drive function so the robot can drive using joysticks
