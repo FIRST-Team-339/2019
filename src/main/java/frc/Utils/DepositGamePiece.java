@@ -45,8 +45,7 @@ public boolean depositHatch ()
             else
                 {
                 if (this.gamePieceManipulator
-                        .moveArmToPosition(LOWERED_ARM_POSITION,
-                                ARM_MOVE_SPEED))
+                        .deployArm())
                     {
                     depositHatchState = DepositHatchState.DEPOSIT_HATCH;
                     }
@@ -99,9 +98,8 @@ public boolean depositCargo ()
                 }
             else
                 {
-                if (this.gamePieceManipulator
-                        .moveArmToPosition(CARGO_ARM_POSITION,
-                                ARM_MOVE_SPEED))
+                if (this.gamePieceManipulator.moveArmToPosition(45,
+                        ARM_MOVE_SPEED))
                     {
                     depositCargoState = DepositCargoState.DEPOSIT_CARGO;
                     }
@@ -139,11 +137,11 @@ public boolean depositCargo ()
 
 // Hatch constants======================
 
-private static final int LOWERED_ARM_POSITION = 260;// TODO
+
 
 private static final int LOWERED_ARM_AFTER_DEPOSIT_POSITION = 250;// TODO
 
-private static final int RAISED_ARM_POSITION = 225;// TODO
+
 
 
 // Cargo constants=========================

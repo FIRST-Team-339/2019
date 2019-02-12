@@ -366,11 +366,15 @@ private static void connerTest ()
 {
 
     Hardware.axisCamera.setRelayValue(Value.kOn);
-
+    System.out.println(
+            "ringlight relay:" + Hardware.axisCamera.getRelayValue());
     System.out.println("Right or left: "
             + Hardware.driveWithCamera.getTargetSide());
     System.out.println(
             "vision has blobs: " + Hardware.axisCamera.hasBlobs());
+
+    System.out.println("Ultrasonic: "
+            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     // if (Hardware.driveWithCamera.visionTest(.4))
     // {
     // System.out.println("ALigned amybe i hope");

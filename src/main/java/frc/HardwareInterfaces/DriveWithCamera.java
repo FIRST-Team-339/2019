@@ -327,6 +327,7 @@ public boolean driveToTarget (double speed)
         default:
         case STOP:
             // Hardware.autoTimer.stop();
+
             Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic

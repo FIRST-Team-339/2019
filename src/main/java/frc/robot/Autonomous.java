@@ -81,6 +81,7 @@ public static void init ()
     // Hardware.leftFrontDriveEncoder.reset();
     // Hardware.rightFrontDriveEncoder.reset();
     Hardware.gyro.reset();
+
     Hardware.axisCamera.setRelayValue(Value.kOff);
 
     // TODO @ANE uncomment
@@ -321,41 +322,10 @@ public static void prepDeposit ()
 {
 
     if (Hardware.lift
-            .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
+            .setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
         {
-        // get correct code
-        // Hardware.manipulator.moveArmToPosition(
-        // 260, -.4);
+        Hardware.manipulator.deployArm();
         }
-    // switch (prepState)
-    // {
-    // case INIT:
-    // prepState = PrepState.RAISE_FORKLIFT;
-    // break;
-
-    // case RAISE_FORKLIFT:
-    // System.out.println("RaIsE fORklLiFt");
-    // if (Hardware.lift
-    // .setLiftPosition(Hardware.lift.CARGO_SHIP_HATCH))
-    // {
-    // prepState = PrepState.DEPLOY_MANIPULATOR;
-    // }
-    // break;
-
-    // case DEPLOY_MANIPULATOR:
-    // System.out.println("Deploy");
-    // // TODO put variables in constants once tested
-    // if (Hardware.manipulator.moveArmToPosition(
-    // 260, -.4))
-    // {
-    // prepState = PrepState.STOP_PREP;
-    // }
-    // break;
-    // case STOP_PREP:
-    // System.out.println("stop");
-    // prepState = PrepState.INIT;
-    // break;
-    // }
 
 }
 
@@ -497,7 +467,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE:
             if (Hardware.drive.turnDegrees(TURN_LEFT90,
-                    TURN_BY_GYRO_SPEED,
+                    TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_2;
@@ -505,7 +475,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE:
             if (Hardware.drive.turnDegrees(TURN_RIGHT90,
-                    TURN_BY_GYRO_SPEED,
+                    TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_2;
@@ -529,7 +499,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE:
             if (Hardware.drive.turnDegrees(TURN_RIGHT90,
-                    TURN_BY_GYRO_SPEED,
+                    TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 if (usingVisionOnStraight == true)
@@ -542,7 +512,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE:
             if (Hardware.drive.turnDegrees(-TURN_LEFT90,
-                    TURN_BY_GYRO_SPEED,
+                    TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 if (usingVisionOnStraight == true)
@@ -1236,7 +1206,7 @@ private static boolean usingVision = true;
 private static boolean usingAlignByWall = false;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = true;
+private static boolean usingVisionOnStraight = false;
 
 private static boolean descendInit = false;
 
