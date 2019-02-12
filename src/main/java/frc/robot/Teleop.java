@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
+import frc.Utils.GamePieceManipulator;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -123,6 +124,9 @@ public static void initTeleop2018 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+    Hardware.lift.resetStateMachine();
+    Hardware.manipulator.resetStateMachine();
+
 } // end initTeleop2018()
 
 /**
@@ -176,6 +180,8 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+    Hardware.lift.resetStateMachine();
+    Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
 
 // tune pid loop
@@ -243,6 +249,39 @@ public static void periodic ()
         } // end if
 
 
+    if ((Hardware.pictureButtonOne.get() == true
+            && Hardware.pictureButtonTwo.get() == true)
+            || (pictureButton1 == true && pictureButton2 == true))
+        {
+        if (firstPress == true)
+            {
+            pictureButton1 = true;
+            pictureButton2 = true;
+            Hardware.takePictureTimer.reset();
+            Hardware.ringLightRelay.set(Value.kOn);
+            firstPress = false;
+            Hardware.takePictureTimer.start();
+            }
+        if (Hardware.takePictureTimer.get() >= 1.0
+                && imageTaken == false)
+            {
+
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+
+            imageTaken = true;
+            }
+        if (Hardware.takePictureTimer.get() >= 3.0)
+            {
+
+            Hardware.ringLightRelay.set(Value.kOff);
+            firstPress = true;
+            pictureButton1 = false;
+            pictureButton2 = false;
+            }
+
+
+        }
+
 
     individualTest();
 
@@ -262,7 +301,7 @@ public static void periodic ()
         teleopDrive();
         }
 
-    printStatements();
+    // printStatements();
 } // end Periodic()
 
 
@@ -334,14 +373,17 @@ private static boolean started = false;
 
 private static void connerTest ()
 {
-    if (!started)
-        {
 
-        }
-    // Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.setRelayValue(Value.kOn);
+    System.out.println(
+            "ringlight relay:" + Hardware.axisCamera.getRelayValue());
+    System.out.println("Right or left: "
+            + Hardware.driveWithCamera.getTargetSide());
+    System.out.println(
+            "vision has blobs: " + Hardware.axisCamera.hasBlobs());
 
-    // System.out.println("Right or left: "
-    // + Hardware.driveWithCamera.getTargetSide());
+    System.out.println("Ultrasonic: "
+            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     // if (Hardware.driveWithCamera.visionTest(.4))
     // {
     // System.out.println("ALigned amybe i hope");
@@ -362,7 +404,8 @@ private static void coleTest ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    Hardware.manipulator.moveArmByButton(45, .6,
+    Hardware.manipulator.moveArmByButton(45,
+            GamePieceManipulator.DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED,
             Hardware.setDeploy45DegreeButton);
 
     if (Hardware.autoDeployButton.getCurrentValue() == true)
@@ -377,7 +420,12 @@ private static void coleTest ()
             Hardware.outtakeButton.get(),
             Hardware.intakeOverride.get());
 
+
+    SmartDashboard.putString("Hardware Arm IR",
+            "" + Hardware.armIR.get());
 } // end coleTest()
+
+private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {

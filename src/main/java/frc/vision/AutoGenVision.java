@@ -53,7 +53,7 @@ public void process (Mat source0)
     double[] rgbThresholdGreen =
         {160, 255.0};
     double[] rgbThresholdBlue =
-        {0, 0};
+        {0, 255};
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen,
             rgbThresholdBlue, rgbThresholdOutput);
 
@@ -177,7 +177,8 @@ private void findContours (Mat input, boolean externalOnly,
     if (externalOnly)
         {
         mode = Imgproc.RETR_EXTERNAL;
-        } else
+        }
+    else
         {
         mode = Imgproc.RETR_LIST;
         }

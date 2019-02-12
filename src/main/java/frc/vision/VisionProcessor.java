@@ -17,6 +17,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
+import frc.Hardware.Hardware;
 
 
 
@@ -106,18 +107,18 @@ public int compareTo (ParticleReport r)
  */
 public enum CameraModel
     {
-/**
- * The USB camera supplied by FIRST, model Lifecam HD-3000
- */
-LIFECAM,
-/**
- * The OLD model of the IP camera supplied by FIRST
- */
-AXIS_M1011,
-/**
- * The NEW model of the IP camera supplied by FIRST
- */
-AXIS_M1013
+    /**
+     * The USB camera supplied by FIRST, model Lifecam HD-3000
+     */
+    LIFECAM,
+    /**
+     * The OLD model of the IP camera supplied by FIRST
+     */
+    AXIS_M1011,
+    /**
+     * The NEW model of the IP camera supplied by FIRST
+     */
+    AXIS_M1013
     } // end enum CameraModel
 
 /**
@@ -127,14 +128,14 @@ AXIS_M1013
  */
 public enum ImageType
     {
-/**
- * An image straight from the camera.
- */
-RAW,
-/**
- * An image that has gone through post processing.
- */
-PROCESSED
+    /**
+     * An image straight from the camera.
+     */
+    RAW,
+    /**
+     * An image that has gone through post processing.
+     */
+    PROCESSED
     } // end enum ImageType
 
 // In order to calculate the horizontal / vertical field of view,
@@ -693,7 +694,8 @@ public boolean getRelayValue ()
     if (this.tempRingLight.get() == Value.kOn)
         {
         return true;
-        } else
+        }
+    else
         {
         return false;
         }
@@ -710,7 +712,8 @@ public boolean getDigitalOutputValue ()
     if (this.tempRingLight.get() == Value.kOn)
         {
         return true;
-        } else
+        }
+    else
         {
         return false;
         }
@@ -776,9 +779,9 @@ public ParticleReport[] getParticleReports ()
 public boolean hasBlobs ()
 {
     // @ANE
-    // if (/* this.particleReports.length > 0 */ !Hardware.axisCamera
-    // .filterContoursOutput().isEmpty())
-    // return true;
+    if (this.particleReports.length > 0)
+        return true;
+
     return false;
 } // end hasBlobs()
 
