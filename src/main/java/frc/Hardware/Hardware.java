@@ -380,7 +380,7 @@ public static JoystickButton cancelTwoButton = null;
 // ------------------------------------
 public static Timer autoTimer = null;
 
-public static Timer deployTimer = null;
+public static Timer takePictureTimer = null;
 
 public static Telemetry telemetry = null;
 
@@ -660,7 +660,7 @@ public static void commonInitialization ()
     // Utility classes
     autoTimer = new Timer();
 
-    deployTimer = new Timer();
+    takePictureTimer = new Timer();
 
     telemetry = new Telemetry(10000);
 

@@ -238,39 +238,10 @@ public static void periodic ()
         }
 
 
-    if ((Hardware.pictureButtonOne.get() == true
-            && Hardware.pictureButtonTwo.get() == true)
-            || (pictureButton1 == true && pictureButton2 == true))
-        {
-        if (firstPress == true)
-            {
-            pictureButton1 = true;
-            pictureButton2 = true;
-            Hardware.deployTimer.reset();
-            Hardware.ringLightRelay.set(Value.kOn);
-            firstPress = false;
-            Hardware.deployTimer.start();
-            }
-        if (Hardware.deployTimer.get() >= 1.0 && imageTaken == false)
-            {
-
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-
-            imageTaken = true;
-            }
-        if (Hardware.deployTimer.get() >= 3.0)
-            {
-            Hardware.ringLightRelay.set(Value.kOff);
-            firstPress = true;
-            pictureButton1 = false;
-            pictureButton2 = false;
-            }
-
-
-        }
-
 
     individualTest();
+
+    takePicture();
 
     // Hardware.telemetry.printToShuffleboard();
 
@@ -586,16 +557,16 @@ public static void printStatements ()
         // Switches
         // prints state of switches
 
-        System.out.println(
-                "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
+        // System.out.println(
+        // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
         // SmartDashboard.putBoolean(
         // "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
 
-        System.out.println(
-                "Right auto switch: "
-                        + Hardware.rightAutoSwitch.isOn());
+        // System.out.println(
+        // "Right auto switch: "
+        // + Hardware.rightAutoSwitch.isOn());
         // SmartDashboard.putString(
         // "Right auto switch: ",
         // "" + Hardware.rightAutoSwitch.isOn());
@@ -791,7 +762,7 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
-        System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
+        // System.out.println("delay pot: " + Hardware.delayPot.get(0, 5));
         // SmartDashboard.putNumber("delay pot: ",
         // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("delay pot: " +
@@ -893,6 +864,50 @@ public static void printStatements ()
 
         }
 } // end printStatements()
+
+public static void takePicture ()
+{
+    // Takes a picture if buttons 8 and 9 are pressed on the right operator at
+    // the same time
+    if ((Hardware.pictureButtonOne.get() == true
+            && Hardware.pictureButtonTwo.get() == true)
+            || (pictureButton1 == true && pictureButton2 == true))
+        {
+        // Checks is this is the first time pressing the button or the button is
+        // held down
+        // Turns on ring light relay and resets and starts timer
+        if (firstPress == true)
+            {
+            pictureButton1 = true;
+            pictureButton2 = true;
+            Hardware.takePictureTimer.reset();
+            Hardware.ringLightRelay.set(Value.kOn);
+            firstPress = false;
+            Hardware.takePictureTimer.start();
+            }
+        // Takes a picture after 1 second of the ring light relay being on
+        if (Hardware.takePictureTimer.get() >= 1.0
+                && imageTaken == false)
+            {
+
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+
+            imageTaken = true;
+            }
+        // If three seconds have passed resets all variables used and turns off
+        // ring light relay
+        if (Hardware.takePictureTimer.get() >= 3.0)
+            {
+            Hardware.ringLightRelay.set(Value.kOff);
+            firstPress = true;
+            pictureButton1 = false;
+            pictureButton2 = false;
+            }
+
+
+        }
+
+}
 
 /**
  * Calls drive's main drive function so the robot can drive using joysticks
