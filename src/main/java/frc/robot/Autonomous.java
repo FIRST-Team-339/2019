@@ -654,6 +654,12 @@ private static boolean depositRocketHatch ()
                 // Hardware.drive.resetEncoders();
                 rocketHatchState = RocketHatchState.BREAKIE_AFTER_DRIVIE;
                 }
+            else
+                {
+                System.out.println("DRIVE STRAIGHT POWER : "
+                        + Hardware.leftFrontCANMotor.get() + "  "
+                        + Hardware.rightFrontCANMotor.get());
+                }
             break;
 
         case BREAKIE_AFTER_DRIVIE:
@@ -675,7 +681,7 @@ private static boolean depositRocketHatch ()
                     && Hardware.drive.turnDegrees(TURN_RIGHT90,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
-                rocketHatchState = RocketHatchState.FINISH;// .DRIVE_TOWARDS_FIELD_WALL;
+                rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                 }
             // turn for if we are on the left side of th field
             else
@@ -683,7 +689,7 @@ private static boolean depositRocketHatch ()
                         && Hardware.drive.turnDegrees(TURN_LEFT90,
                                 TURN_SPEED, ACCELERATION_TIME, true))
                     {
-                    rocketHatchState = RocketHatchState.FINISH;// .DRIVE_TOWARDS_FIELD_WALL;
+                    rocketHatchState = RocketHatchState.DRIVE_TOWARDS_FIELD_WALL;
                     }
             break;
         case DRIVE_TOWARDS_FIELD_WALL:
@@ -725,8 +731,8 @@ private static boolean depositRocketHatch ()
             break;
 
         case DELAY_BEFORE_TURN_ALONG_FIELD_WALL:
-            if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true
-                    && autoTimer.get() >= TIME_TO_DELAY_B4_TURN)
+            if (Hardware.drive.brake_new(BrakeType.AFTER_DRIVE) == true)
+            /* && autoTimer.get() >= TIME_TO_DELAY_B4_TURN )_ */
                 {
                 rocketHatchState = RocketHatchState.TURN_ALONG_FIELD_WALL;
                 }
@@ -734,9 +740,10 @@ private static boolean depositRocketHatch ()
 
 
         case TURN_ALONG_FIELD_WALL:
+            System.out.println(" gyro " + Hardware.gyro.getAngle());
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
-                    && Hardware.drive.turnDegrees(-53/* TURN_LEFT90 */,
+                    && Hardware.drive.turnDegrees(TURN_LEFT90,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 // currently bypasses the align state
@@ -746,7 +753,7 @@ private static boolean depositRocketHatch ()
             else
                 if (autoPosition == Position.LEFT
                         && Hardware.drive.turnDegrees(
-                                53/* TURN_RIGHT90 */,
+                                TURN_RIGHT90,
                                 TURN_SPEED, ACCELERATION_TIME, true))
                     {
                     // currently bypasses the align state
@@ -757,9 +764,9 @@ private static boolean depositRocketHatch ()
         case ALIGN_PERPENDICULAR_TO_TAPE:
             // if (alignPerpendicularToTape() == true)
             // {
-            Hardware.lift
-                    .setLiftPosition(Forklift.LOWER_ROCKET_HATCH);
-            rocketHatchState = RocketHatchState.DRIVE_TO_ROCKET_TAPE;
+            // Hardware.lift
+            // .setLiftPosition(Forklift.LOWER_ROCKET_HATCH);
+            rocketHatchState = RocketHatchState.FINISH;// .DRIVE_TO_ROCKET_TAPE;
             // }
 
             break;

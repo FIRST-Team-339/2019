@@ -411,17 +411,29 @@ public boolean brake_new (BrakeType type)
         // print if requested
         if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
             System.out.println(
-                    "deadband = " + deadband + "\npower =" + power);
+                    "deadband = " + deadband + "\npower = " + power);
 
         // sets values of brakeDelta array to the change in encoder ticks
         // between the current value and the brakePrevEncoderVals
         // in the order left rear, right rear, left front, right front
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+            {
+            System.out.print("Present ticks LR RR LF RF = "
+                    + getEncoderTicks(MotorPosition.LEFT_REAR) + " "
+                    + getEncoderTicks(MotorPosition.RIGHT_REAR));
+            if (this.encoders.length > 2)
+                System.out.print(" "
+                        + getEncoderTicks(MotorPosition.LEFT_FRONT)
+                        + " "
+                        + getEncoderTicks(MotorPosition.RIGHT_FRONT));
+            System.out.println();
+            } // if
         brakeDeltas[0] = getEncoderTicks(MotorPosition.LEFT_REAR)
                 - brakePrevEncoderVals[0];
         brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR)
                 - brakePrevEncoderVals[1];
         if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
-            System.out.print("brake deltas = "
+            System.out.print("brake deltas LR RR LF RF = "
                     + brakeDeltas[0] + " "
                     + brakeDeltas[1]);
         if (this.encoders.length > 2)
@@ -731,13 +743,20 @@ private void brakePrep ()
     if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
         {
         System.out.print("present MC power LR RR LF RF = "
-                + getEncoderTicks(MotorPosition.LEFT_REAR) + " "
-                + getEncoderTicks(MotorPosition.RIGHT_REAR));
+                + transmission.getSpeedController(
+                        MotorPosition.LEFT_REAR).get()
+                + " "
+                + transmission
+                        .getSpeedController(MotorPosition.RIGHT_REAR));
         if (this.brakeMotorDirection.length > 2)
             System.out.print(" "
-                    + getEncoderTicks(MotorPosition.LEFT_FRONT)
+                    + transmission
+                            .getSpeedController(
+                                    MotorPosition.LEFT_FRONT)
+                            .get()
                     + " "
-                    + getEncoderTicks(MotorPosition.RIGHT_FRONT));
+                    + transmission.getSpeedController(
+                            MotorPosition.RIGHT_FRONT).get());
         System.out.println();
         } // if
     // ==================================
