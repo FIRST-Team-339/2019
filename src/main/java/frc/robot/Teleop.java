@@ -249,40 +249,6 @@ public static void periodic ()
         } // end if
 
 
-    if ((Hardware.pictureButtonOne.get() == true
-            && Hardware.pictureButtonTwo.get() == true)
-            || (pictureButton1 == true && pictureButton2 == true))
-        {
-        if (firstPress == true)
-            {
-            pictureButton1 = true;
-            pictureButton2 = true;
-            Hardware.takePictureTimer.reset();
-            Hardware.ringLightRelay.set(Value.kOn);
-            firstPress = false;
-            Hardware.takePictureTimer.start();
-            }
-        if (Hardware.takePictureTimer.get() >= 1.0
-                && imageTaken == false)
-            {
-
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-
-            imageTaken = true;
-            }
-        if (Hardware.takePictureTimer.get() >= 3.0)
-            {
-
-            Hardware.ringLightRelay.set(Value.kOff);
-            firstPress = true;
-            pictureButton1 = false;
-            pictureButton2 = false;
-            }
-
-
-        }
-
-
     individualTest();
 
     takePicture();
