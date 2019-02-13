@@ -225,13 +225,17 @@ public boolean driveToTarget (double speed)
                 }
             else
                 {
-                slowestSpeed = motorspeed;
+                slowestSpeed = motorspeed - DRIVE_CORRECTION;
                 }
 
             System.out.println("right speed: "
                     + Hardware.rightFrontCANMotor.get());
             System.out.println("left speed: "
                     + Hardware.leftFrontCANMotor.get());
+
+
+
+
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -241,7 +245,7 @@ public boolean driveToTarget (double speed)
 
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (this.getTargetSide() == Side.RIGHT)
+            if (this.getTargetSide() == Side.LEFT)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
@@ -253,30 +257,23 @@ public boolean driveToTarget (double speed)
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-            else
-                if (this.getTargetSide() == Side.LEFT)
-                    {
-                    // the switch's center is too far left, drive faster on the
-                    // right
-                    System.out.println("WE ARE TOO Right");
-                    this.getTransmission().driveRaw(slowestSpeed,
-                            motorspeed + DRIVE_CORRECTION);
 
-                    }
-                else
-                    if (this.getTargetSide() == Side.CENTER)
-                        {
-                        System.out.println(
-                                "Driving straight center of blobs");
-                        Hardware.drive.driveStraight(speed, .2,
-                                true);
-                        }
-                    else
-                        {
-                        System.out.println("Driving straight no blobs");
-                        Hardware.drive.driveStraight(speed, .2,
-                                true);
-                        }
+            if (this.getTargetSide() == Side.RIGHT)
+                {
+                // the switch's center is too far left, drive faster on the
+                // right
+                System.out.println("WE ARE TOO Right");
+                this.getTransmission().driveRaw(slowestSpeed,
+                        motorspeed + DRIVE_CORRECTION);
+
+                }
+            if (this.getTargetSide() == Side.CENTER)
+                {
+                System.out.println(
+                        "Driving straight center of blobs");
+                this.getTransmission().driveRaw(motorspeed, motorspeed);
+                }
+
             // if we lose camera before aligned
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
@@ -611,8 +608,8 @@ public double getCameraCenterValue ()
                 + visionProcessor.getNthSizeBlob(1).center.x) / 2;
 
 
-        System.out.println("TWO BLOBS");
-        System.out.println("blob center: " + center);
+        // System.out.println("TWO BLOBS");
+        // System.out.println("blob center: " + center);
         }
     // if we only can detect one blob, the center is equal to the center x
     // position of the blob
@@ -620,8 +617,8 @@ public double getCameraCenterValue ()
         if (visionProcessor.getParticleReports().length == 1)
             {
             center = visionProcessor.getNthSizeBlob(0).center.x;
-            System.out.println("ONE BLOBS");
-            System.out.println("blob center: " + center);
+            // System.out.println("ONE BLOBS");
+            // System.out.println("blob center: " + center);
             }
         // if we don't have any blobs, set the center equal to the constanct
         // center,
@@ -648,7 +645,7 @@ private final double TEST_COMPENSATE_3 = .1;
 
 // the distance in inches in which we drive the robot straight using the
 // ultrasonic
-private final double CAMERA_NO_LONGER_WORKS = 3;
+private final double CAMERA_NO_LONGER_WORKS = 35;
 
 // The minimum encoder distance we must drive before we enable the ultrasonic
 // private final double ENCODER_MIN_DISTANCE = 50; // inches
@@ -670,7 +667,7 @@ private final double SLOW_MODIFIER = .6;
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .20;
+private final double DRIVE_CORRECTION = .2;
 
 
 

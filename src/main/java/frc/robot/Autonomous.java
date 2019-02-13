@@ -549,7 +549,9 @@ private static boolean depositCargoHatch ()
 
             break;
         case STRAIGHT_DEPOSIT_ALIGN_TO_CARGO:
-
+            System.out.println(
+                    "Ultrasosnic" + Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper());
             Autonomous.prepDeposit();
             // maybe align with vision
             if (Hardware.driveWithCamera
@@ -816,7 +818,7 @@ private static boolean depositRocketHatch ()
                     break;
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
-                            distanceToCrossAutoline,
+                            /* DISTANCE_TO_CROSS_AUTOLINE_CAMERA */2,
                             .6,
                             ACCELERATION_TIME, USING_GYRO))
                         {
@@ -1297,7 +1299,7 @@ public static final double CAMERA_ACCELERATION = .2;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
-public static final int TURN_FOR_CAMERA_DEGREES = 80;
+public static final int TURN_FOR_CAMERA_DEGREES = 60;
 
 // changed to correct-ish number 2 February 2019
 public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 60;
