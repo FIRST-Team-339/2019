@@ -415,7 +415,7 @@ private static boolean crossAutoline ()
             break;
 
         case FINISH:
-            HardwareInterfaces.Transmission.TransmissionBase.stop();
+            // HardwareInterfaces.Transmission.TransmissionBase.stop();
             System.out.println(
                     "You have arrived at your final destination...the foreboding Vaaach homeworld.");
             break;
