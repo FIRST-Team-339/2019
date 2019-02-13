@@ -32,6 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
@@ -364,6 +365,7 @@ private static boolean crossAutoline ()
                 case NULL:
                     break;
                 }
+            Hardware.gyro.reset();
             cross = CrossAutoState.L2_DESCEND;
             break;
 
@@ -391,6 +393,7 @@ private static boolean crossAutoline ()
             // a.k.a. drive straight
             // TODO figure out why the robot isn't braking properly
             System.out.println("*distant screaming*");
+            Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
@@ -404,13 +407,15 @@ private static boolean crossAutoline ()
             // don't ever use drive.stop to break - leaves you coasting for
             // another foot and a half.
             System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
-            if ((Hardware.drive.brake(BrakeType.AFTER_DRIVE)) == true)
+            if ((Hardware.drive
+                    .brake_new(BrakeType.AFTER_DRIVE)) == true)
                 {
                 cross = CrossAutoState.FINISH;
                 }
             break;
 
         case FINISH:
+            HardwareInterfaces.Transmission.TransmissionBase.stop();
             System.out.println(
                     "You have arrived at your final destination...the foreboding Vaaach homeworld.");
             break;
