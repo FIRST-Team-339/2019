@@ -699,8 +699,7 @@ private static boolean depositRocketHatch ()
                     DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
-                autoTimer.reset();
-                autoTimer.start();
+
                 rocketHatchState = RocketHatchState.DELAY_BEFORE_TURN_ALONG_FIELD_WALL;
 
                 }

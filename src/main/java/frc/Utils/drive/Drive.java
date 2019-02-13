@@ -416,18 +416,6 @@ public boolean brake_new (BrakeType type)
         // sets values of brakeDelta array to the change in encoder ticks
         // between the current value and the brakePrevEncoderVals
         // in the order left rear, right rear, left front, right front
-        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
-            {
-            System.out.print("Present ticks LR RR LF RF = "
-                    + getEncoderTicks(MotorPosition.LEFT_REAR) + " "
-                    + getEncoderTicks(MotorPosition.RIGHT_REAR));
-            if (this.encoders.length > 2)
-                System.out.print(" "
-                        + getEncoderTicks(MotorPosition.LEFT_FRONT)
-                        + " "
-                        + getEncoderTicks(MotorPosition.RIGHT_FRONT));
-            System.out.println();
-            } // if
         brakeDeltas[0] = getEncoderTicks(MotorPosition.LEFT_REAR)
                 - brakePrevEncoderVals[0];
         brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR)
