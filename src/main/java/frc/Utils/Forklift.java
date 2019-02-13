@@ -459,7 +459,7 @@ public void setToNextLowerPreset (double forkliftSpeed,
                         }
             }
 
-        SmartDashboard.putNumber("Next Lower Position:", position);
+
         // if position was set to one of the prest heights
         // (if it was not it would still be -1)
         if (position >= 0.0)
@@ -591,7 +591,6 @@ public void update ()
  */
 public void resetStateMachine ()
 {
-    System.out.println("Resetting forklift state machine");
     this.liftState = ForkliftState.STAY_AT_POSITION;
 }
 

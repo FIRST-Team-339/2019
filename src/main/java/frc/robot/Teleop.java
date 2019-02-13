@@ -202,7 +202,7 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    // Forklifts
+    // Forklift
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
@@ -224,6 +224,16 @@ public static void periodic ()
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextLowerLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
+
+    // Game Piece Manipulator
+
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
     // =================================================================
     Hardware.lift.update();
@@ -278,12 +288,13 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
     // meghanTest();
+    // dionTest();
     // nithyaTest();
 } // end individualTest()
 
@@ -383,28 +394,8 @@ private static void coleTest ()
 
     // Manipulator
 
-    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
-            Hardware.deployOverride.get());
-
-    Hardware.manipulator.moveArmByButton(45,
-            GamePieceManipulator.DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED,
-            Hardware.setDeploy45DegreeButton);
-
-    if (Hardware.autoDeployButton.getCurrentValue() == true)
-        Hardware.manipulator.deployArm();
-
-    if (Hardware.autoRetractButton.getCurrentValue() == true)
-        Hardware.manipulator.retractArm();
-
     // TODO test with make break / IR
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
 
-
-    SmartDashboard.putString("Hardware Arm IR",
-            "" + Hardware.armIR.get());
 } // end coleTest()
 
 private static boolean hasFinishedAutoSpinOut = false;
@@ -505,6 +496,11 @@ private static void meghanTest ()
 {
 
 } // end meghanTest()
+
+private static void dionTest()
+{
+
+} // end dionTest()
 
 private static void nithyaTest ()
 {
