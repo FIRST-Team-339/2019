@@ -743,7 +743,7 @@ private static boolean depositRocketHatch ()
             System.out.println(" gyro " + Hardware.gyro.getAngle());
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
-                    && Hardware.drive.turnDegrees(TURN_LEFT90,
+                    && Hardware.drive.turnDegrees(-53/* TURN_LEFT90 */,
                             TURN_SPEED, ACCELERATION_TIME, true))
                 {
                 // currently bypasses the align state
@@ -752,8 +752,8 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the left side of th field
             else
                 if (autoPosition == Position.LEFT
-                        && Hardware.drive.turnDegrees(
-                                TURN_RIGHT90,
+                        && Hardware.drive.turnDegrees(53
+                        /* TURN_RIGHT90 */,
                                 TURN_SPEED, ACCELERATION_TIME, true))
                     {
                     // currently bypasses the align state
