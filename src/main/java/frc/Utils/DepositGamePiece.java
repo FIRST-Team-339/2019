@@ -53,13 +53,19 @@ public boolean depositHatch ()
             break;
 
         case DEPOSIT_HATCH:
-            System.out.println("deposit deposit");
-            depositHatchState = DepositHatchState.BACKUP_HATCH;
+            if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
+                    .3, BACKUP_ACCELERATION, usingGyro))
+                {
+                System.out.println("deposit deposit");
+                depositHatchState = DepositHatchState.LOWER_FORKLIFT_HATCH;
+
+                }
             break;
         case LOWER_FORKLIFT_HATCH:
-            if (this.gamePieceManipulator.moveArmToPosition(
-                    LOWERED_ARM_AFTER_DEPOSIT_POSITION, ARM_MOVE_SPEED))
+            if (this.forklift.setLiftPosition(
+                    this.forklift.getForkliftHeight() - 4))
                 {
+                depositHatchState = DepositHatchState.BACKUP_HATCH;
                 }
             break;
         case BACKUP_HATCH:
@@ -116,7 +122,11 @@ public boolean depositCargo ()
 
         case DEPOSIT_CARGO:
             System.out.println("Depositing the cargo");
-            depositHatchState = DepositHatchState.BACKUP_HATCH;
+
+            if (this.gamePieceManipulator.spinOutCargoByTimer())
+                {
+                depositHatchState = DepositHatchState.BACKUP_HATCH;
+                }
             break;
         case BACKUP_CARGO:
             if (this.drive.driveStraightInches(BACKUP_INCHES,
@@ -141,7 +151,7 @@ public boolean depositCargo ()
 
 private static final int LOWERED_ARM_AFTER_DEPOSIT_POSITION = 250;// TODO
 
-
+private static final int FORWARD_TO_DEPOSIT = 4;// TODO
 
 
 // Cargo constants=========================

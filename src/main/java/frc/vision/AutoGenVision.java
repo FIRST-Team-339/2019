@@ -71,7 +71,7 @@ public void process (Mat source0)
     ArrayList<MatOfPoint> filterContoursContours = convexHullsOutput;
     double filterContoursMinArea = 0;
     double filterContoursMinPerimeter = 0;
-    double filterContoursMinWidth = 8.0;
+    double filterContoursMinWidth = 0;
     double filterContoursMaxWidth = 1000;
     double filterContoursMinHeight = 0;
     double filterContoursMaxHeight = 1000;

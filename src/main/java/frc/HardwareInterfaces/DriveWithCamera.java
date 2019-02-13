@@ -178,7 +178,7 @@ public DriveWithCamera (TransmissionBase transmission,
  */
 public boolean driveToTarget (double speed)
 {
-
+    System.out.println("vision state: " + state);
     switch (state)
         {
         case INIT:
@@ -219,25 +219,19 @@ public boolean driveToTarget (double speed)
             motorspeed = speed * slowAmount;
 
             // adjust speed so that motors never reverse
-            if (motorspeed - DRIVE_CORRECTION <= 0
-                    && Hardware.rightFrontDriveEncoder
-                            .getDistance() > MIN_INCHES)
+            if (motorspeed - DRIVE_CORRECTION <= 0)
                 {
                 slowestSpeed = 0.05;
                 }
             else
-                if (Hardware.rightFrontDriveEncoder
-                        .getDistance() > MIN_INCHES)
-                    {
-                    slowestSpeed = motorspeed - DRIVE_CORRECTION;
-                    }
-                else
-                    {
-                    slowestSpeed = motorspeed;
-                    }
+                {
+                slowestSpeed = motorspeed;
+                }
 
-            System.out.println("slowest speed: " + slowestSpeed);
-            System.out.println("motorspeed: " + motorspeed);
+            System.out.println("right speed: "
+                    + Hardware.rightFrontCANMotor.get());
+            System.out.println("left speed: "
+                    + Hardware.leftFrontCANMotor.get());
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light

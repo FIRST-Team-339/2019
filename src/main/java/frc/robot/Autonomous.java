@@ -428,6 +428,8 @@ private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatch
 
 private static boolean depositCargoHatch ()
 {
+    System.out.println(
+            "depositCargoHatchState:" + depositCargoHatchState);
     switch (depositCargoHatchState)
         {
         case INIT:
@@ -1203,10 +1205,10 @@ public static void endAutoPath ()
 // use vision for rocket autopath
 private static boolean usingVision = true;
 
-private static boolean usingAlignByWall = false;
+private static boolean usingAlignByWall = true;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = false;
+private static boolean usingVisionOnStraight = true;
 
 private static boolean descendInit = false;
 
