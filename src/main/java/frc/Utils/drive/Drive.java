@@ -322,14 +322,14 @@ public boolean arc (double speed, double radius, double arcLength,
 }
 
 /**
- * Stops the robot suddenly, to prevent drifting during autonomous functions,
- * and increase the precision.
+ * Stops the robot suddenly, to prevent drifting during autonomous
+ * functions, and increase the precision.
  *
- * @author Ryan McGee
- * @written 7/26/2017
+ * @author Robert Brown
+ * @written 2/11/2019
  * @param type
- *                 What kind of brake is being used, after driving, or after
- *                 turning.
+ *                 What kind of brake is being used, after driving, or
+ *                 after turning.
  *
  * @return Whether or not the robot has stopped moving.
  */
@@ -338,7 +338,7 @@ public boolean arc (double speed, double radius, double arcLength,
 // 1. You should reset the encoders before calling brake() - not
 // required but helpful.
 // 2. You should setup the maxBrakeIterations - this limits the total
-// number of times you can call this function (use the default, use
+// number of times you can call this function (use the default (5), use
 // setMaxBrakeIterations())
 // 3. The deadband on how much leeway you want to allow before you are
 // considered stopped. If you want to get to zero movement or just
@@ -367,7 +367,7 @@ public boolean arc (double speed, double radius, double arcLength,
 
 public boolean brake_new (BrakeType type)
 {
-    // sets deadband and power to brakePrevEncoderValszero
+    // deadband and power to be used later
     int deadband = 0;
     double power = 0;
     int[] brakeDeltas = new int[4];
@@ -376,7 +376,7 @@ public boolean brake_new (BrakeType type)
     // data initialization
     // -------------------------------------
     this.currentBrakeIteration++;
-    if (this.getDebugOnStatus() == true)
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
         System.out.println(
                 "Brake Iterations = " + this.currentBrakeIteration);
     // -------------------------------------
@@ -385,117 +385,34 @@ public boolean brake_new (BrakeType type)
     // -------------------------------------
     if (this.currentBrakeIteration == 1)
         {
-        if (this.getDebugOnStatus() == true)
-            System.out.print("MC power = "
-                    + getEncoderTicks(MotorPosition.LEFT_REAR) + " "
-                    + getEncoderTicks(MotorPosition.RIGHT_REAR));
-        if (this.getDebugOnStatus() == true
-                && this.brakeMotorDirection.length > 2)
-            System.out.print(" "
-                    + getEncoderTicks(MotorPosition.LEFT_FRONT) + " "
-                    + getEncoderTicks(MotorPosition.RIGHT_FRONT));
-        if (this.getDebugOnStatus() == true)
-            System.out.println();
-        // ==================================
-        // First time through save the initial
-        // value of the encoders. This will be
-        // checked later to make sure that we
-        // haven't stopped the motors and suddenly
-        // reversed directions
-        // ==================================
-        this.brakeInitialDirection[0] = (int) Math
-                .signum(getEncoderTicks(
-                        MotorPosition.LEFT_REAR));
-        this.brakeInitialDirection[1] = (int) Math
-                .signum(getEncoderTicks(
-                        MotorPosition.RIGHT_REAR));
-        if (this.getDebugOnStatus() == true)
-            System.out.print("brake initial direction = "
-                    + this.brakeInitialDirection[0] + " "
-                    + this.brakeInitialDirection[1]);
-        if (this.brakeInitialDirection.length > 2)
-            {
-            this.brakeInitialDirection[2] = (int) Math
-                    .signum(getEncoderTicks(
-                            MotorPosition.LEFT_FRONT));
-            this.brakeInitialDirection[3] = (int) Math
-                    .signum(getEncoderTicks(
-                            MotorPosition.RIGHT_FRONT));
-            if (this.getDebugOnStatus() == true)
-                System.out.print(" "
-                        + this.brakeInitialDirection[2] + " "
-                        + this.brakeInitialDirection[3]);
-            }
-        if (this.getDebugOnStatus() == true)
-            System.out.println();
-        // ==================================
-        // First time through determine the direction
-        // of the motors to see if they are reversed
-        // ==================================
-        if (this.transmission
-                .getSpeedController(MotorPosition.LEFT_REAR)
-                .getInverted() == true)
-            this.brakeMotorDirection[0] = -1;
-
-        if (this.transmission
-                .getSpeedController(MotorPosition.RIGHT_REAR)
-                .getInverted() == true)
-            this.brakeMotorDirection[1] = -1;
-        if (this.getDebugOnStatus() == true)
-            System.out.print("brake motor direction = "
-                    + this.brakeMotorDirection[0] + " "
-                    + this.brakeMotorDirection[1]);
-        if (this.brakeMotorDirection.length > 2)
-            {
-            if (this.transmission
-                    .getSpeedController(MotorPosition.LEFT_FRONT)
-                    .getInverted() == true)
-                this.brakeMotorDirection[2] = -1;
-
-            if (this.transmission
-                    .getSpeedController(MotorPosition.RIGHT_FRONT)
-                    .getInverted() == true)
-                this.brakeMotorDirection[3] = -1;
-            if (this.getDebugOnStatus() == true)
-                System.out.print(" "
-                        + this.brakeMotorDirection[2] + " "
-                        + this.brakeMotorDirection[3]);
-            } // if
-        if (this.getDebugOnStatus() == true)
-            System.out.println();
-        brakeDeltas[0] = getEncoderTicks(MotorPosition.LEFT_REAR);
-        brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR);
-        if (this.encoders.length > 2)
-            {
-            brakeDeltas[2] = getEncoderTicks(MotorPosition.LEFT_FRONT);
-            brakeDeltas[3] = getEncoderTicks(MotorPosition.RIGHT_FRONT);
-            }
+        this.brakePrep();
+        return false;
         } // if
-
-    // if BrakeType is AFTER_DRIVE then set deadband to brakeDriveDeadband
-    // and power to brakeDrivePower
-    switch (type)
-
+    else
         {
-        default:
-        case AFTER_DRIVE:
-            deadband = brakeDriveDeadband;
-            power = brakeDrivePower;
-            break;
+        // if BrakeType is AFTER_DRIVE then set deadband to
+        // brakeDriveDeadband and power to brakeDrivePower
+        switch (type)
 
-        // if Braketype is AFTER_TURN set the deadband to brakeTurnDeadband
-        // and set power to brakeTurnPower
-        case AFTER_TURN:
-            deadband = brakeTurnDeadband;
-            power = brakeTurnPower;
-            break;
-        } // switch
-    if (this.getDebugOnStatus() == true)
-        System.out.println(
-                "deadband = " + deadband + "\npower =" + power);
+            {
+            default:
+            case AFTER_DRIVE:
+                deadband = brakeDriveDeadband;
+                power = brakeDrivePower;
+                break;
 
-    if (this.currentBrakeIteration > 1)
-        {
+            // if Braketype is AFTER_TURN set the deadband to
+            // brakeTurnDeadband and set power to brakeTurnPower
+            case AFTER_TURN:
+                deadband = brakeTurnDeadband;
+                power = brakeTurnPower;
+                break;
+            } // switch
+        // print if requested
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+            System.out.println(
+                    "deadband = " + deadband + "\npower = " + power);
+
         // sets values of brakeDelta array to the change in encoder ticks
         // between the current value and the brakePrevEncoderVals
         // in the order left rear, right rear, left front, right front
@@ -503,8 +420,8 @@ public boolean brake_new (BrakeType type)
                 - brakePrevEncoderVals[0];
         brakeDeltas[1] = getEncoderTicks(MotorPosition.RIGHT_REAR)
                 - brakePrevEncoderVals[1];
-        if (this.getDebugOnStatus() == true)
-            System.out.print("brake deltas = "
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+            System.out.print("brake deltas LR RR LF RF = "
                     + brakeDeltas[0] + " "
                     + brakeDeltas[1]);
         if (this.encoders.length > 2)
@@ -513,14 +430,16 @@ public boolean brake_new (BrakeType type)
                     - brakePrevEncoderVals[2];
             brakeDeltas[3] = getEncoderTicks(MotorPosition.RIGHT_FRONT)
                     - brakePrevEncoderVals[3];
-            if (this.getDebugOnStatus() == true)
+            if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
                 System.out.print(" "
                         + brakeDeltas[2] + " "
                         + brakeDeltas[3]);
             } // if
-        if (this.getDebugOnStatus() == true)
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
             System.out.println();
-        }
+        } // else - not on first pass
+
+    // -------------------------------------
     // -------------------------------------
     // finish
     // -------------------------------------
@@ -535,9 +454,9 @@ public boolean brake_new (BrakeType type)
         finished = true;
     // ===========================
     // if things are finished as determined
-    // b) we are stationary, or c) we
-    // are within the deadband range on how close
-    // we want to get to "stopped"
+    // b) we are stationary, or
+    // c) we are within the deadband range
+    // on how close we want to get to "stopped"
     // ============================
     if (Math.abs(brakeDeltas[0]) <= deadband
             || Math.abs(brakeDeltas[1]) <= deadband)
@@ -570,22 +489,17 @@ public boolean brake_new (BrakeType type)
     // ======================================
     if (finished == true)
         {
-        this.currentBrakeIteration = 0;
-        transmission.stop();
-        this.brakePrevEncoderVals[0] = Integer.MIN_VALUE;
-        this.brakePrevEncoderVals[1] = Integer.MIN_VALUE;
-        if (this.brakePrevEncoderVals.length > 2)
-            {
-            this.brakePrevEncoderVals[2] = Integer.MIN_VALUE;
-            this.brakePrevEncoderVals[3] = Integer.MIN_VALUE;
-            } // if
+        this.brakeReset();
         return true;
         } // if
     // ====================================
     // not finished. save values for next
     // time and return a false
     // ====================================
-    // sets present encoder tick values to the previous tick vals
+    // sets present encoder tick values to
+    // the previous tick vals to be used
+    // for future computations - print if
+    // requested
     brakePrevEncoderVals[0] = getEncoderTicks(MotorPosition.LEFT_REAR);
     brakePrevEncoderVals[1] = getEncoderTicks(MotorPosition.RIGHT_REAR);
     if (this.brakePrevEncoderVals.length > 2)
@@ -595,8 +509,25 @@ public boolean brake_new (BrakeType type)
         brakePrevEncoderVals[3] = getEncoderTicks(
                 MotorPosition.RIGHT_FRONT);
         }
-    // Set the rear wheels
-    double newSpeed[] = new double[4];
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        {
+        System.out.print("present encoder LR RR LF RF = "
+                + brakePrevEncoderVals[0] + " "
+                + brakePrevEncoderVals[1]);
+        if (this.brakeMotorDirection.length > 2)
+            System.out.print(" "
+                    + brakePrevEncoderVals[2] + " "
+                    + brakePrevEncoderVals[3]);
+        System.out.println();
+        } // if
+
+    // ==================================
+    // finally we do the actual work
+    // Set the rear wheels - print if
+    // requested
+    // ==================================
+    double[] newSpeed = new double[4];
+
     newSpeed[0] = -brakeMotorDirection[0]
             * this.brakeInitialDirection[0] * power;
     newSpeed[1] = -brakeMotorDirection[1]
@@ -605,11 +536,16 @@ public boolean brake_new (BrakeType type)
             .set(newSpeed[0]);
     transmission.getSpeedController(MotorPosition.RIGHT_REAR)
             .set(newSpeed[1]);
-    if (this.getDebugOnStatus() == true)
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
         System.out
-                .print("MC speed = " + newSpeed[0] + " " + newSpeed[1]);
+                .print("MC new speed LR RR LF RF = " + newSpeed[0] + " "
+                        + newSpeed[1]);
 
-    // Set the front wheels if it's the right kind of drive
+    // ==================================
+    // Set the front wheels if we are not
+    // in two wheel drive - print if
+    // requested
+    // ==================================
     if (encoders.length >= 4)
         {
         newSpeed[2] = -brakeMotorDirection[2]
@@ -620,11 +556,15 @@ public boolean brake_new (BrakeType type)
                 .set(newSpeed[2]);
         transmission.getSpeedController(MotorPosition.RIGHT_FRONT)
                 .set(newSpeed[3]);
-        if (this.getDebugOnStatus() == true)
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
             System.out.print(" " + newSpeed[2] + " " + newSpeed[3]);
         } // if
-    if (this.getDebugOnStatus() == true)
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
         System.out.println();
+    // -------------------------
+    // obviously not done - tell the
+    // caller
+    // -------------------------
     return false;
 } // end brake()
 
@@ -775,6 +715,148 @@ public boolean brake (BrakeType type)
     this.previousBrakeTime = System.currentTimeMillis();
     return false;
 } // end brake()
+
+/**
+ * Prepares the braking system so that it can be used to stop
+ * the robot.
+ *
+ */
+private void brakePrep ()
+{
+    // ====================================
+    // print out the present (initial)
+    // Motor controller values for
+    // debug purposes
+    // ====================================
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        {
+        System.out.print("present MC power LR RR LF RF = "
+                + transmission.getSpeedController(
+                        MotorPosition.LEFT_REAR).get()
+                + " "
+                + transmission
+                        .getSpeedController(MotorPosition.RIGHT_REAR)
+                        .get());
+        if (this.brakeMotorDirection.length > 2)
+            System.out.print(" "
+                    + transmission
+                            .getSpeedController(
+                                    MotorPosition.LEFT_FRONT)
+                            .get()
+                    + " "
+                    + transmission.getSpeedController(
+                            MotorPosition.RIGHT_FRONT).get());
+        System.out.println();
+        } // if
+    // ==================================
+    // First time through save the initial
+    // value of the encoders. This will be
+    // checked later to make sure that we
+    // haven't stopped the motors and suddenly
+    // reversed directions. Also print to
+    // screen if in debug mode
+    // ==================================
+    brakePrevEncoderVals[0] = getEncoderTicks(
+            MotorPosition.LEFT_REAR);
+    brakePrevEncoderVals[1] = getEncoderTicks(
+            MotorPosition.RIGHT_REAR);
+    if (this.encoders.length > 2)
+        {
+        brakePrevEncoderVals[2] = getEncoderTicks(
+                MotorPosition.LEFT_FRONT);
+        brakePrevEncoderVals[3] = getEncoderTicks(
+                MotorPosition.RIGHT_FRONT);
+        } // if
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        {
+        System.out.print("present encoder LR RR LF RF = "
+                + brakePrevEncoderVals[0] + " "
+                + brakePrevEncoderVals[1]);
+        if (this.brakeMotorDirection.length > 2)
+            System.out.print(" "
+                    + brakePrevEncoderVals[2] + " "
+                    + brakePrevEncoderVals[3]);
+        System.out.println();
+        } // if
+    // ========================================
+    // determine direction of each of the encoders
+    // (using the previously stored values)
+    // and print to screen if requested
+    // ========================================
+    this.brakeInitialDirection[0] = (int) Math
+            .signum(brakePrevEncoderVals[0]);
+    this.brakeInitialDirection[1] = (int) Math
+            .signum(brakePrevEncoderVals[1]);
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        System.out.print("brake initial direction LR RR LF RF = "
+                + this.brakeInitialDirection[0] + " "
+                + this.brakeInitialDirection[1]);
+    if (this.brakeInitialDirection.length > 2)
+        {
+        this.brakeInitialDirection[2] = (int) Math
+                .signum(brakePrevEncoderVals[2]);
+        this.brakeInitialDirection[3] = (int) Math
+                .signum(brakePrevEncoderVals[3]);
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+            System.out.print(" "
+                    + this.brakeInitialDirection[2] + " "
+                    + this.brakeInitialDirection[3]);
+        } // if
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        System.out.println();
+    // ==================================
+    // First time through determine the direction
+    // of the motors to see if they are reversed
+    // Save for later usage and print if requested
+    // ==================================
+    if (this.transmission
+            .getSpeedController(MotorPosition.LEFT_REAR)
+            .getInverted() == true)
+        this.brakeMotorDirection[0] = -1;
+    if (this.transmission
+            .getSpeedController(MotorPosition.RIGHT_REAR)
+            .getInverted() == true)
+        this.brakeMotorDirection[1] = -1;
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        System.out.print("motor reversed LR RR LF RF = "
+                + this.brakeMotorDirection[0] + " "
+                + this.brakeMotorDirection[1]);
+    if (this.brakeMotorDirection.length > 2)
+        {
+        if (this.transmission
+                .getSpeedController(MotorPosition.LEFT_FRONT)
+                .getInverted() == true)
+            this.brakeMotorDirection[2] = -1;
+
+        if (this.transmission
+                .getSpeedController(MotorPosition.RIGHT_FRONT)
+                .getInverted() == true)
+            this.brakeMotorDirection[3] = -1;
+        if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+            System.out.print(" "
+                    + this.brakeMotorDirection[2] + " "
+                    + this.brakeMotorDirection[3]);
+        } // if
+    if (this.isDebugOn(debugType.DEBUG_BRAKING) == true)
+        System.out.println();
+} // end brakePrep
+
+/**
+ * Cleans up after the brake system thinks that it is stopped.
+ *
+ */
+private void brakeReset ()
+{
+    this.currentBrakeIteration = 0;
+    transmission.stop();
+    this.brakePrevEncoderVals[0] = Integer.MIN_VALUE;
+    this.brakePrevEncoderVals[1] = Integer.MIN_VALUE;
+    if (this.brakePrevEncoderVals.length > 2)
+        {
+        this.brakePrevEncoderVals[2] = Integer.MIN_VALUE;
+        this.brakePrevEncoderVals[3] = Integer.MIN_VALUE;
+        } // if
+} // end brakeReset
 
 /**
  * Determines how many inches an encoder must read to have completed a turn
@@ -1094,7 +1176,7 @@ public double getCurrentGearRatio ()
  *         If debugOn is TRUE, then extra debug messages will
  *         be displayed to the console
  */
-public boolean getDebugOnStatus ()
+public debugType getDebugOnStatus ()
 {
     return this.debugOn;
 } // end getDebugOnStatus()
@@ -1323,6 +1405,24 @@ public boolean isAnyEncoderLargerThan (double length)
             return true;
     return false;
 }
+
+/**
+ * @param debugTypeToCheck
+ *                             - besides DEBUG_ALL, check this
+ *                             particular type of debugging flag to see
+ *                             if it is on.
+ *
+ * @return returns to the caller the status of debugOn flag.
+ *         If DEBUG_ALL is on or the requested debugTypeToCheck
+ *         is on, then return true. All other cases return false
+ */
+public boolean isDebugOn (debugType debugTypeToCheck)
+{
+    if (this.getDebugOnStatus() == debugType.DEBUG_ALL
+            || this.getDebugOnStatus() == debugTypeToCheck)
+        return true;
+    return false;
+} // end isDebugOn()
 
 /**
  * Turns the robot by pivoting on one side or another.
@@ -1554,7 +1654,7 @@ public double setBrakeStoppingDistance (double brakeStoppingDistance)
  *         If debugOn is TRUE, then extra debug messages will
  *         be displayed to the console
  */
-public boolean setDebugOnStatus (boolean newDebugOnState)
+public debugType setDebugOnStatus (debugType newDebugOnState)
 {
     this.debugOn = newDebugOnState;
     return this.getDebugOnStatus();
@@ -2063,7 +2163,13 @@ private double inRange (double val, double lowerVal, double upperVal)
             return lowerVal;
 
     return val;
-}
+} // end inRange ()
+
+public static enum debugType
+    {
+    DEBUG_NONE, DEBUG_ALL, DEBUG_BRAKING
+    };
+
 
 private KilroyEncoder[] encoders;
 
@@ -2073,7 +2179,7 @@ private final TransmissionBase transmission;
 
 private final TransmissionType transmissionType;
 
-private boolean debugOn = false;
+private debugType debugOn = debugType.DEBUG_NONE;
 
 // ================VARIABLES================
 
@@ -2139,7 +2245,8 @@ private double defaultAcceleration = .8;// Seconds
 // ---------------------------------
 private double distanceRequiredToBrake = 3.0;
 
-// How much should be subtracted from the left or right side while driving
+// How much should be subtracted from the left or right side while
+// driving
 // straight
 private double driveStraightConstant = .1;
 
@@ -2155,7 +2262,8 @@ private double turnDegrees2ndStagePower = .22; // @ANE//.19;
 
 private double turnDegreesTriggerStage = 40;// Degrees
 
-// The distance from the left side wheel to the right-side wheel divided by
+// The distance from the left side wheel to the right-side wheel divided
+// by
 // 2, in inches. Used in turnDegrees.
 // Nov 4 changed from 16 to 17
 private static double turningRadius = 16.75;

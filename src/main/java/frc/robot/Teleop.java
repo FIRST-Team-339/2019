@@ -278,7 +278,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -340,20 +340,36 @@ private static boolean started = false;
 private static void connerTest ()
 {
 
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+
+
+
+    if (Hardware.rightOperator.getRawButton(8))
+        {
+        started = true;
+        }
+    if (started == true)
+        {
+
+        if (Hardware.driveWithCamera.driveToTarget(.35))
+            {
+            started = false;
+            }
+
+
+
+        }
+
+
     System.out.println(
             "ringlight relay:" + Hardware.axisCamera.getRelayValue());
-    System.out.println("Right or left: "
-            + Hardware.driveWithCamera.getTargetSide());
-    System.out.println(
-            "vision has blobs: " + Hardware.axisCamera.hasBlobs());
+    // System.out.println("Right or left: "
+    // + Hardware.driveWithCamera.getTargetSide());
+    // System.out.println(
+    // "vision has blobs: " + Hardware.axisCamera.hasBlobs());
 
-    System.out.println("Ultrasonic: "
-            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
-    // if (Hardware.driveWithCamera.visionTest(.4))
-    // {
-    // System.out.println("ALigned amybe i hope");
-    // }
+    // System.out.println("Ultrasonic: "
+    // + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+
 
 } // end connerTest()
 
