@@ -735,7 +735,8 @@ private void brakePrep ()
                         MotorPosition.LEFT_REAR).get()
                 + " "
                 + transmission
-                        .getSpeedController(MotorPosition.RIGHT_REAR));
+                        .getSpeedController(MotorPosition.RIGHT_REAR)
+                        .get());
         if (this.brakeMotorDirection.length > 2)
             System.out.print(" "
                     + transmission
