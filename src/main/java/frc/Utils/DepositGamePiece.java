@@ -2,6 +2,7 @@ package frc.Utils;
 
 import frc.Utils.drive.*;
 import frc.Utils.GamePieceManipulator;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class DepositGamePiece
@@ -19,7 +20,11 @@ public DepositGamePiece (Drive drive, Forklift forklift,
     this.drive = drive;
     this.forklift = forklift;
     this.gamePieceManipulator = gamePieceManipulator;
+
+
 }
+
+public Timer outakeTimer = new Timer();
 
 public enum DepositHatchState
     {
@@ -34,29 +39,33 @@ public static DepositHatchState depositHatchState = DepositHatchState.INIT;
  */
 public boolean depositHatch ()
 {
+
+    System.out.println("depositHatchstate: " + depositHatchState);
     switch (depositHatchState)
         {
         case INIT:
-            System.out.println("init deposit");
-            if (this.gamePieceManipulator.isDeployed())
-                {
-                depositHatchState = DepositHatchState.DEPOSIT_HATCH;
-                }
-            else
-                {
-                if (this.gamePieceManipulator
-                        .deployArm())
-                    {
-                    depositHatchState = DepositHatchState.DEPOSIT_HATCH;
-                    }
-                }
+
+            // if (this.gamePieceManipulator.isDeployed())
+            // {
+            // depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+            // }
+            // else
+            // {
+            // if (this.gamePieceManipulator
+            // .deployArm())
+            // {
+            // depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+            // }
+            // }
+            depositHatchState = DepositHatchState.DEPOSIT_HATCH;
             break;
 
         case DEPOSIT_HATCH:
+            System.out.println("deposit deposit");
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
-                    .3, BACKUP_ACCELERATION, usingGyro))
+                    .4, BACKUP_ACCELERATION, usingGyro))
                 {
-                System.out.println("deposit deposit");
+
                 depositHatchState = DepositHatchState.LOWER_FORKLIFT_HATCH;
 
                 }
@@ -71,7 +80,7 @@ public boolean depositHatch ()
         case BACKUP_HATCH:
             System.out.println("back deposit");
             if (this.drive.driveStraightInches(BACKUP_INCHES,
-                    BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
+                    -BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
                 {
                 depositHatchState = DepositHatchState.STOP;
                 }
@@ -94,6 +103,7 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
 
 public boolean depositCargo ()
 {
+    System.out.println("depositCargostate: " + depositCargoState);
     switch (depositCargoState)
         {
         case INIT:
@@ -112,12 +122,13 @@ public boolean depositCargo ()
                 }
             break;
         case RAISE_MANIPULATOR:
-            if (this.gamePieceManipulator
-                    .moveArmToPosition(CARGO_ARM_POSITION,
-                            ARM_MOVE_SPEED))
-                {
-                depositCargoState = DepositCargoState.DEPOSIT_CARGO;
-                }
+            // if (this.gamePieceManipulator
+            // .moveArmToPosition(CARGO_ARM_POSITION,
+            // ARM_MOVE_SPEED))
+            // {
+            // depositCargoState = DepositCargoState.DEPOSIT_CARGO;
+            // }
+            depositCargoState = DepositCargoState.DEPOSIT_CARGO;
             break;
 
         case DEPOSIT_CARGO:
@@ -125,12 +136,15 @@ public boolean depositCargo ()
 
             if (this.gamePieceManipulator.spinOutCargoByTimer())
                 {
+                System.out.println(
+                        "deposited");
+                this.gamePieceManipulator.resetStateMachine();
                 depositHatchState = DepositHatchState.BACKUP_HATCH;
                 }
             break;
         case BACKUP_CARGO:
             if (this.drive.driveStraightInches(BACKUP_INCHES,
-                    BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
+                    -BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
                 {
                 depositHatchState = DepositHatchState.STOP;
                 }
@@ -145,17 +159,26 @@ public boolean depositCargo ()
 } // end depositCargo()
 
 
+
+public boolean outakeGamepiece ()
+{
+
+
+    return true;
+}
+
+
 // Hatch constants======================
 
 
 
 private static final int LOWERED_ARM_AFTER_DEPOSIT_POSITION = 250;// TODO
 
-private static final int FORWARD_TO_DEPOSIT = 4;// TODO
+private static final int FORWARD_TO_DEPOSIT = 2;// TODO
 
 
 // Cargo constants=========================
-private static final int CARGO_ARM_POSITION = 245;// TODO magic number
+
 
 
 
@@ -164,7 +187,7 @@ private static boolean usingGyro = true;
 
 private static final double ARM_MOVE_SPEED = .4;
 
-private static final double BACKUP_INCHES = -10;// TODO
+private static final double BACKUP_INCHES = 10;// TODO
 
 private static final double BACKUP_ACCELERATION = .1;
 

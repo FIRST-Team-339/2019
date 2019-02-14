@@ -264,7 +264,7 @@ public static void periodic ()
         }
     else
         {
-        teleopDrive();
+        // teleopDrive();
         }
 
     // printStatements();
@@ -337,31 +337,39 @@ private static void ashleyTest ()
 
 private static boolean started = false;
 
+private static boolean prepped = false;
+
 private static void connerTest ()
 {
 
 
-
+    System.out.println("is doing the thng: " + started);
 
     if (Hardware.rightOperator.getRawButton(8))
         {
-        started = true;
+        started = !started;
         }
-    if (started == true)
+    if (started == true && !prepped)
         {
-
-        if (Hardware.driveWithCamera.driveToTarget(.35))
+        if (Autonomous.prepToDeposit())
             {
-            started = false;
+            System.out.println("Finished prep");
+            prepped = true;
             }
+        }
 
-
-
+    if (started && prepped)
+        {
+        if (Hardware.depositGamePiece.depositCargo())
+            {
+            System.out.println("deposited the hatch");
+            started = false;
+            prepped = false;
+            }
         }
 
 
-    System.out.println(
-            "ringlight relay:" + Hardware.axisCamera.getRelayValue());
+
     // System.out.println("Right or left: "
     // + Hardware.driveWithCamera.getTargetSide());
     // System.out.println(

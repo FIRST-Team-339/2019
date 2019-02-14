@@ -29,6 +29,7 @@ private SpeedController armRollers = null;
 
 private LightSensor photoSwitch = null;
 
+
 private Timer outakeTimer = new Timer();
 
 public RollerIntakeMechanism (SpeedController armRollers,
@@ -120,15 +121,19 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
  */
 public boolean spinOutCargoByTimer ()
 {
+    System.out.println(intakeState);
+    System.out.println(depositInit);
     if (depositInit == false)
         {
+
         intakeState = IntakeState.OUTTAKE_BY_TIMER;
         return false;
         }
     if (depositInit == true
             && intakeState != IntakeState.OUTTAKE_BY_TIMER)
         {
-        depositInit = false;
+
+        // depositInit = false; //TODO this no worky
         return true;
         }
     return false;
@@ -199,13 +204,18 @@ public void update ()
                 // expelled autonomously
                 depositInit = true;
                 }
+
             if (outakeTimer.get() >= DEPOSIT_CARGO_TIME)
                 {
+
                 outakeTimer.stop();
                 armRollers.set(HOLD_INTAKE_SPEED_NO_CARGO);
                 intakeState = IntakeState.HOLD;
                 }
-            armRollers.set(OUTTAKE_ROLLER_SPEED);
+            else
+                {
+                armRollers.set(OUTTAKE_ROLLER_SPEED);
+                }
             break;
         default:
             // state to stop intake, or apply a small speed if necessary
