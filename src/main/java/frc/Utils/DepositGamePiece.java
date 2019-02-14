@@ -138,21 +138,21 @@ public boolean depositCargo ()
                 {
                 System.out.println(
                         "deposited");
-                this.gamePieceManipulator.resetStateMachine();
-                depositHatchState = DepositHatchState.BACKUP_HATCH;
+
+                depositCargoState = DepositCargoState.BACKUP_CARGO;
                 }
             break;
         case BACKUP_CARGO:
             if (this.drive.driveStraightInches(BACKUP_INCHES,
                     -BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
                 {
-                depositHatchState = DepositHatchState.STOP;
+                depositCargoState = DepositCargoState.STOP;
                 }
             break;
         case STOP:
             this.drive.drive(0, 0);
 
-            depositHatchState = DepositHatchState.INIT;
+            depositCargoState = DepositCargoState.INIT;
             return true;
         }
     return false;
