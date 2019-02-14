@@ -1077,8 +1077,8 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.rightFrontCANMotor.setInverted(true);
+    Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
 
@@ -1126,8 +1126,8 @@ public static void setHardwareSettings2019 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.rightFrontCANMotor.setInverted(true);
+    Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
 

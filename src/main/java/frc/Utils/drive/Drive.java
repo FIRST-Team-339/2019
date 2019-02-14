@@ -578,7 +578,7 @@ public boolean brake_new (BrakeType type)
  *
  * @return Whether or not the robot has stopped moving.
  */
-public boolean brake (BrakeType type)
+public boolean brakeOld (BrakeType type)
 {
     // prints out calling brake
     // System.out.println("Calling Brake");

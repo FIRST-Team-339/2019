@@ -274,7 +274,7 @@ public static void periodic ()
         }
     else
         {
-        // teleopDrive();
+        teleopDrive();
         }
 
     printStatements();
