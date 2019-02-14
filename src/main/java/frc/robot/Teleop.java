@@ -267,7 +267,7 @@ public static void periodic ()
         teleopDrive();
         }
 
-    // printStatements();
+    printStatements();
 } // end Periodic()
 
 
@@ -278,7 +278,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -383,28 +383,24 @@ private static void coleTest ()
 
     // Manipulator
 
-    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
-            Hardware.deployOverride.get());
+    // System.out.println("Left Front motor isReversed: " +
+    // Hardware.leftFrontCANMotor.get());
 
-    Hardware.manipulator.moveArmByButton(45,
-            GamePieceManipulator.DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED,
-            Hardware.setDeploy45DegreeButton);
+    // System.out.println("Left Rear motor isReversed: " +
+    // Hardware.leftFrontCANMotor.get());
 
-    if (Hardware.autoDeployButton.getCurrentValue() == true)
-        Hardware.manipulator.deployArm();
+    // System.out.println("Right Front motor isReversed: " +
+    // Hardware.rightFrontCANMotor.get());
 
-    if (Hardware.autoRetractButton.getCurrentValue() == true)
-        Hardware.manipulator.retractArm();
+    // System.out.println("Right Rear motor isReversed: " +
+    // Hardware.rightRearCANMotor.get());
 
-    // TODO test with make break / IR
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // // System.out.println("Right Front Encoder isReversed: " +
+    // // Hardware.rightFrontDriveEncoder.getRate());
 
+    // System.out.println("Left Front Encoder isReversed: "
+    // + Hardware.leftFrontDriveEncoder.getRate());
 
-    SmartDashboard.putString("Hardware Arm IR",
-            "" + Hardware.armIR.get());
 } // end coleTest()
 
 private static boolean hasFinishedAutoSpinOut = false;
@@ -539,29 +535,29 @@ public static void printStatements ()
 
         // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
-        // SmartDashboard.putNumber("RF Drive Motor ",
-        // Hardware.rightFrontCANMotor.get());
+        SmartDashboard.putNumber("RF Drive Motor ",
+                Hardware.rightFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
 
         // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
-        // SmartDashboard.putNumber("LF Drive Motor ",
-        // Hardware.leftFrontCANMotor.get());
+        SmartDashboard.putNumber("LF Drive Motor ",
+                Hardware.leftFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
 
         // System.out.println("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
-        // SmartDashboard.putNumber("RR Drive Motor ",
-        // Hardware.rightRearCANMotor.get());
+        SmartDashboard.putNumber("RR Drive Motor ",
+                Hardware.rightRearCANMotor.get());
         // Hardware.telemetry.printToConsole("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
 
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        // SmartDashboard.putNumber("LR Drive Motor ",
-        // Hardware.leftRearCANMotor.get());
+        SmartDashboard.putNumber("LR Drive Motor ",
+                Hardware.leftRearCANMotor.get());
         // Hardware.telemetry.printToConsole("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
 
