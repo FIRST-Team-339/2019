@@ -415,6 +415,25 @@ private static void coleTest ()
     SmartDashboard.putNumber("Right Front Ticks ",
             Hardware.rightFrontDriveEncoder.get());
 
+    // System.out.println("Left Front motor isReversed: " +
+    // Hardware.leftFrontCANMotor.get());
+
+    // System.out.println("Left Rear motor isReversed: " +
+    // Hardware.leftFrontCANMotor.get());
+
+    // System.out.println("Right Front motor isReversed: " +
+    // Hardware.rightFrontCANMotor.get());
+
+    // System.out.println("Right Rear motor isReversed: " +
+    // Hardware.rightRearCANMotor.get());
+
+    // // System.out.println("Right Front Encoder isReversed: " +
+    // // Hardware.rightFrontDriveEncoder.getRate());
+
+    // System.out.println("Left Front Encoder isReversed: "
+    // + Hardware.leftFrontDriveEncoder.getRate());
+
+
 } // end coleTest()
 
 private static boolean hasFinishedAutoSpinOut = false;
@@ -554,29 +573,29 @@ public static void printStatements ()
 
         // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
-        // SmartDashboard.putNumber("RF Drive Motor ",
-        // Hardware.rightFrontCANMotor.get());
+        SmartDashboard.putNumber("RF Drive Motor ",
+                Hardware.rightFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
 
         // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
-        // SmartDashboard.putNumber("LF Drive Motor ",
-        // Hardware.leftFrontCANMotor.get());
+        SmartDashboard.putNumber("LF Drive Motor ",
+                Hardware.leftFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
 
         // System.out.println("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
-        // SmartDashboard.putNumber("RR Drive Motor ",
-        // Hardware.rightRearCANMotor.get());
+        SmartDashboard.putNumber("RR Drive Motor ",
+                Hardware.rightRearCANMotor.get());
         // Hardware.telemetry.printToConsole("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
 
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        // SmartDashboard.putNumber("LR Drive Motor ",
-        // Hardware.leftRearCANMotor.get());
+        SmartDashboard.putNumber("LR Drive Motor ",
+                Hardware.leftRearCANMotor.get());
         // Hardware.telemetry.printToConsole("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
 

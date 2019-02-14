@@ -1066,7 +1066,7 @@ public static void setHardwareSettings2018 ()
 {
     // Hardware.drive.setBrakeIterations(4);
     // Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
-    Hardware.drive.setDebugOnStatus(Drive.debugType.DEBUG_BRAKING);
+    // Hardware.drive.setDebugOnStatus(Drive.debugType.DEBUG_BRAKING);
     // ----------------------------
     // motor initialization
     // ----------------------------
