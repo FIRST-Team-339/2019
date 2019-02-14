@@ -85,6 +85,8 @@ public static void init ()
 
     Hardware.axisCamera.setRelayValue(Value.kOff);
 
+    Hardware.liftingEncoder.reset();
+
     // TODO @ANE uncomment
     // if (Hardware.autoLevelSwitch.isOn() == true) {
     // autoLevel = Level.DISABLE;

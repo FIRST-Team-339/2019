@@ -277,7 +277,7 @@ public static void periodic ()
         teleopDrive();
         }
 
-    // printStatements();
+    printStatements();
 } // end Periodic()
 
 
@@ -394,7 +394,26 @@ private static void coleTest ()
 
     // Manipulator
 
-    // TODO test with make break / IR
+    SmartDashboard.putString("Lift Encoder 2019 get",
+            "" + Hardware.liftingEncoder.get());
+
+    SmartDashboard.putString("Lift Encoder 2019 getDistance",
+            "" + Hardware.liftingEncoder.getDistance());
+
+    SmartDashboard.putString("Lift Encoder 2019 getRate",
+            "" + Hardware.liftingEncoder.getRate());
+
+    SmartDashboard.putNumber("Left Front Encoder Inches = ",
+            Hardware.leftFrontDriveEncoder.getDistance());
+
+    SmartDashboard.putNumber("Left front encoder ticks: ",
+            Hardware.leftFrontDriveEncoder.get());
+
+    SmartDashboard.putNumber("Right Front Inches = ",
+            Hardware.rightFrontDriveEncoder.getDistance());
+
+    SmartDashboard.putNumber("Right Front Ticks ",
+            Hardware.rightFrontDriveEncoder.get());
 
 } // end coleTest()
 
@@ -497,7 +516,7 @@ private static void meghanTest ()
 
 } // end meghanTest()
 
-private static void dionTest()
+private static void dionTest ()
 {
 
 } // end dionTest()
@@ -655,29 +674,29 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("LF encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Left Front Encoder Inches = ",
-        // Hardware.leftFrontDriveEncoder.getDistance());
+        SmartDashboard.putNumber("Left Front Encoder Inches = ",
+                Hardware.leftFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
         // System.out.println("LF encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Left front encoder ticks: ",
-        // Hardware.leftFrontDriveEncoder.get());
+        SmartDashboard.putNumber("Left front encoder ticks: ",
+                Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Right Front Inches = ",
-        // Hardware.rightFrontDriveEncoder.getDistance());
+        SmartDashboard.putNumber("Right Front Inches = ",
+                Hardware.rightFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Right Front Ticks ",
-        // Hardware.rightFrontDriveEncoder.get());
+        SmartDashboard.putNumber("Right Front Ticks ",
+                Hardware.rightFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
 

@@ -53,6 +53,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -899,7 +900,7 @@ public static void robotInitialize2019 ()
     rightRearDriveEncoder = new KilroyEncoder(
             (CANSparkMax) rightRearCANMotor);
 
-    liftingEncoder = new KilroyEncoder((TalonSRX) liftMotor);
+    liftingEncoder = new KilroyEncoder((BaseMotorController) liftMotor);
 
     // -------------------------------------
     // Red Light/IR Sensor class
@@ -1110,6 +1111,9 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
+
+
+
     // Hardware.drive.setBrakeIterations(20);
     // Hardware.drive.setBrakeDeadband(50, BrakeType.AFTER_DRIVE);
     // ----------------------------
@@ -1152,6 +1156,9 @@ public static void setHardwareSettings2019 ()
     Hardware.leftRearDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
+
+    Hardware.drive
+            .setMaxBrakeIterations(KILROY_XX_MAX_BRAKE_ITERATIONS);
 } // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
@@ -1160,6 +1167,9 @@ private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
 private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.82;
 
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+// 665 ticks for 6 inches
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0091603;
+
+private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 1;
 
 } // end class
