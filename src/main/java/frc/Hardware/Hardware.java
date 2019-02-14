@@ -225,6 +225,8 @@ public static Compressor compressor = null;
 // ------------------------------------
 public static DoubleSolenoid armIntakeSolenoid = null;
 
+public static DoubleSolenoid driveSolenoid = null;
+
 // ------------------------------------
 // Single Solenoids
 // ------------------------------------
@@ -530,7 +532,10 @@ public static void commonInitialization ()
     // ====================================
 
     // Double Solenoids
-    armIntakeSolenoid = new DoubleSolenoid(0, 1);
+
+    driveSolenoid = new DoubleSolenoid(0,
+            1);
+
 
     // Single Solenoids
 
@@ -694,14 +699,16 @@ public static void commonInitialization ()
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, armMotor, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-
     alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
             drive);
 
     depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
+
+
+
+    climber = new ClimbToLevelTwo(
+            driveSolenoid, armMotor, intakeDeploySensor,
+            drive, lift, frontUltraSonic);
 
 } // end of commonInitialization()
 
@@ -785,6 +792,7 @@ public static void robotInitialize2018 ()
     // ====================================
 
     // Double Solenoids
+
 
     // Single Solenoids
 
@@ -928,7 +936,6 @@ public static void robotInitialize2019 ()
     // Double Solenoids
 
     // Single Solenoids
-
     // **********************************************************
     // ANALOG I/O CLASSES
     // **********************************************************
