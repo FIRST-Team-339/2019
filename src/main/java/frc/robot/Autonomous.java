@@ -350,7 +350,7 @@ private static boolean crossAutoline ()
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("GOOD MORNING VIETNAM!");
+            System.out.println("Initializing");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -417,7 +417,8 @@ private static boolean crossAutoline ()
         case FINISH:
             // HardwareInterfaces.Transmission.TransmissionBase.stop();
             System.out.println(
-                    "You have arrived at your final destination...the foreboding Vaaach homeworld.");
+                    "You have arrived at your final destination");
+            // Transmission.TransmissionBase.stop();
             break;
         }
     return false;
