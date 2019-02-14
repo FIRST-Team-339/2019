@@ -28,8 +28,6 @@ private KilroyEncoder armEncoder = null;
 private RollerIntakeMechanism intake = null;
 
 
-
-
 /**
  * constructor to use in hardware
  */
@@ -382,7 +380,6 @@ public boolean retractArm ()
  */
 public void deployUpdate ()
 {
-    this.printDeployDebugInfo();
 
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
         this.stayAtPosition2018InitIsReady = true;
@@ -390,8 +387,6 @@ public void deployUpdate ()
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
-            SmartDashboard.putString("Target Position",
-                    "" + this.deployTargetAngle);
             if ((this.deployTargetAngle > currentDeployMaxAngle)
                     || (this.deployTargetAngle < currentDeployMinAngle))
                 {
@@ -602,7 +597,6 @@ public boolean spinOutCargoByTimer ()
  */
 public void resetStateMachine ()
 {
-    System.out.println("Resetting manipulator state machine");
     this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
     this.intake.resetStateMachine();
 }

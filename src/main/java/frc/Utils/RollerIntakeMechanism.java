@@ -3,8 +3,6 @@ package frc.Utils;
 import edu.wpi.first.wpilibj.SpeedController;
 import frc.HardwareInterfaces.LightSensor;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Hardware.Hardware;
 
 /**
  * Class for all the methods for taking in and spitting out the cargo for
@@ -166,9 +164,6 @@ public void resetStateMachine ()
  */
 public void update ()
 {
-    SmartDashboard.putString("Intake State", "" + intakeState);
-    SmartDashboard.putString("Intake Arm IR",
-            "" + this.photoSwitch.get());
 
     switch (intakeState) // main state machine of intake
         {

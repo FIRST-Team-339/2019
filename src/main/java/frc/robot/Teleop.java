@@ -202,7 +202,7 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    // Forklifts
+    // Forklift
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
@@ -224,6 +224,16 @@ public static void periodic ()
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextLowerLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
+
+    // Game Piece Manipulator
+
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
     // =================================================================
     Hardware.lift.update();
@@ -267,7 +277,7 @@ public static void periodic ()
         // teleopDrive();
         }
 
-    // printStatements();
+    printStatements();
 } // end Periodic()
 
 
@@ -278,12 +288,13 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
     // meghanTest();
+    // dionTest();
     // nithyaTest();
 } // end individualTest()
 
@@ -391,28 +402,46 @@ private static void coleTest ()
 
     // Manipulator
 
-    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
-            Hardware.deployOverride.get());
+    SmartDashboard.putString("Lift Encoder 2019 get",
+            "" + Hardware.liftingEncoder.get());
 
-    Hardware.manipulator.moveArmByButton(45,
-            GamePieceManipulator.DEFAULT_MOVE_BY_BUTTON_SPEED_UNSCALED,
-            Hardware.setDeploy45DegreeButton);
+    SmartDashboard.putString("Lift Encoder 2019 getDistance",
+            "" + Hardware.liftingEncoder.getDistance());
 
-    if (Hardware.autoDeployButton.getCurrentValue() == true)
-        Hardware.manipulator.deployArm();
+    SmartDashboard.putString("Lift Encoder 2019 getRate",
+            "" + Hardware.liftingEncoder.getRate());
 
-    if (Hardware.autoRetractButton.getCurrentValue() == true)
-        Hardware.manipulator.retractArm();
+    SmartDashboard.putNumber("Left Front Encoder Inches = ",
+            Hardware.leftFrontDriveEncoder.getDistance());
 
-    // TODO test with make break / IR
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    SmartDashboard.putNumber("Left front encoder ticks: ",
+            Hardware.leftFrontDriveEncoder.get());
+
+    SmartDashboard.putNumber("Right Front Inches = ",
+            Hardware.rightFrontDriveEncoder.getDistance());
+
+    SmartDashboard.putNumber("Right Front Ticks ",
+            Hardware.rightFrontDriveEncoder.get());
+
+    // System.out.println("Left Front motor isReversed: " +
+    // Hardware.leftFrontCANMotor.get());
+
+    // System.out.println("Left Rear motor isReversed: " +
+    // Hardware.leftFrontCANMotor.get());
+
+    // System.out.println("Right Front motor isReversed: " +
+    // Hardware.rightFrontCANMotor.get());
+
+    // System.out.println("Right Rear motor isReversed: " +
+    // Hardware.rightRearCANMotor.get());
+
+    // // System.out.println("Right Front Encoder isReversed: " +
+    // // Hardware.rightFrontDriveEncoder.getRate());
+
+    // System.out.println("Left Front Encoder isReversed: "
+    // + Hardware.leftFrontDriveEncoder.getRate());
 
 
-    SmartDashboard.putString("Hardware Arm IR",
-            "" + Hardware.armIR.get());
 } // end coleTest()
 
 private static boolean hasFinishedAutoSpinOut = false;
@@ -514,6 +543,11 @@ private static void meghanTest ()
 
 } // end meghanTest()
 
+private static void dionTest ()
+{
+
+} // end dionTest()
+
 private static void nithyaTest ()
 {
 
@@ -547,29 +581,29 @@ public static void printStatements ()
 
         // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
-        // SmartDashboard.putNumber("RF Drive Motor ",
-        // Hardware.rightFrontCANMotor.get());
+        SmartDashboard.putNumber("RF Drive Motor ",
+                Hardware.rightFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
 
         // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
-        // SmartDashboard.putNumber("LF Drive Motor ",
-        // Hardware.leftFrontCANMotor.get());
+        SmartDashboard.putNumber("LF Drive Motor ",
+                Hardware.leftFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
 
         // System.out.println("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
-        // SmartDashboard.putNumber("RR Drive Motor ",
-        // Hardware.rightRearCANMotor.get());
+        SmartDashboard.putNumber("RR Drive Motor ",
+                Hardware.rightRearCANMotor.get());
         // Hardware.telemetry.printToConsole("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
 
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        // SmartDashboard.putNumber("LR Drive Motor ",
-        // Hardware.leftRearCANMotor.get());
+        SmartDashboard.putNumber("LR Drive Motor ",
+                Hardware.leftRearCANMotor.get());
         // Hardware.telemetry.printToConsole("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
 
@@ -667,29 +701,29 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("LF encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Left Front Encoder Inches = ",
-        // Hardware.leftFrontDriveEncoder.getDistance());
+        SmartDashboard.putNumber("Left Front Encoder Inches = ",
+                Hardware.leftFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
         // System.out.println("LF encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Left front encoder ticks: ",
-        // Hardware.leftFrontDriveEncoder.get());
+        SmartDashboard.putNumber("Left front encoder ticks: ",
+                Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
-        // SmartDashboard.putNumber("Right Front Inches = ",
-        // Hardware.rightFrontDriveEncoder.getDistance());
+        SmartDashboard.putNumber("Right Front Inches = ",
+                Hardware.rightFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
-        // SmartDashboard.putNumber("Right Front Ticks ",
-        // Hardware.rightFrontDriveEncoder.get());
+        SmartDashboard.putNumber("Right Front Ticks ",
+                Hardware.rightFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
 
