@@ -374,6 +374,29 @@ public boolean retractArm ()
     return true; // if we are already deployed
 }
 
+
+/**
+ * sets the state of the deploy state machine to whatever state you pass in
+ *
+ * @param State
+ */
+public boolean setDeployMovementState (
+        DeployMovementState targetDeployMovementState)
+{
+    deployMovementState = targetDeployMovementState;
+
+    if (deployMovementState == targetDeployMovementState)
+        {
+        return true;
+        }
+    else
+        {
+        return false;
+        }
+}
+
+
+
 /**
  * Update method for the deploy state machine. Is what actually tells
  * the armMotor what to do based off the current deployMovementState.

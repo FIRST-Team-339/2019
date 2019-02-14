@@ -1,5 +1,6 @@
 package frc.Utils;
 
+import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -13,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class ClimbToLevelTwo
 {
 
-private SingleSolenoid driveSolenoid = null;
+private DoubleSolenoid driveSolenoid = null;
 
 private SpeedController armMotor = null;
 
@@ -79,23 +80,25 @@ public ClimbToLevelTwo ()
  * @param-lift
  *             Forklift object that controlls the forklift's up and down motions
  * @param- ultraSonic
- *         Ultrasonic that is mounted on the front of the robot and used to tell
- *         us when to stop based on how far away from the wall we are
- *
+ *         // * Ultrasonic that is mounted on the front of the robot and used to
+ *         tell
+ *         // * us when to stop based on how far away from the wall we are
+ *         // *
+ *         //
  */
-public ClimbToLevelTwo (DoubleSolenoid testSolenoid,
-        SpeedController armMotor, RobotPotentiometer armSensor,
-        Drive drive,
-        Forklift lift, UltraSonic ultraSonic)
-{
+// public ClimbToLevelTwo (DoubleSolenoid testSolenoid,
+// SpeedController armMotor, RobotPotentiometer armSensor,
+// Drive drive,
+// Forklift lift, UltraSonic ultraSonic)
+// {
 
-    this.testSolenoid = testSolenoid;
-    this.armMotor = armMotor;
-    this.armSensor = armSensor;
-    this.drive = drive;
-    this.lift = lift;
-    this.ultraSonic = ultraSonic;
-}
+// this.testSolenoid = testSolenoid;
+// this.armMotor = armMotor;
+// this.armSensor = armSensor;
+// this.drive = drive;
+// this.lift = lift;
+// this.ultraSonic = ultraSonic;
+// }
 
 /**
  * Constructor for the new robot- has armPot and single solenoid
@@ -123,7 +126,7 @@ public ClimbToLevelTwo (DoubleSolenoid testSolenoid,
  *         us when to stop based on how far away from the wall we are
  *
  */
-public ClimbToLevelTwo (SingleSolenoid driveSolenoid,
+public ClimbToLevelTwo (DoubleSolenoid driveSolenoid,
         SpeedController armMotor, RobotPotentiometer armSensor,
         Drive drive, Forklift lift, UltraSonic ultraSonic)
 {
@@ -149,7 +152,7 @@ public void climbUpdate ()
         case STANDBY:
             // state to wait in during the match until climb() or reverseClimb()
             // is called
-            testSolenoid.set(Value.kForward);
+            // testSolenoid.set(Value.kForward);
             break;
 
         case START_CLIMB:
@@ -678,14 +681,14 @@ private boolean lowerForkliftToPosition ()
     // } else {
     // liftMotor.set(0.0);
     System.out.println("Trying to lower forklift to position ");
-    // if (this.lift.setLiftPosition(LIFT_HEIGHT_TO_START_CLIMB,
-    // LOWER_LIFT_SPEED))
-    // {
-    return true;
-}
-// return false;
+    if (this.lift.setLiftPosition(LIFT_HEIGHT_TO_START_CLIMB,
+            LOWER_LIFT_SPEED))
+        {
+        return true;
+        }
+    return false;
 
-// }
+}
 
 /**
  * method to lower arm to the position needed to climb- all the way down
@@ -695,13 +698,17 @@ private boolean lowerArm ()
     // checks the position of the arm and if it has not gone far enough, sets
     // the motor to the sped to lower the arm
     System.out.println("Trying to lower arm");
-    if (this.armSensor.get() <= LOWERED_ARM_POSITION)
+    // if (this.armSensor.get() <= LOWERED_ARM_POSITION)
+    // {
+    // armMotor.set(LOWER_ARM_SPEED);
+    // }
+    // else
+    // {
+    // armMotor.set(0.0);
+    // return true;
+    // }
+    if (Hardware.manipulator.deployArm() == true)
         {
-        armMotor.set(LOWER_ARM_SPEED);
-        }
-    else
-        {
-        armMotor.set(0.0);
         return true;
         }
     return false;
@@ -721,10 +728,12 @@ private boolean lowerForkliftCompletely ()
     // liftMotor.set(0.0);
     // }
     // armMotor.set(ARM_HOLD_SPEED);
-    // if (lift.setLiftPosition(MIN_LIFT_HEIGHT_TO_CLIMB, LOWER_LIFT_SPEED)) {
-    return true;
-    // }
-    // return false;
+    if (lift.setLiftPosition(MIN_LIFT_HEIGHT_TO_CLIMB,
+            LOWER_LIFT_SPEED))
+        {
+        return true;
+        }
+    return false;
 }
 
 /**
@@ -735,9 +744,9 @@ private boolean lowerForkliftCompletely ()
 private boolean deployBackWheels ()
 {
     System.out.println("Trying to deploy back wheels");
-    // driveSolenoid.set(LOWER_WHEELS_POSITION);
+    driveSolenoid.setForward(LOWER_WHEELS_POSITION);
     // sets test solnoid to a position
-    testSolenoid.set(Value.kReverse);
+    // testSolenoid.set(Value.kReverse);
     return true;
 
 }
@@ -769,15 +778,20 @@ private boolean raiseArm ()
     // checks to see if the arm has gone far enough, if not it sets th ar to the
     // raise arm speed
     System.out.println("Trying to raise arm");
-    if (armSensor.get() >= RAISED_ARM_POSITION)
+    // if (armSensor.get() >= RAISED_ARM_POSITION)
+    // {
+    // armMotor.set(RAISE_ARM_SPEED);
+    // }
+    // else
+    // {
+    // armMotor.set(0.0);
+    // return true;
+    // }
+    if (Hardware.manipulator.retractArm() == true)
         {
-        armMotor.set(RAISE_ARM_SPEED);
-        }
-    else
-        {
-        armMotor.set(0.0);
         return true;
         }
+
     return false;
 }
 
@@ -790,8 +804,8 @@ private boolean retractWheels ()
 {
     // sets the solenoid to the correct position
     System.out.println("Trying to retract wheels");
-    // driveSolenoid.set(RETRACT_WHEELS_POSITION);
-    testSolenoid.set(Value.kForward);
+    driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
+    // testSolenoid.set(Value.kForward);
     return true;
 }
 
@@ -827,10 +841,10 @@ private void stop ()
 {
     System.out.println("Trying to stop");
     drive.stop();
-    armMotor.set(0.0);
-    // lift.liftState = Forklift.ForkliftState.STOP;
-    // driveSolenoid.set(RETRACT_WHEELS_POSITION);
-    // drive.stop();
+    Hardware.manipulator.setDeployMovementState(
+            GamePieceManipulator.DeployMovementState.STAY_AT_POSITION);
+    lift.liftState = Forklift.ForkliftState.STOP;
+    driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
 }
 
 /**
@@ -860,9 +874,9 @@ private static final double LIFT_HEIGHT_TO_START_CLIMB = 30.0;
 
 private static final double MIN_LIFT_HEIGHT_TO_CLIMB = 10.0;
 
-private static final boolean LOWER_WHEELS_POSITION = true;
+private static final Boolean LOWER_WHEELS_POSITION = true;
 
-private static final boolean RETRACT_WHEELS_POSITION = false;
+private static final Boolean RETRACT_WHEELS_POSITION = false;
 
 
 // SPEEDS
