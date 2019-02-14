@@ -881,9 +881,9 @@ private static final Boolean RETRACT_WHEELS_POSITION = false;
 
 // SPEEDS
 
-private static final double RAISE_ARM_SPEED = .7;
+// private static final double RAISE_ARM_SPEED = .7;
 
-private static final double LOWER_ARM_SPEED = -.4;
+// private static final double LOWER_ARM_SPEED = -.4;
 
 private static final double ARM_HOLD_SPEED = 1.0;
 
