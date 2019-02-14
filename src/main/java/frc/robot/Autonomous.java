@@ -85,6 +85,8 @@ public static void init ()
 
     Hardware.axisCamera.setRelayValue(Value.kOff);
 
+    Hardware.liftingEncoder.reset();
+
     // TODO @ANE uncomment
     // if (Hardware.autoLevelSwitch.isOn() == true) {
     // autoLevel = Level.DISABLE;
@@ -1189,13 +1191,16 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
  */
 public static boolean prepToDeposit ()
 {
-    if (Hardware.lift
-            .setLiftPosition(Forklift.LOWER_ROCKET_CARGO - 5) == true)
+    System.out.println("prepping, currnet forkiness: "
+            + Hardware.lift.getForkliftHeight());
+    if (Hardware.lift.setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
         {
-        // Hardware.manipulator.
-        System.out.println(
-                "NOW WE WOULD MOVE THE ARM IF THAT CODE WAS ACTUALLY WRITTEN");
-        return true;
+        System.out.println("deploying");
+        if (/* Hardware.manipulator.moveArmToPosition(45, .4) */true)
+            {
+            return true;
+            }
+
         } // end if
     return false;
 } // end prepToDeposit()
