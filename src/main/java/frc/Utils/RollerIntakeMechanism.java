@@ -3,8 +3,6 @@ package frc.Utils;
 import edu.wpi.first.wpilibj.SpeedController;
 import frc.HardwareInterfaces.LightSensor;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Hardware.Hardware;
 
 /**
  * Class for all the methods for taking in and spitting out the cargo for
@@ -28,6 +26,7 @@ public class RollerIntakeMechanism
 private SpeedController armRollers = null;
 
 private LightSensor photoSwitch = null;
+
 
 private Timer outakeTimer = new Timer();
 
@@ -120,15 +119,19 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
  */
 public boolean spinOutCargoByTimer ()
 {
+    System.out.println(intakeState);
+    System.out.println(depositInit);
     if (depositInit == false)
         {
+
         intakeState = IntakeState.OUTTAKE_BY_TIMER;
         return false;
         }
     if (depositInit == true
             && intakeState != IntakeState.OUTTAKE_BY_TIMER)
         {
-        depositInit = false;
+
+        // depositInit = false; //TODO this no worky
         return true;
         }
     return false;
@@ -161,9 +164,6 @@ public void resetStateMachine ()
  */
 public void update ()
 {
-    SmartDashboard.putString("Intake State", "" + intakeState);
-    SmartDashboard.putString("Intake Arm IR",
-            "" + this.photoSwitch.get());
 
     switch (intakeState) // main state machine of intake
         {
@@ -199,13 +199,18 @@ public void update ()
                 // expelled autonomously
                 depositInit = true;
                 }
+
             if (outakeTimer.get() >= DEPOSIT_CARGO_TIME)
                 {
+
                 outakeTimer.stop();
                 armRollers.set(HOLD_INTAKE_SPEED_NO_CARGO);
                 intakeState = IntakeState.HOLD;
                 }
-            armRollers.set(OUTTAKE_ROLLER_SPEED);
+            else
+                {
+                armRollers.set(OUTTAKE_ROLLER_SPEED);
+                }
             break;
         default:
             // state to stop intake, or apply a small speed if necessary

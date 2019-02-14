@@ -53,6 +53,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -223,6 +224,8 @@ public static Compressor compressor = null;
 // Double Solenoids
 // ------------------------------------
 public static DoubleSolenoid armIntakeSolenoid = null;
+
+public static DoubleSolenoid driveSolenoid = null;
 
 // ------------------------------------
 // Single Solenoids
@@ -529,7 +532,10 @@ public static void commonInitialization ()
     // ====================================
 
     // Double Solenoids
-    armIntakeSolenoid = new DoubleSolenoid(0, 1);
+
+    driveSolenoid = new DoubleSolenoid(0,
+            1);
+
 
     // Single Solenoids
 
@@ -693,14 +699,16 @@ public static void commonInitialization ()
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
-    climber = new ClimbToLevelTwo(
-            armIntakeSolenoid, armMotor, intakeDeploySensor,
-            drive, lift, frontUltraSonic);
-
     alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
             drive);
 
     depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
+
+
+
+    climber = new ClimbToLevelTwo(
+            driveSolenoid, armMotor, intakeDeploySensor,
+            drive, lift, frontUltraSonic);
 
 } // end of commonInitialization()
 
@@ -784,6 +792,7 @@ public static void robotInitialize2018 ()
     // ====================================
 
     // Double Solenoids
+
 
     // Single Solenoids
 
@@ -899,7 +908,7 @@ public static void robotInitialize2019 ()
     rightRearDriveEncoder = new KilroyEncoder(
             (CANSparkMax) rightRearCANMotor);
 
-    liftingEncoder = new KilroyEncoder((TalonSRX) liftMotor);
+    liftingEncoder = new KilroyEncoder((BaseMotorController) liftMotor);
 
     // -------------------------------------
     // Red Light/IR Sensor class
@@ -927,7 +936,6 @@ public static void robotInitialize2019 ()
     // Double Solenoids
 
     // Single Solenoids
-
     // **********************************************************
     // ANALOG I/O CLASSES
     // **********************************************************
@@ -1065,7 +1073,7 @@ public static void setHardwareSettings2018 ()
 {
     // Hardware.drive.setBrakeIterations(4);
     // Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
-    Hardware.drive.setDebugOnStatus(Drive.debugType.DEBUG_BRAKING);
+    // Hardware.drive.setDebugOnStatus(Drive.debugType.DEBUG_BRAKING);
     // ----------------------------
     // motor initialization
     // ----------------------------
@@ -1110,6 +1118,9 @@ public static void setHardwareSettings2018 ()
  */
 public static void setHardwareSettings2019 ()
 {
+
+
+
     // Hardware.drive.setBrakeIterations(20);
     // Hardware.drive.setBrakeDeadband(50, BrakeType.AFTER_DRIVE);
     // ----------------------------
@@ -1152,6 +1163,9 @@ public static void setHardwareSettings2019 ()
     Hardware.leftRearDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
+
+    Hardware.drive
+            .setMaxBrakeIterations(KILROY_XX_MAX_BRAKE_ITERATIONS);
 } // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
@@ -1160,6 +1174,9 @@ private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
 private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.82;
 
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.02;
+// 665 ticks for 6 inches
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0091603;
+
+private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 1;
 
 } // end class

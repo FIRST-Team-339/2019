@@ -99,7 +99,7 @@ public KilroyEncoder (CANSparkMax canMotorController,
  * This is the same as the old kilroy can encoder, but the can hats for the
  * talon SRX's read the encoder as 4X instead of 1X, so the ticks must be
  * divided by 4
- * 
+ *
  * @param canMotorController
  */
 public KilroyEncoder (TalonSRX canMotorController)
@@ -398,14 +398,14 @@ public double pidGet ()
  */
 public enum SensorType
     {
-/** Attached to a CAN Motor Controller */
-CAN,
-/** Attached to the Digital I/O ports */
-D_IO,
-/** Attached to the REVSparkMax CAN encoder */
-REV_CAN,
-/** Attached to a CAN Motor Controller via hat */
-CAN_HAT
+    /** Attached to a CAN Motor Controller */
+    CAN,
+    /** Attached to the Digital I/O ports */
+    D_IO,
+    /** Attached to the REVSparkMax CAN encoder */
+    REV_CAN,
+    /** Attached to a CAN Motor Controller via hat */
+    CAN_HAT
     }
 
 // variable at which rotational measurements of the Spark Max is translated to
