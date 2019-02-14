@@ -202,7 +202,7 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    // Forklifts
+    // Forklift
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
@@ -224,6 +224,16 @@ public static void periodic ()
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.nextLowerLiftHeightButton,
             Hardware.chooseCargoRocketHeights.get());
+
+    // Game Piece Manipulator
+
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            Hardware.intakeTrigger.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
 
     // =================================================================
     Hardware.lift.update();
@@ -284,6 +294,7 @@ private static void individualTest ()
     // patrickTest();
     // annaTest();
     // meghanTest();
+    // dionTest();
     // nithyaTest();
 } // end individualTest()
 
@@ -501,6 +512,11 @@ private static void meghanTest ()
 {
 
 } // end meghanTest()
+
+private static void dionTest ()
+{
+
+} // end dionTest()
 
 private static void nithyaTest ()
 {
