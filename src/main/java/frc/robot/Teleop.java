@@ -288,7 +288,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -352,9 +352,16 @@ private static boolean prepped = false;
 
 private static void connerTest ()
 {
+    Hardware.axisCamera.setDigitalOutputValue(Value.kOn);
+    // System.out.println(
+    // "can see the things: " + Hardware.axisCamera.hasBlobs()
+    // + Hardware.axisCamera
+    // .getParticleReports().length);
 
+    SmartDashboard.putNumber("ultrasonic: ",
+            Hardware.frontUltraSonic.getDistanceFromNearestBumper());
 
-    System.out.println("is doing the thng: " + started);
+    // System.out.println("is doing the thng: " + started);
 
     if (Hardware.rightOperator.getRawButton(8))
         {
@@ -362,7 +369,8 @@ private static void connerTest ()
         }
     if (started == true && !prepped)
         {
-        if (Autonomous.prepToDeposit())
+        Autonomous.prepToDeposit();
+        if (Hardware.driveWithCamera.driveToTarget(.4))
             {
             System.out.println("Finished prep");
             prepped = true;
@@ -379,6 +387,14 @@ private static void connerTest ()
             }
         }
 
+    if (Hardware.rightOperator.getRawButton(9))
+        {
+        Hardware.axisCamera.setDigitalOutputValue(Value.kOn);
+        System.out.println(
+                "can see the things: " + Hardware.axisCamera.hasBlobs()
+                        + Hardware.axisCamera
+                                .getParticleReports().length);
+        }
 
 
     // System.out.println("Right or left: "
@@ -862,8 +878,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -887,7 +903,7 @@ public static void printStatements ()
         // GYRO
         // ---------------------------------
 
-        // System.out.println("Gyro: " + Hardware.gyro.getAngle());
+        System.out.println("Gyro: " + Hardware.gyro.getAngle());
         // SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
         // Hardware.telemetry.printToConsole("Gyro: " +
         // Hardware.gyro.getAngle());

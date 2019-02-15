@@ -182,16 +182,19 @@ public boolean driveToTarget (double speed)
     switch (state)
         {
         case INIT:
+            Hardware.axisCamera.processImage();
             Hardware.axisCamera.setRelayValue(Value.kOn);
             Hardware.drive.resetEncoders();
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
+            // visionProcessor.saveImage(ImageType.RAW);
+            // visionProcessor.saveImage(ImageType.PROCESSED);
 
 
             double motorspeed = speed;
             double slowAmount;
             double slowestSpeed;
+
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
+
             break;
         case DRIVE_WITH_CAMERA:
             visionProcessor.saveImage(ImageType.RAW);
@@ -245,10 +248,11 @@ public boolean driveToTarget (double speed)
 
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (this.getTargetSide() == Side.LEFT)
+            if (centerX >= SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
+
                 System.out.println("WE ARE TOO left");
                 this.getTransmission().driveRaw(
                         motorspeed + DRIVE_CORRECTION,
@@ -258,26 +262,30 @@ public boolean driveToTarget (double speed)
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
 
-            if (this.getTargetSide() == Side.RIGHT)
-                {
-                // the switch's center is too far left, drive faster on the
-                // right
-                System.out.println("WE ARE TOO Right");
-                this.getTransmission().driveRaw(slowestSpeed,
-                        motorspeed + DRIVE_CORRECTION);
+            else
+                if (centerX <= SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
+                    {
+                    // the switch's center is too far left, drive faster on the
+                    // right
+                    System.out.println("WE ARE TOO Right");
+                    this.getTransmission().driveRaw(slowestSpeed,
+                            motorspeed + DRIVE_CORRECTION);
 
-                }
-            if (this.getTargetSide() == Side.CENTER)
-                {
-                System.out.println(
-                        "Driving straight center of blobs");
-                this.getTransmission().driveRaw(motorspeed, motorspeed);
-                }
+                    }
+                else
+                    {
+                    System.out.println(
+                            "Driving straight center of blobs");
+                    driveStraight(speed, 2, true);
+                    }
 
             // if we lose camera before aligned
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
-                    && isAnyEncoderLargerThan(MIN_INCHES))
+                    && (Hardware.rightFrontDriveEncoder
+                            .getDistance() >= CAMERA_NO_LONGER_WORKS
+                            || Hardware.leftFrontDriveEncoder
+                                    .getDistance() >= CAMERA_NO_LONGER_WORKS))
                 {
 
                 state = DriveWithCameraState.DRIVE_WITH_US;
@@ -399,71 +407,7 @@ private enum DriveWithCameraState
  * @return true if the robot has driven all the way to the front of the scale,
  *         and false if it hasn't
  */
-public boolean jankyDriveToTarget (double speed)
-{
-    switch (jankyState)
-        {
-        case INIT:
-            state = DriveWithCameraState.DRIVE_WITH_CAMERA;
-            break;
-        case DRIVE_WITH_CAMERA:
-            // gets the position of the center
 
-            double centerX = this.getCameraCenterValue();
-
-            // System.out.println("center" + centerX);
-            // turns on the ring light
-            // this.visionProcessor.setRelayValue(true);
-
-            // this.visionProcessor.setDigitalOutputValue(true);
-            // if the switch center is to the right of our center set by the
-            // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (centerX >= SWITCH_CAMERA_CENTER)
-                {
-                // the switch's center is too far right, drive faster on the
-                // left
-                // System.out.println("WE ARE TOO RIGHT");
-                this.getTransmission().driveRaw(
-                        speed + DRIVE_CORRECTION,
-                        speed - DRIVE_CORRECTION);
-                }
-            // if the switch center is to the left of our center set by the
-            // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-            else
-                {
-                // the switch's center is too far left, drive faster on the
-                // right
-                // System.out.println("WE ARE TOO LEFT");
-                this.getTransmission().driveRaw(
-                        speed - DRIVE_CORRECTION,
-                        speed + DRIVE_CORRECTION);
-                }
-
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS)
-                {
-                state = DriveWithCameraState.DRIVE_WITH_US;
-                }
-
-            break;
-        case DRIVE_WITH_US:
-            driveStraight(speed, 0, true);
-
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
-                state = DriveWithCameraState.STOP;
-
-            break;
-        default:
-        case STOP:
-            // if we are too close to the wall, brake, then set all motors to
-            // zero, else drive by ultrasonic
-            this.getTransmission().driveRaw(0, 0);
-            state = DriveWithCameraState.INIT;
-            return true;
-        }
-    return false;
-}
 
 private DriveWithCameraState jankyState = DriveWithCameraState.INIT;
 
@@ -482,7 +426,7 @@ public boolean visionTest (double speed)
 
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
-
+            testState = TestState.ALIGN_TEST;
             break;
         case ALIGN_TEST:
             System.out.println(
@@ -496,6 +440,12 @@ public boolean visionTest (double speed)
             double slowAmount = 1;
             double motorspeed = speed;
             double slowestSpeed;
+
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() >= DISTANCE_FROM_WALL_TO_STOP)
+                {
+                testState = TestState.ALIGN_TEST;
+                }
 
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
@@ -569,7 +519,7 @@ public boolean visionTest (double speed)
             // zero, else drive by ultrasonic
             System.out.println("We are stopping");
             this.getTransmission().driveRaw(0, 0);
-            state = DriveWithCameraState.INIT;
+            testState = TestState.INIT_TEST;
             return true;
         }
     return false;
@@ -608,8 +558,8 @@ public double getCameraCenterValue ()
                 + visionProcessor.getNthSizeBlob(1).center.x) / 2;
 
 
-        // System.out.println("TWO BLOBS");
-        // System.out.println("blob center: " + center);
+        System.out.println("TWO BLOBS");
+        System.out.println("blob center: " + center);
         }
     // if we only can detect one blob, the center is equal to the center x
     // position of the blob
@@ -617,8 +567,8 @@ public double getCameraCenterValue ()
         if (visionProcessor.getParticleReports().length == 1)
             {
             center = visionProcessor.getNthSizeBlob(0).center.x;
-            // System.out.println("ONE BLOBS");
-            // System.out.println("blob center: " + center);
+            System.out.println("ONE BLOBS");
+            System.out.println("blob center: " + center);
             }
         // if we don't have any blobs, set the center equal to the constanct
         // center,
@@ -657,9 +607,9 @@ private final double CAMERA_DEADBAND = 15;
 // the distance from the wall (in inches) where we start stopping the robot
 private final double DISTANCE_FROM_WALL_TO_STOP = 35;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW1 = 80;
+private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW2 = 50;
+private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
 private final double SLOW_MODIFIER = .6;
 
@@ -667,10 +617,10 @@ private final double SLOW_MODIFIER = .6;
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .2;
+private final double DRIVE_CORRECTION = .15;
 
 
 
-private final double MIN_INCHES = 60;
+private final double MIN_INCHES = 50;
 
 }
