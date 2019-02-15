@@ -393,7 +393,8 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO figure out why the robot isn't braking properly
+            // TODO check in with Ashley about distance/tick tomorrow
+            // 14 February 2019
             System.out.println("*distant screaming*");
             Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
