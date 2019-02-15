@@ -49,11 +49,11 @@ public void process (Mat source0)
     // Step RGB_Threshold0:
     Mat rgbThresholdInput = source0;
     double[] rgbThresholdRed =
-        {0, 100};
+        {0, 114};
     double[] rgbThresholdGreen =
-        {80, 255.0};
+        {130, 255.0};
     double[] rgbThresholdBlue =
-        {0, 255};
+        {0, 0};
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen,
             rgbThresholdBlue, rgbThresholdOutput);
 
@@ -69,12 +69,12 @@ public void process (Mat source0)
 
     // Step Filter_Contours0:
     ArrayList<MatOfPoint> filterContoursContours = convexHullsOutput;
-    double filterContoursMinArea = 0;
+    double filterContoursMinArea = 10;
     double filterContoursMinPerimeter = 0;
-    double filterContoursMinWidth = 3;
+    double filterContoursMinWidth = 2;
     double filterContoursMaxWidth = 1000;
     double filterContoursMinHeight = 0;
-    double filterContoursMaxHeight = 1000;
+    double filterContoursMaxHeight = 100;
     double[] filterContoursSolidity =
         {0, 100};
     double filterContoursMaxVertices = 1000000;

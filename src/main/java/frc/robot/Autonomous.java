@@ -546,7 +546,7 @@ private static boolean depositCargoHatch ()
                     ACCELERATION_TIME,
                     USING_GYRO)
                     || Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() < 20)
+                            .getDistanceFromNearestBumper() < 30)
                 {
                 System.out
                         .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");

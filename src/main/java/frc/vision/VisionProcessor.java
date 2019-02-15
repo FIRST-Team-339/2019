@@ -779,8 +779,10 @@ public ParticleReport[] getParticleReports ()
 public boolean hasBlobs ()
 {
     // @ANE
-    if (this.particleReports.length > 0)
+    if (this.getParticleReports().length >= 1)
+        {
         return true;
+        }
 
     return false;
 } // end hasBlobs()
