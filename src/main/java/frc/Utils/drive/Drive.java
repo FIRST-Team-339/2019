@@ -365,7 +365,7 @@ public boolean arc (double speed, double radius, double arcLength,
 // -----------------------------------------------------
 
 
-public boolean brake_new (BrakeType type)
+public boolean brake (BrakeType type)
 {
     // deadband and power to be used later
     int deadband = 0;
@@ -578,7 +578,7 @@ public boolean brake_new (BrakeType type)
  *
  * @return Whether or not the robot has stopped moving.
  */
-public boolean brake (BrakeType type)
+public boolean brakeOld (BrakeType type)
 {
     // prints out calling brake
     // System.out.println("Calling Brake");

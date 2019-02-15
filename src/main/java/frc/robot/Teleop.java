@@ -274,7 +274,7 @@ public static void periodic ()
         }
     else
         {
-        // teleopDrive();
+        teleopDrive();
         }
 
     printStatements();
@@ -872,8 +872,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -897,7 +897,7 @@ public static void printStatements ()
         // GYRO
         // ---------------------------------
 
-        // System.out.println("Gyro: " + Hardware.gyro.getAngle());
+        System.out.println("Gyro: " + Hardware.gyro.getAngle());
         // SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
         // Hardware.telemetry.printToConsole("Gyro: " +
         // Hardware.gyro.getAngle());

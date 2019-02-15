@@ -75,7 +75,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 
 // -------------------------------------
 // Private Constants
@@ -1077,8 +1077,8 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.rightFrontCANMotor.setInverted(true);
+    Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
 
@@ -1126,8 +1126,8 @@ public static void setHardwareSettings2019 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
-    Hardware.rightFrontCANMotor.setInverted(false);
-    Hardware.rightRearCANMotor.setInverted(false);
+    Hardware.rightFrontCANMotor.setInverted(true);
+    Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
 
@@ -1172,7 +1172,7 @@ private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
-private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.82;
+private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.67;
 
 // 665 ticks for 6 inches
 private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0091603;
