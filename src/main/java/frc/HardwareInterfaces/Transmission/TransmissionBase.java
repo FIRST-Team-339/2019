@@ -80,7 +80,7 @@ public void driveRaw (double leftVal, double rightVal)
         if (i % 2 == 0)
             this.motors[i].set(leftVal);
         else
-            this.motors[i].set(-rightVal);
+            this.motors[i].set(rightVal);
 }
 
 /**
