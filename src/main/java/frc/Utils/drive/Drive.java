@@ -365,7 +365,7 @@ public boolean arc (double speed, double radius, double arcLength,
 // -----------------------------------------------------
 
 
-public boolean brake_new (BrakeType type)
+public boolean brake (BrakeType type)
 {
     // deadband and power to be used later
     int deadband = 0;

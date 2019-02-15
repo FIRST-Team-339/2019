@@ -352,7 +352,7 @@ private static boolean crossAutoline ()
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("Initializing");
+            System.out.println("GOOD MORNING VIETNAM!");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -410,7 +410,7 @@ private static boolean crossAutoline ()
             // another foot and a half.
             System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
             if ((Hardware.drive
-                    .brake_new(BrakeType.AFTER_DRIVE)) == true)
+                    .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
                 cross = CrossAutoState.FINISH;
                 }
@@ -419,8 +419,7 @@ private static boolean crossAutoline ()
         case FINISH:
             // HardwareInterfaces.Transmission.TransmissionBase.stop();
             System.out.println(
-                    "You have arrived at your final destination");
-            // Transmission.TransmissionBase.stop();
+                    "You have arrived at your final destination...the foreboding Vaaach homeworld.");
             break;
         }
     return false;
@@ -680,7 +679,7 @@ private static boolean depositRocketHatch ()
                     "left : " + Hardware.leftFrontCANMotor.get());
             System.out.println(
                     "right : " + Hardware.rightFrontCANMotor.get());
-            if (Hardware.drive.brake_new(BrakeType.AFTER_DRIVE) == true)
+            if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
                 {
                 rocketHatchState = RocketHatchState.FINISH;// .TURN_TOWARDS_FIELD_WALL;
                 }
@@ -742,7 +741,7 @@ private static boolean depositRocketHatch ()
             break;
 
         case DELAY_BEFORE_TURN_ALONG_FIELD_WALL:
-            if (Hardware.drive.brake_new(BrakeType.AFTER_DRIVE) == true)
+            if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
             /* && autoTimer.get() >= TIME_TO_DELAY_B4_TURN )_ */
                 {
                 rocketHatchState = RocketHatchState.TURN_ALONG_FIELD_WALL;
@@ -1109,7 +1108,9 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
                 }
             else
                 {
-                Hardware.drive.driveStraight(1.0, ACCELERATION_TIME,
+                Hardware.drive.driveStraight(
+                        SPEED_TO_DRIVE_OFF_PLATFORM,
+                        ACCELERATION_TIME,
                         true);
                 }
             break;
@@ -1263,9 +1264,9 @@ public static Timer autoTimer = new Timer();
 
 public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
 
-public static final double DRIVE_BACKWARDS_SPEED = -.5;
+public static final double DRIVE_BACKWARDS_SPEED = -.4;
 
-public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75;
+public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .85;
 
 public static final double DRIVE_SPEED = .375;
 
@@ -1286,11 +1287,11 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = 1.0;
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .7;
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
 
-public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .5;
+public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
 
 // cross autoline constants
 
@@ -1335,7 +1336,7 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
 // descent Stuff
 
-public static final double TIME_TO_DELAY_AFTER_DRIVE_FAST = 4;
+public static final double TIME_TO_DELAY_AFTER_DRIVE_FAST = 1;
 
 public static final double TIME_TO_DELAY_B4_FINISH = 4;
 }
