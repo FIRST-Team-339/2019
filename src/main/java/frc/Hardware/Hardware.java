@@ -600,17 +600,16 @@ public static void commonInitialization ()
 
     outtakeButton = new JoystickButton(leftOperator, 2);
 
+    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
+
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
     cancelOneButton = new JoystickButton(leftOperator, 10);
 
-    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
 
     // ----- Right Operator -----
-
-    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
@@ -621,6 +620,7 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
+    pictureButtonOne = new JoystickButton(rightOperator, 8);
 
     pictureButtonTwo = new JoystickButton(rightOperator, 9);
 
@@ -630,7 +630,7 @@ public static void commonInitialization ()
 
     deployOverride = forkliftOverride;
 
-
+    // ----------Left Driver---------------
 
     climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
 
