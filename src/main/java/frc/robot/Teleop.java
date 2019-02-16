@@ -288,7 +288,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -418,26 +418,33 @@ private static void coleTest ()
 
     // Manipulator
 
-    SmartDashboard.putString("Lift Encoder 2019 get",
-            "" + Hardware.liftingEncoder.get());
+    SmartDashboard.putNumber("Forklift Height",
+            Hardware.lift.getForkliftHeight());
 
-    SmartDashboard.putString("Lift Encoder 2019 getDistance",
-            "" + Hardware.liftingEncoder.getDistance());
+    SmartDashboard.putNumber("Forklift Encoder",
+            Hardware.liftingEncoder.get());
 
-    SmartDashboard.putString("Lift Encoder 2019 getRate",
-            "" + Hardware.liftingEncoder.getRate());
 
-    SmartDashboard.putNumber("Left Front Encoder Inches = ",
-            Hardware.leftFrontDriveEncoder.getDistance());
+    // SmartDashboard.putString("Lift Encoder 2019 get",
+    // "" + Hardware.liftingEncoder.get());
 
-    SmartDashboard.putNumber("Left front encoder ticks: ",
-            Hardware.leftFrontDriveEncoder.get());
+    // SmartDashboard.putString("Lift Encoder 2019 getDistance",
+    // "" + Hardware.liftingEncoder.getDistance());
 
-    SmartDashboard.putNumber("Right Front Inches = ",
-            Hardware.rightFrontDriveEncoder.getDistance());
+    // SmartDashboard.putString("Lift Encoder 2019 getRate",
+    // "" + Hardware.liftingEncoder.getRate());
 
-    SmartDashboard.putNumber("Right Front Ticks ",
-            Hardware.rightFrontDriveEncoder.get());
+    // SmartDashboard.putNumber("Left Front Encoder Inches = ",
+    // Hardware.leftFrontDriveEncoder.getDistance());
+
+    // SmartDashboard.putNumber("Left front encoder ticks: ",
+    // Hardware.leftFrontDriveEncoder.get());
+
+    // SmartDashboard.putNumber("Right Front Inches = ",
+    // Hardware.rightFrontDriveEncoder.getDistance());
+
+    // SmartDashboard.putNumber("Right Front Ticks ",
+    // Hardware.rightFrontDriveEncoder.get());
 
     // System.out.println("Left Front motor isReversed: " +
     // Hardware.leftFrontCANMotor.get());

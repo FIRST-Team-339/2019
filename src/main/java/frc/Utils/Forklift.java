@@ -86,6 +86,9 @@ public double getForkliftHeight ()
     return this.forkliftEncoder.getDistance();
 }
 
+
+
+
 /**
  * Moves the forklift up and down based on a Joystick's y axis
  *
@@ -491,18 +494,19 @@ public void update ()
 
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
-    if (manipulator.isDeployed() == false)
-        this.currentMinLiftPosition = DEPLOY_FOLDED_MIN_HEIGHT;
+    if (manipulator.isArmClearOfFrame() == false && this
+            .getForkliftHeight() < PAST_CONSIDER_OUT_OF_FRAME_HEIGHT)
+        this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
     else
-        this.currentMinLiftPosition = NO_PIECE_MIN_HEIGHT;
+        this.currentLiftMaxHeight = NO_PIECE_MIN_HEIGHT;
 
     // main switch statement for the forklift state machine
     switch (liftState)
         {
         case MOVING_TO_POSITION:
             // Make sure we are not trying to move past the MAX or MIN position
-            if ((this.forkliftTargetHeight > currentForkliftMaxHeight)
-                    || (this.forkliftTargetHeight < currentMinLiftPosition))
+            if ((this.forkliftTargetHeight > currentLiftMaxHeight)
+                    || (this.forkliftTargetHeight < currentLiftMinHeight))
                 {
                 liftState = ForkliftState.STAY_AT_POSITION;
                 break;
@@ -646,7 +650,7 @@ private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRA
 
 private boolean setLiftPositionInit = true;
 
-private double currentForkliftMaxHeight = MAX_HEIGHT;
+private double currentLiftMaxHeight = MAX_HEIGHT;
 
 // used by the MOVING_TO_POSITION state in the state machine to determine what
 // position to move to
@@ -656,7 +660,7 @@ private double forkliftTargetHeight = 0.0;
 // speed to move at
 private double forkliftTargetSpeed = 0.0;
 
-private double currentMinLiftPosition = 0;
+private double currentLiftMinHeight = 0;
 
 // ===== Constants =====
 
@@ -715,10 +719,13 @@ public final static double CARGO_SHIP_HATCH = 40;// placeholder value
 
 private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
+private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 10;
+
 private final double NO_PIECE_MIN_HEIGHT = 0;
 
 private final double DEPLOY_FOLDED_MIN_HEIGHT = 15;
 
+private double PAST_CONSIDER_OUT_OF_FRAME_HEIGHT = 35;
 
 // ----- Forklift Speed Constants 2018 ------
 
