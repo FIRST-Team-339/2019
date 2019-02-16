@@ -606,9 +606,7 @@ public static void commonInitialization ()
 
     cancelOneButton = new JoystickButton(leftOperator, 10);
 
-    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 10);
-
-    autoDeployButton = new QuickSwitch(leftOperator, 11);
+    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
 
     // ----- Right Operator -----
 
@@ -632,7 +630,6 @@ public static void commonInitialization ()
 
     deployOverride = forkliftOverride;
 
-    autoRetractButton = new QuickSwitch(rightOperator, 11); // Gone
 
 
     climbTwoButton = new MomentarySwitch(leftDriver, 11, false);

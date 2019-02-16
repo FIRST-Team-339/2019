@@ -377,7 +377,7 @@ private static boolean crossAutoline ()
             // a.k.a. drive straight
             // TODO closely monitor merge tomorrow
             // 17 February 2019
-            Hardware.depositGamePiece.prepToDeposit();
+            Hardware.depositGamePiece.prepToDepositHatch();
             Hardware.manipulator.printDeployDebugInfo();
             System.out.println("*distant screaming*");
             Hardware.gyro.reset();
@@ -527,7 +527,7 @@ private static boolean depositCargoHatch ()
                     "encoders" + Hardware.rightFrontDriveEncoder
                             .getDistance());
 
-            Hardware.depositGamePiece.prepToDeposit();
+            Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -546,7 +546,7 @@ private static boolean depositCargoHatch ()
             System.out.println(
                     "Ultrasosnic" + Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper());
-            Hardware.depositGamePiece.prepToDeposit();
+            Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
@@ -890,7 +890,7 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
-                    Hardware.depositGamePiece.prepToDeposit();
+                    Hardware.depositGamePiece.prepToDepositHatch();
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
