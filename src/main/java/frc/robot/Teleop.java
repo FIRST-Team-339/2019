@@ -1028,7 +1028,6 @@ public static final double FORKLIFT_DIVISOR = 4;
 private static double DRIVE_SPEED = .4;
 
 private static double TURN_SPEED = .4;
-
 // ================================
 // Variables
 // ================================
