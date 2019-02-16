@@ -327,7 +327,7 @@ private static boolean crossAutoline ()
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("GOOD MORNING VIETNAM!");
+            System.out.println("initialising!");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -369,8 +369,8 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO check in with Ashley about distance/tick tomorrow
-            // 14 February 2019
+            // TODO closely monitor merge tomorrow
+            // 17 February 2019
             System.out.println("*distant screaming*");
             Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
@@ -390,7 +390,6 @@ private static boolean crossAutoline ()
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
-                //cross = CrossAutoState.PosArmRL1;
                 cross = CrossAutoState.FINISH;
                 }
             break;
