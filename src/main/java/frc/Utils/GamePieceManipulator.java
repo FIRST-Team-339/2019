@@ -131,7 +131,9 @@ public boolean isDeployed ()
 
 public boolean isArmClearOfFrame ()
 {
-    return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
+    return true; // TODO uncomment the below code instead when
+    // the manipulator is working on 2019
+    // return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
 }
 
 
@@ -706,7 +708,11 @@ private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
 // ----- Deploy Position Constants 2019 -----
 
+private static int MAX_ARM_POSITION_RAW = 0;
+
 private static int MAX_ARM_POSITION_ADJUSTED = 85;
+
+private static int MIN_ARM_POSITION_RAW = 0;
 
 private static int MIN_ARM_POSITION_ADJUSTED = 5;
 
