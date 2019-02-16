@@ -32,17 +32,12 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.vision.VisionProcessor;
-import frc.vision.VisionProcessor.ImageType;
-import frc.Utils.GamePieceManipulator;
 import frc.Utils.DepositGamePiece.DepositHeight;
+import frc.vision.VisionProcessor.ImageType;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -66,11 +61,15 @@ public static void init ()
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .4;
             initTeleop2018();
             break;
 
         default:
         case KILROY_2019:
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .7;
             initTeleop2019();
             break;
 
@@ -246,10 +245,7 @@ public static void periodic ()
     if (Hardware.alignVisionButton.isOnCheckNow() == true)
         {
         if (Hardware.depositGamePiece
-                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1))// TODO make a
-                                                                  // thing that
-                                                                  // changes
-                                                                  // this
+                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1))
             {
             Hardware.depositGamePiece.resetDepositTeleop();
             }
@@ -1049,6 +1045,10 @@ private static boolean isOrange = true;
 private static boolean isCurrentlyChanging = false;
 
 public static final double FORKLIFT_DIVISOR = 4;
+
+private static double DRIVE_SPEED = .4;
+
+private static double TURN_SPEED = .4;
 
 // ================================
 // Variables

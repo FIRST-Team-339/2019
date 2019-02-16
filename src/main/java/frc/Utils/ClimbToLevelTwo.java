@@ -5,7 +5,6 @@ import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
-import frc.HardwareInterfaces.SingleSolenoid;
 import frc.HardwareInterfaces.UltraSonic;
 import frc.Utils.drive.Drive;
 import edu.wpi.first.wpilibj.SpeedController;

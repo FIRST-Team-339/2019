@@ -254,7 +254,7 @@ public static boolean hasDoneThePrep = false;
 /**
  * function to back up and raise arm to deposit
  */
-public static void prepToDeposit ()
+public void prepToDeposit ()
 {
     if (hasDoneThePrep == false)
         {
