@@ -649,8 +649,6 @@ public static void commonInitialization ()
 
     climbOneButton = new MomentarySwitch(rightDriver, 11, false);
 
-
-
     // Momentary Switches
 
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
