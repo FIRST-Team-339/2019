@@ -617,28 +617,29 @@ public static void commonInitialization ()
 
     // ----- Right Operator -----
 
-    pictureButtonOne = new JoystickButton(rightOperator, 8);
-
-    pictureButtonTwo = new JoystickButton(rightOperator, 9);
-
-    cancelTwoButton = new JoystickButton(rightOperator, 10);
+    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
     forkliftOverride = new JoystickButton(rightOperator, 5);
-
-    intakeOverride = forkliftOverride;
-
-    deployOverride = forkliftOverride;
 
     nextHigherLiftHeightButton = new QuickSwitch(rightOperator, 6);
 
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    autoRetractButton = new QuickSwitch(rightOperator, 11);
+    pictureButtonOne = new JoystickButton(rightOperator, 8);
 
-    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
+    pictureButtonTwo = new JoystickButton(rightOperator, 9);
+
+    cancelTwoButton = new JoystickButton(rightOperator, 10);
+
+    intakeOverride = forkliftOverride;
+
+    deployOverride = forkliftOverride;
+
+    autoRetractButton = new QuickSwitch(rightOperator, 11); // Gone
+
 
 
     // ----------Left Driver---------------
