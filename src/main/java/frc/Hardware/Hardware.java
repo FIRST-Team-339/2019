@@ -322,6 +322,10 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
+public static JoystickButton resetForkliftEncoderButton1 = null;
+
+public static JoystickButton resetForkliftEncoderButton2 = null;
+
 // ----- Right Operator -----
 
 public static JoystickButton pictureButtonOne = null;
@@ -605,6 +609,8 @@ public static void commonInitialization ()
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+
+    // new JoystickButton(leftOperator, 8);
 
     // ----- Right Operator -----
 
