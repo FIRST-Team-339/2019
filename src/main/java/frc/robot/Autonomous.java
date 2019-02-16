@@ -378,6 +378,7 @@ private static boolean crossAutoline ()
                             - Hardware.drive.getBrakeStoppingDistance(),
                     DRIVE_SPEED, ACCELERATION_TIME, true) == true)
                 {
+                prepToDeposit();
                 cross = CrossAutoState.BRAKE;
                 }
             break;
