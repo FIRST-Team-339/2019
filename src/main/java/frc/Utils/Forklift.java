@@ -727,7 +727,6 @@ private final double NO_PIECE_MIN_HEIGHT = 0;
 private final double DEPLOY_FOLDED_MIN_HEIGHT = 15;
 
 private double PAST_CONSIDER_OUT_OF_FRAME_HEIGHT = 35;
-
 // ----- Forklift Speed Constants 2018 ------
 
 private static final double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER_2018 = 1.0;
