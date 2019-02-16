@@ -309,31 +309,6 @@ private static void setPositionAndLevel ()
 
 }
 
-
-public static enum PrepState
-    {
-    INIT, RAISE_FORKLIFT, DEPLOY_MANIPULATOR, STOP_PREP
-    }
-
-private static PrepState prepState = PrepState.INIT;
-
-/**
- * Code to set up the forklift for autonomous for a hatch deposit
- *
- */
-public static void prepDeposit ()
-{
-
-    if (Hardware.lift
-            .setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
-        {
-        Hardware.manipulator.deployArm();
-        }
-
-}
-
-
-
 // =====================================================================
 // Path Methods
 // =====================================================================
@@ -541,7 +516,7 @@ private static boolean depositCargoHatch ()
                     "encoders" + Hardware.rightFrontDriveEncoder
                             .getDistance());
 
-            Autonomous.prepDeposit();
+            Autonomous.prepToDeposit();
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -560,7 +535,7 @@ private static boolean depositCargoHatch ()
             System.out.println(
                     "Ultrasosnic" + Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper());
-            Autonomous.prepDeposit();
+            Autonomous.prepToDeposit();
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
@@ -903,6 +878,7 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
+                    prepToDeposit();
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
@@ -926,7 +902,7 @@ private static boolean depositRocketHatch ()
             break;
 
         case PREP_TO_DEPOSIT_HATCH:
-            if (prepToDeposit() == true)
+            if (/* prepToDeposit() == */ true)
                 {
                 rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                 }
@@ -1188,24 +1164,26 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
     return false;
 } // end descendFromLevelTwo()
 
+public static boolean hasDoneThePrep = false;
 
 /**
  * function to back up and raise arm to deposit
  */
-public static boolean prepToDeposit ()
+public static void prepToDeposit ()
 {
-    System.out.println("prepping, currnet forkiness: "
-            + Hardware.lift.getForkliftHeight());
-    if (Hardware.lift.setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
+    if (hasDoneThePrep == false)
         {
-        System.out.println("deploying");
-        if (/* Hardware.manipulator.moveArmToPosition(45, .4) */true)
+        System.out.println("*Dabs on haters*");
+        if (Hardware.manipulator.moveArmToPosition(105, 1)
+                || (Hardware.manipulator
+                        .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
+                        && Hardware.manipulator
+                                .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
             {
-            return true;
-            }
+            hasDoneThePrep = true;
 
-        } // end if
-    return false;
+            }
+        }
 } // end prepToDeposit()
 
 
@@ -1243,8 +1221,16 @@ public static int distanceToCrossAutoline;
  */
 
 
+
+
 // General constants
 
+
+// constants for prep
+
+public static final double PREP_FOR_HATCH_MAX = 110;
+
+public static final double PREP_FOR_HATCH_MIN = 100;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
@@ -1318,7 +1304,7 @@ public static final double CAMERA_ACCELERATION = .2;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
-public static final int TURN_FOR_CAMERA_DEGREES = 60;
+public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
 // changed to correct-ish number 2 February 2019
 public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 60;
