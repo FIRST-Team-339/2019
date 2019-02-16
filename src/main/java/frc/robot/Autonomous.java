@@ -309,31 +309,6 @@ private static void setPositionAndLevel ()
 
 }
 
-
-public static enum PrepState
-    {
-    INIT, RAISE_FORKLIFT, DEPLOY_MANIPULATOR, STOP_PREP
-    }
-
-private static PrepState prepState = PrepState.INIT;
-
-/**
- * Code to set up the forklift for autonomous for a hatch deposit
- *
- */
-public static void prepDeposit ()
-{
-
-    if (Hardware.lift
-            .setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
-        {
-        Hardware.manipulator.deployArm();
-        }
-
-}
-
-
-
 // =====================================================================
 // Path Methods
 // =====================================================================
@@ -542,7 +517,7 @@ private static boolean depositCargoHatch ()
                     "encoders" + Hardware.rightFrontDriveEncoder
                             .getDistance());
 
-            Autonomous.prepDeposit();
+            Autonomous.prepToDeposit();
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -561,7 +536,7 @@ private static boolean depositCargoHatch ()
             System.out.println(
                     "Ultrasosnic" + Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper());
-            Autonomous.prepDeposit();
+            Autonomous.prepToDeposit();
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
@@ -1200,17 +1175,17 @@ public static void prepToDeposit ()
 
     if (hasDoneThePrep == false)
         {
-        System.out.println("prepping, currnent forkiness: "
-                + Hardware.lift.getForkliftHeight());
-        if (Hardware.manipulator.deployArm())
-            {
-            System.out.println("deploying");
-            if (Hardware.lift
-                    .setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
-                hasDoneThePrep = true;
-            } // end if
-        }
 
+        if (Hardware.manipulator.moveArmToPosition(105, .5)
+                || (Hardware.manipulator
+                        .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
+                        && Hardware.manipulator
+                                .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
+            {
+            hasDoneThePrep = true;
+
+            }
+        }
 } // end prepToDeposit()
 
 
@@ -1248,8 +1223,16 @@ public static int distanceToCrossAutoline;
  */
 
 
+
+
 // General constants
 
+
+// constants for prep
+
+public static final double PREP_FOR_HATCH_MAX = 110;
+
+public static final double PREP_FOR_HATCH_MIN = 100;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
