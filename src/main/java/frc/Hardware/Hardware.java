@@ -28,20 +28,16 @@ import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
-import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -51,8 +47,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
 /**
@@ -348,6 +342,8 @@ public static QuickSwitch nextLowerLiftHeightButton = null;
 
 public static QuickSwitch autoRetractButton = null;
 
+public static MomentarySwitch alignVisionButton = null;
+
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
@@ -642,6 +638,8 @@ public static void commonInitialization ()
 
     autoRetractButton = new QuickSwitch(rightOperator, 11);
 
+    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
+
 
     // ----------Left Driver---------------
 
@@ -650,6 +648,8 @@ public static void commonInitialization ()
     // ----------Right Driver--------------
 
     climbOneButton = new MomentarySwitch(rightDriver, 11, false);
+
+
 
     // Momentary Switches
 

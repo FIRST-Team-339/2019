@@ -8,7 +8,6 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
-import frc.vision.VisionProcessor.ParticleReport;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -233,7 +232,7 @@ public boolean driveToTarget (double speed)
                             .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
-                correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
+                // correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
                 }
             else
                 if (this.frontUltrasonic
@@ -621,7 +620,7 @@ private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double SLOW_MODIFIER = .6;
+private final double SLOW_MODIFIER = .7;
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
