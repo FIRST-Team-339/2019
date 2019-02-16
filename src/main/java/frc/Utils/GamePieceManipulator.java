@@ -6,7 +6,6 @@ import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.LightSensor;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.HardwareInterfaces.QuickSwitch;
 

@@ -32,16 +32,11 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
-import frc.Utils.GamePieceManipulator;
 
 /**
  * This class contains all of the user code for the Autonomous part of the

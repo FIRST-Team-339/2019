@@ -32,18 +32,13 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.HardwareInterfaces.LightSensor;
-import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
-import frc.Utils.Forklift;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.VisionProcessor.ImageType;
 
 
 /**
@@ -390,7 +385,7 @@ private static boolean crossAutoline ()
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
-                //cross = CrossAutoState.PosArmRL1;
+                // cross = CrossAutoState.PosArmRL1;
                 cross = CrossAutoState.FINISH;
                 }
             break;

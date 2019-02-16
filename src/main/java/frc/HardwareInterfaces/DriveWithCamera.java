@@ -8,7 +8,6 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
-import frc.vision.VisionProcessor.ParticleReport;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
