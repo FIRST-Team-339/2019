@@ -491,8 +491,6 @@ private final double NEXT_LOWER_POSITION_DEADBAND = 1;
  */
 public void update ()
 {
-
-    this.printDebugInfo();
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
     if (manipulator.isArmClearOfFrame() == false && this
@@ -657,8 +655,8 @@ private double currentLiftMaxHeight = MAX_HEIGHT;
 // position to move to
 private double forkliftTargetHeight = 0.0;
 
-// used by the MOVING_TO_POSITION state in the state machine to determine what
-// speed to move at
+// used by the MOVING_TO_POSITION state in the state machine to determine
+// what speed to move at
 private double forkliftTargetSpeed = 0.0;
 
 private double currentLiftMinHeight = 0;
@@ -669,15 +667,15 @@ private double currentLiftMinHeight = 0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.8;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.4;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = .55;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = -0.4;
 
-private double UP_JOYSTICK_SCALAR = 0.8;
+private double UP_JOYSTICK_SCALAR = 0.4;
 
-private double DOWN_JOYSTICK_SCALAR = .55;
+private double DOWN_JOYSTICK_SCALAR = -0.4;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -688,11 +686,11 @@ public static double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED = 1.0;
 
 // speed sent to the forklift motor to hold position when we do not
 // have any game piece
-private double STAY_UP_NO_PIECE = 0.05;
+private double STAY_UP_NO_PIECE = 0.0;
 
 // speed sent to the forklift motor to hold position when we have a
 // cargo
-private double STAY_UP_WITH_CARGO = .1;
+private double STAY_UP_WITH_CARGO = 0.0;
 
 // ----- Preset Heights -----
 
