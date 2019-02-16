@@ -285,7 +285,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -350,7 +350,7 @@ private static boolean prepped = false;
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    // Autonomous.prepToDeposit();
+    Autonomous.prepToDeposit();
 
 } // end connerTest()
 
