@@ -32,18 +32,13 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.HardwareInterfaces.LightSensor;
-import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
-import frc.Utils.Forklift;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.VisionProcessor.ImageType;
 
 
 /**
@@ -87,11 +82,22 @@ public static void init ()
 
     Hardware.liftingEncoder.reset();
 
-    // TODO @ANE uncomment
-    // if (Hardware.autoLevelSwitch.isOn() == true) {
-    // autoLevel = Level.DISABLE;
-    // autoState = State.FINISH;
-    // }
+    if (Hardware.autoDisableSwitch.isOn() == true)
+        {
+        autoLevel = Level.DISABLE;
+        autoState = State.FINISH;
+        }
+    if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2018)
+        {
+        DRIVE_SPEED = .4;
+        TURN_SPEED = .4;
+        }
+    else
+        if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2019)
+            {
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .7;
+            }
 
 } // end Init
 
@@ -369,16 +375,18 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO check in with Ashley about distance/tick tomorrow
-            // 14 February 2019
-            System.out.println("Launching Nukes");
+            // TODO closely monitor merge tomorrow
+            // 17 February 2019
+            Hardware.depositGamePiece.prepToDeposit();
+            Hardware.manipulator.printDeployDebugInfo();
+            System.out.println("*distant screaming*");
             Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
                     DRIVE_SPEED, ACCELERATION_TIME, true) == true)
                 {
-                prepToDeposit();
+
                 cross = CrossAutoState.BRAKE;
                 }
             break;
@@ -390,7 +398,6 @@ private static boolean crossAutoline ()
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
-                // cross = CrossAutoState.PosArmRL1;
                 cross = CrossAutoState.FINISH;
                 }
             break;
@@ -520,7 +527,7 @@ private static boolean depositCargoHatch ()
                     "encoders" + Hardware.rightFrontDriveEncoder
                             .getDistance());
 
-            Autonomous.prepToDeposit();
+            Hardware.depositGamePiece.prepToDeposit();
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -539,7 +546,7 @@ private static boolean depositCargoHatch ()
             System.out.println(
                     "Ultrasosnic" + Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper());
-            Autonomous.prepToDeposit();
+            Hardware.depositGamePiece.prepToDeposit();
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
@@ -612,7 +619,7 @@ private static boolean depositRocketHatch ()
                         autoTimer.start();
                         // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
                         // DRIVE_AGAINST_WALL_SPEED);
-                        rocketHatchState = RocketHatchState.DRIVE_FORWARD_TO_TURN;
+                        rocketHatchState = RocketHatchState.BREAKIE_AFTER_DRIVIE;
                         }
                     }
                 }
@@ -633,7 +640,7 @@ private static boolean depositRocketHatch ()
             break;
         // TODO @ANE
         // =================================================================
-        // DRIVE BY NONVISION this is where the smart kids code
+        // DRIVE BY NONVISION this is where the dumb kids code
         // =================================================================
         case DRIVE_FORWARD_TO_TURN:
             if (Hardware.drive.driveStraightInches(
@@ -883,7 +890,7 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
-                    prepToDeposit();
+                    Hardware.depositGamePiece.prepToDeposit();
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
@@ -1013,7 +1020,7 @@ private static void driverControl ()
 
 public static enum DescentState
     {
-    STANDBY, INIT, DRIVE_FAST, DELAY_INIT_AFTER_DRIVE_FAST, DELAY_AFTER_DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, DELAY_INIT_B4_FINISH, DELAY_B4_FINISH, TURN_180, FINISH
+    STANDBY, INIT, DRIVE_FAST, DELAY_INIT_AFTER_DRIVE_FAST, DELAY_AFTER_DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, DELAY_INIT_B4_FINISH, DELAY_B4_FINISH, PREP_TO_TURN_180, TURN_180, FINISH
     }
 
 
@@ -1202,7 +1209,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                 {
                 if (turn180AtEnd == true)
                     {
-                    descentState = DescentState.TURN_180;
+                    descentState = DescentState.PREP_TO_TURN_180;
                     }
                 else
                     {
@@ -1212,14 +1219,21 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                 }
             break;
 
+        case PREP_TO_TURN_180:
+            if (Hardware.drive.driveStraightInches(
+                    distanceToCrossAutoline, -DRIVE_SPEED,
+                    ACCELERATION_TIME, true) == true)
+                {
+                descentState = DescentState.TURN_180;
+                }
+            break;
+
         case TURN_180:
             if (Hardware.drive.turnDegrees(TURN_180, TURN_SPEED,
                     ACCELERATION_TIME, true))
                 {
                 descentState = DescentState.FINISH;
                 }
-
-
             break;
 
         case FINISH:
@@ -1234,27 +1248,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
     return false;
 } // end descendFromLevelTwo()
 
-public static boolean hasDoneThePrep = false;
 
-/**
- * function to back up and raise arm to deposit
- */
-public static void prepToDeposit ()
-{
-    if (hasDoneThePrep == false)
-        {
-        System.out.println("*Dabs on haters*");
-        if (Hardware.manipulator.moveArmToPosition(105, 1)
-                || (Hardware.manipulator
-                        .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-                        && Hardware.manipulator
-                                .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
-            {
-            hasDoneThePrep = true;
-
-            }
-        }
-} // end prepToDeposit()
 
 
 public static void endAutoPath ()
@@ -1273,9 +1267,9 @@ public static void endAutoPath ()
 // =========================================================================
 // use vision for rocket autopath
 
-public static boolean turningAroundAfter = false;
+public static boolean turningAroundAfter = true;
 
-public static boolean goingBackwards = false;
+public static boolean goingBackwards = true;
 
 private static boolean usingVision = true;
 
@@ -1288,7 +1282,7 @@ private static boolean descendInit = false;
 
 public static Timer descentTimer = new Timer();
 
-public static int distanceToCrossAutoline;
+public static int distanceToCrossAutoline = 60;
 /*
  * ==============================================================
  * Constants
@@ -1301,11 +1295,7 @@ public static int distanceToCrossAutoline;
 // General constants
 
 
-// constants for prep
 
-public static final double PREP_FOR_HATCH_MAX = 110;
-
-public static final double PREP_FOR_HATCH_MIN = 100;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
@@ -1314,7 +1304,7 @@ public static final int TURN_RIGHT90 = 90;
 
 public static final int TURN_LEFT90 = -90;
 
-public static final double TURN_SPEED = .4;
+public static double TURN_SPEED = .4;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
@@ -1332,9 +1322,7 @@ public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .85; // @ANE
 
 public static final double REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.85;
 
-public static final double DRIVE_SPEED = .375;
-
-
+public static double DRIVE_SPEED = .375;
 
 /**
  * Acceleration time that we generally pass into the drive class's driveStraight
