@@ -606,9 +606,6 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 10);
-
-    autoDeployButton = new QuickSwitch(leftOperator, 11);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
@@ -632,13 +629,9 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-<<<<<<< HEAD
-    autoRetractButton = new QuickSwitch(rightOperator, 11);
 
 
-=======
-    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
->>>>>>> 730e3be47077d42706fa2aa54c0d1d58ff12f25a
+
 
 
     // ----------Left Driver---------------
