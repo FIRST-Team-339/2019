@@ -42,6 +42,7 @@ import frc.Utils.Forklift;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
 import frc.Utils.GamePieceManipulator;
+import frc.Utils.DepositGamePiece.DepositHeight;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -240,9 +241,15 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    Hardware.depositGamePiece.depositTeleopStateMachine();
+
     if (Hardware.alignVisionButton.isOnCheckNow() == true)
         {
-        if (Hardware.depositGamePiece.startTeleopDeposit())
+        if (Hardware.depositGamePiece
+                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1))// TODO make a
+                                                                  // thing that
+                                                                  // changes
+                                                                  // this
             {
             Hardware.depositGamePiece.resetDepositTeleop();
             }

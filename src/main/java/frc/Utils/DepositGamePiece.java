@@ -177,13 +177,16 @@ private enum DepositTeleopState
 
 public DepositTeleopState depositTeleopState = DepositTeleopState.INIT;
 
-private enum DepositHeight
+public enum DepositHeight
     {
     CARGO_SHIP, ROCKET_HATCH_1, ROCKET_HATCH_2, ROCKET_HATCH_3, ROCKET_CARGO_1, ROCKET_CARGO_2, ROCKET_CARGO_3
     }
 
+public DepositHeight depositHeight = DepositHeight.ROCKET_CARGO_1;
+
 public boolean depositTeleopStateMachine ()
 {
+
 
     switch (depositTeleopState)
         {
@@ -192,7 +195,13 @@ public boolean depositTeleopStateMachine ()
 
             break;
         case INIT:
+            switch (depositHeight)
+                {
 
+                case ROCKET_HATCH_1:
+                    break;
+
+                }
 
             break;
 
@@ -218,14 +227,13 @@ boolean hasStartedDeposit = false;
 
 public boolean startTeleopDeposit (DepositHeight height)
 {
+
+    depositHeight = height;
     if (hasStartedDeposit)
         {
         hasStartedDeposit = true;
         depositTeleopState = DepositTeleopState.INIT;
         }
-
-
-
 
     if (depositTeleopState == DepositTeleopState.FINISH
             || depositTeleopState == DepositTeleopState.HOLD)
@@ -264,6 +272,8 @@ public static void prepToDeposit ()
         }
 } // end prepToDeposit()
 
+
+public double forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
 
 // constants for prep
 
