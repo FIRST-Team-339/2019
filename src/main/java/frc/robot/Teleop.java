@@ -279,15 +279,15 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
-    // if (Hardware.climbOneButton.isOnCheckNow() == true
-    // && Hardware.climbTwoButton.isOnCheckNow() == true)
-    // {
-    // Hardware.climber.climb();
-    // }
-    // else
-    // {
-    teleopDrive();
-    // }
+    if (Hardware.climbOneButton.isOnCheckNow() == true
+            && Hardware.climbTwoButton.isOnCheckNow() == true)
+        {
+        Hardware.climber.climb();
+        }
+    else
+        {
+        teleopDrive();
+        }
 
     printStatements();
 } // end Periodic()
