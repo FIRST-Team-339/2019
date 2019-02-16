@@ -188,7 +188,7 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 // Red Light/IR Sensor class
 // -------------------------------------
-public static LightSensor armIR = null;
+public static LightSensor armBallDetector = null;
 
 public static LightSensor leftBackIR = null;
 
@@ -241,7 +241,7 @@ public static DoubleSolenoid driveSolenoid = null;
 // --------------------------------------
 public static RobotPotentiometer delayPot = null;
 
-public static RobotPotentiometer intakeDeploySensor = null;
+public static RobotPotentiometer armPot = null;
 
 // -------------------------------------
 // Sonar/Ultrasonic
@@ -322,10 +322,6 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
-public static QuickSwitch setDeploy45DegreeButton = null;
-
-public static QuickSwitch autoDeployButton = null;
-
 // ----- Right Operator -----
 
 public static JoystickButton pictureButtonOne = null;
@@ -340,7 +336,6 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
-public static QuickSwitch autoRetractButton = null;
 
 public static MomentarySwitch alignVisionButton = null;
 
@@ -501,7 +496,7 @@ public static void commonInitialization ()
     // -------------------------------------
     // Red Light/IR Sensor class
     // -------------------------------------
-    armIR = new LightSensor(21);
+    armBallDetector = new LightSensor(21);
 
     leftBackIR = new LightSensor(8);
 
@@ -550,7 +545,7 @@ public static void commonInitialization ()
 
     delayPot = new RobotPotentiometer(2, 300);
 
-    intakeDeploySensor = new RobotPotentiometer(0, 300);
+    armPot = new RobotPotentiometer(0, 300);
 
     // Sonar/Ultrasonic
     frontUltraSonic = new LVMaxSonarEZ(3);
@@ -628,7 +623,6 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    pictureButtonOne = new JoystickButton(rightOperator, 8);
 
     pictureButtonTwo = new JoystickButton(rightOperator, 9);
 
@@ -641,16 +635,11 @@ public static void commonInitialization ()
     autoRetractButton = new QuickSwitch(rightOperator, 11); // Gone
 
 
-
-    // ----------Left Driver---------------
-
     climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
 
     // ----------Right Driver--------------
 
     climbOneButton = new MomentarySwitch(rightDriver, 11, false);
-
-
 
     // Momentary Switches
 
@@ -694,9 +683,9 @@ public static void commonInitialization ()
 
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
-            armMotor, intakeDeploySensor/* armEncoder */,
+            armMotor, armPot/* armEncoder */,
             armRoller,
-            armIR);
+            armBallDetector);
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
@@ -708,7 +697,7 @@ public static void commonInitialization ()
 
 
     climber = new ClimbToLevelTwo(
-            driveSolenoid, armMotor, intakeDeploySensor,
+            driveSolenoid, armMotor, armPot,
             drive, lift, frontUltraSonic);
 
 } // end of commonInitialization()
