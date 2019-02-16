@@ -4,6 +4,7 @@ import frc.Utils.drive.*;
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.MomentarySwitch;
 import frc.Utils.GamePieceManipulator;
+import frc.Utils.GamePieceManipulator.GamePiece;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -182,14 +183,22 @@ public enum DepositHeight
     CARGO_SHIP, ROCKET_HATCH_1, ROCKET_HATCH_2, ROCKET_HATCH_3, ROCKET_CARGO_1, ROCKET_CARGO_2, ROCKET_CARGO_3
     }
 
+public enum HatchOrCargo
+    {
+    HATCH, CARGO, NULL
+    }
+
+public HatchOrCargo hatchOrCargo = HatchOrCargo.NULL;
+
 public DepositHeight depositHeight = DepositHeight.ROCKET_CARGO_1;
 
 public boolean depositTeleopStateMachine ()
 {
 
-
+    System.out.println("deposit teleop state: " + depositTeleopState);
     switch (depositTeleopState)
         {
+
         case HOLD:
             Hardware.axisCamera.setRelayValue(Value.kOff);
 
@@ -199,21 +208,65 @@ public boolean depositTeleopStateMachine ()
                 {
 
                 case ROCKET_HATCH_1:
+
+                    forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
                     break;
+                }
+            Hardware.axisCamera.setRelayValue(Value.kOn);
+
+            depositTeleopState = DepositTeleopState.PREP;
+            break;
+
+        case PREP:
+            Hardware.lift.setLiftPosition(forkliftHeight);
+
+            if (hatchOrCargo == HatchOrCargo.HATCH)
+                {
+                // has a hatch
+                if (Hardware.manipulator.moveArmToPosition(35/* 105 */,
+                        .8)
+                        || (Hardware.manipulator
+                                .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
+                                && Hardware.manipulator
+                                        .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
+                    {
+                    depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
+                    }
+                }
+            // has cargo
+            else
+                {
+
 
                 }
 
             break;
 
-        case PREP:
-            break;
-
         case ALIGN_TO_TARGET:
+
+            if (Hardware.driveWithCamera.driveToTargetClose(.3))
+                {
+                depositTeleopState = DepositTeleopState.DEPOSIT;
+                }
             break;
 
         case DEPOSIT:
+            if (hatchOrCargo == HatchOrCargo.HATCH)
+                {
+                if (this.depositHatch())
+                    {
+                    depositTeleopState = DepositTeleopState.FINISH;
+                    }
+                }
+            else
+                {
+                if (this.depositCargo())
+                    {
+                    depositTeleopState = DepositTeleopState.FINISH;
+                    }
+                }
             break;
-
+        default:
         case FINISH:
 
             depositTeleopState = DepositTeleopState.HOLD;
@@ -225,19 +278,24 @@ public boolean depositTeleopStateMachine ()
 
 boolean hasStartedDeposit = false;
 
-public boolean startTeleopDeposit (DepositHeight height)
+public boolean startTeleopDeposit (DepositHeight height,
+        HatchOrCargo gamepiece)
 {
 
     depositHeight = height;
+    hatchOrCargo = gamepiece;
     if (hasStartedDeposit)
         {
+        System.out
+                .println("started teleopdeposit");
         hasStartedDeposit = true;
         depositTeleopState = DepositTeleopState.INIT;
         }
 
-    if (depositTeleopState == DepositTeleopState.FINISH
-            || depositTeleopState == DepositTeleopState.HOLD)
+    if (depositTeleopState == DepositTeleopState.FINISH)
         {
+        System.out
+                .println("finished teleopdeposit");
         hasStartedDeposit = false;
         return true;
         }
@@ -246,15 +304,22 @@ public boolean startTeleopDeposit (DepositHeight height)
 
 public void resetDepositTeleop ()
 {
+    System.out.println("reseting teleop");
     depositTeleopState = DepositTeleopState.HOLD;
 }
 
 public static boolean hasDoneThePrep = false;
 
+
+
+
+
+
 /**
- * function to back up and raise arm to deposit
+ * function to back up and raise arm to deposit in autonomous. This will only
+ * wok with the hatch panel
  */
-public void prepToDeposit ()
+public void prepToDepositHatch ()
 {
     if (hasDoneThePrep == false)
         {

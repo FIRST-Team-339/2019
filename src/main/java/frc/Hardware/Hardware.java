@@ -615,6 +615,7 @@ public static void commonInitialization ()
 
     autoDeployButton = new QuickSwitch(leftOperator, 11);
 
+    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
 
     pictureButtonOne = new JoystickButton(rightOperator, 8);
@@ -638,7 +639,7 @@ public static void commonInitialization ()
 
     autoRetractButton = new QuickSwitch(rightOperator, 11);
 
-    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
+
 
 
     // ----------Left Driver---------------
