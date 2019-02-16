@@ -141,9 +141,9 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
         if ((speed > 0
-                && this.getForkliftHeight() > currentForkliftMaxHeight)
+                && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
-                        .getForkliftHeight() < currentMinLiftPosition))
+                        .getForkliftHeight() < currentLiftMinHeight))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
             // return so we exit the method and do not accidentally set
@@ -171,7 +171,7 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
  */
 public void setMaxLiftHeight (int inches)
 {
-    this.currentForkliftMaxHeight = inches;
+    this.currentLiftMaxHeight = inches;
 }
 
 /**
