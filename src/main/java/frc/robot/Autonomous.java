@@ -1380,6 +1380,7 @@ public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
 public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
+
 // changed to correct-ish number 2 February 2019
 public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 60;
 
