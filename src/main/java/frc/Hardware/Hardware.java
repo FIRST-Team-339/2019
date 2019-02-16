@@ -28,20 +28,16 @@ import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
-import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -51,8 +47,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
 /**
@@ -194,7 +188,7 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 // Red Light/IR Sensor class
 // -------------------------------------
-public static LightSensor armIR = null;
+public static LightSensor armBallDetector = null;
 
 public static LightSensor leftBackIR = null;
 
@@ -342,6 +336,8 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
+
+public static MomentarySwitch alignVisionButton = null;
 
 // ------------------------------------
 // Momentary Switches
@@ -500,7 +496,7 @@ public static void commonInitialization ()
     // -------------------------------------
     // Red Light/IR Sensor class
     // -------------------------------------
-    armIR = new LightSensor(21);
+    armBallDetector = new LightSensor(21);
 
     leftBackIR = new LightSensor(8);
 
@@ -631,6 +627,9 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
+    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
+
+
     // ----------Left Driver---------------
 
     climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
@@ -683,7 +682,7 @@ public static void commonInitialization ()
     manipulator = new GamePieceManipulator(
             armMotor, armPot/* armEncoder */,
             armRoller,
-            armIR);
+            armBallDetector);
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 

@@ -32,16 +32,12 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.vision.VisionProcessor;
+import frc.Utils.DepositGamePiece.DepositHeight;
 import frc.vision.VisionProcessor.ImageType;
-import frc.Utils.GamePieceManipulator;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -65,11 +61,15 @@ public static void init ()
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .4;
             initTeleop2018();
             break;
 
         default:
         case KILROY_2019:
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .7;
             initTeleop2019();
             break;
 
@@ -204,6 +204,7 @@ public static void periodic ()
 
     // Hardware.manipulator.printDeployDebugInfo();
     // Forklift
+    Hardware.manipulator.printDeployDebugInfo();
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
@@ -243,6 +244,17 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    Hardware.depositGamePiece.depositTeleopStateMachine();
+
+    if (Hardware.alignVisionButton.isOnCheckNow() == true)
+        {
+        if (Hardware.depositGamePiece
+                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1))
+            {
+            Hardware.depositGamePiece.resetDepositTeleop();
+            }
+        }
+
     // buttons
     if (Hardware.climbOneButton.isOnCheckNow() == true
             && Hardware.climbTwoButton.isOnCheckNow() == true)
@@ -274,9 +286,10 @@ public static void periodic ()
         Hardware.climber.climb();
         }
     else
-        {
-        teleopDrive();
-        }
+        if (!started)
+            {
+            teleopDrive();
+            }
 
     printStatements();
 } // end Periodic()
@@ -290,7 +303,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    coleTest();
+    // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -347,14 +360,21 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-private static boolean started = false;
+private static boolean started = true;
 
 private static boolean prepped = false;
 
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    // Autonomous.prepToDeposit();
+    System.out.println("*Orange Justicing: *" + started);
+    System.out.println("*giant green light: *" + prepped);
+
+
+
+
+    Hardware.driveWithCamera.driveToTarget(.4);
+
 
 } // end connerTest()
 
@@ -1036,6 +1056,10 @@ private static boolean isOrange = true;
 private static boolean isCurrentlyChanging = false;
 
 public static final double FORKLIFT_DIVISOR = 4;
+
+private static double DRIVE_SPEED = .4;
+
+private static double TURN_SPEED = .4;
 
 // ================================
 // Variables
