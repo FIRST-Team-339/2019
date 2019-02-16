@@ -91,8 +91,6 @@ public static void initTeleop2018 ()
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XIX);
 
-    Hardware.transmission
-            .setJoystickDeadband(DEADBAND_VALUE_KILROY_XIX);
     Hardware.transmission.enableDeadband();
 
     Hardware.gyro.reset();
@@ -141,7 +139,6 @@ public static void initTeleop2019 ()
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
 
-    Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE_KILROY_XX);
     Hardware.transmission.enableDeadband();
 
     Hardware.gyro.reset();
@@ -288,7 +285,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -418,6 +415,7 @@ private static void coleTest ()
 
     // Manipulator
 
+
     SmartDashboard.putString("Lift Encoder 2019 get",
             "" + Hardware.liftingEncoder.get());
 
@@ -427,17 +425,21 @@ private static void coleTest ()
     SmartDashboard.putString("Lift Encoder 2019 getRate",
             "" + Hardware.liftingEncoder.getRate());
 
-    SmartDashboard.putNumber("Left Front Encoder Inches = ",
-            Hardware.leftFrontDriveEncoder.getDistance());
 
-    SmartDashboard.putNumber("Left front encoder ticks: ",
-            Hardware.leftFrontDriveEncoder.get());
 
-    SmartDashboard.putNumber("Right Front Inches = ",
-            Hardware.rightFrontDriveEncoder.getDistance());
+    SmartDashboard.putString("Transmission Deadband", "");
 
-    SmartDashboard.putNumber("Right Front Ticks ",
-            Hardware.rightFrontDriveEncoder.get());
+    // SmartDashboard.putNumber("Left Front Encoder Inches = ",
+    // Hardware.leftFrontDriveEncoder.getDistance());
+
+    // SmartDashboard.putNumber("Left front encoder ticks: ",
+    // Hardware.leftFrontDriveEncoder.get());
+
+    // SmartDashboard.putNumber("Right Front Inches = ",
+    // Hardware.rightFrontDriveEncoder.getDistance());
+
+    // SmartDashboard.putNumber("Right Front Ticks ",
+    // Hardware.rightFrontDriveEncoder.get());
 
     // System.out.println("Left Front motor isReversed: " +
     // Hardware.leftFrontCANMotor.get());
@@ -1051,9 +1053,6 @@ private static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XX = .5;
 
-private static final double DEADBAND_VALUE_KILROY_XIX = .2;
-
-private static final double DEADBAND_VALUE_KILROY_XX = .2;
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 

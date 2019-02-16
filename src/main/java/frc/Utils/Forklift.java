@@ -489,6 +489,7 @@ private final double NEXT_LOWER_POSITION_DEADBAND = 1;
 public void update ()
 {
 
+    this.printDebugInfo();
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
     if (manipulator.isDeployed() == false)
@@ -599,14 +600,14 @@ public void resetStateMachine ()
 public void printDebugInfo ()
 {
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
-    // SmartDashboard.putNumber("FL Encoder Ticks: ",
-    // this.forkliftEncoder.get());
-    SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
-    SmartDashboard.putString("FL Direction State: ",
-            "" + this.forkliftDirection);
-    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
-            setLiftPositionInit);
-    SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
+    SmartDashboard.putNumber("FL Encoder Ticks: ",
+            this.forkliftEncoder.get());
+    // SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
+    // SmartDashboard.putString("FL Direction State: ",
+    // "" + this.forkliftDirection);
+    // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+    // setLiftPositionInit);
+    // SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
 }
 
 // ==================
@@ -741,6 +742,8 @@ public static final double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED_2018 = 1.0;
 private final double STAY_UP_NO_PIECE_2018 = 0.05;
 
 private final double STAY_UP_WITH_CARGO_2018 = .1;
+
+private final double FORKLIFT_STARTING_HEIGHT_FROM_FLOOR = 0;
 
 /**
  * ROCKET information from the game manual.
