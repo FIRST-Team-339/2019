@@ -91,8 +91,6 @@ public static void initTeleop2018 ()
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XIX);
 
-    Hardware.transmission
-            .setJoystickDeadband(DEADBAND_VALUE_KILROY_XIX);
     Hardware.transmission.enableDeadband();
 
     Hardware.gyro.reset();
@@ -141,7 +139,6 @@ public static void initTeleop2019 ()
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
 
-    Hardware.transmission.setJoystickDeadband(DEADBAND_VALUE_KILROY_XX);
     Hardware.transmission.enableDeadband();
 
     Hardware.gyro.reset();
@@ -274,7 +271,7 @@ public static void periodic ()
         }
     else
         {
-        // teleopDrive();
+        teleopDrive();
         }
 
     printStatements();
@@ -288,7 +285,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -352,59 +349,8 @@ private static boolean prepped = false;
 
 private static void connerTest ()
 {
-    Hardware.axisCamera.setDigitalOutputValue(Value.kOn);
-    // System.out.println(
-    // "can see the things: " + Hardware.axisCamera.hasBlobs()
-    // + Hardware.axisCamera
-    // .getParticleReports().length);
-
-    SmartDashboard.putNumber("ultrasonic: ",
-            Hardware.frontUltraSonic.getDistanceFromNearestBumper());
-
-    // System.out.println("is doing the thng: " + started);
-
-    if (Hardware.rightOperator.getRawButton(8))
-        {
-        started = !started;
-        }
-    if (started == true && !prepped)
-        {
-        Autonomous.prepToDeposit();
-        if (Hardware.driveWithCamera.driveToTarget(.4))
-            {
-            System.out.println("Finished prep");
-            prepped = true;
-            }
-        }
-
-    if (started && prepped)
-        {
-        if (Hardware.depositGamePiece.depositHatch())
-            {
-            System.out.println("deposited the hatch");
-            started = false;
-            prepped = false;
-            }
-        }
-
-    if (Hardware.rightOperator.getRawButton(9))
-        {
-        Hardware.axisCamera.setDigitalOutputValue(Value.kOn);
-        System.out.println(
-                "can see the things: " + Hardware.axisCamera.hasBlobs()
-                        + Hardware.axisCamera
-                                .getParticleReports().length);
-        }
-
-
-    // System.out.println("Right or left: "
-    // + Hardware.driveWithCamera.getTargetSide());
-    // System.out.println(
-    // "vision has blobs: " + Hardware.axisCamera.hasBlobs());
-
-    // System.out.println("Ultrasonic: "
-    // + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
-
+    Hardware.axisCamera.setRelayValue(Value.kOn);
+    // Autonomous.prepToDeposit();
 
 } // end connerTest()
 
@@ -418,26 +364,27 @@ private static void coleTest ()
 
     // Manipulator
 
-    SmartDashboard.putString("Lift Encoder 2019 get",
-            "" + Hardware.liftingEncoder.get());
 
-    SmartDashboard.putString("Lift Encoder 2019 getDistance",
-            "" + Hardware.liftingEncoder.getDistance());
+    // SmartDashboard.putString("Lift Encoder 2019 get",
+    // "" + Hardware.liftingEncoder.get());
 
-    SmartDashboard.putString("Lift Encoder 2019 getRate",
-            "" + Hardware.liftingEncoder.getRate());
+    // SmartDashboard.putString("Lift Encoder 2019 getDistance",
+    // "" + Hardware.liftingEncoder.getDistance());
 
-    SmartDashboard.putNumber("Left Front Encoder Inches = ",
-            Hardware.leftFrontDriveEncoder.getDistance());
+    // SmartDashboard.putString("Lift Encoder 2019 getRate",
+    // "" + Hardware.liftingEncoder.getRate());
 
-    SmartDashboard.putNumber("Left front encoder ticks: ",
-            Hardware.leftFrontDriveEncoder.get());
+    // SmartDashboard.putNumber("Left Front Encoder Inches = ",
+    // Hardware.leftFrontDriveEncoder.getDistance());
 
-    SmartDashboard.putNumber("Right Front Inches = ",
-            Hardware.rightFrontDriveEncoder.getDistance());
+    // SmartDashboard.putNumber("Left front encoder ticks: ",
+    // Hardware.leftFrontDriveEncoder.get());
 
-    SmartDashboard.putNumber("Right Front Ticks ",
-            Hardware.rightFrontDriveEncoder.get());
+    // SmartDashboard.putNumber("Right Front Inches = ",
+    // Hardware.rightFrontDriveEncoder.getDistance());
+
+    // SmartDashboard.putNumber("Right Front Ticks ",
+    // Hardware.rightFrontDriveEncoder.get());
 
     // System.out.println("Left Front motor isReversed: " +
     // Hardware.leftFrontCANMotor.get());
@@ -464,8 +411,14 @@ private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {
-    SmartDashboard.putNumber("Lift Encoder",
-            Hardware.lift.getForkliftHeight());
+    if (Hardware.leftOperator.getRawButton(3) == true)
+        {
+        Hardware.armIntakeSolenoid.setForward(true);
+        }
+    else
+        {
+        Hardware.armIntakeSolenoid.setReverse(true);
+        }
 } // end guidoTest()
 
 private static void patrickTest ()
@@ -872,8 +825,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        System.out.println("ultrasonic " + Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper());
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -897,7 +850,7 @@ public static void printStatements ()
         // GYRO
         // ---------------------------------
 
-        System.out.println("Gyro: " + Hardware.gyro.getAngle());
+        // System.out.println("Gyro: " + Hardware.gyro.getAngle());
         // SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
         // Hardware.telemetry.printToConsole("Gyro: " +
         // Hardware.gyro.getAngle());
@@ -1051,9 +1004,6 @@ private static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XX = .5;
 
-private static final double DEADBAND_VALUE_KILROY_XIX = .2;
-
-private static final double DEADBAND_VALUE_KILROY_XX = .2;
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 

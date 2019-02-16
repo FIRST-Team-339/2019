@@ -45,7 +45,8 @@ public KilroySPIGyro (boolean hasGyro)
     if (hasGyro)
         {
         this.gyro = new ADXRS450_Gyro();
-        } else
+        }
+    else
         {
         System.out.println("***Gyro is NOT enabled!***");
         this.gyro = null;

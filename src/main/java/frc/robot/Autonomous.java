@@ -352,7 +352,8 @@ private static boolean crossAutoline ()
             System.out.println("Manoevering, clear the datum!");
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                if (descendFromLevelTwo(usingAlignByWall) == true)
+                if (descendFromLevelTwo(usingAlignByWall,
+                        goingBackwards, turningAroundAfter) == true)
                     {
                     cross = CrossAutoState.ONWARD;
                     }
@@ -595,7 +596,8 @@ private static boolean depositRocketHatch ()
             if (autoLevel == Level.LEVEL_TWO)
                 {
                 System.out.println("AAAAAAAAHHHHHHHHHHHHHHHHHHHH");
-                if (descendFromLevelTwo(usingAlignByWall) == true)
+                if (descendFromLevelTwo(usingAlignByWall,
+                        goingBackwards, turningAroundAfter) == true)
                     {
                     if (usingVision == true)
                         {
@@ -903,7 +905,7 @@ private static boolean depositRocketHatch ()
             break;
 
         case PREP_TO_DEPOSIT_HATCH:
-            if (prepToDeposit() == true)
+            if (/* prepToDeposit() == */ true)
                 {
                 rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                 }
@@ -954,7 +956,8 @@ private static boolean depositSideCargoHatch ()
                 sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_ONLY;
             break;
         case LEAVE_LEVEL_2:
-            if (descendFromLevelTwo(usingAlignByWall) == true)
+            if (descendFromLevelTwo(usingAlignByWall,
+                    goingBackwards, turningAroundAfter) == true)
                 {
                 sideCargoHatchState = SideCargoHatchState.TURN_AFTER_LEVEL_2_DROP;
                 }
@@ -1008,7 +1011,7 @@ private static void driverControl ()
 
 public static enum DescentState
     {
-    STANDBY, INIT, DRIVE_FAST, DELAY_INIT_AFTER_DRIVE_FAST, DELAY_AFTER_DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, DELAY_INIT_B4_FINISH, DELAY_B4_FINISH, FINISH
+    STANDBY, INIT, DRIVE_FAST, DELAY_INIT_AFTER_DRIVE_FAST, DELAY_AFTER_DRIVE_FAST, LANDING_SETUP, BACKWARDS_TIMER_INIT, DRIVE_BACKWARDS_TO_ALIGN, DELAY_INIT_B4_FINISH, DELAY_B4_FINISH, TURN_180, FINISH
     }
 
 
@@ -1054,7 +1057,8 @@ public static boolean reorientAfterLevel2Drop ()
     return false;
 }
 
-public static boolean descendFromLevelTwo (boolean usingAlignByWall)
+public static boolean descendFromLevelTwo (boolean usingAlignByWall,
+        boolean goingBackwards, boolean turn180AtEnd)
 {
 
     if (descentState == DescentState.STANDBY)
@@ -1078,19 +1082,42 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
             break;
 
         case DRIVE_FAST:
-            if (descentTimer.get() >= TIME_TO_DRIVE_OFF_PLATFORM)
+            if (goingBackwards == false)
                 {
-                Hardware.drive.stop();
-                descentTimer.stop();
-                descentState = DescentState.DELAY_INIT_AFTER_DRIVE_FAST;
+                if (descentTimer.get() >= TIME_TO_DRIVE_OFF_PLATFORM)
+                    {
+                    Hardware.drive.stop();
+                    descentTimer.stop();
+                    descentState = DescentState.DELAY_INIT_AFTER_DRIVE_FAST;
+                    }
+                else
+                    {
+                    Hardware.drive.driveStraight(
+                            SPEED_TO_DRIVE_OFF_PLATFORM,
+                            ACCELERATION_TIME,
+                            true);
+                    }
+                break;
                 }
             else
-                {
-                Hardware.drive.driveStraight(
-                        SPEED_TO_DRIVE_OFF_PLATFORM,
-                        ACCELERATION_TIME,
-                        true);
-                }
+                if (goingBackwards == true)
+                    {
+                    if (descentTimer
+                            .get() >= TIME_TO_DRIVE_OFF_PLATFORM)
+                        {
+                        Hardware.drive.stop();
+                        descentTimer.stop();
+                        descentState = DescentState.DELAY_INIT_AFTER_DRIVE_FAST;
+                        }
+                    else
+                        {
+                        Hardware.drive.driveStraight(
+                                REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM,
+                                ACCELERATION_TIME,
+                                true);
+                        }
+                    break;
+                    }
             break;
 
         case DELAY_INIT_AFTER_DRIVE_FAST:
@@ -1127,18 +1154,41 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
             break;
 
         case DRIVE_BACKWARDS_TO_ALIGN:
-            if (descentTimer.get() >= TIME_TO_DRIVE_BACKWARDS_TO_ALIGN)
+            if (goingBackwards == false)
                 {
-                descentTimer.stop();
-                Hardware.drive.stop();
-                descentState = DescentState.DELAY_INIT_B4_FINISH;
+                if (descentTimer
+                        .get() >= TIME_TO_DRIVE_BACKWARDS_TO_ALIGN)
+                    {
+                    descentTimer.stop();
+                    Hardware.drive.stop();
+                    descentState = DescentState.DELAY_INIT_B4_FINISH;
+                    }
+                else
+                    {
+                    Hardware.transmission.driveRaw(
+                            DRIVE_BACKWARDS_SPEED,
+                            DRIVE_BACKWARDS_SPEED);
+                    }
+                break;
                 }
             else
-                {
-                Hardware.transmission.driveRaw(DRIVE_BACKWARDS_SPEED,
-                        DRIVE_BACKWARDS_SPEED);
-                }
-            break;
+                if (goingBackwards == true)
+                    {
+                    if (descentTimer
+                            .get() >= TIME_TO_DRIVE_BACKWARDS_TO_ALIGN)
+                        {
+                        descentTimer.stop();
+                        Hardware.drive.stop();
+                        descentState = DescentState.DELAY_INIT_B4_FINISH;
+                        }
+                    else
+                        {
+                        Hardware.transmission.driveRaw(
+                                -DRIVE_BACKWARDS_SPEED,
+                                -DRIVE_BACKWARDS_SPEED);
+                        }
+                    break;
+                    }
         case DELAY_INIT_B4_FINISH:
             descentTimer.reset();
             descentTimer.start();
@@ -1148,10 +1198,27 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
         case DELAY_B4_FINISH:
             if (descentTimer.get() > TIME_TO_DELAY_B4_FINISH)
                 {
-                descentState = DescentState.FINISH;
+                if (turn180AtEnd == true)
+                    {
+                    descentState = DescentState.TURN_180;
+                    }
+                else
+                    {
+                    descentState = DescentState.FINISH;
+                    }
+
                 }
             break;
 
+        case TURN_180:
+            if (Hardware.drive.turnDegrees(TURN_180, TURN_SPEED,
+                    ACCELERATION_TIME, true))
+                {
+                descentState = DescentState.FINISH;
+                }
+
+
+            break;
 
         case FINISH:
             System.out.println(
@@ -1161,7 +1228,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
         default:
             break;
 
-        } // ens switch
+        } // end switch
     return false;
 } // end descendFromLevelTwo()
 
@@ -1172,11 +1239,10 @@ public static boolean hasDoneThePrep = false;
  */
 public static void prepToDeposit ()
 {
-
     if (hasDoneThePrep == false)
         {
-
-        if (Hardware.manipulator.moveArmToPosition(105, .5)
+        System.out.println("*Dabs on haters*");
+        if (Hardware.manipulator.moveArmToPosition(105, 1)
                 || (Hardware.manipulator
                         .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
                         && Hardware.manipulator
@@ -1204,6 +1270,11 @@ public static void endAutoPath ()
 // TUNEABLES
 // =========================================================================
 // use vision for rocket autopath
+
+public static boolean turningAroundAfter = false;
+
+public static boolean goingBackwards = false;
+
 private static boolean usingVision = true;
 
 private static boolean usingAlignByWall = true;
@@ -1255,7 +1326,9 @@ public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
 
 public static final double DRIVE_BACKWARDS_SPEED = -.4;
 
-public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .85;
+public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .85; // @ANE
+
+public static final double REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.85;
 
 public static final double DRIVE_SPEED = .375;
 
@@ -1276,7 +1349,7 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .7;
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .7; // @ANE
 
 public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
 
@@ -1308,6 +1381,7 @@ public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
 public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
+
 // changed to correct-ish number 2 February 2019
 public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 60;
 
@@ -1328,4 +1402,6 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 public static final double TIME_TO_DELAY_AFTER_DRIVE_FAST = 1;
 
 public static final double TIME_TO_DELAY_B4_FINISH = 4;
+
+public static int TURN_180 = 180;
 }

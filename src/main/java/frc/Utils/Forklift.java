@@ -86,6 +86,9 @@ public double getForkliftHeight ()
     return this.forkliftEncoder.getDistance();
 }
 
+
+
+
 /**
  * Moves the forklift up and down based on a Joystick's y axis
  *
@@ -138,9 +141,9 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
         if ((speed > 0
-                && this.getForkliftHeight() > currentForkliftMaxHeight)
+                && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
-                        .getForkliftHeight() < currentMinLiftPosition))
+                        .getForkliftHeight() < currentLiftMinHeight))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
             // return so we exit the method and do not accidentally set
@@ -168,7 +171,7 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
  */
 public void setMaxLiftHeight (int inches)
 {
-    this.currentForkliftMaxHeight = inches;
+    this.currentLiftMaxHeight = inches;
 }
 
 /**
@@ -489,20 +492,22 @@ private final double NEXT_LOWER_POSITION_DEADBAND = 1;
 public void update ()
 {
 
+    this.printDebugInfo();
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
-    if (manipulator.isDeployed() == false)
-        this.currentMinLiftPosition = DEPLOY_FOLDED_MIN_HEIGHT;
+    if (manipulator.isArmClearOfFrame() == false && this
+            .getForkliftHeight() < PAST_CONSIDER_OUT_OF_FRAME_HEIGHT)
+        this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
     else
-        this.currentMinLiftPosition = NO_PIECE_MIN_HEIGHT;
+        this.currentLiftMaxHeight = NO_PIECE_MIN_HEIGHT;
 
     // main switch statement for the forklift state machine
     switch (liftState)
         {
         case MOVING_TO_POSITION:
             // Make sure we are not trying to move past the MAX or MIN position
-            if ((this.forkliftTargetHeight > currentForkliftMaxHeight)
-                    || (this.forkliftTargetHeight < currentMinLiftPosition))
+            if ((this.forkliftTargetHeight > currentLiftMaxHeight)
+                    || (this.forkliftTargetHeight < currentLiftMinHeight))
                 {
                 liftState = ForkliftState.STAY_AT_POSITION;
                 break;
@@ -599,14 +604,14 @@ public void resetStateMachine ()
 public void printDebugInfo ()
 {
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
-    // SmartDashboard.putNumber("FL Encoder Ticks: ",
-    // this.forkliftEncoder.get());
-    SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
-    SmartDashboard.putString("FL Direction State: ",
-            "" + this.forkliftDirection);
-    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
-            setLiftPositionInit);
-    SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
+    SmartDashboard.putNumber("FL Encoder Ticks: ",
+            this.forkliftEncoder.get());
+    // SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
+    // SmartDashboard.putString("FL Direction State: ",
+    // "" + this.forkliftDirection);
+    // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+    // setLiftPositionInit);
+    // SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
 }
 
 // ==================
@@ -646,7 +651,7 @@ private ForkliftDirectionState forkliftDirection = ForkliftDirectionState.NEUTRA
 
 private boolean setLiftPositionInit = true;
 
-private double currentForkliftMaxHeight = MAX_HEIGHT;
+private double currentLiftMaxHeight = MAX_HEIGHT;
 
 // used by the MOVING_TO_POSITION state in the state machine to determine what
 // position to move to
@@ -656,7 +661,7 @@ private double forkliftTargetHeight = 0.0;
 // speed to move at
 private double forkliftTargetSpeed = 0.0;
 
-private double currentMinLiftPosition = 0;
+private double currentLiftMinHeight = 0;
 
 // ===== Constants =====
 
@@ -715,11 +720,13 @@ public final static double CARGO_SHIP_HATCH = 40;// placeholder value
 
 private static final double MAX_HEIGHT = 69; // placeholder value from last year
 
+private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 10;
+
 private final double NO_PIECE_MIN_HEIGHT = 0;
 
 private final double DEPLOY_FOLDED_MIN_HEIGHT = 15;
 
-
+private double PAST_CONSIDER_OUT_OF_FRAME_HEIGHT = 35;
 // ----- Forklift Speed Constants 2018 ------
 
 private static final double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER_2018 = 1.0;
@@ -741,6 +748,8 @@ public static final double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED_2018 = 1.0;
 private final double STAY_UP_NO_PIECE_2018 = 0.05;
 
 private final double STAY_UP_WITH_CARGO_2018 = .1;
+
+private final double FORKLIFT_STARTING_HEIGHT_FROM_FLOOR = 0;
 
 /**
  * ROCKET information from the game manual.
