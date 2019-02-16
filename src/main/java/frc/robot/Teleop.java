@@ -200,6 +200,10 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
+
+
+
+    // Hardware.manipulator.printDeployDebugInfo();
     // Forklift
     Hardware.manipulator.printDeployDebugInfo();
 
@@ -391,14 +395,22 @@ private static void connerTest ()
 
 private static void coleTest ()
 {
-
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeplo45DegreeButton
 
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
+
     // Manipulator
 
+    SmartDashboard.putString("Arm Potentiometer Raw",
+            "" + Hardware.armPot.get());
+    SmartDashboard.putString("Arm Angle Adjusted",
+            "" + Hardware.manipulator.getCurrentArmPosition());
+    SmartDashboard.putString("Arm Motor Value",
+            "" + Hardware.armMotor.get());
 
     // SmartDashboard.putString("Lift Encoder 2019 get",
     // "" + Hardware.liftingEncoder.get());
@@ -442,7 +454,6 @@ private static void coleTest ()
 
 } // end coleTest()
 
-private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {
