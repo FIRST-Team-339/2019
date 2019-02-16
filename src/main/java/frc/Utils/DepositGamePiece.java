@@ -1,10 +1,15 @@
 package frc.Utils;
 
 import frc.Utils.drive.*;
+import frc.Hardware.Hardware;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Timer;
 
-
+/**
+ * @author Conner McKevitt
+ *
+ *         use to deposit a game piece for the 2019 season
+ */
 public class DepositGamePiece
 {
 
@@ -34,7 +39,9 @@ public enum DepositHatchState
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
 
 /**
- *
+ * a statemachine that deposits and hatch. The forklift must already be at the
+ * correct height and the manipulator at the correct angle. For auto use
+ * prepToDepost to set up for a rocket hatch
  *
  */
 public boolean depositHatch ()
@@ -66,19 +73,15 @@ public boolean depositHatch ()
                     .4, BACKUP_ACCELERATION, usingGyro))
                 {
 
-                depositHatchState = DepositHatchState.LOWER_FORKLIFT_HATCH;
+                depositHatchState = DepositHatchState.BACKUP_HATCH;
 
                 }
             break;
-        case LOWER_FORKLIFT_HATCH:
-            if (this.forklift.setLiftPosition(
-                    this.forklift.getForkliftHeight() - 4))
-                {
-                depositHatchState = DepositHatchState.BACKUP_HATCH;
-                }
-            break;
+
         case BACKUP_HATCH:
             System.out.println("back deposit");
+            Hardware.manipulator.moveArmToPosition(DEPOSIT_ARM_ANGLE,
+                    ARM_MOVE_SPEED);
             if (this.drive.driveStraightInches(BACKUP_INCHES,
                     -BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
                 {
@@ -101,6 +104,12 @@ public enum DepositCargoState
 
 public static DepositCargoState depositCargoState = DepositCargoState.INIT;
 
+/**
+ * use this to deposit a cargo gamepiece. The forklift and manipulator must
+ * already be set to the proper height and angle.
+ * 
+ * @return
+ */
 public boolean depositCargo ()
 {
     System.out.println("depositCargostate: " + depositCargoState);
@@ -172,10 +181,11 @@ public boolean outakeGamepiece ()
 
 
 
-private static final int LOWERED_ARM_AFTER_DEPOSIT_POSITION = 250;// TODO
+
 
 private static final int FORWARD_TO_DEPOSIT = 2;// TODO
 
+private static final double DEPOSIT_ARM_ANGLE = 90;
 
 // Cargo constants=========================
 
@@ -191,7 +201,7 @@ private static final double BACKUP_INCHES = 10;// TODO
 
 private static final double BACKUP_ACCELERATION = .1;
 
-private static final double BACKUP_SPEED = .4;
+private static final double BACKUP_SPEED = .2;
 
 
 }

@@ -902,7 +902,7 @@ private static boolean depositRocketHatch ()
             break;
 
         case PREP_TO_DEPOSIT_HATCH:
-            if (prepToDeposit() == true)
+            if (/* prepToDeposit() == */ true)
                 {
                 rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                 }
@@ -1171,11 +1171,10 @@ public static boolean hasDoneThePrep = false;
  */
 public static void prepToDeposit ()
 {
-
     if (hasDoneThePrep == false)
         {
-
-        if (Hardware.manipulator.moveArmToPosition(105, .5)
+        System.out.println("*Dabs on haters*");
+        if (Hardware.manipulator.moveArmToPosition(105, 1)
                 || (Hardware.manipulator
                         .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
                         && Hardware.manipulator
