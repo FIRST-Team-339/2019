@@ -612,6 +612,8 @@ public static void commonInitialization ()
 
     // new JoystickButton(leftOperator, 8);
 
+
+    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
 
     pictureButtonOne = new JoystickButton(rightOperator, 8);
@@ -633,7 +635,9 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
+
+
+
 
 
     // ----------Left Driver---------------

@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
 import frc.Utils.DepositGamePiece.DepositHeight;
+import frc.Utils.DepositGamePiece.HatchOrCargo;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -240,14 +241,28 @@ public static void periodic ()
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
 
+    System.out.println("alignvisionbutton; "
+            + Hardware.alignVisionButton.isOnCheckNow());
     if (Hardware.alignVisionButton.isOnCheckNow() == true)
         {
+        System.out
+                .println("calling deposit");
+        // TODO, make so that driver can select height and gamepiece
         if (Hardware.depositGamePiece
-                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1))
+                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1,
+                        HatchOrCargo.HATCH))
             {
+            System.out
+                    .println("finished the thing");
             Hardware.depositGamePiece.resetDepositTeleop();
+
             }
         }
+    else
+        {
+        Hardware.depositGamePiece.resetDepositTeleop();
+        }
+
 
     // buttons
     if (Hardware.climbOneButton.isOnCheckNow() == true
@@ -809,8 +824,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
