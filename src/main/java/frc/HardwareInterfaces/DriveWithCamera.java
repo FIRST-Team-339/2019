@@ -188,7 +188,7 @@ public boolean driveToTarget (double speed)
             // visionProcessor.saveImage(ImageType.RAW);
             // visionProcessor.saveImage(ImageType.PROCESSED);
 
-
+            double correctionValue = DRIVE_CORRECTION;
             double motorspeed = speed;
             double slowAmount;
             double slowestSpeed;
@@ -197,21 +197,50 @@ public boolean driveToTarget (double speed)
 
             break;
         case DRIVE_WITH_CAMERA:
+            correctionValue = DRIVE_CORRECTION;
+
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             // adjust speed based on distance
+            System.out.println("ultrasonic distance: "
+                    + this.frontUltrasonic
+                            .getDistanceFromNearestBumper());
+
+            // if we lose camera before aligned
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
+                    && (Hardware.rightFrontDriveEncoder
+                            .getDistance() >= CAMERA_NO_LONGER_WORKS
+                            || Hardware.leftFrontDriveEncoder
+                                    .getDistance() >= CAMERA_NO_LONGER_WORKS))
+                {
+
+                state = DriveWithCameraState.DRIVE_WITH_US;
+                }
+
+            // if we get close enought to the target and have to stop
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
+                    && Hardware.rightFrontDriveEncoder
+                            .getDistance() > MIN_INCHES)
+                {
+                state = DriveWithCameraState.STOP;
+                }
+
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
                     && this.frontUltrasonic
                             .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
+                correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
                 }
             else
                 if (this.frontUltrasonic
                         .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
                     {
                     slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
+                    correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
                     }
                 else
                     {
@@ -253,9 +282,9 @@ public boolean driveToTarget (double speed)
                 // the switch's center is too far right, drive faster on the
                 // left
 
-                System.out.println("WE ARE TOO left");
+                System.out.println("WE ARE TOO LEFT");
                 this.getTransmission().driveRaw(
-                        motorspeed + DRIVE_CORRECTION,
+                        motorspeed + correctionValue,
                         slowestSpeed);
 
                 }
@@ -267,38 +296,19 @@ public boolean driveToTarget (double speed)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
-                    System.out.println("WE ARE TOO Right");
+                    System.out.println("WE ARE TOO RIGHT");
                     this.getTransmission().driveRaw(slowestSpeed,
-                            motorspeed + DRIVE_CORRECTION);
+                            motorspeed + correctionValue);
 
                     }
                 else
                     {
                     System.out.println(
                             "Driving straight center of blobs");
-                    driveStraight(speed, 2, true);
+                    driveStraight(motorspeed, 2, true);
                     }
 
-            // if we lose camera before aligned
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
-                    && (Hardware.rightFrontDriveEncoder
-                            .getDistance() >= CAMERA_NO_LONGER_WORKS
-                            || Hardware.leftFrontDriveEncoder
-                                    .getDistance() >= CAMERA_NO_LONGER_WORKS))
-                {
 
-                state = DriveWithCameraState.DRIVE_WITH_US;
-                }
-
-            // if we get close enought to the target and have to stop
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && Hardware.rightFrontDriveEncoder
-                            .getDistance() > MIN_INCHES)
-                {
-                state = DriveWithCameraState.STOP;
-                }
 
             break;
         case DRIVE_WITH_US:
@@ -617,7 +627,7 @@ private final double SLOW_MODIFIER = .6;
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .15;
+private final double DRIVE_CORRECTION = .2;
 
 
 

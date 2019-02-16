@@ -903,6 +903,7 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
+                    prepToDeposit();
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
@@ -1188,24 +1189,27 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall)
     return false;
 } // end descendFromLevelTwo()
 
+public static boolean hasDoneThePrep = false;
 
 /**
  * function to back up and raise arm to deposit
  */
-public static boolean prepToDeposit ()
+public static void prepToDeposit ()
 {
-    System.out.println("prepping, currnet forkiness: "
-            + Hardware.lift.getForkliftHeight());
-    if (Hardware.lift.setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
-        {
-        System.out.println("deploying");
-        if (/* Hardware.manipulator.moveArmToPosition(45, .4) */true)
-            {
-            return true;
-            }
 
-        } // end if
-    return false;
+    if (hasDoneThePrep == false)
+        {
+        System.out.println("prepping, currnent forkiness: "
+                + Hardware.lift.getForkliftHeight());
+        if (Hardware.manipulator.deployArm())
+            {
+            System.out.println("deploying");
+            if (Hardware.lift
+                    .setLiftPosition(Forklift.LOWER_ROCKET_HATCH))
+                hasDoneThePrep = true;
+            } // end if
+        }
+
 } // end prepToDeposit()
 
 
@@ -1318,7 +1322,7 @@ public static final double CAMERA_ACCELERATION = .2;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
 
-public static final int TURN_FOR_CAMERA_DEGREES = 60;
+public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
 // changed to correct-ish number 2 February 2019
 public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 60;
