@@ -413,7 +413,7 @@ private static boolean crossAutoline ()
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
-                cross = CrossAutoState.FINISH;
+                cross = CrossAutoState.PosArmRL1;
                 }
             break;
 
