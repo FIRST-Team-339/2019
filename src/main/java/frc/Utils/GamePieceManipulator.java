@@ -6,7 +6,6 @@ import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.LightSensor;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.HardwareInterfaces.QuickSwitch;
 
@@ -66,7 +65,7 @@ public static enum DeployState
 
 public static enum DeployMovementState
     {
-    MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP
+    MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP, SET_MANUALLY_FOR_CLIMB
     }
 
 private static enum DeployMovementDirection
@@ -95,8 +94,8 @@ public void initiliazeConstantsFor2018 ()
 {
     UP_JOYSTICK_SCALER = UP_JOYSTICK_SCALER_2018;
     DOWN_JOYSTICK_SCALER = DOWN_JOYSTICK_SCALER_2018;
-    UPWARD_ARM_MOVEMENT_SCALER = UPWARD_ARM_MOVEMENT_SCALER_2018;
-    DOWNWARD_ARM_MOVEMENT_SCALER = DOWNWARD_ARM_MOVEMENT_SCALER_2018;
+    SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER = UPWARD_ARM_MOVEMENT_SCALER_2018;
+    SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER = DOWNWARD_ARM_MOVEMENT_SCALER_2018;
     MAX_ARM_POSITION_ADJUSTED = MAX_ARM_POSITION_ADJUSTED_2018;
     MIN_ARM_POSITION_ADJUSTED = MIN_ARM_POSITION_ADJUSTED_2018;
     RETRACTED_ARM_POSITION_ADJUSTED = RETRACTED_ARM_POSITION_ADJUSTED_2018;
@@ -132,7 +131,9 @@ public boolean isDeployed ()
 
 public boolean isArmClearOfFrame ()
 {
-    return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
+    return true; // TODO uncomment the below code instead when
+    // the manipulator is working on 2019
+    // return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
 }
 
 
@@ -232,8 +233,8 @@ public double getCurrentArmPosition ()
 {
     // if (armPot != null)
     // {
-    // scales the value from the arm pot so parallet to the ground is
-    // zero, and perpenciular to the ground and pointing up is 90
+    // scales the value from the arm pot so parallel to the ground is
+    // zero, and perpendicular to the ground and pointing up is 90
     return (this.armPot.get()
             - ARM_POT_RAW_HORIZONTAL_VALUE)
             * ARM_POT_SCALE_TO_DEGREES;
@@ -320,11 +321,11 @@ public boolean moveArmToPosition (double angle, double speed)
 
         if (deployTargetAngle < this.getCurrentArmPosition())
             {
-            deployTargetSpeed *= DOWNWARD_ARM_MOVEMENT_SCALER;
+            deployTargetSpeed *= SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER;
             }
         else // if the forklift will move down
             {
-            deployTargetSpeed *= UPWARD_ARM_MOVEMENT_SCALER;
+            deployTargetSpeed *= SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER;
             }
 
         isSetDeployPositionInitReady = false;
@@ -516,11 +517,62 @@ public void deployUpdate ()
             isSetDeployPositionInitReady = true;
             break;
 
+        // allows for the code to autonomously constantly send a voltage to
+        // the manipualtor, since the climb function will need to be able
+        // to do so in order to use the manipulator to hoist up the robot.
+        case SET_MANUALLY_FOR_CLIMB:
+            isSetDeployPositionInitReady = true;
+            this.armMotor.set(deployTargetSpeed);
+            deployMovementState = DeployMovementState.STAY_AT_POSITION;
+            break;
+
         case STOP:
             this.armMotor.set(0.0);
             break;
 
         }
+}
+
+/**
+ * Allows the user to manually set the arm motor to a speed using
+ * the SET_MANUALLY_FOR_CLIMB state. This should not be used outside
+ * of autonomous climb functions, where we need to give the
+ * manipulator a higher speed than usual.
+ *
+ * Should be called continously. If this funtion is not called even
+ * for one loop through periodic, the state machine will reset the
+ * manipulator state to STAY_AT_POSITION
+ *
+ * TODO add a similar function Forklift
+ *
+ * @param speed
+ *                  the speed the motor will be set to (unscaled)
+ *                  This function will scale down the passed in value,
+ *                  but until more testing on 2019's robot,
+ *                  DO NOT pass in any values greater than 1.0;
+ *                  positive values move the arm up, negative
+ *                  values move the arm down
+ */
+public void setArmMotorSpeedManuallyForClimb (double speed)
+{
+    // If we are trying to move up and past the max angle, or
+    // trying to move down and below the min height, tell the
+    // arm to stay where it is
+    if ((speed > 0
+            && this.getCurrentArmPosition() > currentDeployMaxAngle)
+            || (speed < 0 && this
+                    .getCurrentArmPosition() < currentDeployMinAngle))
+        {
+        this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
+        // return so we exit the method and do not accidentally set
+        // deployMovementState to SET_MANUALLY_FOR_CLIMB;
+        return;
+        }
+
+    // scales the speed based on whether it is going up or down
+    deployTargetSpeed = speed * MAX_DEPLOY_SPEED_2019;
+
+    this.deployMovementState = DeployMovementState.SET_MANUALLY_FOR_CLIMB;
 }
 
 /** Puts various debug into smart dashboard */
@@ -656,7 +708,11 @@ private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
 // ----- Deploy Position Constants 2019 -----
 
+private static int MAX_ARM_POSITION_RAW = 0;
+
 private static int MAX_ARM_POSITION_ADJUSTED = 85;
+
+private static int MIN_ARM_POSITION_RAW = 0;
 
 private static int MIN_ARM_POSITION_ADJUSTED = 5;
 
@@ -678,7 +734,7 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static double ARM_POT_SCALE_TO_DEGREES = -0.428571; // placeholder
+private static double ARM_POT_SCALE_TO_DEGREES = -1.0; // placeholder
 
 // value that is multiplied by the number of ticks to convert it to degrees
 private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
@@ -721,14 +777,14 @@ private static final double ARM_ENCODER_SCALE_TO_DEGREES_2018 = 0.0; // placehol
 
 // ----- Deploy Speed Constants 2019 -----
 
-private static double STAY_UP_WITH_CARGO = 0.2;
+private static double STAY_UP_WITH_CARGO = 0.0;
 
-private static double STAY_UP_NO_PIECE = 0.2;
+private static double STAY_UP_NO_PIECE = 0.0;
 
-private static double UPWARD_ARM_MOVEMENT_SCALER = 1.0
+private static double SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER = 1.0
         * MAX_DEPLOY_SPEED_2019;
 
-private static double DOWNWARD_ARM_MOVEMENT_SCALER = 0.05
+private static double SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER = 0.05
         * MAX_DEPLOY_SPEED_2019;
 
 private static double DEFAULT_DEPLOY_SPEED_UNSCALED = 1.0;

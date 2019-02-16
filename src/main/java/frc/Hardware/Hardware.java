@@ -28,20 +28,16 @@ import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
-import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.AutoGenVision;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -51,8 +47,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 
 /**
@@ -194,7 +188,7 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 // Red Light/IR Sensor class
 // -------------------------------------
-public static LightSensor armIR = null;
+public static LightSensor armBallDetector = null;
 
 public static LightSensor leftBackIR = null;
 
@@ -247,7 +241,7 @@ public static DoubleSolenoid driveSolenoid = null;
 // --------------------------------------
 public static RobotPotentiometer delayPot = null;
 
-public static RobotPotentiometer intakeDeploySensor = null;
+public static RobotPotentiometer armPot = null;
 
 // -------------------------------------
 // Sonar/Ultrasonic
@@ -328,9 +322,9 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
-public static QuickSwitch setDeploy45DegreeButton = null;
+public static JoystickButton resetForkliftEncoderButton1 = null;
 
-public static QuickSwitch autoDeployButton = null;
+public static JoystickButton resetForkliftEncoderButton2 = null;
 
 // ----- Right Operator -----
 
@@ -346,7 +340,8 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
-public static QuickSwitch autoRetractButton = null;
+
+public static MomentarySwitch alignVisionButton = null;
 
 // ------------------------------------
 // Momentary Switches
@@ -505,7 +500,7 @@ public static void commonInitialization ()
     // -------------------------------------
     // Red Light/IR Sensor class
     // -------------------------------------
-    armIR = new LightSensor(21);
+    armBallDetector = new LightSensor(21);
 
     leftBackIR = new LightSensor(8);
 
@@ -554,7 +549,7 @@ public static void commonInitialization ()
 
     delayPot = new RobotPotentiometer(2, 300);
 
-    intakeDeploySensor = new RobotPotentiometer(0, 300);
+    armPot = new RobotPotentiometer(0, 300);
 
     // Sonar/Ultrasonic
     frontUltraSonic = new LVMaxSonarEZ(3);
@@ -615,10 +610,10 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    setDeploy45DegreeButton = new QuickSwitch(leftOperator, 10);
+    // new JoystickButton(leftOperator, 8);
 
-    autoDeployButton = new QuickSwitch(leftOperator, 11);
 
+    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
 
     pictureButtonOne = new JoystickButton(rightOperator, 8);
@@ -640,7 +635,9 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-    autoRetractButton = new QuickSwitch(rightOperator, 11);
+
+
+
 
 
     // ----------Left Driver---------------
@@ -693,9 +690,9 @@ public static void commonInitialization ()
 
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
-            armMotor, intakeDeploySensor/* armEncoder */,
+            armMotor, armPot/* armEncoder */,
             armRoller,
-            armIR);
+            armBallDetector);
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
@@ -707,7 +704,7 @@ public static void commonInitialization ()
 
 
     climber = new ClimbToLevelTwo(
-            driveSolenoid, armMotor, intakeDeploySensor,
+            driveSolenoid, armMotor, armPot,
             drive, lift, frontUltraSonic);
 
 } // end of commonInitialization()

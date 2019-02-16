@@ -32,16 +32,13 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.vision.VisionProcessor;
+import frc.Utils.DepositGamePiece.DepositHeight;
+import frc.Utils.DepositGamePiece.HatchOrCargo;
 import frc.vision.VisionProcessor.ImageType;
-import frc.Utils.GamePieceManipulator;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -65,11 +62,15 @@ public static void init ()
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .4;
             initTeleop2018();
             break;
 
         default:
         case KILROY_2019:
+            DRIVE_SPEED = .4;
+            TURN_SPEED = .7;
             initTeleop2019();
             break;
 
@@ -169,7 +170,7 @@ public static void initTeleop2019 ()
     Hardware.leftFrontDriveEncoder.reset();
     Hardware.rightRearDriveEncoder.reset();
     Hardware.leftRearDriveEncoder.reset();
-    Hardware.liftingEncoder.reset();
+    // DO NOT RESET THE LIFT ENCODER
 
     // ---------------------------------
     // setup motors
@@ -200,7 +201,6 @@ public static void periodic ()
     // =================================================================
 
     // Forklift
-
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
 
@@ -238,6 +238,31 @@ public static void periodic ()
     Hardware.manipulator.masterUpdate();
 
     Hardware.climber.climbUpdate();
+
+    Hardware.depositGamePiece.depositTeleopStateMachine();
+
+    System.out.println("alignvisionbutton; "
+            + Hardware.alignVisionButton.isOnCheckNow());
+    if (Hardware.alignVisionButton.isOnCheckNow() == true)
+        {
+        System.out
+                .println("calling deposit");
+        // TODO, make so that driver can select height and gamepiece
+        if (Hardware.depositGamePiece
+                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1,
+                        HatchOrCargo.HATCH))
+            {
+            System.out
+                    .println("finished the thing");
+            Hardware.depositGamePiece.resetDepositTeleop();
+
+            }
+        }
+    else
+        {
+        Hardware.depositGamePiece.resetDepositTeleop();
+        }
+
 
     // buttons
     if (Hardware.climbOneButton.isOnCheckNow() == true
@@ -343,71 +368,43 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-private static boolean started = false;
+private static boolean started = true;
 
 private static boolean prepped = false;
 
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    // Autonomous.prepToDeposit();
+    System.out.println("*Orange Justicing: *" + started);
+    System.out.println("*giant green light: *" + prepped);
+
+
+
+
+    Hardware.driveWithCamera.driveToTarget(.4);
+
 
 } // end connerTest()
 
 private static void coleTest ()
 {
-
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeplo45DegreeButton
 
+
+    SmartDashboard.putNumber("Delay Pot", Hardware.delayPot.get());
+
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
+
     // Manipulator
 
-
-    // SmartDashboard.putString("Lift Encoder 2019 get",
-    // "" + Hardware.liftingEncoder.get());
-
-    // SmartDashboard.putString("Lift Encoder 2019 getDistance",
-    // "" + Hardware.liftingEncoder.getDistance());
-
-    // SmartDashboard.putString("Lift Encoder 2019 getRate",
-    // "" + Hardware.liftingEncoder.getRate());
-
-    // SmartDashboard.putNumber("Left Front Encoder Inches = ",
-    // Hardware.leftFrontDriveEncoder.getDistance());
-
-    // SmartDashboard.putNumber("Left front encoder ticks: ",
-    // Hardware.leftFrontDriveEncoder.get());
-
-    // SmartDashboard.putNumber("Right Front Inches = ",
-    // Hardware.rightFrontDriveEncoder.getDistance());
-
-    // SmartDashboard.putNumber("Right Front Ticks ",
-    // Hardware.rightFrontDriveEncoder.get());
-
-    // System.out.println("Left Front motor isReversed: " +
-    // Hardware.leftFrontCANMotor.get());
-
-    // System.out.println("Left Rear motor isReversed: " +
-    // Hardware.leftFrontCANMotor.get());
-
-    // System.out.println("Right Front motor isReversed: " +
-    // Hardware.rightFrontCANMotor.get());
-
-    // System.out.println("Right Rear motor isReversed: " +
-    // Hardware.rightRearCANMotor.get());
-
-    // // System.out.println("Right Front Encoder isReversed: " +
-    // // Hardware.rightFrontDriveEncoder.getRate());
-
-    // System.out.println("Left Front Encoder isReversed: "
-    // + Hardware.leftFrontDriveEncoder.getRate());
 
 
 } // end coleTest()
 
-private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {
@@ -550,29 +547,29 @@ public static void printStatements ()
 
         // System.out.println("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
-        SmartDashboard.putNumber("RF Drive Motor ",
-                Hardware.rightFrontCANMotor.get());
+        // SmartDashboard.putNumber("RF Drive Motor ",
+        // Hardware.rightFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
 
         // System.out.println("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
-        SmartDashboard.putNumber("LF Drive Motor ",
-                Hardware.leftFrontCANMotor.get());
+        // SmartDashboard.putNumber("LF Drive Motor ",
+        // Hardware.leftFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("LF Drive Motor "
         // + Hardware.leftFrontCANMotor.get());
 
         // System.out.println("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
-        SmartDashboard.putNumber("RR Drive Motor ",
-                Hardware.rightRearCANMotor.get());
+        // SmartDashboard.putNumber("RR Drive Motor ",
+        // Hardware.rightRearCANMotor.get());
         // Hardware.telemetry.printToConsole("RR Drive Motor " +
         // Hardware.rightRearCANMotor.get());
 
         // System.out.println("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
-        SmartDashboard.putNumber("LR Drive Motor ",
-                Hardware.leftRearCANMotor.get());
+        // SmartDashboard.putNumber("LR Drive Motor ",
+        // Hardware.leftRearCANMotor.get());
         // Hardware.telemetry.printToConsole("LR Drive Motor "
         // + Hardware.leftRearCANMotor.get());
 
@@ -670,29 +667,29 @@ public static void printStatements ()
         // ---------------------------------
         // System.out.println("LF encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
-        SmartDashboard.putNumber("Left Front Encoder Inches = ",
-                Hardware.leftFrontDriveEncoder.getDistance());
+        // SmartDashboard.putNumber("Left Front Encoder Inches = ",
+        // Hardware.leftFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
         // System.out.println("LF encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
-        SmartDashboard.putNumber("Left front encoder ticks: ",
-                Hardware.leftFrontDriveEncoder.get());
+        // SmartDashboard.putNumber("Left front encoder ticks: ",
+        // Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
         // + Hardware.leftFrontDriveEncoder.get());
 
         // System.out.println("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
-        SmartDashboard.putNumber("Right Front Inches = ",
-                Hardware.rightFrontDriveEncoder.getDistance());
+        // SmartDashboard.putNumber("Right Front Inches = ",
+        // Hardware.rightFrontDriveEncoder.getDistance());
         // Hardware.telemetry.printToConsole("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
-        SmartDashboard.putNumber("Right Front Ticks ",
-                Hardware.rightFrontDriveEncoder.get());
+        // SmartDashboard.putNumber("Right Front Ticks ",
+        // Hardware.rightFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right Front Ticks "
         // + Hardware.rightFrontDriveEncoder.get());
 
@@ -802,9 +799,11 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
 
-        // System.out.println("Delay pot: " + Hardware.delayPot.get());
-        // SmartDashboard.putNumber("Delay pot: ",
-        // Hardware.delayPot.get());
+        System.out.println("Delay pot: " + Hardware.delayPot.get());
+        SmartDashboard.putNumber("Delay pot: ",
+                Hardware.delayPot.get());
+        SmartDashboard.putNumber("Deploy pot min max: ",
+                Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
@@ -816,8 +815,8 @@ public static void printStatements ()
 
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
-        // SmartDashboard.putNumber("Intake deploy sensor: ",
-        // Hardware.intakeDeploySensor.get());
+        SmartDashboard.putNumber("Arm Pot sensor: ",
+                Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -825,8 +824,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -1025,6 +1024,10 @@ private static boolean isOrange = true;
 private static boolean isCurrentlyChanging = false;
 
 public static final double FORKLIFT_DIVISOR = 4;
+
+private static double DRIVE_SPEED = .4;
+
+private static double TURN_SPEED = .4;
 
 // ================================
 // Variables
