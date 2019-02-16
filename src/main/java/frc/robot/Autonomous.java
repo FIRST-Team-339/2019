@@ -32,18 +32,13 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.HardwareInterfaces.LightSensor;
-import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
-import frc.Utils.Forklift;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
-import frc.vision.VisionProcessor.ImageType;
 
 
 /**
@@ -151,14 +146,14 @@ public static Level autoLevel = Level.NULL;
  * @written Jan 13, 2015
  *
  *          FYI: drive.stop cuts power to the motors, causing the robot to
- *          coast. drive(PID).brake results in a more complete stop.
+ *          coast. drive.brake results in a more complete stop.
  *          Meghan Brown; 10 February 2019
  *
  */
 public static void periodic ()
 {
-    if (Hardware.rightDriver.getRawButton(11)
-            && Hardware.leftDriver.getRawButton(11))
+    if (Hardware.rightDriver.getRawButton(10)
+            && Hardware.leftDriver.getRawButton(10))
         {
         endAutoPath();
         autoState = State.FINISH;
@@ -245,11 +240,14 @@ public static void periodic ()
 /**
  *
  */
+// choosePath() selects which autonomous path is used, based on the position of
+// the auto path switch on the robot. Said switch is a six position switch.
 private static void choosePath ()
 {
     switch (Hardware.autoSixPosSwitch.getPosition())
         {
         case 0:
+            // crossing the autoline
             autoState = State.CROSS_AUTOLINE;
             break;
 
@@ -272,6 +270,7 @@ private static void choosePath ()
         case 5:
 
         default:
+            // end of autonomous
             autoState = State.FINISH;
             break;
         }
@@ -283,8 +282,13 @@ private static void choosePath ()
  * coresponding switches
  *
  */
+
+// setPositionAndLevel gets the level we are descending from, and which part of
+// the HAB we are in. (Level 1 or 2; left, right or centre respectively.) This
+// info is based on the position of the autoLevel and autoPosition switches.
 private static void setPositionAndLevel ()
 {
+    // getting the position; left, right, or centre
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
@@ -306,7 +310,7 @@ private static void setPositionAndLevel ()
     // hardcoded, change when switch is fixed
     // autoLevel = Level.LEVEL_TWO;
     System.out.println("woooooooooooo");
-
+    // getting the level.
     if (Hardware.levelOneSwitch.isOn() == true)
         {
         autoLevel = Level.LEVEL_ONE;
@@ -323,6 +327,9 @@ private static void setPositionAndLevel ()
 // =====================================================================
 // Path Methods
 // =====================================================================
+
+// crosses the autoline during autonomous and nothing else. Has a path that
+// descends from level 2 as well.
 public static enum CrossAutoState
     {
     INIT, L2_DESCEND, ONWARD, BRAKE, FINISH
@@ -338,7 +345,7 @@ private static boolean crossAutoline ()
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("initialising!");
+            System.out.println("Priming Nukes!");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -359,7 +366,7 @@ private static boolean crossAutoline ()
 
         case L2_DESCEND:
 
-            // only run if going off of level ii
+            // only run if going off of level 2
             System.out.println("Manoevering, clear the datum!");
             if (autoLevel == Level.LEVEL_TWO)
                 {
@@ -382,7 +389,7 @@ private static boolean crossAutoline ()
             // a.k.a. drive straight
             // TODO closely monitor merge tomorrow
             // 17 February 2019
-            prepToDeposit();
+            Hardware.depositGamePiece.prepToDepositHatch();
             Hardware.manipulator.printDeployDebugInfo();
             System.out.println("*distant screaming*");
             Hardware.gyro.reset();
@@ -399,24 +406,27 @@ private static boolean crossAutoline ()
         case BRAKE:
             // don't ever use drive.stop to break - leaves you coasting for
             // another foot and a half.
-            System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+            System.out.println("Correcting Trajectory");
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
+                // cross = CrossAutoState.PosArmRL1;
                 cross = CrossAutoState.FINISH;
                 }
             break;
 
         case FINISH:
+            // end of crossing the autoline
+            // TODO figure out how to make the below line WORK
             // HardwareInterfaces.Transmission.TransmissionBase.stop();
             System.out.println(
-                    "You have arrived at your final destination...the foreboding Vaaach homeworld.");
+                    "You Have Nuked The Sun");
             break;
         }
     return false;
 }
 
-
+// depositCargoHatch() goes straight ahead to the front end of the cargo ship.
 private static enum DepositCargoHatchState
     {
     INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_CARGO, FINISHED
@@ -441,7 +451,7 @@ private static boolean depositCargoHatch ()
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
                 }
             break;
-        case DESCEND:
+        case DESCEND: // driving off of level 2
         // if (descendFromLevelTwo(usingAlignByWall))
             {
             // turn based on start position
@@ -449,7 +459,7 @@ private static boolean depositCargoHatch ()
             }
             break;
 
-        case STRAIGHT_DEPOSIT_DRIVE_1:
+        case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
             if (Hardware.drive.driveStraightInches(
                     60, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -465,15 +475,18 @@ private static boolean depositCargoHatch ()
                     }
                 }
             break;
-        case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE:
+        case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE: // first turn, when
+                                                 // autoPosition is set to RIGHT
             if (Hardware.drive.turnDegrees(TURN_LEFT90,
                     TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_2;
+
                 }
             break;
-        case STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE:
+        case STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE: // first turn, when autoPosition
+                                                // is set to LEFT
             if (Hardware.drive.turnDegrees(TURN_RIGHT90,
                     TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
@@ -531,7 +544,7 @@ private static boolean depositCargoHatch ()
                     "encoders" + Hardware.rightFrontDriveEncoder
                             .getDistance());
 
-            Autonomous.prepToDeposit();
+            Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
                     DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
@@ -550,7 +563,7 @@ private static boolean depositCargoHatch ()
             System.out.println(
                     "Ultrasosnic" + Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper());
-            Autonomous.prepToDeposit();
+            Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
@@ -563,7 +576,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
             System.out.println("Deposit");
-            if (Hardware.depositGamePiece.depositHatch())
+            if (Hardware.depositGamePiece.depositHatch(true))
                 {
                 depositCargoHatchState = DepositCargoHatchState.FINISHED;
                 }
@@ -575,6 +588,8 @@ private static boolean depositCargoHatch ()
     return false;
 }
 
+// depositRocketHatch goes to the rocket to put on a hatch. The ROCKET, not the
+// CARGO SHIP
 private static enum RocketHatchState
     {
     STANDBY, DESCEND, DRIVE_FORWARD_TO_TURN, BREAKIE_AFTER_DRIVIE, TURN_TOWARDS_FIELD_WALL, DRIVE_TOWARDS_FIELD_WALL, DELAY_BEFORE_TURN_ALONG_FIELD_WALL, TURN_ALONG_FIELD_WALL, ALIGN_PERPENDICULAR_TO_TAPE, DRIVE_TO_ROCKET_TAPE, ALIGN_TO_ROCKET, PREP_TO_DEPOSIT_HATCH, DEPOSIT_HATCH, FINISH, DRIVE_BY_CAMERA
@@ -644,7 +659,7 @@ private static boolean depositRocketHatch ()
             break;
         // TODO @ANE
         // =================================================================
-        // DRIVE BY NONVISION this is where the smart kids code
+        // DRIVE BY NONVISION this is where the dumb kids code
         // =================================================================
         case DRIVE_FORWARD_TO_TURN:
             if (Hardware.drive.driveStraightInches(
@@ -897,7 +912,7 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
-                    prepToDeposit();
+                    Hardware.depositGamePiece.prepToDepositHatch();
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
@@ -946,6 +961,8 @@ private static boolean depositRocketHatch ()
     return false;
 }
 
+
+// depositSideCargoHatch() deposits on the SIDE of the cargo ship.
 /**
  * Enum for representing the states used in the depositSideCargoHatch path
  */
@@ -1255,27 +1272,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
     return false;
 } // end descendFromLevelTwo()
 
-public static boolean hasDoneThePrep = false;
 
-/**
- * function to back up and raise arm to deposit
- */
-public static void prepToDeposit ()
-{
-    if (hasDoneThePrep == false)
-        {
-        System.out.println("pTD --> *Dabs on haters*");
-        if (Hardware.manipulator.moveArmToPosition(105, 1)
-                || (Hardware.manipulator
-                        .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-                        && Hardware.manipulator
-                                .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
-            {
-            hasDoneThePrep = true;
-
-            }
-        }
-} // end prepToDeposit()
 
 
 public static void endAutoPath ()
@@ -1322,11 +1319,7 @@ public static int distanceToCrossAutoline = 60;
 // General constants
 
 
-// constants for prep
 
-public static final double PREP_FOR_HATCH_MAX = 110;
-
-public static final double PREP_FOR_HATCH_MIN = 100;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
@@ -1346,8 +1339,6 @@ public static final boolean USING_GYRO = true;
 public static Timer autoTimer = new Timer();
 
 public static double DRIVE_SPEED = .25;
-
-
 
 /**
  * Acceleration time that we generally pass into the drive class's driveStraight

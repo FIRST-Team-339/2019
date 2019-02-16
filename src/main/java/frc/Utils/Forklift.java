@@ -105,10 +105,22 @@ public double getForkliftHeight ()
 public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
-    // TODO scale the speed so it doesn't jump up as soon as the deaband is
+    double speed = operator.getY();
+
+    SmartDashboard.putNumber("Arm Joystick", speed);
+    SmartDashboard.putString("wasAtMin", "" + wasAtMin);
+    SmartDashboard.putString("wasAtMax", "" + wasAtMax);
+
+    if (speed >= 0)
+        wasAtMin = false;
+
+    if (speed <= 0)
+        wasAtMax = false;
+
+    // TODO scale DEFAULT_SPEED_UPmp up as soon as the deaband is
     // exceeded?
-    if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
-        this.moveForkliftAtSpeed(operator.getY(), overrideButton);
+    if (Math.abs(speed) > Forklift.JOYSTICK_DEADBAND)
+        this.moveForkliftAtSpeed(speed, overrideButton);
 
 }
 
@@ -132,6 +144,9 @@ public void moveForkliftWithController (Joystick operator,
  */
 private void moveForkliftAtSpeed (double speed, boolean overrideButton)
 {
+    // if the speed is up, the lift cannot be moving
+    // towards a min, so resets wasAtMin
+
 
     // if override button is pressed, ignore encoder and skip this if
     // statement
@@ -140,14 +155,17 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // If we are trying to move up and past the max height, or trying to
         // move down and below the min height, tell the forklift to stay where
         // it is
-        if ((speed > 0
+
+
+        if (wasAtMin == true || wasAtMin == true || ((speed > 0
                 && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
-                        .getForkliftHeight() < currentLiftMinHeight))
+                        .getForkliftHeight() < currentLiftMinHeight)))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
             // return so we exit the method and do not accidentally set
             // liftState to MOVE_JOY
+            wasAtMin = true;
             return;
             }
         }
@@ -160,8 +178,11 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         forkliftTargetSpeed = speed * DOWN_JOYSTICK_SCALAR;
 
     this.liftState = ForkliftState.MOVE_JOY;
-
 }
+
+private boolean wasAtMin = false;
+
+private boolean wasAtMax = false;
 
 /**
  * Sets the maximum height for the lift. Use only for demo mode.
@@ -462,7 +483,7 @@ public void setToNextLowerPreset (double forkliftSpeed,
                         }
             }
 
-
+        System.out.println("Next Lowest Position: " + position);
         // if position was set to one of the prest heights
         // (if it was not it would still be -1)
         if (position >= 0.0)
@@ -491,15 +512,13 @@ private final double NEXT_LOWER_POSITION_DEADBAND = 1;
  */
 public void update ()
 {
-
-    this.printDebugInfo();
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
     if (manipulator.isArmClearOfFrame() == false && this
             .getForkliftHeight() < PAST_CONSIDER_OUT_OF_FRAME_HEIGHT)
         this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
     else
-        this.currentLiftMaxHeight = NO_PIECE_MIN_HEIGHT;
+        this.currentLiftMaxHeight = MAX_HEIGHT;
 
     // main switch statement for the forklift state machine
     switch (liftState)
@@ -590,6 +609,17 @@ public void update ()
 }
 
 /**
+ * Resets the forklift encoder to 0, and therefore
+ * resets what the forklift thinks the forklift
+ * height is to 0. Does not actually move the
+ * forklift
+ */
+public void resetEncoder ()
+{
+    this.forkliftEncoder.reset();
+}
+
+/**
  * Resets the state machine so the forklift does not keep trying to run
  * code from a previous enable after a disable. Should be called in teleop
  * init ONLY.
@@ -606,12 +636,16 @@ public void printDebugInfo ()
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
     SmartDashboard.putNumber("FL Encoder Ticks: ",
             this.forkliftEncoder.get());
-    // SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
-    // SmartDashboard.putString("FL Direction State: ",
-    // "" + this.forkliftDirection);
-    // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
-    // setLiftPositionInit);
-    // SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
+    SmartDashboard.putNumber("FL current max height",
+            currentLiftMaxHeight);
+    SmartDashboard.putNumber("FL current min height",
+            currentLiftMinHeight);
+    SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
+    SmartDashboard.putString("FL Direction State: ",
+            "" + this.forkliftDirection);
+    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+            setLiftPositionInit);
+    SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
 }
 
 // ==================
@@ -657,11 +691,11 @@ private double currentLiftMaxHeight = MAX_HEIGHT;
 // position to move to
 private double forkliftTargetHeight = 0.0;
 
-// used by the MOVING_TO_POSITION state in the state machine to determine what
-// speed to move at
+// used by the MOVING_TO_POSITION state in the state machine to determine
+// what speed to move at
 private double forkliftTargetSpeed = 0.0;
 
-private double currentLiftMinHeight = 0;
+private double currentLiftMinHeight = 1.0;
 
 // ===== Constants =====
 
@@ -669,15 +703,15 @@ private double currentLiftMinHeight = 0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.8;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.6;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = .55;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.2;
 
-private double UP_JOYSTICK_SCALAR = 0.8;
+private double UP_JOYSTICK_SCALAR = 0.6;
 
-private double DOWN_JOYSTICK_SCALAR = .55;
+private double DOWN_JOYSTICK_SCALAR = 0.2;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -688,11 +722,11 @@ public static double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED = 1.0;
 
 // speed sent to the forklift motor to hold position when we do not
 // have any game piece
-private double STAY_UP_NO_PIECE = 0.05;
+private double STAY_UP_NO_PIECE = 0.1;
 
 // speed sent to the forklift motor to hold position when we have a
 // cargo
-private double STAY_UP_WITH_CARGO = .1;
+private double STAY_UP_WITH_CARGO = 0.0;
 
 // ----- Preset Heights -----
 
@@ -718,7 +752,7 @@ public final static double CARGO_SHIP_CARGO = 45;// placeholder value
 
 public final static double CARGO_SHIP_HATCH = 40;// placeholder value
 
-private static final double MAX_HEIGHT = 69; // placeholder value from last year
+private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 10;
 

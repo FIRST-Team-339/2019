@@ -5,7 +5,6 @@ import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
-import frc.HardwareInterfaces.SingleSolenoid;
 import frc.HardwareInterfaces.UltraSonic;
 import frc.Utils.drive.Drive;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -231,6 +230,7 @@ public void climbUpdate ()
         case LOWER_FORKLIFT_COMPLETELY:
             // lowers forklift all the way and lifts the front end of the robot
             // subsequentially
+            // this.holdArmToSupportDrive();
             if (this.lowerForkliftCompletely() == true)
                 {
                 // goes to delay four
@@ -241,6 +241,7 @@ public void climbUpdate ()
 
         case DELAY_FOUR:
             // delay after LOWER_FORKLIFT_COMPLETELY and before DRIVE_FORWARD
+            // this.holdArmToSupportDrive();
             if (climbTimer.get() >= DELAY_FOUR_TIME)
                 {
                 // goes to DRIVE_FORWARD
@@ -253,6 +254,7 @@ public void climbUpdate ()
         case DRIVE_FORWARD:
             // drives forward to the point where the the rear wheels can be
             // retracted
+            // this.holdArmToSupportDrive();
             if (this.driveForward() == true)
                 {
                 // goes to DELAY_FIVE
@@ -572,6 +574,7 @@ public void reverseClimbUpdate ()
         case RAISE_FORKLIFT_TO_POSITION:
             // raises forklift to the position needed to lower robot, not all
             // the way up
+
             if (this.lowerForkliftToPosition() == true)
                 {
                 // moves on to STOP
@@ -719,6 +722,12 @@ private boolean lowerArm ()
         return true;
         }
     return false;
+}
+
+private void holdArmToSupportDrive ()
+{
+    Hardware.manipulator
+            .setArmMotorSpeedManuallyForClimb(SUPPORT_DRIVE_ARM_SPEED);
 }
 
 /**
@@ -933,6 +942,9 @@ private static final Boolean RETRACT_WHEELS_POSITION = false;
 // private static final double LOWER_ARM_SPEED = -.4;
 
 private static final double ARM_HOLD_SPEED = 1.0;
+
+// temporary placeholder value
+private static final double SUPPORT_DRIVE_ARM_SPEED = -.5;
 
 private static final double SPEED_TO_DRIVE_UP = .4;
 

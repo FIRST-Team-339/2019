@@ -8,7 +8,6 @@ import frc.HardwareInterfaces.Transmission.TransmissionBase;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
-import frc.vision.VisionProcessor.ParticleReport;
 // import frc.vision.VisionProcessor.ImageType;
 // import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -233,7 +232,7 @@ public boolean driveToTarget (double speed)
                             .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
-                correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
+                // correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
                 }
             else
                 if (this.frontUltrasonic
@@ -349,7 +348,111 @@ public boolean driveToTarget (double speed)
 }
 
 
+public boolean driveToTargetClose (double speed)
+{
+    System.out.println("vision state: " + state);
+    switch (state)
+        {
+        case INIT:
+            Hardware.axisCamera.processImage();
+            Hardware.axisCamera.setRelayValue(Value.kOn);
+            Hardware.drive.resetEncoders();
+            // visionProcessor.saveImage(ImageType.RAW);
+            // visionProcessor.saveImage(ImageType.PROCESSED);
 
+            double correctionValue = DRIVE_CORRECTION_CLOSE;
+            double motorspeed = speed;
+
+
+            state = DriveWithCameraState.DRIVE_WITH_CAMERA;
+
+            break;
+        case DRIVE_WITH_CAMERA:
+            correctionValue = DRIVE_CORRECTION;
+
+            motorspeed = speed;
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
+            // adjust speed based on distance
+
+
+
+
+            // if we get close enought to the target and have to stop
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
+                    && Hardware.leftFrontDriveEncoder
+                            .getDistance() >= MIN_INCHES_CLOSE)
+
+                {
+                state = DriveWithCameraState.STOP;
+                }
+
+            if (this.frontUltrasonic
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
+
+                {
+                motorspeed = motorspeed * SLOW_MODIFIER;
+                correctionValue = correctionValue * SLOW_MODIFIER;
+                }
+
+
+
+
+            // adjust speed so that motors never reverse
+
+
+            // gets the position of the center
+            double centerX = this.getCameraCenterValue();
+            // turns on the ring light
+
+            // if the switch center is to the right of our center set by the
+            // SWITCH_CAMERA_CENTER, correct by driving faster on the left
+            if (centerX >= SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
+                {
+                // the switch's center is too far right, drive faster on the
+                // left
+
+
+                this.getTransmission().driveRaw(
+                        motorspeed + correctionValue,
+                        motorspeed - correctionValue);
+
+                }
+            // if the switch center is to the left of our center set by the
+            // SWITCH_CAMERA_CENTER, correct by driving faster on the right
+
+            else
+                if (centerX <= SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
+                    {
+                    // the switch's center is too far left, drive faster on the
+                    // right
+
+                    this.getTransmission().driveRaw(
+                            motorspeed - correctionValue,
+                            motorspeed + correctionValue);
+
+                    }
+                else
+                    {
+
+                    driveStraight(motorspeed - correctionValue, 2,
+                            true);
+                    }
+            break;
+
+        default:
+        case STOP:
+            Hardware.axisCamera.setRelayValue(Value.kOff);
+            // if we are too close to the wall, brake, then set all motors to
+            // zero, else drive by ultrasonic
+
+            this.getTransmission().driveRaw(0, 0);
+            state = DriveWithCameraState.INIT;
+            return true;
+        }
+    return false;
+}
 
 /**
  * Code for 2019 camera to align to the rocket. returns Side that the camera see
@@ -615,13 +718,15 @@ private final double CAMERA_NO_LONGER_WORKS = 35;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 35;
+private final double DISTANCE_FROM_WALL_TO_STOP = 20;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double SLOW_MODIFIER = .6;
+private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 25;
+
+private final double SLOW_MODIFIER = .7;
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
@@ -629,8 +734,13 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
+private final double DRIVE_CORRECTION_CLOSE = .5;
+
+
 
 
 private final double MIN_INCHES = 50;
+
+private final double MIN_INCHES_CLOSE = 10;
 
 }

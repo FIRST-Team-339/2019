@@ -104,7 +104,7 @@ private int lastGoodValue = java.lang.Integer.MAX_VALUE;
 // values to make sure that they are
 // "good"
 // ----------------------------------
-private int numberOfItemsToCheckForValidity = 5;
+private int numberOfItemsToCheckForValidity = 4;
 
 // ---------------------------------
 // present index into the confidenceArray
@@ -385,7 +385,8 @@ private int getDistanceValueWithConfidence ()
         // stored array to check to make sure that we
         // don't have an outlier
         // -------------------------------------
-        } else
+        }
+    else
         {
         // -------------------------------------
         // loop for all the requested entries until
@@ -407,7 +408,8 @@ private int getDistanceValueWithConfidence ()
                 // otherwise go back in the array to get
                 // the last value
                 // -------------------------------------
-                } else
+                }
+            else
                 {
                 workConfidenceValueIndex--;
                 }
