@@ -436,7 +436,7 @@ public void reverseClimbUpdate ()
 
         case DRIVE_BACKWARDS:
             // drives until we get far enough from the wall
-            if (this.finishDriving() == true)
+            if (this.driveBackwards() == true)
                 {
                 // goes to DELAY_ONE
                 prevReverseState = ReverseClimberState.DRIVE_BACKWARDS;
@@ -504,7 +504,7 @@ public void reverseClimbUpdate ()
 
         case LOWER_ARM:
             // lowers nessie head all the way
-            if (this.lowerArm() == true)
+            if (Hardware.manipulator.deployArm() == true)
                 {
                 // goes to DELAY_FOUR
                 prevReverseState = ReverseClimberState.LOWER_ARM;
@@ -527,7 +527,7 @@ public void reverseClimbUpdate ()
         case DRIVE_OFF_COMPLETELY:
             // drives backwards to the point where the the rear wheels can be
             // retracted
-            if (this.driveForward() == true)
+            if (this.reverseDriveOffCompletely() == true)
                 {
                 // goes to DELAY_FIVE
                 prevReverseState = ReverseClimberState.DRIVE_OFF_COMPLETELY;
@@ -564,16 +564,18 @@ public void reverseClimbUpdate ()
                 // goes to RAISE_ARM
                 climbTimer.stop();
                 prevReverseState = ReverseClimberState.DELAY_SIX;
-                reverseClimbState = ReverseClimberState.RAISE_ARM;
+                reverseClimbState = ReverseClimberState.RAISE_FORKLIFT_TO_POSITION;
                 }
             break;
 
-        case RAISE_ARM:
-            // raises nessie head all the way
-            if (this.raiseArm() == true)
+
+        case RAISE_FORKLIFT_TO_POSITION:
+            // raises forklift to the position needed to lower robot, not all
+            // the way up
+            if (this.lowerForkliftToPosition() == true)
                 {
-                // goes to DELAY_SEVEN
-                prevReverseState = ReverseClimberState.RAISE_ARM;
+                // moves on to STOP
+                prevReverseState = ReverseClimberState.RAISE_FORKLIFT_TO_POSITION;
                 reverseClimbState = ReverseClimberState.DELAY_INIT;
                 }
             break;
@@ -585,20 +587,18 @@ public void reverseClimbUpdate ()
                 // goes to RAISE_FORKLIFT_TO_POSITION
                 climbTimer.stop();
                 prevReverseState = ReverseClimberState.DELAY_SEVEN;
-                reverseClimbState = ReverseClimberState.RAISE_FORKLIFT_TO_POSITION;
+                reverseClimbState = ReverseClimberState.RAISE_ARM;
                 }
             break;
 
-        case RAISE_FORKLIFT_TO_POSITION:
-            // raises forklift to the position needed to lower robot, not all
-            // the way up
-            if (this.lowerForkliftToPosition() == true)
+        case RAISE_ARM:
+            // raises nessie head all the way
+            if (Hardware.manipulator.retractArm() == true)
                 {
-                // moves on to STOP
-                prevReverseState = ReverseClimberState.RAISE_FORKLIFT_TO_POSITION;
+                // goes to DELAY_SEVEN
+                prevReverseState = ReverseClimberState.RAISE_ARM;
                 reverseClimbState = ReverseClimberState.STOP;
                 }
-            break;
 
         case STOP:
             // stops stuff
@@ -645,7 +645,7 @@ public void reverseClimbUpdate ()
                                     reverseClimbState = ReverseClimberState.DELAY_SIX;
                                     }
                                 else
-                                    if (prevReverseState == ReverseClimberState.RAISE_ARM)
+                                    if (prevReverseState == ReverseClimberState.RAISE_FORKLIFT_TO_POSITION)
                                         {
                                         reverseClimbState = ReverseClimberState.DELAY_SEVEN;
                                         }
@@ -752,7 +752,7 @@ private boolean deployBackWheels ()
 }
 
 /**
- * drives to the poin that we can raise our wheels and continue climbing
+ * drives to the point that we can raise our wheels and continue climbing
  *
  * @return- whether its been completed
  */
@@ -760,8 +760,8 @@ private boolean driveForward ()
 {
     // drive forward a set distance
     System.out.println("Trying to drive forward");
-    if (drive.driveStraightInches(DISTANCE_TO_DRIVE_B4_RETRACTION,
-            SPEED_TO_DRIVE_UP, .6, false) == true)
+    if (drive.driveStraightInches(DISTANCE_TO_DRIVE_B4_RETRACTION_NORM,
+            SPEED_TO_DRIVE_UP, ACCELERATION_TIME, false) == true)
         {
         return true;
         }
@@ -834,6 +834,46 @@ private boolean finishDriving ()
 
 }
 
+
+// reverse specific methods
+
+public boolean driveBackwards ()
+{
+    if (ultraSonic
+            .getDistanceFromNearestBumper() >= DISTANCE_TO_DRIVE_B4_DEPLOYMENT)
+        {
+        drive.stop();
+        return true;
+        }
+    else
+        {
+        drive.drive(SPEED_TO_FINISH_REVERSE_DRIVING,
+                SPEED_TO_FINISH_REVERSE_DRIVING);
+        return false;
+        }
+
+}
+
+
+public boolean reverseDriveOffCompletely ()
+{
+    if (drive.driveStraightInches(DISTANCE_BEFORE_END_REVERSE_CLIMB,
+            SPEED_TO_FINISH_REVERSE_CLIMB, ACCELERATION_TIME,
+            true) == true)
+        {
+        drive.stop();
+        return true;
+        }
+    return false;
+}
+
+
+
+
+
+
+
+
 /**
  * stops all the various mechanisms so we just sit there on the platform
  */
@@ -889,18 +929,30 @@ private static final double ARM_HOLD_SPEED = 1.0;
 
 private static final double SPEED_TO_DRIVE_UP = .4;
 
+private static final double SPEED_TO_REVERSE_DRIVE_OFF = -.4;
+
 private static final double SPEED_TO_FINISH_DRIVING = .4;
 
+private static final double SPEED_TO_FINISH_REVERSE_DRIVING = -.4;
+
 private static final double LOWER_LIFT_SPEED = .3;
+
+private static final double SPEED_TO_FINISH_REVERSE_CLIMB = -.4;
 
 // DISTANCES
 
 private static final int DISTANCE_B4_STOPPING = 10;
 
-private static final int DISTANCE_TO_DRIVE_B4_RETRACTION = 20;
+private static final int DISTANCE_TO_DRIVE_B4_RETRACTION_NORM = 20;
+
+private static final int DISTANCE_TO_DRIVE_B4_DEPLOYMENT = 20;
+
+private static final int DISTANCE_BEFORE_END_REVERSE_CLIMB = 10;
 
 
 // TIMES
+
+private static final double ACCELERATION_TIME = .2;
 
 private static final double DELAY_ONE_TIME = 0.0;
 
@@ -916,8 +968,11 @@ private static final double DELAY_SIX_TIME = 0.0;
 
 private static final double DELAY_SEVEN_TIME = 1.0;
 
+
 // Extra tuneable stuff
 
 public static boolean finishedEarly = false;
+
+public static boolean reverseClimb = false;
 
 }
