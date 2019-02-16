@@ -164,7 +164,7 @@ public static void periodic ()
         autoState = State.FINISH;
         }
     Teleop.printStatements();
-    Hardware.lift.update();
+    // Hardware.lift.update();
     System.out.println(autoState + "yeeeeeeeee");
     switch (autoState)
         {
@@ -363,8 +363,8 @@ private static boolean crossAutoline ()
             System.out.println("Manoevering, clear the datum!");
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                if (descendFromLevelTwo(usingAlignByWall,
-                        goingBackwards, turningAroundAfter) == true)
+                if (descendFromLevelTwo(true, false, false// usingAlignByWall,
+                /* goingBackwards, turningAroundAfter */) == true)
                     {
                     cross = CrossAutoState.ONWARD;
                     }
@@ -673,7 +673,7 @@ private static boolean depositRocketHatch ()
                     "right : " + Hardware.rightFrontCANMotor.get());
             if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
                 {
-                rocketHatchState = RocketHatchState.FINISH;// .TURN_TOWARDS_FIELD_WALL;
+                rocketHatchState = RocketHatchState.TURN_TOWARDS_FIELD_WALL;
                 }
 
             break;// ironic I know
@@ -698,7 +698,7 @@ private static boolean depositRocketHatch ()
         case DRIVE_TOWARDS_FIELD_WALL:
 
             if (Hardware.drive.driveStraightInches(
-                    75 - Hardware.drive.getBrakeStoppingDistance(),
+                    35 - Hardware.drive.getBrakeStoppingDistance(),
                     DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
@@ -745,8 +745,11 @@ private static boolean depositRocketHatch ()
             System.out.println(" gyro " + Hardware.gyro.getAngle());
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
-                    && Hardware.drive.turnDegrees(-53/* TURN_LEFT90 */,
-                            TURN_SPEED, ACCELERATION_TIME, true))
+                    && Hardware.drive
+                            .turnDegrees(
+                                    -DEGREES_TO_TURN_ALONG_FIELD_WALL,
+                                    TURN_SPEED, ACCELERATION_TIME,
+                                    true))
                 {
                 // currently bypasses the align state
                 rocketHatchState = RocketHatchState.ALIGN_PERPENDICULAR_TO_TAPE;
@@ -754,8 +757,8 @@ private static boolean depositRocketHatch ()
             // turn for if we are on the left side of th field
             else
                 if (autoPosition == Position.LEFT
-                        && Hardware.drive.turnDegrees(53
-                        /* TURN_RIGHT90 */,
+                        && Hardware.drive.turnDegrees(
+                                DEGREES_TO_TURN_ALONG_FIELD_WALL,
                                 TURN_SPEED, ACCELERATION_TIME, true))
                     {
                     // currently bypasses the align state
@@ -768,14 +771,14 @@ private static boolean depositRocketHatch ()
             // {
             // Hardware.lift
             // .setLiftPosition(Forklift.LOWER_ROCKET_HATCH);
-            rocketHatchState = RocketHatchState.FINISH;// .DRIVE_TO_ROCKET_TAPE;
+            rocketHatchState = RocketHatchState.DRIVE_TO_ROCKET_TAPE;
             // }
 
             break;
 
         case DRIVE_TO_ROCKET_TAPE:
 
-            if (Hardware.drive.driveStraightInches(112.5, DRIVE_SPEED,
+            if (Hardware.drive.driveStraightInches(80, DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 rocketHatchState = RocketHatchState.FINISH;
@@ -803,7 +806,7 @@ private static boolean depositRocketHatch ()
             break;
 
         // =================================================================
-        // DRIVE BY VISION CODE this is where the cool kidz code
+        // DRIVE BY VISION CODE this is where the dumb kidz code
         // =================================================================
 
         case DRIVE_BY_CAMERA:
@@ -817,7 +820,7 @@ private static boolean depositRocketHatch ()
             switch (driveWithCameraStates)
                 {
                 case INIT:
-                    System.out.println("the cool kidz code");
+                    System.out.println("the dumb kidz code");
 
                     driveWithCameraStates = DriveWithCameraStates.DRIVE;
                     break;
@@ -1107,7 +1110,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                     {
                     Hardware.drive.driveStraight(
                             SPEED_TO_DRIVE_OFF_PLATFORM,
-                            ACCELERATION_TIME,
+                            0.0,
                             true);
                     }
                 break;
@@ -1126,7 +1129,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                         {
                         Hardware.drive.driveStraight(
                                 REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM,
-                                ACCELERATION_TIME,
+                                0.0,
                                 true);
                         }
                     break;
@@ -1332,7 +1335,7 @@ public static final int TURN_RIGHT90 = 90;
 
 public static final int TURN_LEFT90 = -90;
 
-public static double TURN_SPEED = .4;
+public static double TURN_SPEED = .5;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
@@ -1342,15 +1345,7 @@ public static final boolean USING_GYRO = true;
 
 public static Timer autoTimer = new Timer();
 
-public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
-
-public static final double DRIVE_BACKWARDS_SPEED = -.4;
-
-public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .85; // @ANE
-
-public static final double REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.85;
-
-public static double DRIVE_SPEED = .375;
+public static double DRIVE_SPEED = .25;
 
 
 
@@ -1369,11 +1364,6 @@ public static final Relay.Value LEVEL_ONE = Relay.Value.kForward;
 
 public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .7; // @ANE
-
-public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
-
-public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
 
 // cross autoline constants
 
@@ -1383,11 +1373,13 @@ public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
 
 // rocket hatch contstants- no vision
 
-public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 20;// 60;
+public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 60;// 60;
 
 public static final int DISTANCE_NEEDED_TO_TURN = 35;// change @ANE
 
 public static final double TIME_TO_DELAY_B4_TURN = .2;
+
+public static final int DEGREES_TO_TURN_ALONG_FIELD_WALL = 50;
 
 
 
@@ -1421,7 +1413,21 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
 public static final double TIME_TO_DELAY_AFTER_DRIVE_FAST = 1;
 
-public static final double TIME_TO_DELAY_B4_FINISH = 4;
+public static final double TIME_TO_DELAY_B4_FINISH = .1;
 
 public static int TURN_180 = 180;
+
+public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
+
+public static final double DRIVE_BACKWARDS_SPEED = -.4;
+
+public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
+
+public static final double REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.85;
+
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .45; // @ANE
+
+public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .4;
+
+public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
 }

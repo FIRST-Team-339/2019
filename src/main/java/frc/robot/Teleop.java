@@ -74,6 +74,17 @@ public static void init ()
         case KILROY_2019:
             DRIVE_SPEED = .4;
             TURN_SPEED = .7;
+
+            // TIME_TO_DELAY_AFTER_DRIVE_FAST = 1;
+            // TIME_TO_DELAY_B4_FINISH = 4;
+            // TURN_180 = 180;
+            // DRIVE_AGAINST_WALL_SPEED = -.6;
+            // DRIVE_BACKWARDS_SPEED = -.4;
+            // SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
+            // REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.85;
+            // TIME_TO_DRIVE_OFF_PLATFORM = .4; // @ANE
+            // TIME_TO_STRAIGHTEN_OUT_ON_WALL = .6;
+            // TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
             initTeleop2019();
             break;
 
@@ -268,15 +279,15 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
-    if (Hardware.climbOneButton.isOnCheckNow() == true
-            && Hardware.climbTwoButton.isOnCheckNow() == true)
-        {
-        Hardware.climber.climb();
-        }
-    else
-        {
-        teleopDrive();
-        }
+    // if (Hardware.climbOneButton.isOnCheckNow() == true
+    // && Hardware.climbTwoButton.isOnCheckNow() == true)
+    // {
+    // Hardware.climber.climb();
+    // }
+    // else
+    // {
+    teleopDrive();
+    // }
 
     printStatements();
 } // end Periodic()
@@ -288,7 +299,7 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    // ashleyTest();
+    ashleyTest();
     // connerTest();
     // coleTest();
     // guidoTest();
@@ -301,6 +312,12 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    Hardware.climber.reverseClimbUpdate();
+    if (Hardware.leftDriver.getRawButton(6) == true)
+        {
+        Hardware.climber.reverseClimb();
+        }
+
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
     // {
@@ -552,15 +569,15 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Lift Motor One "
         // + Hardware.liftMotor.get());
 
-        // System.out.println("RF Drive Motor " +
-        // Hardware.rightFrontCANMotor.get());
+        System.out.println("RF Drive Motor " +
+                Hardware.rightFrontCANMotor.get());
         SmartDashboard.putNumber("RF Drive Motor ",
                 Hardware.rightFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("RF Drive Motor " +
         // Hardware.rightFrontCANMotor.get());
 
-        // System.out.println("LF Drive Motor "
-        // + Hardware.leftFrontCANMotor.get());
+        System.out.println("LF Drive Motor "
+                + Hardware.leftFrontCANMotor.get());
         SmartDashboard.putNumber("LF Drive Motor ",
                 Hardware.leftFrontCANMotor.get());
         // Hardware.telemetry.printToConsole("LF Drive Motor "

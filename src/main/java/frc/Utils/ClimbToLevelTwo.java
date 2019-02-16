@@ -22,7 +22,7 @@ private KilroyEncoder armEncoder = null;
 
 private RobotPotentiometer armSensor = null;
 
-private DoubleSolenoid testSolenoid = null;
+// private DoubleSolenoid testSolenoid = null;
 
 private Drive drive = null;
 
@@ -397,7 +397,7 @@ public void climb ()
 // state of the climb state machine
 private static enum ReverseClimberState
     {
-    STANDBY, START_REVERSE_CLIMB, DRIVE_BACKWARDS, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, LOWER_FORKLIFT_COMPLETELY, DELAY_THREE, LOWER_ARM, DELAY_FOUR, DRIVE_OFF_COMPLETELY, DELAY_FIVE, RAISE_FORKLIFT_TO_POSITION, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, RAISE_ARM, DELAY_INIT, STOP;
+    STANDBY, START_REVERSE_CLIMB, DRIVE_BACKWARDS, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, LOWER_FORKLIFT_COMPLETELY, DELAY_THREE, LOWER_ARM, DELAY_FOUR, DRIVE_OFF_COMPLETELY, DELAY_FIVE, RAISE_FORKLIFT_TO_POSITION, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, RAISE_ARM, DELAY_INIT, STOP, FINISH;
     }
 
 
@@ -416,14 +416,14 @@ private static ReverseClimberState prevReverseState = ReverseClimberState.STANDB
 // must reorganize @ANE
 public void reverseClimbUpdate ()
 {
-    // System.out.println(climbState);
+    System.out.println(reverseClimbState);
 
     switch (reverseClimbState)
         {
         case STANDBY:
             // state to wait in during the match until climb() or reverseClimb()
             // is called
-            testSolenoid.set(Value.kForward);
+            driveSolenoid.set(Value.kForward);
             break;
 
         case START_REVERSE_CLIMB:
@@ -650,6 +650,13 @@ public void reverseClimbUpdate ()
                                         reverseClimbState = ReverseClimberState.DELAY_SEVEN;
                                         }
             break;
+
+        case FINISH:
+            this.stop();
+            System.out.println(
+                    "WE HAVE FINISHED WHAT WE WANTED TO OF REVERSE CLIMB");
+            break;
+
 
         // welp heres a default just in case
         default:
@@ -879,7 +886,7 @@ public boolean reverseDriveOffCompletely ()
  */
 private void stop ()
 {
-    System.out.println("Trying to stop");
+    // System.out.println("Trying to stop");
     drive.stop();
     Hardware.manipulator.setDeployMovementState(
             GamePieceManipulator.DeployMovementState.STAY_AT_POSITION);

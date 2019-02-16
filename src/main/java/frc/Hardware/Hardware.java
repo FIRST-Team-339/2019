@@ -75,7 +75,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 
 // -------------------------------------
 // Private Constants
