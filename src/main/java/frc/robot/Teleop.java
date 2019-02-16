@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.Utils.DepositGamePiece.DepositHeight;
 import frc.Utils.DepositGamePiece.HatchOrCargo;
 import frc.vision.VisionProcessor.ImageType;
 
@@ -59,6 +58,7 @@ public class Teleop
  */
 public static void init ()
 {
+    Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
@@ -76,6 +76,7 @@ public static void init ()
 
         case TEST_BOARD:
             break;
+
         } // end switch
 } // end Init
 
@@ -200,7 +201,7 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-
+    Hardware.axisCamera.saveImage(ImageType.RAW);
 
 
     // Hardware.manipulator.printDeployDebugInfo();
@@ -247,19 +248,46 @@ public static void periodic ()
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
 
-    System.out.println("alignvisionbutton; "
-            + Hardware.alignVisionButton.isOnCheckNow());
+
+    // vision=====================================
+
+    if (Hardware.visionHeightUpButton.get() == true
+            && visionHeight < 3 && Hardware.telopTimer.get() > .5)
+        {
+        Hardware.telopTimer.reset();
+        visionHeight++;
+        Hardware.telopTimer.start();
+        }
+    if (Hardware.visionHeightDownButton.get() == true
+            && visionHeight > 0)
+        {
+        Hardware.telopTimer.reset();
+        visionHeight--;
+        Hardware.telopTimer.start();
+        }
+
+
+    if (Hardware.manipulator.hasCargo())
+        {
+        hatchOrCargoTeleop = HatchOrCargo.CARGO;
+        }
+    else
+        {
+        hatchOrCargoTeleop = HatchOrCargo.HATCH;
+        }
+
+    System.out.println("level: " + visionHeight);
+
+    System.out.println("hatch or cargo: " + hatchOrCargoTeleop);
     if (Hardware.alignVisionButton.isOnCheckNow() == true)
         {
-        System.out
-                .println("calling deposit");
+
         // TODO, make so that driver can select height and gamepiece
         if (Hardware.depositGamePiece
-                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1,
-                        HatchOrCargo.HATCH))
+                .startTeleopDeposit(visionHeight,
+                        /* hatchOrCargoTeleop */HatchOrCargo.HATCH))
             {
-            System.out
-                    .println("finished the thing");
+
             Hardware.depositGamePiece.resetDepositTeleop();
 
             }
@@ -269,6 +297,8 @@ public static void periodic ()
         Hardware.depositGamePiece.resetDepositTeleop();
         }
 
+
+    // end vision==============================================
 
     // buttons
     if (Hardware.climbOneButton.isOnCheckNow() == true
@@ -307,6 +337,8 @@ public static void periodic ()
             }
 
     printStatements();
+
+    Hardware.lift.printDebugInfo();
 } // end Periodic()
 
 
@@ -1075,6 +1107,11 @@ public static final double FORKLIFT_DIVISOR = 4;
 private static double DRIVE_SPEED = .4;
 
 private static double TURN_SPEED = .4;
+
+// lower rocket by default
+private static int visionHeight = 0;
+
+private static HatchOrCargo hatchOrCargoTeleop = HatchOrCargo.NULL;
 
 // ================================
 // Variables

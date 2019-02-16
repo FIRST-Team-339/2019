@@ -521,9 +521,13 @@ public void saveImage (ImageType type)
                 .exec("mkdir -p " + SAVE_IMAGE_PATH + timeStamp);
         // "echo $(ls -1rtd images*| head -n$(($(ls -1d images*| wc -l)-" +
         // numImageFolders+"))) \\> temp.txt"
+        // ls -l | find -name "images*" | tail -n +6 | xargs rm -r
+
         Runtime.getRuntime()
                 .exec("ls -ld " + IMAGE_BASIC_PATH + "; sleep 30");
 
+        // Runtime.getRuntime().exec(
+        // "ls -l | find -name \"images*\" | tail -n +6 | xargs rm -r");
         } // end try
     catch (IOException e)
         {
@@ -564,14 +568,14 @@ public void saveImage (ImageType type)
     switch (type)
         {
         case RAW:
-            // Creating the file name. Only 26 images will be saved before
+            // Creating the file name. Only 30 images will be saved before
             // overwrite.
             if (rawImageNum > this.maxRawImagesAllowedToCollect)
                 rawImageNum = 0;
             fileName = "raw_image_" + rawImageNum++ + ".png";
             break;
         case PROCESSED:
-            // Creating the file name. Only 26 images will be saved before
+            // Creating the file name. Only 30 images will be saved before
             // overwrite.
             if (processedImageNum > this.maxProcessedImagesAllowedToCollect)
                 processedImageNum = 0;
@@ -905,7 +909,7 @@ public double getYawAngleDegrees (ParticleReport target)
 // -------------------------------------
 // Max number of processed images allowed on the roboRIO
 // -------------------------------------
-private final int maxProcessedImagesAllowedToCollect = 25;
+private final int maxProcessedImagesAllowedToCollect = 29;
 
 // -------------------------------------
 // Max number of raw images allowed on the roboRIO

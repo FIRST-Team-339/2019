@@ -497,7 +497,7 @@ public void update ()
             .getForkliftHeight() < PAST_CONSIDER_OUT_OF_FRAME_HEIGHT)
         this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
     else
-        this.currentLiftMaxHeight = NO_PIECE_MIN_HEIGHT;
+        this.currentLiftMaxHeight = MAX_HEIGHT;
 
     // main switch statement for the forklift state machine
     switch (liftState)

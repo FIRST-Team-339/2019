@@ -558,7 +558,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
             System.out.println("Deposit");
-            if (Hardware.depositGamePiece.depositHatch())
+            if (Hardware.depositGamePiece.depositHatch(true))
                 {
                 depositCargoHatchState = DepositCargoHatchState.FINISHED;
                 }

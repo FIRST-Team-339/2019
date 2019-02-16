@@ -322,6 +322,9 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
+public static JoystickButton visionHeightDownButton = null;
+
+public static JoystickButton visionHeightUpButton = null;
 // ----- Right Operator -----
 
 public static JoystickButton pictureButtonOne = null;
@@ -374,6 +377,8 @@ public static JoystickButton cancelTwoButton = null;
 public static Timer autoTimer = null;
 
 public static Timer takePictureTimer = null;
+
+public static Timer telopTimer = null;
 
 public static Telemetry telemetry = null;
 
@@ -573,7 +578,7 @@ public static void commonInitialization ()
 
     USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
-    USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
+    // USBCamII = CameraServer.getInstance().startAutomaticCapture(1);//TODO
 
     // **********************************************************
     // DRIVER STATION CLASSES
@@ -605,6 +610,10 @@ public static void commonInitialization ()
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+
+    visionHeightUpButton = new JoystickButton(leftOperator, 9);
+
+    visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
@@ -657,6 +666,8 @@ public static void commonInitialization ()
     autoTimer = new Timer();
 
     takePictureTimer = new Timer();
+
+    telopTimer = new Timer();
 
     telemetry = new Telemetry(10000);
 
