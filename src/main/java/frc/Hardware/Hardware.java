@@ -604,8 +604,6 @@ public static void commonInitialization ()
     // Buttons classes
     // ----- Left Operator -----
 
-    cancelOneButton = new JoystickButton(leftOperator, 10);
-
     // left trigger
     intakeTrigger = new JoystickButton(leftOperator, 1);
 
@@ -614,6 +612,8 @@ public static void commonInitialization ()
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+
+    cancelOneButton = new JoystickButton(leftOperator, 10);
 
     setDeploy45DegreeButton = new QuickSwitch(leftOperator, 10);
 

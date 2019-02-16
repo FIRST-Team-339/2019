@@ -146,8 +146,8 @@ public static Level autoLevel = Level.NULL;
  */
 public static void periodic ()
 {
-    if (Hardware.rightDriver.getRawButton(11)
-            && Hardware.leftDriver.getRawButton(11))
+    if (Hardware.rightDriver.getRawButton(10)
+            && Hardware.leftDriver.getRawButton(10))
         {
         endAutoPath();
         autoState = State.FINISH;
@@ -327,7 +327,7 @@ private static boolean crossAutoline ()
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("GOOD MORNING VIETNAM!");
+            System.out.println("Priming Nukes!");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -371,7 +371,7 @@ private static boolean crossAutoline ()
             // a.k.a. drive straight
             // TODO check in with Ashley about distance/tick tomorrow
             // 14 February 2019
-            System.out.println("*distant screaming*");
+            System.out.println("Launching Nukes");
             Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
@@ -386,11 +386,11 @@ private static boolean crossAutoline ()
         case BRAKE:
             // don't ever use drive.stop to break - leaves you coasting for
             // another foot and a half.
-            System.out.println("SLAM THE BRAKES! SLAM THE BRAKES!");
+            System.out.println("Correcting Trajectory");
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
-                //cross = CrossAutoState.PosArmRL1;
+                // cross = CrossAutoState.PosArmRL1;
                 cross = CrossAutoState.FINISH;
                 }
             break;
@@ -398,7 +398,7 @@ private static boolean crossAutoline ()
         case FINISH:
             // HardwareInterfaces.Transmission.TransmissionBase.stop();
             System.out.println(
-                    "You have arrived at your final destination...the foreboding Vaaach homeworld.");
+                    "You Have Nuked The Sun");
             break;
         }
     return false;
@@ -459,6 +459,7 @@ private static boolean depositCargoHatch ()
                     ACCELERATION_TIME, USING_GYRO))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_2;
+
                 }
             break;
         case STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE:

@@ -360,7 +360,7 @@ private static void coleTest ()
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
-    // Then deployArm/ retractArm/ setDeplo45DegreeButton
+    // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
     // Manipulator
 
