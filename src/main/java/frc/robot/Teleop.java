@@ -274,7 +274,7 @@ public static void periodic ()
         }
     else
         {
-        teleopDrive();
+        // teleopDrive();
         }
 
     printStatements();
@@ -379,7 +379,7 @@ private static void connerTest ()
 
     if (started && prepped)
         {
-        if (Hardware.depositGamePiece.depositCargo())
+        if (Hardware.depositGamePiece.depositHatch())
             {
             System.out.println("deposited the hatch");
             started = false;
@@ -471,8 +471,14 @@ private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {
-    SmartDashboard.putNumber("Lift Encoder",
-            Hardware.lift.getForkliftHeight());
+    if (Hardware.leftOperator.getRawButton(3) == true)
+        {
+        Hardware.armIntakeSolenoid.setForward(true);
+        }
+    else
+        {
+        Hardware.armIntakeSolenoid.setReverse(true);
+        }
 } // end guidoTest()
 
 private static void patrickTest ()
