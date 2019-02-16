@@ -413,8 +413,14 @@ private static boolean hasFinishedAutoSpinOut = false;
 
 private static void guidoTest ()
 {
-    SmartDashboard.putNumber("Lift Encoder",
-            Hardware.lift.getForkliftHeight());
+    if (Hardware.leftOperator.getRawButton(3) == true)
+        {
+        Hardware.armIntakeSolenoid.setForward(true);
+        }
+    else
+        {
+        Hardware.armIntakeSolenoid.setReverse(true);
+        }
 } // end guidoTest()
 
 private static void patrickTest ()
