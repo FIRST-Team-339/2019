@@ -232,7 +232,7 @@ public boolean driveToTarget (double speed)
                             .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
-                correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
+                // correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
                 }
             else
                 if (this.frontUltrasonic
@@ -620,7 +620,7 @@ private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double SLOW_MODIFIER = .6;
+private final double SLOW_MODIFIER = .7;
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image

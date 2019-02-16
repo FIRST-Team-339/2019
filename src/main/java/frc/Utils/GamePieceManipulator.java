@@ -231,8 +231,8 @@ public double getCurrentArmPosition ()
 {
     // if (armPot != null)
     // {
-    // scales the value from the arm pot so parallet to the ground is
-    // zero, and perpenciular to the ground and pointing up is 90
+    // scales the value from the arm pot so parallel to the ground is
+    // zero, and perpendicular to the ground and pointing up is 90
     return (this.armPot.get()
             - ARM_POT_RAW_HORIZONTAL_VALUE)
             * ARM_POT_SCALE_TO_DEGREES;

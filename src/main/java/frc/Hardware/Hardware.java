@@ -342,6 +342,8 @@ public static QuickSwitch nextLowerLiftHeightButton = null;
 
 public static QuickSwitch autoRetractButton = null;
 
+public static MomentarySwitch alignVisionButton = null;
+
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
@@ -636,6 +638,8 @@ public static void commonInitialization ()
 
     autoRetractButton = new QuickSwitch(rightOperator, 11);
 
+    alignVisionButton = new MomentarySwitch(rightOperator, 1, false);
+
 
     // ----------Left Driver---------------
 
@@ -644,6 +648,8 @@ public static void commonInitialization ()
     // ----------Right Driver--------------
 
     climbOneButton = new MomentarySwitch(rightDriver, 11, false);
+
+
 
     // Momentary Switches
 

@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
+import frc.Utils.DepositGamePiece.DepositHeight;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -199,6 +200,7 @@ public static void periodic ()
     // =================================================================
 
     // Forklift
+    Hardware.manipulator.printDeployDebugInfo();
 
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
@@ -238,6 +240,17 @@ public static void periodic ()
 
     Hardware.climber.climbUpdate();
 
+    Hardware.depositGamePiece.depositTeleopStateMachine();
+
+    if (Hardware.alignVisionButton.isOnCheckNow() == true)
+        {
+        if (Hardware.depositGamePiece
+                .startTeleopDeposit(DepositHeight.ROCKET_HATCH_1))
+            {
+            Hardware.depositGamePiece.resetDepositTeleop();
+            }
+        }
+
     // buttons
     if (Hardware.climbOneButton.isOnCheckNow() == true
             && Hardware.climbTwoButton.isOnCheckNow() == true)
@@ -269,9 +282,10 @@ public static void periodic ()
         Hardware.climber.climb();
         }
     else
-        {
-        teleopDrive();
-        }
+        if (!started)
+            {
+            teleopDrive();
+            }
 
     printStatements();
 } // end Periodic()
@@ -284,7 +298,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -342,14 +356,21 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-private static boolean started = false;
+private static boolean started = true;
 
 private static boolean prepped = false;
 
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    // Autonomous.prepToDeposit();
+    System.out.println("*Orange Justicing: *" + started);
+    System.out.println("*giant green light: *" + prepped);
+
+
+
+
+    Hardware.driveWithCamera.driveToTarget(.4);
+
 
 } // end connerTest()
 
