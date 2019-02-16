@@ -130,6 +130,15 @@ public boolean isDeployed ()
     return this.getDeployState() == DeployState.DEPLOYED;
 }
 
+public boolean isArmClearOfFrame ()
+{
+    return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
+}
+
+
+
+
+
 /**
  * Gets the current state of the deploy mechanism (DEPLOYED, MIDDLE
  * (not deployed or retracted), and RETRACTED). Not to be confused
@@ -645,8 +654,6 @@ private static final double UP_JOYSTICK_SCALER_2018 = .65;
 
 private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
-
-
 // ----- Deploy Position Constants 2019 -----
 
 private static int MAX_ARM_POSITION_ADJUSTED = 85;
@@ -657,7 +664,9 @@ private static int DEPLOYED_ARM_POSITION_ADJUSTED = 10;
 
 private static int RETRACTED_ARM_POSITION_ADJUSTED = 80;
 
-private static int PARALLEL_TO_GROUND_ADJUSTED = 10;
+private double IS_CLEAR_OF_FRAME_ANGLE = 70;
+
+private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor

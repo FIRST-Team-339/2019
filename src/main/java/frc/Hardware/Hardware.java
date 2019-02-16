@@ -1061,6 +1061,10 @@ public static void commonHardwareSettings ()
     // of the drive motors
     // --------------------------------------
 
+
+    Hardware.transmission
+            .setJoystickDeadband(JOYSTICK_DEADBAND);
+
 } // end commonHardwareSettings()
 
 /**
@@ -1174,9 +1178,13 @@ private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
 private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.67;
 
-// 665 ticks for 6 inches
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0091603;
+// This value was tested on 15 Feb 2019; it gives values within
+// .1 inch of what we want
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0092;
+
 
 private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 1;
+
+private static final double JOYSTICK_DEADBAND = 0.2;
 
 } // end class
