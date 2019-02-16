@@ -390,7 +390,7 @@ private static boolean crossAutoline ()
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
-                //cross = CrossAutoState.PosArmRL1;
+                // cross = CrossAutoState.PosArmRL1;
                 cross = CrossAutoState.FINISH;
                 }
             break;
@@ -632,7 +632,7 @@ private static boolean depositRocketHatch ()
             break;
         // TODO @ANE
         // =================================================================
-        // DRIVE BY NONVISION this is where the smart kids code
+        // DRIVE BY NONVISION this is where the dumb kids code
         // =================================================================
         case DRIVE_FORWARD_TO_TURN:
             if (Hardware.drive.driveStraightInches(
@@ -1233,27 +1233,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
     return false;
 } // end descendFromLevelTwo()
 
-public static boolean hasDoneThePrep = false;
 
-/**
- * function to back up and raise arm to deposit
- */
-public static void prepToDeposit ()
-{
-    if (hasDoneThePrep == false)
-        {
-        System.out.println("*Dabs on haters*");
-        if (Hardware.manipulator.moveArmToPosition(105, 1)
-                || (Hardware.manipulator
-                        .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-                        && Hardware.manipulator
-                                .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
-            {
-            hasDoneThePrep = true;
-
-            }
-        }
-} // end prepToDeposit()
 
 
 public static void endAutoPath ()
@@ -1300,11 +1280,7 @@ public static int distanceToCrossAutoline;
 // General constants
 
 
-// constants for prep
 
-public static final double PREP_FOR_HATCH_MAX = 110;
-
-public static final double PREP_FOR_HATCH_MIN = 100;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;

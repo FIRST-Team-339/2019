@@ -2,8 +2,11 @@ package frc.Utils;
 
 import frc.Utils.drive.*;
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.MomentarySwitch;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
  * @author Conner McKevitt
@@ -29,7 +32,7 @@ public DepositGamePiece (Drive drive, Forklift forklift,
 
 }
 
-public Timer outakeTimer = new Timer();
+
 
 public enum DepositHatchState
     {
@@ -107,7 +110,7 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
 /**
  * use this to deposit a cargo gamepiece. The forklift and manipulator must
  * already be set to the proper height and angle.
- * 
+ *
  * @return
  */
 public boolean depositCargo ()
@@ -167,15 +170,106 @@ public boolean depositCargo ()
     return false;
 } // end depositCargo()
 
+private enum DepositTeleopState
+    {
+    INIT, HOLD, PREP, ALIGN_TO_TARGET, DEPOSIT, FINISH
+    }
 
+public DepositTeleopState depositTeleopState = DepositTeleopState.INIT;
 
-public boolean outakeGamepiece ()
+private enum DepositHeight
+    {
+    CARGO_SHIP, ROCKET_HATCH_1, ROCKET_HATCH_2, ROCKET_HATCH_3, ROCKET_CARGO_1, ROCKET_CARGO_2, ROCKET_CARGO_3
+    }
+
+public boolean depositTeleopStateMachine ()
 {
 
+    switch (depositTeleopState)
+        {
+        case HOLD:
+            Hardware.axisCamera.setRelayValue(Value.kOff);
 
-    return true;
+            break;
+        case INIT:
+
+
+            break;
+
+        case PREP:
+            break;
+
+        case ALIGN_TO_TARGET:
+            break;
+
+        case DEPOSIT:
+            break;
+
+        case FINISH:
+
+            depositTeleopState = DepositTeleopState.HOLD;
+            return true;
+        }
+
+    return false;
 }
 
+boolean hasStartedDeposit = false;
+
+public boolean startTeleopDeposit (DepositHeight height)
+{
+    if (hasStartedDeposit)
+        {
+        hasStartedDeposit = true;
+        depositTeleopState = DepositTeleopState.INIT;
+        }
+
+
+
+
+    if (depositTeleopState == DepositTeleopState.FINISH
+            || depositTeleopState == DepositTeleopState.HOLD)
+        {
+        hasStartedDeposit = false;
+        return true;
+        }
+    return false;
+}
+
+public void resetDepositTeleop ()
+{
+    depositTeleopState = DepositTeleopState.HOLD;
+}
+
+public static boolean hasDoneThePrep = false;
+
+/**
+ * function to back up and raise arm to deposit
+ */
+public static void prepToDeposit ()
+{
+    if (hasDoneThePrep == false)
+        {
+        System.out.println("*Dabs on haters*");
+        if (Hardware.manipulator.moveArmToPosition(35/* 105 */, .8)
+                || (Hardware.manipulator
+                        .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
+                        && Hardware.manipulator
+                                .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
+            {
+            System.out.println("*Hater has been dabbed on*");
+            hasDoneThePrep = true;
+
+            }
+        }
+} // end prepToDeposit()
+
+
+// constants for prep
+
+public static final double PREP_FOR_HATCH_MAX = 40/* 110 */;
+
+public static final double PREP_FOR_HATCH_MIN = 30/* 100 */;
 
 // Hatch constants======================
 
