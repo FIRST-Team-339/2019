@@ -188,7 +188,7 @@ public static KilroyEncoder liftingEncoder = null;
 // -------------------------------------
 // Red Light/IR Sensor class
 // -------------------------------------
-public static LightSensor armIR = null;
+public static LightSensor armBallDetector = null;
 
 public static LightSensor leftBackIR = null;
 
@@ -499,7 +499,7 @@ public static void commonInitialization ()
     // -------------------------------------
     // Red Light/IR Sensor class
     // -------------------------------------
-    armIR = new LightSensor(21);
+    armBallDetector = new LightSensor(21);
 
     leftBackIR = new LightSensor(8);
 
@@ -689,7 +689,7 @@ public static void commonInitialization ()
     manipulator = new GamePieceManipulator(
             armMotor, intakeDeploySensor/* armEncoder */,
             armRoller,
-            armIR);
+            armBallDetector);
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
