@@ -105,22 +105,19 @@ public double getForkliftHeight ()
 public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
-    double speed = operator.getY();
-
-    SmartDashboard.putNumber("Arm Joystick", speed);
+    SmartDashboard.putNumber("Arm Joystick", operator.getY());
     SmartDashboard.putString("wasAtMin", "" + wasAtMin);
     SmartDashboard.putString("wasAtMax", "" + wasAtMax);
 
-    if (speed >= 0)
-        wasAtMin = false;
-
-    if (speed <= 0)
-        wasAtMax = false;
-
-    // TODO scale DEFAULT_SPEED_UPmp up as soon as the deaband is
+    // TODO scale the joystick as soon as the deaband is
     // exceeded?
-    if (Math.abs(speed) > Forklift.JOYSTICK_DEADBAND)
-        this.moveForkliftAtSpeed(speed, overrideButton);
+    if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
+        this.moveForkliftAtSpeed(operator.getY(), overrideButton);
+    else
+        {
+        wasAtMin = false;
+        wasAtMax = false;
+        }
 
 }
 
@@ -156,7 +153,6 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
 
-
         if (wasAtMin == true || wasAtMin == true || ((speed > 0
                 && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
@@ -165,7 +161,6 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
             this.liftState = ForkliftState.STAY_AT_POSITION;
             // return so we exit the method and do not accidentally set
             // liftState to MOVE_JOY
-            wasAtMin = true;
             return;
             }
         }
@@ -180,8 +175,12 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
     this.liftState = ForkliftState.MOVE_JOY;
 }
 
+// used to keep track if the forklift already stopped itself b/c
+// it was at the max height
 private boolean wasAtMin = false;
 
+// used to keep track if the forklift already stopped itself b/c
+// it was at the min height
 private boolean wasAtMax = false;
 
 /**

@@ -69,7 +69,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2019;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -325,6 +325,7 @@ public static QuickSwitch cargoShipHatchButton = null;
 public static JoystickButton visionHeightDownButton = null;
 
 public static JoystickButton visionHeightUpButton = null;
+
 // ----- Right Operator -----
 
 public static JoystickButton pictureButtonOne = null;
@@ -338,7 +339,6 @@ public static JoystickButton forkliftOverride = null;
 public static QuickSwitch nextHigherLiftHeightButton = null;
 
 public static QuickSwitch nextLowerLiftHeightButton = null;
-
 
 public static MomentarySwitch alignVisionButton = null;
 
@@ -354,10 +354,24 @@ public static MomentarySwitch climbOneButton = null;
 public static MomentarySwitch climbTwoButton = null;
 
 // ----------Left Driver---------------
+public static JoystickButton resetForkliftEncoderButton1 = null;
+
 public static JoystickButton cancelOneButton = null;
 
+public static QuickSwitch testDeployButtonTemp = null;
+
+public static QuickSwitch testRetractTemp = null;
+
+public static QuickSwitch testSetManipulatorPosition = null;
+
+public static JoystickButton cancelAutoLeftDriver = null;
+
 // ----------Right Driver--------------
+public static JoystickButton resetForkliftEncoderButton2 = null;
+
 public static JoystickButton cancelTwoButton = null;
+
+public static JoystickButton cancelAutoRightDriver = null;
 
 // **********************************************************
 // Kilroy's Ancillary classes
@@ -638,18 +652,28 @@ public static void commonInitialization ()
     nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
             7);
 
-
-
-
-
-
     // ----------Left Driver---------------
+    resetForkliftEncoderButton1 = new JoystickButton(leftDriver, 7);
 
     climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
 
+    testDeployButtonTemp = new QuickSwitch(leftDriver,
+            8);
+
+    testRetractTemp = new QuickSwitch(leftDriver,
+            9);
+
+    testSetManipulatorPosition = new QuickSwitch(leftDriver,
+            10);
+
+    cancelAutoLeftDriver = new JoystickButton(leftDriver, 10);
+
     // ----------Right Driver--------------
+    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 7);
 
     climbOneButton = new MomentarySwitch(rightDriver, 11, false);
+
+    cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
 
     // Momentary Switches
 
@@ -1136,6 +1160,7 @@ public static void setHardwareSettings2019 ()
     Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
     Hardware.leftRearCANMotor.setInverted(false);
+    Hardware.armMotor.setInverted(true);
 
     // ---------------------------
     // Encoder Initialization
