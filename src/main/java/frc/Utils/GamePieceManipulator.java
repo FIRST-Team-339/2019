@@ -849,7 +849,7 @@ private static final double STAY_AT_PARALLEL_2018 = .1;
 
 private static final double STAY_UP_WITH_CARGO_2018 = 0.3;
 
-private static final double STAY_UP_NO_PIECE_2018 = 0.3;
+private static final double STAY_UP_NO_PIECE_2018 = 0.2;
 
 private static final double UPWARD_ARM_MOVEMENT_SCALER_2018 = .65;
 

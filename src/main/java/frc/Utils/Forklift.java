@@ -725,7 +725,7 @@ private double STAY_UP_NO_PIECE = 0.1;
 
 // speed sent to the forklift motor to hold position when we have a
 // cargo
-private double STAY_UP_WITH_CARGO = 0.0;
+private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // ----- Preset Heights -----
 
@@ -744,7 +744,7 @@ public final static double TOP_ROCKET_HATCH = 50;// placeholder value
 
 public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
 
-public final static double LOWER_ROCKET_HATCH = 10;// placeholder value
+public final static double LOWER_ROCKET_HATCH = 0;// placeholder value
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 45;// placeholder value

@@ -53,7 +53,7 @@ public boolean depositHatch (boolean inAuto)
         {
         case INIT:
             if (Hardware.manipulator.moveArmToPosition(
-                    35/* 105 */,
+                    105,
                     FORK_SPEED)
                     || (Hardware.manipulator
                             .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
@@ -65,7 +65,7 @@ public boolean depositHatch (boolean inAuto)
 
         case DEPOSIT_HATCH:
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
-                    .4, BACKUP_ACCELERATION, usingGyro))
+                    .2, BACKUP_ACCELERATION, usingGyro))
                 {
 
                 depositHatchState = DepositHatchState.BACKUP_HATCH;
@@ -74,6 +74,7 @@ public boolean depositHatch (boolean inAuto)
             break;
 
         case BACKUP_HATCH:
+            System.out.println("in auto: " + inAuto);
             if (inAuto)
                 {
                 Hardware.manipulator.moveArmToPosition(
@@ -88,6 +89,7 @@ public boolean depositHatch (boolean inAuto)
             else
                 if (depositHeighthatch == 3)
                     {
+                    System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
                             Hardware.manipulator.getCurrentArmPosition()
                                     - 10,
@@ -212,14 +214,14 @@ public int depositHeightCargo = 0;
  */
 public boolean depositTeleopStateMachine ()
 {
-
+    System.out.println("deposit state: " + depositTeleopState);
 
     switch (depositTeleopState)
         {
 
         case HOLD:
 
-            Hardware.axisCamera.setRelayValue(Value.kOff);
+            // Hardware.axisCamera.setRelayValue(Value.kOff);
 
             break;
 
@@ -322,7 +324,7 @@ public boolean depositTeleopStateMachine ()
 
         case ALIGN_TO_TARGET:
 
-            if (true /* Hardware.driveWithCamera.driveToTargetClose(.25) */)
+            if (Hardware.driveWithCamera.driveToTargetClose(.25))
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -472,7 +474,7 @@ public static final double PREP_FOR_HATCH_MIN = 100;
 // Hatch constants======================
 
 
-private static final int FORWARD_TO_DEPOSIT = 2;// TODO
+private static final int FORWARD_TO_DEPOSIT = 4;// TODO
 
 private static final double DEPOSIT_ARM_ANGLE = 90;
 

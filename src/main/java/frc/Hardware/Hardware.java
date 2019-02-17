@@ -69,7 +69,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 
 // -------------------------------------
 // Private Constants
@@ -485,7 +485,7 @@ public static void commonInitialization ()
     // ====================================
     // Relay classes
     // ====================================
-    ringLightRelay = new Relay(0);
+    ringLightRelay = new Relay(3);
 
     // ====================================
     // Digital Inputs

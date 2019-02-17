@@ -248,13 +248,12 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    // Hardware.climber.climbUpdate();
+    Hardware.climber.climbUpdate();
 
-    // Hardware.depositGamePiece.depositTeleopStateMachine();
+    Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
     // vision=====================================
-
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 3 && Hardware.telopTimer.get() > .25)
         {
@@ -269,32 +268,25 @@ public static void periodic ()
         visionHeight--;
         Hardware.telopTimer.start();
         }
-
-
-
-
-
-
     if (Hardware.alignVisionButton.isOnCheckNow() == true
-            && Hardware.depositGamePiece.overrideVision() == false)
+            && Hardware.depositGamePiece.overrideVision() == false
+            && hasFinishedDeposit == false)
         {
 
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
                         false/* Hardware.manipulator.hasCargo() */))
             {
-
-
+            hasFinishedDeposit = true;
             Hardware.depositGamePiece.resetDepositTeleop();
-
             }
         }
     else
         {
+        hasFinishedDeposit = false;
         Hardware.depositGamePiece.resetDepositTeleop();
         }
-
-    Hardware.lift.printDebugInfo();
+    System.out.println("height level:" + visionHeight);
     // end vision==============================================
 
     // buttons
@@ -425,7 +417,12 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+
+    if (Hardware.rightOperator.getRawButton(8))
+        Hardware.axisCamera.setRelayValue(Value.kOn);
+
+    if (Hardware.rightOperator.getRawButton(9))
+        Hardware.axisCamera.setRelayValue(Value.kOff);
 
 
 } // end connerTest()
@@ -1088,5 +1085,7 @@ private static boolean imageTaken = false;
 private static boolean pictureButton1;
 
 private static boolean pictureButton2;
+
+public static boolean hasFinishedDeposit = false;
 
 } // end class
