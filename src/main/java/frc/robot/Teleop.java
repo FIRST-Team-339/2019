@@ -305,7 +305,7 @@ public static void periodic ()
 
     // end vision==============================================
 
-    // buttons
+    // this is on the driver joysticks
     if (Hardware.climbOneButton.isOnCheckNow() == true
             && Hardware.climbTwoButton.isOnCheckNow() == true)
         {
@@ -313,7 +313,7 @@ public static void periodic ()
         } // end if
 
 
-    // buttons to cancel everything
+    // buttons to cancel everything ===========================
     if (Hardware.cancelTwoButton.get() == true
             && Hardware.cancelOneButton.get() == true)
         {
