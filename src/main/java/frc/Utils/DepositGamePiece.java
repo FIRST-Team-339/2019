@@ -156,12 +156,12 @@ public boolean depositCargo ()
                 }
             break;
         case RAISE_MANIPULATOR:
-            // if (this.gamePieceManipulator
-            // .moveArmToPosition(CARGO_ARM_POSITION,
-            // ARM_MOVE_SPEED))
-            // {
-            // depositCargoState = DepositCargoState.DEPOSIT_CARGO;
-            // }
+            if (this.gamePieceManipulator
+                    .moveArmToPosition(CARGO_ARM_POSITION,
+                            ARM_MOVE_SPEED))
+                {
+                depositCargoState = DepositCargoState.DEPOSIT_CARGO;
+                }
             depositCargoState = DepositCargoState.DEPOSIT_CARGO;
             break;
 
@@ -447,9 +447,6 @@ public static final double PREP_FOR_HATCH_MIN = 30/* 100 */;
 // Hatch constants======================
 
 
-
-
-
 private static final int FORWARD_TO_DEPOSIT = 2;// TODO
 
 private static final double DEPOSIT_ARM_ANGLE = 90;
@@ -457,9 +454,12 @@ private static final double DEPOSIT_ARM_ANGLE = 90;
 // Cargo constants=========================
 
 
+private static final double CARGO_ARM_POSITION = 90;
 
 
 // otro constants===========================
+
+
 private static boolean usingGyro = true;
 
 private static final double ARM_MOVE_SPEED = .4;
