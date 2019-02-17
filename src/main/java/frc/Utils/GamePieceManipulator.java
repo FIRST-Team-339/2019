@@ -358,7 +358,10 @@ public boolean deployArm ()
         return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED,
                 DEFAULT_DEPLOY_SPEED_UNSCALED);
         }
-    return true; // if we are already deployed
+    else
+        {
+        return true; // if we are already deployed
+        }
 }
 
 /**

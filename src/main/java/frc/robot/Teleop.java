@@ -212,7 +212,7 @@ public static void periodic ()
     // OPERATOR CONTROLS
     // =================================================================
 
-    // Forklift
+    // // Forklift
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
 
@@ -244,7 +244,7 @@ public static void periodic ()
             Hardware.outtakeButton.get(),
             Hardware.intakeOverride.get());
 
-    // =================================================================
+    // // =================================================================
     Hardware.lift.update();
 
     Hardware.manipulator.masterUpdate();
@@ -306,12 +306,6 @@ public static void periodic ()
     // end vision==============================================
 
     // buttons
-    if (Hardware.climbOneButton.isOnCheckNow() == true
-            && Hardware.climbTwoButton.isOnCheckNow() == true)
-        {
-        Hardware.climber.climb();
-        } // end if
-
 
     // buttons to cancel everything
     if (Hardware.cancelTwoButton.get() == true
@@ -322,7 +316,7 @@ public static void periodic ()
         } // end if
 
 
-    individualTest();
+    // individualTest();
 
     takePicture();
 
@@ -330,8 +324,9 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
-    if (Hardware.climbOneButton.isOnCheckNow() == true
-            && Hardware.climbTwoButton.isOnCheckNow() == true)
+    // if (Hardware.climbOneButton.isOnCheckNow() == true
+    // && Hardware.climbTwoButton.isOnCheckNow() == true)
+    if (Hardware.leftDriver.getRawButton(6) == true)
         {
         Hardware.climber.climb();
         }
@@ -342,7 +337,7 @@ public static void periodic ()
 
     printStatements();
 
-    Hardware.lift.printDebugInfo();
+    // Hardware.lift.printDebugInfo();
 } // end Periodic()
 
 
@@ -352,7 +347,7 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
+    // ashleyTest();
     // connerTest();
     // coleTest();
     // guidoTest();
@@ -365,11 +360,11 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    Hardware.climber.reverseClimbUpdate();
-    if (Hardware.leftDriver.getRawButton(6) == true)
-        {
-        Hardware.climber.reverseClimb();
-        }
+    // Hardware.climber.reverseClimbUpdate();
+    // if (Hardware.leftDriver.getRawButton(6) == true)
+    // {
+    // Hardware.climber.reverseClimb();
+    // }
 
 
     // if (Hardware.leftDriver.getRawButton(3) == true)
@@ -848,7 +843,7 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
 
-        System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
         SmartDashboard.putNumber("Delay pot: ",
                 Hardware.delayPot.get());
         SmartDashboard.putNumber("Deploy pot min max: ",
@@ -873,8 +868,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        System.out.println("ultrasonic " + Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper());
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());

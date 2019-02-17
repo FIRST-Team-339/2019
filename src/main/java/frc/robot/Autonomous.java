@@ -66,7 +66,39 @@ public class Autonomous
  */
 public static void init ()
 {
-    Hardware.drive.setGearPercentage(1, 1.0);
+
+    switch (Hardware.whichRobot)
+        {
+        case KILROY_2018:
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                    FIRST_AUTO_GEAR_RATIO_KILROY_XIX);
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+                    SECOND_AUTO_GEAR_RATIO_KILROY_XIX);
+            // sets the gear to 0 at the beginning.
+            Hardware.drive.setGear(0);
+            // ------------------------------------------------------
+            DRIVE_SPEED = KILROY_XIX_DRIVE_SPEED;
+            TURN_SPEED = KILROY_XIX_TURN_SPEED;
+            break;
+
+        default:
+        case KILROY_2019:
+
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                    FIRST_AUTO_GEAR_RATIO_KILROY_XX);
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+                    SECOND_AUTO_GEAR_RATIO_KILROY_XX);
+            // sets the gear to 0 at the beginning.
+            Hardware.drive.setGear(0);
+            // ---------------------------------------------------------
+            DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
+            TURN_SPEED = KILROY_XIX_TURN_SPEED;
+            break;
+
+        case TEST_BOARD:
+            break;
+
+        } // end switch
     // --------------------------------------
     // reset the MotorSafetyHelpers for each
     // of the drive motors
@@ -87,17 +119,6 @@ public static void init ()
         autoLevel = Level.DISABLE;
         autoState = State.FINISH;
         }
-    if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2018)
-        {
-        DRIVE_SPEED = .4;
-        TURN_SPEED = .4;
-        }
-    else
-        if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2019)
-            {
-            DRIVE_SPEED = .4;
-            TURN_SPEED = .7;
-            }
 
 } // end Init
 
@@ -370,8 +391,8 @@ private static boolean crossAutoline ()
             System.out.println("Manoevering, clear the datum!");
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                if (descendFromLevelTwo(true, false, false// usingAlignByWall,
-                /* goingBackwards, turningAroundAfter */) == true)
+                if (descendFromLevelTwo(usingAlignByWall,
+                        goingBackwards, turningAroundAfter) == true)
                     {
                     cross = CrossAutoState.ONWARD;
                     }
@@ -389,8 +410,8 @@ private static boolean crossAutoline ()
             // a.k.a. drive straight
             // TODO closely monitor merge tomorrow
             // 17 February 2019
-            Hardware.depositGamePiece.prepToDepositHatch();
-            Hardware.manipulator.printDeployDebugInfo();
+            // Hardware.depositGamePiece.prepToDepositHatch();
+            // Hardware.manipulator.printDeployDebugInfo();
             System.out.println("*distant screaming*");
             Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
@@ -636,8 +657,6 @@ private static boolean depositRocketHatch ()
                         // Hardware.axisCamera.setRelayValue(Value.kOff);
                         autoTimer.reset();
                         autoTimer.start();
-                        // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
-                        // DRIVE_AGAINST_WALL_SPEED);
                         rocketHatchState = RocketHatchState.BREAKIE_AFTER_DRIVIE;
                         }
                     }
@@ -652,8 +671,6 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.setRelayValue(Value.kOff);
                     autoTimer.reset();
                     autoTimer.start();
-                    // Hardware.drive.drive(DRIVE_AGAINST_WALL_SPEED,
-                    // DRIVE_AGAINST_WALL_SPEED);
                     rocketHatchState = RocketHatchState.DRIVE_FORWARD_TO_TURN;
                     }
             break;
@@ -1136,7 +1153,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                 if (goingBackwards == true)
                     {
                     if (descentTimer
-                            .get() >= TIME_TO_DRIVE_OFF_PLATFORM)
+                            .get() >= TIME_TO_DRIVE_OFF_PLATFORM_BACKWARDS)
                         {
                         Hardware.drive.stop();
                         descentTimer.stop();
@@ -1199,8 +1216,8 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                 else
                     {
                     Hardware.transmission.driveRaw(
-                            DRIVE_BACKWARDS_SPEED,
-                            DRIVE_BACKWARDS_SPEED);
+                            DRIVE_BACKWARDS_TO_ALIGN_SPEED,
+                            DRIVE_BACKWARDS_TO_ALIGN_SPEED);
                     }
                 break;
                 }
@@ -1208,7 +1225,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                 if (goingBackwards == true)
                     {
                     if (descentTimer
-                            .get() >= TIME_TO_DRIVE_BACKWARDS_TO_ALIGN)
+                            .get() >= TIME_TO_DRIVE_FORWARDS_TO_ALIGN)
                         {
                         descentTimer.stop();
                         Hardware.drive.stop();
@@ -1217,8 +1234,8 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
                     else
                         {
                         Hardware.transmission.driveRaw(
-                                -DRIVE_BACKWARDS_SPEED,
-                                -DRIVE_BACKWARDS_SPEED);
+                                DRIVE_FORWARDS_TO_ALIGN_SPEED,
+                                DRIVE_FORWARDS_TO_ALIGN_SPEED);
                         }
                     break;
                     }
@@ -1245,7 +1262,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
 
         case PREP_TO_TURN_180:
             if (Hardware.drive.driveStraightInches(
-                    distanceToCrossAutoline, -DRIVE_SPEED,
+                    distanceToCrossAutoline + 20, -DRIVE_SPEED,
                     ACCELERATION_TIME, true) == true)
                 {
                 descentState = DescentState.TURN_180;
@@ -1277,6 +1294,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
 
 public static void endAutoPath ()
 {
+
     sideCargoHatchState = SideCargoHatchState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
@@ -1289,15 +1307,17 @@ public static void endAutoPath ()
 // =========================================================================
 // TUNEABLES
 // =========================================================================
-// use vision for rocket autopath
 
-public static boolean turningAroundAfter = true;
 
-public static boolean goingBackwards = true;
+public static boolean turningAroundAfter = false;
 
-private static boolean usingVision = true;
+public static boolean goingBackwards = false;
 
 private static boolean usingAlignByWall = true;
+
+// ----------------------------------------------
+// use vision for rocket autopath
+private static boolean usingVision = true;
 
 // use vision for the put hatch straght auto path
 private static boolean usingVisionOnStraight = true;
@@ -1318,8 +1338,9 @@ public static int distanceToCrossAutoline = 60;
 
 // General constants
 
+public static double DRIVE_SPEED;
 
-
+public static double TURN_SPEED;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
@@ -1328,8 +1349,6 @@ public static final int TURN_RIGHT90 = 90;
 
 public static final int TURN_LEFT90 = -90;
 
-public static double TURN_SPEED = .5;
-
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
 public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
@@ -1337,8 +1356,6 @@ public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
 public static final boolean USING_GYRO = true;
 
 public static Timer autoTimer = new Timer();
-
-public static double DRIVE_SPEED = .25;
 
 /**
  * Acceleration time that we generally pass into the drive class's driveStraight
@@ -1406,19 +1423,51 @@ public static final double TIME_TO_DELAY_AFTER_DRIVE_FAST = 1;
 
 public static final double TIME_TO_DELAY_B4_FINISH = .1;
 
-public static int TURN_180 = 180;
-
-public static final double DRIVE_AGAINST_WALL_SPEED = -.6;
-
-public static final double DRIVE_BACKWARDS_SPEED = -.4;
+public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
-public static final double REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.85;
-
 public static final double TIME_TO_DRIVE_OFF_PLATFORM = .45; // @ANE
 
-public static final double TIME_TO_STRAIGHTEN_OUT_ON_WALL = .4;
-
 public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
+
+// reverse descent stuff
+
+public static int TURN_180 = 180;
+
+public static final double TIME_TO_DRIVE_OFF_PLATFORM_BACKWARDS = .5;
+
+public static final double TIME_TO_DRIVE_FORWARDS_TO_ALIGN = .35;
+
+public static final double REVERSE_SPEED_TO_DRIVE_OFF_PLATFORM = -.75;
+
+public static final double DRIVE_FORWARDS_TO_ALIGN_SPEED = .5;
+
+
+
+// Auto INIT stuff
+
+public static final int FIRST_GEAR_NUMBER = 0;
+
+public static final int SECOND_GEAR_NUMBER = 1;
+
+public static final double FIRST_AUTO_GEAR_RATIO_KILROY_XIX = 1.0;
+
+public static final double SECOND_AUTO_GEAR_RATIO_KILROY_XIX = 1.0;
+
+public static final double FIRST_AUTO_GEAR_RATIO_KILROY_XX = 1.0;
+
+public static final double SECOND_AUTO_GEAR_RATIO_KILROY_XX = 1.0;
+
+public static final double KILROY_XIX_DRIVE_SPEED = .4;
+
+public static final double KILROY_XX_DRIVE_SPEED = .4;
+
+public static final double KILROY_XIX_TURN_SPEED = .4;
+
+public static final double KILROY_XX_TURN_SPEED = .7;// .5;
+
+
+
+
 }

@@ -144,7 +144,7 @@ public ClimbToLevelTwo (DoubleSolenoid driveSolenoid,
 // will not work
 public void climbUpdate ()
 {
-    // System.out.println(climbState);
+    System.out.println(climbState);
 
     switch (climbState)
         {
@@ -206,6 +206,7 @@ public void climbUpdate ()
             break;
 
         case DEPLOY_BACK_WHEELS:
+            this.holdArmToSupportDrive();
             // deploys back wheels
             if (this.deployBackWheels() == true)
                 {
@@ -216,6 +217,7 @@ public void climbUpdate ()
             break;
 
         case DELAY_THREE:
+            this.holdArmToSupportDrive();
             // delay state after DEPLOY_BACK_WHEELS and before
             // LOWER_FORKLFT_COMPLETELY
             if (climbTimer.get() >= DELAY_THREE_TIME)
@@ -228,6 +230,7 @@ public void climbUpdate ()
             break;
 
         case LOWER_FORKLIFT_COMPLETELY:
+            this.holdArmToSupportDrive();
             // lowers forklift all the way and lifts the front end of the robot
             // subsequentially
             // this.holdArmToSupportDrive();
@@ -240,6 +243,7 @@ public void climbUpdate ()
             break;
 
         case DELAY_FOUR:
+            this.holdArmToSupportDrive();
             // delay after LOWER_FORKLIFT_COMPLETELY and before DRIVE_FORWARD
             // this.holdArmToSupportDrive();
             if (climbTimer.get() >= DELAY_FOUR_TIME)
@@ -252,6 +256,7 @@ public void climbUpdate ()
             break;
 
         case DRIVE_FORWARD:
+            this.holdArmToSupportDrive();
             // drives forward to the point where the the rear wheels can be
             // retracted
             // this.holdArmToSupportDrive();
@@ -264,6 +269,7 @@ public void climbUpdate ()
             break;
 
         case DELAY_FIVE:
+            this.holdArmToSupportDrive();
             // dely state after DRIVE_FORWARD and before RAISE_ARM
             if (climbTimer.get() >= DELAY_FIVE_TIME)
                 {
@@ -389,10 +395,10 @@ public void climbUpdate ()
  */
 public void climb ()
 {
-    if (climbState == climberState.STANDBY)
-        {
-        climbState = climberState.START_CLIMB;
-        }
+    // if (climbState == climberState.STANDBY)
+    // {
+    climbState = climberState.START_CLIMB;
+    // }
 }
 
 
@@ -516,6 +522,7 @@ public void reverseClimbUpdate ()
 
 
         case DELAY_FOUR:
+            this.holdArmToSupportDrive();
             // delay after LOWER_ARM and before DRIVE_OFF_COMPLETELY
             if (climbTimer.get() >= DELAY_FOUR_TIME)
                 {
@@ -527,6 +534,7 @@ public void reverseClimbUpdate ()
             break;
 
         case DRIVE_OFF_COMPLETELY:
+            this.holdArmToSupportDrive();
             // drives backwards to the point where the the rear wheels can be
             // retracted
             if (this.reverseDriveOffCompletely() == true)
@@ -538,6 +546,7 @@ public void reverseClimbUpdate ()
             break;
 
         case DELAY_FIVE:
+            this.holdArmToSupportDrive();
             // delay state after DRIVE_FORWARD and before RETRACT_WHEELS
             if (climbTimer.get() >= DELAY_FIVE_TIME)
                 {
@@ -550,6 +559,7 @@ public void reverseClimbUpdate ()
             break;
 
         case RETRACT_WHEELS:
+            this.holdArmToSupportDrive();
             // retracts wheels
             if (this.retractWheels() == true)
                 {
@@ -560,6 +570,7 @@ public void reverseClimbUpdate ()
             break;
 
         case DELAY_SIX:
+            this.holdArmToSupportDrive();
             // delay state after RETRACT_WHEELS and before RAISE_ARM
             if (climbTimer.get() >= DELAY_SIX_TIME)
                 {
@@ -572,6 +583,7 @@ public void reverseClimbUpdate ()
 
 
         case RAISE_FORKLIFT_TO_POSITION:
+            this.holdArmToSupportDrive();
             // raises forklift to the position needed to lower robot, not all
             // the way up
 
@@ -584,7 +596,8 @@ public void reverseClimbUpdate ()
             break;
 
         case DELAY_SEVEN:
-            // delay after RAISE_ARM and before RAISE_FORKLIFT_TO_POSITION
+            this.holdArmToSupportDrive();
+            // delay after RAISE_FORKLIFT_TO_POSITION and before RAISE_ARM
             if (climbTimer.get() >= DELAY_SEVEN_TIME)
                 {
                 // goes to RAISE_FORKLIFT_TO_POSITION
@@ -691,8 +704,7 @@ private boolean lowerForkliftToPosition ()
     // } else {
     // liftMotor.set(0.0);
     System.out.println("Trying to lower forklift to position ");
-    if (this.lift.setLiftPosition(LIFT_HEIGHT_TO_START_CLIMB,
-            LOWER_LIFT_SPEED))
+    if (this.lift.setLiftPosition(LIFT_HEIGHT_TO_START_CLIMB) == true)
         {
         return true;
         }
@@ -926,9 +938,9 @@ private static final double LOWERED_ARM_POSITION = 260;
 
 private static final double RAISED_ARM_POSITION = 225;
 
-private static final double LIFT_HEIGHT_TO_START_CLIMB = 30.0;
+private static final double LIFT_HEIGHT_TO_START_CLIMB = 10.0;
 
-private static final double MIN_LIFT_HEIGHT_TO_CLIMB = 10.0;
+private static final double MIN_LIFT_HEIGHT_TO_CLIMB = 8.0;
 
 private static final Boolean LOWER_WHEELS_POSITION = true;
 

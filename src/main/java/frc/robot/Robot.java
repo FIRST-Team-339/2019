@@ -103,7 +103,8 @@ public void autonomousInit ()
     // =========================================================
     // m_autoSelected = SmartDashboard.getString("Auto Selector",
     // kDefaultAuto);
-    // Autonomous.init();
+    Autonomous.init();
+
 
     // =========================================================
     // User code goes above here
@@ -284,6 +285,5 @@ public void testPeriodic ()
 // ==========================================
 // TUNEABLES
 // ==========================================
-
 
 } // end robot class

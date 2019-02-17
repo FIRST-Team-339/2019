@@ -349,9 +349,11 @@ public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
 
-public static MomentarySwitch climbOneButton = null;
+// --------------------------------------------------
 
-public static MomentarySwitch climbTwoButton = null;
+public static JoystickButton climbOneButton = null;
+
+public static JoystickButton climbTwoButton = null;
 
 // ----------Left Driver---------------
 public static JoystickButton cancelOneButton = null;
@@ -645,11 +647,11 @@ public static void commonInitialization ()
 
     // ----------Left Driver---------------
 
-    climbTwoButton = new MomentarySwitch(leftDriver, 11, false);
+    climbTwoButton = new JoystickButton(leftDriver, 11);
 
     // ----------Right Driver--------------
 
-    climbOneButton = new MomentarySwitch(rightDriver, 11, false);
+    climbOneButton = new JoystickButton(rightDriver, 11);
 
     // Momentary Switches
 
