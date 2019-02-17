@@ -249,9 +249,9 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    Hardware.climber.climbUpdate();
+    // Hardware.climber.climbUpdate();
 
-    Hardware.depositGamePiece.depositTeleopStateMachine();
+    // Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
     // vision=====================================
@@ -319,6 +319,8 @@ public static void periodic ()
         {
         Hardware.climber.finishEarly();
         Autonomous.endAutoPath();
+        Hardware.lift.resetStateMachine();
+        Hardware.manipulator.resetStateMachine();
         } // end if
 
 
