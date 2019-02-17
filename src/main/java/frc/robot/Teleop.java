@@ -272,17 +272,16 @@ public static void periodic ()
 
 
 
-    System.out.println("forklift level: " + visionHeight);
+
 
 
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
 
-        // TODO, make so that driver can select height and gamepiece
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        /* Hardware.manipulator.hasCargo() */false))
+                        Hardware.manipulator.hasCargo()))
             {
 
 
