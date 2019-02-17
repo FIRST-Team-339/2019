@@ -755,7 +755,7 @@ private static int MAX_ARM_POSITION_ADJUSTED = 120;
 
 private static int MIN_ARM_POSITION_RAW = 10;
 
-private static int MIN_ARM_POSITION_ADJUSTED = -1;
+private static int MIN_ARM_POSITION_ADJUSTED = 5;
 
 private static int DEPLOYED_ARM_POSITION_ADJUSTED = 10;
 
