@@ -322,7 +322,7 @@ public boolean depositTeleopStateMachine ()
 
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.25))
+            if (true /* Hardware.driveWithCamera.driveToTargetClose(.25) */)
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -386,7 +386,7 @@ public boolean startTeleopDeposit (int heightLevel, boolean hasCargo)
         depositTeleopState = DepositTeleopState.INIT;
         }
 
-    if (depositTeleopState == DepositTeleopState.FINISH)
+    if (depositTeleopState == DepositTeleopState.HOLD)
         {
 
         hasStartedDeposit = false;
