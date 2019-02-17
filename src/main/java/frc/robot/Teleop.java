@@ -291,7 +291,7 @@ public static void periodic ()
 
     // buttons
 
-    // buttons to cancel everything
+    // buttons to cancel everything ===========================
     if (Hardware.cancelTwoButton.get() == true
             && Hardware.cancelOneButton.get() == true)
         {
