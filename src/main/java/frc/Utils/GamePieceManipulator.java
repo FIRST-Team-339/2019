@@ -415,8 +415,10 @@ public void deployUpdate ()
 {
 
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
+        {
         this.stayAtPosition2018InitIsReady = true;
-
+        this.stayAtPositionInitIsReady = true;
+        }
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
@@ -507,11 +509,46 @@ public void deployUpdate ()
                 }
             else
                 {
-                if (this.hasCargo() == true)
-                    this.armMotor.set(STAY_UP_WITH_CARGO);
-                else
-                    this.armMotor.set(STAY_UP_NO_PIECE);
+                if (this.stayAtPositionInitIsReady == true)
+                    {
+                    double stayUpSpeed = 0;
+
+                    // stayUpSpeed is set to different things
+                    // depending on whether or not the manipulator
+                    // has cargo
+                    if (this.hasCargo() == true)
+                        stayUpSpeed = STAY_UP_WITH_CARGO;
+                    else
+                        stayUpSpeed = STAY_UP_NO_PIECE;
+
+
+                    // Scales the arm position based on the cosine
+                    // of the angle, since this means angles closer
+                    // to 0 (parallel to the floor) will get
+                    // more power
+                    if (this.getCurrentArmPosition() > ARM_LEANING_BACK_ANGLE)
+                        {
+                        stayAtPositionTempSpeed = Math
+                                .abs(stayUpSpeed * Math.cos(
+                                        this.getCurrentArmPosition()))
+                                +
+                                DEFAULT_KEEP_ARM_UP_SPEED;
+
+                        }
+                    // If the arm angle is passed a certain point,
+                    // do not scale using cosine since we do
+                    // not want to give the arm a negative holding value
+                    // (maybe, this was just what I thought while testing)
+                    else
+                        {
+                        stayAtPositionTempSpeed = DEFAULT_KEEP_ARM_UP_SPEED;
+                        }
+                    this.stayAtPositionInitIsReady = false;
+                    }
+
+                this.armMotor.set(stayAtPositionTempSpeed);
                 }
+
             // Reset the direction for next move-to-position.
             deployDirection = DeployMovementDirection.NEUTRAL;
             isSetDeployPositionInitReady = true;
@@ -531,6 +568,7 @@ public void deployUpdate ()
             break;
 
         }
+
 }
 
 /**
@@ -593,6 +631,8 @@ public void printDeployDebugInfo ()
             Hardware.leftOperator.getY());
     SmartDashboard.putNumber("deployTargetSpeed",
             deployTargetSpeed);
+    SmartDashboard.putString("stayAtPositionInitIsReady",
+            "" + this.stayAtPositionInitIsReady);
 }
 
 // =========================================================================
@@ -696,9 +736,10 @@ private static double MAX_DEPLOY_SPEED_2019 = .2;
 // ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
-private static double UP_JOYSTICK_SCALER = .5 * MAX_DEPLOY_SPEED_2019;
+private static double UP_JOYSTICK_SCALER = 1.0 * MAX_DEPLOY_SPEED_2019;
 
-private static double DOWN_JOYSTICK_SCALER = .5 * MAX_DEPLOY_SPEED_2019;
+private static double DOWN_JOYSTICK_SCALER = 0.5
+        * MAX_DEPLOY_SPEED_2019;
 
 // ----- Joystick Constants 2018 -----
 
@@ -710,23 +751,25 @@ private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
 private static int MAX_ARM_POSITION_RAW = 0;
 
-private static int MAX_ARM_POSITION_ADJUSTED = 85;
+private static int MAX_ARM_POSITION_ADJUSTED = 120;
 
-private static int MIN_ARM_POSITION_RAW = 0;
+private static int MIN_ARM_POSITION_RAW = 10;
 
-private static int MIN_ARM_POSITION_ADJUSTED = 5;
+private static int MIN_ARM_POSITION_ADJUSTED = -1;
 
 private static int DEPLOYED_ARM_POSITION_ADJUSTED = 10;
 
-private static int RETRACTED_ARM_POSITION_ADJUSTED = 80;
+private static int RETRACTED_ARM_POSITION_ADJUSTED = 90;
 
-private double IS_CLEAR_OF_FRAME_ANGLE = 70;
+private double ARM_LEANING_BACK_ANGLE = 90;
+
+private double IS_CLEAR_OF_FRAME_ANGLE = 80;
 
 private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 260; // placeholder
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 143; // placeholder
 
 private static final double ACCEPTABLE_ERROR = 0.0;
 
@@ -777,14 +820,17 @@ private static final double ARM_ENCODER_SCALE_TO_DEGREES_2018 = 0.0; // placehol
 
 // ----- Deploy Speed Constants 2019 -----
 
-private static double STAY_UP_WITH_CARGO = 0.0;
+private static double DEFAULT_KEEP_ARM_UP_SPEED = 0.2
+        * MAX_DEPLOY_SPEED_2019;
 
-private static double STAY_UP_NO_PIECE = 0.0;
+private static double STAY_UP_WITH_CARGO = 0.5 * MAX_DEPLOY_SPEED_2019;
+
+private static double STAY_UP_NO_PIECE = 0.2 * MAX_DEPLOY_SPEED_2019;
 
 private static double SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER = 1.0
         * MAX_DEPLOY_SPEED_2019;
 
-private static double SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER = 0.05
+private static double SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER = 0.5
         * MAX_DEPLOY_SPEED_2019;
 
 private static double DEFAULT_DEPLOY_SPEED_UNSCALED = 1.0;
@@ -839,6 +885,8 @@ private boolean isSetDeployPositionInitReady = true;
 // this is used to determine whether or not we need to calculate a new
 // speed
 private boolean stayAtPosition2018InitIsReady = true;
+
+private boolean stayAtPositionInitIsReady = true;
 
 private double stayAtPositionTempSpeed = 0.0;
 

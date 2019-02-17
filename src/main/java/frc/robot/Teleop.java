@@ -322,6 +322,16 @@ public static void periodic ()
         } // end if
 
 
+    // Buttons to reset the forklift encoder. Should never be called during
+    // a match; only is in the final code for the purpsoe of speeding up
+    // testing in the pits
+
+    if (Hardware.resetForkliftEncoderButton1.get() == true
+            && Hardware.resetForkliftEncoderButton2.get() == true)
+        {
+        Hardware.lift.resetEncoder();
+        }
+
     individualTest();
 
     takePicture();
@@ -352,9 +362,9 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
+    // ashleyTest();
     // connerTest();
-    // coleTest();
+    coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -848,11 +858,11 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
 
-        System.out.println("Delay pot: " + Hardware.delayPot.get());
-        SmartDashboard.putNumber("Delay pot: ",
-                Hardware.delayPot.get());
-        SmartDashboard.putNumber("Deploy pot min max: ",
-                Hardware.delayPot.get(0, 5));
+        // System.out.println("Delay pot: " + Hardware.delayPot.get());
+        // SmartDashboard.putNumber("Delay pot: ",
+        // Hardware.delayPot.get());
+        // SmartDashboard.putNumber("Deploy pot min max: ",
+        // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
@@ -864,8 +874,8 @@ public static void printStatements ()
 
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
-        SmartDashboard.putNumber("Arm Pot sensor: ",
-                Hardware.armPot.get());
+        // SmartDashboard.putNumber("Arm Pot sensor: ",
+        // Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -873,8 +883,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        System.out.println("ultrasonic " + Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper());
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
