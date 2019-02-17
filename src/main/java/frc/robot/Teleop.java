@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.Utils.DepositGamePiece.HatchOrCargo;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -255,54 +254,39 @@ public static void periodic ()
 
 
     // vision=====================================
-
     if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 3 && Hardware.telopTimer.get() > .5)
+            && visionHeight < 3 && Hardware.telopTimer.get() > .25)
         {
         Hardware.telopTimer.reset();
         visionHeight++;
         Hardware.telopTimer.start();
         }
     if (Hardware.visionHeightDownButton.get() == true
-            && visionHeight > 0)
+            && visionHeight > 0 && Hardware.telopTimer.get() > .25)
         {
         Hardware.telopTimer.reset();
         visionHeight--;
         Hardware.telopTimer.start();
         }
-
-
-    if (Hardware.manipulator.hasCargo())
-        {
-        hatchOrCargoTeleop = HatchOrCargo.CARGO;
-        }
-    else
-        {
-        hatchOrCargoTeleop = HatchOrCargo.HATCH;
-        }
-
-    System.out.println("level: " + visionHeight);
-
-    System.out.println("hatch or cargo: " + hatchOrCargoTeleop);
-    if (Hardware.alignVisionButton.isOnCheckNow() == true)
+    if (Hardware.alignVisionButton.isOnCheckNow() == true
+            && Hardware.depositGamePiece.overrideVision() == false
+            && hasFinishedDeposit == false)
         {
 
-        // TODO, make so that driver can select height and gamepiece
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        /* hatchOrCargoTeleop */HatchOrCargo.HATCH))
+                        false/* Hardware.manipulator.hasCargo() */))
             {
-
+            hasFinishedDeposit = true;
             Hardware.depositGamePiece.resetDepositTeleop();
-
             }
         }
     else
         {
+        hasFinishedDeposit = false;
         Hardware.depositGamePiece.resetDepositTeleop();
         }
-
-
+    System.out.println("height level:" + visionHeight);
     // end vision==============================================
 
     // buttons
@@ -313,10 +297,22 @@ public static void periodic ()
         {
         Hardware.climber.finishEarly();
         Autonomous.endAutoPath();
+        Hardware.lift.resetStateMachine();
+        Hardware.manipulator.resetStateMachine();
         } // end if
 
 
-    // individualTest();
+    // Buttons to reset the forklift encoder. Should never be called during
+    // a match; only is in the final code for the purpsoe of speeding up
+    // testing in the pits
+
+    if (Hardware.resetForkliftEncoderButton1.get() == true
+            && Hardware.resetForkliftEncoderButton2.get() == true)
+        {
+        Hardware.lift.resetEncoder();
+        }
+
+    individualTest();
 
     takePicture();
 
@@ -331,9 +327,11 @@ public static void periodic ()
         Hardware.climber.climb();
         }
     else
-        {
-        teleopDrive();
-        }
+        if (Hardware.alignVisionButton.get() == false
+                || Hardware.depositGamePiece.overrideVision())
+            {
+            teleopDrive();
+            }
 
     printStatements();
 
@@ -412,20 +410,14 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-private static boolean started = true;
-
-private static boolean prepped = false;
-
 private static void connerTest ()
 {
-    Hardware.axisCamera.setRelayValue(Value.kOn);
-    System.out.println("*Orange Justicing: *" + started);
-    System.out.println("*giant green light: *" + prepped);
 
+    if (Hardware.rightOperator.getRawButton(8))
+        Hardware.axisCamera.setRelayValue(Value.kOn);
 
-
-
-    Hardware.driveWithCamera.driveToTarget(.4);
+    if (Hardware.rightOperator.getRawButton(9))
+        Hardware.axisCamera.setRelayValue(Value.kOff);
 
 
 } // end connerTest()
@@ -844,10 +836,10 @@ public static void printStatements ()
         // ----------------------------------
 
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
-        SmartDashboard.putNumber("Delay pot: ",
-                Hardware.delayPot.get());
-        SmartDashboard.putNumber("Deploy pot min max: ",
-                Hardware.delayPot.get(0, 5));
+        // SmartDashboard.putNumber("Delay pot: ",
+        // Hardware.delayPot.get());
+        // SmartDashboard.putNumber("Deploy pot min max: ",
+        // Hardware.delayPot.get(0, 5));
         // Hardware.telemetry.printToConsole("Delay pot: " +
         // Hardware.delayPot.get());
 
@@ -859,8 +851,8 @@ public static void printStatements ()
 
         // System.out.println("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
-        SmartDashboard.putNumber("Arm Pot sensor: ",
-                Hardware.armPot.get());
+        // SmartDashboard.putNumber("Arm Pot sensor: ",
+        // Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -1076,7 +1068,7 @@ private static double TURN_SPEED = .4;
 // lower rocket by default
 private static int visionHeight = 0;
 
-private static HatchOrCargo hatchOrCargoTeleop = HatchOrCargo.NULL;
+
 
 // ================================
 // Variables
@@ -1088,5 +1080,7 @@ private static boolean imageTaken = false;
 private static boolean pictureButton1;
 
 private static boolean pictureButton2;
+
+public static boolean hasFinishedDeposit = false;
 
 } // end class
