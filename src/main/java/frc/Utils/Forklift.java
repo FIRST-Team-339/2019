@@ -105,22 +105,19 @@ public double getForkliftHeight ()
 public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
-    double speed = operator.getY();
-
-    SmartDashboard.putNumber("Arm Joystick", speed);
+    SmartDashboard.putNumber("Arm Joystick", operator.getY());
     SmartDashboard.putString("wasAtMin", "" + wasAtMin);
     SmartDashboard.putString("wasAtMax", "" + wasAtMax);
 
-    if (speed >= 0)
-        wasAtMin = false;
-
-    if (speed <= 0)
-        wasAtMax = false;
-
-    // TODO scale DEFAULT_SPEED_UPmp up as soon as the deaband is
+    // TODO scale the joystick as soon as the deaband is
     // exceeded?
-    if (Math.abs(speed) > Forklift.JOYSTICK_DEADBAND)
-        this.moveForkliftAtSpeed(speed, overrideButton);
+    if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
+        this.moveForkliftAtSpeed(operator.getY(), overrideButton);
+    else
+        {
+        wasAtMin = false;
+        wasAtMax = false;
+        }
 
 }
 
@@ -156,7 +153,6 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
 
-
         if (wasAtMin == true || wasAtMin == true || ((speed > 0
                 && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
@@ -165,7 +161,6 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
             this.liftState = ForkliftState.STAY_AT_POSITION;
             // return so we exit the method and do not accidentally set
             // liftState to MOVE_JOY
-            wasAtMin = true;
             return;
             }
         }
@@ -180,8 +175,12 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
     this.liftState = ForkliftState.MOVE_JOY;
 }
 
+// used to keep track if the forklift already stopped itself b/c
+// it was at the max height
 private boolean wasAtMin = false;
 
+// used to keep track if the forklift already stopped itself b/c
+// it was at the min height
 private boolean wasAtMax = false;
 
 /**
@@ -726,7 +725,7 @@ private double STAY_UP_NO_PIECE = 0.1;
 
 // speed sent to the forklift motor to hold position when we have a
 // cargo
-private double STAY_UP_WITH_CARGO = 0.0;
+private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // ----- Preset Heights -----
 
@@ -745,7 +744,7 @@ public final static double TOP_ROCKET_HATCH = 50;// placeholder value
 
 public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
 
-public final static double LOWER_ROCKET_HATCH = 10;// placeholder value
+public final static double LOWER_ROCKET_HATCH = 0;// placeholder value
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 45;// placeholder value

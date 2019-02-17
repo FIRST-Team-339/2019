@@ -708,7 +708,7 @@ private final double TEST_COMPENSATE_3 = .1;
 
 // the distance in inches in which we drive the robot straight using the
 // ultrasonic
-private final double CAMERA_NO_LONGER_WORKS = 35;
+private final double CAMERA_NO_LONGER_WORKS = 0;
 
 // The minimum encoder distance we must drive before we enable the ultrasonic
 // private final double ENCODER_MIN_DISTANCE = 50; // inches

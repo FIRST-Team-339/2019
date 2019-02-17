@@ -152,8 +152,8 @@ public static Level autoLevel = Level.NULL;
  */
 public static void periodic ()
 {
-    if (Hardware.rightDriver.getRawButton(10)
-            && Hardware.leftDriver.getRawButton(10))
+    if (Hardware.cancelAutoLeftDriver.get() == true
+            && Hardware.cancelAutoRightDriver.get() == true)
         {
         endAutoPath();
         autoState = State.FINISH;
