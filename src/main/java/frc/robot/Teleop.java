@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.Forklift;
-import frc.Utils.DepositGamePiece.HatchOrCargo;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -257,14 +256,14 @@ public static void periodic ()
     // vision=====================================
 
     if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 3 && Hardware.telopTimer.get() > .5)
+            && visionHeight < 3 && Hardware.telopTimer.get() > .25)
         {
         Hardware.telopTimer.reset();
         visionHeight++;
         Hardware.telopTimer.start();
         }
     if (Hardware.visionHeightDownButton.get() == true
-            && visionHeight > 0)
+            && visionHeight > 0 && Hardware.telopTimer.get() > .25)
         {
         Hardware.telopTimer.reset();
         visionHeight--;
@@ -272,26 +271,20 @@ public static void periodic ()
         }
 
 
-    if (Hardware.manipulator.hasCargo())
-        {
-        hatchOrCargoTeleop = HatchOrCargo.CARGO;
-        }
-    else
-        {
-        hatchOrCargoTeleop = HatchOrCargo.HATCH;
-        }
 
-    System.out.println("level: " + visionHeight);
+    System.out.println("forklift level: " + visionHeight);
 
-    System.out.println("hatch or cargo: " + hatchOrCargoTeleop);
-    if (Hardware.alignVisionButton.isOnCheckNow() == true)
+
+    if (Hardware.alignVisionButton.isOnCheckNow() == true
+            && Hardware.depositGamePiece.overrideVision() == false)
         {
 
         // TODO, make so that driver can select height and gamepiece
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        /* hatchOrCargoTeleop */HatchOrCargo.HATCH))
+                        /* Hardware.manipulator.hasCargo() */false))
             {
+
 
             Hardware.depositGamePiece.resetDepositTeleop();
 
@@ -302,7 +295,7 @@ public static void periodic ()
         Hardware.depositGamePiece.resetDepositTeleop();
         }
 
-
+    Hardware.lift.printDebugInfo();
     // end vision==============================================
 
     // buttons
@@ -336,13 +329,15 @@ public static void periodic ()
         Hardware.climber.climb();
         }
     else
-        {
-        teleopDrive();
-        }
+        if (Hardware.alignVisionButton.get() == false
+                || Hardware.depositGamePiece.overrideVision())
+            {
+            teleopDrive();
+            }
 
     printStatements();
 
-    Hardware.lift.printDebugInfo();
+
 } // end Periodic()
 
 
@@ -352,8 +347,8 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    ashleyTest();
-    // connerTest();
+    // ashleyTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -417,20 +412,9 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-private static boolean started = true;
-
-private static boolean prepped = false;
-
 private static void connerTest ()
 {
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    System.out.println("*Orange Justicing: *" + started);
-    System.out.println("*giant green light: *" + prepped);
-
-
-
-
-    Hardware.driveWithCamera.driveToTarget(.4);
 
 
 } // end connerTest()
@@ -1081,7 +1065,7 @@ private static double TURN_SPEED = .4;
 // lower rocket by default
 private static int visionHeight = 0;
 
-private static HatchOrCargo hatchOrCargoTeleop = HatchOrCargo.NULL;
+
 
 // ================================
 // Variables
