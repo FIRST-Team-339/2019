@@ -469,14 +469,17 @@ private static void coleTest ()
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
-    if (Hardware.testDeployButtonTemp.getCurrentValue())
+    // if (Hardware.testDeployButtonTemp.getCurrentValue())
+    if (Hardware.leftDriver.getRawButton(3))
         Hardware.manipulator.deployArm();
 
-    if (Hardware.testRetractTemp.getCurrentValue())
+    // if (Hardware.rightOperator.getRawButton(5))
+    if (Hardware.leftDriver.getRawButton(4))
         Hardware.manipulator.retractArm();
 
-    if (Hardware.testSetManipulatorPosition.getCurrentValue())
-        Hardware.manipulator.moveArmToPosition(45, 1.0);
+    // if (Hardware.testSetManipulatorPosition.getCurrentValue())
+    if (Hardware.leftDriver.getRawButton(5))
+        Hardware.manipulator.moveArmToPosition(45);
 
 
 

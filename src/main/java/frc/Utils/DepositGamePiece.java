@@ -53,8 +53,7 @@ public boolean depositHatch (boolean inAuto)
         {
         case INIT:
             if (Hardware.manipulator.moveArmToPosition(
-                    105,
-                    FORK_SPEED)
+                    105)
             /*
              * || (Hardware.manipulator
              * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
@@ -80,8 +79,7 @@ public boolean depositHatch (boolean inAuto)
             if (inAuto)
                 {
                 Hardware.manipulator.moveArmToPosition(
-                        DEPOSIT_ARM_ANGLE_AUTO,
-                        MANIPULATOR_SPEED);
+                        DEPOSIT_ARM_ANGLE_AUTO);
                 if (this.drive.driveStraightInches(BACKUP_INCHES,
                         -BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
                     {
@@ -94,8 +92,7 @@ public boolean depositHatch (boolean inAuto)
                     System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
                             Hardware.manipulator.getCurrentArmPosition()
-                                    - 10,
-                            MANIPULATOR_SPEED))
+                                    - 10))
                         {
                         if (this.drive.driveStraightInches(
                                 BACKUP_INCHES,
@@ -157,8 +154,7 @@ public boolean depositCargo ()
             break;
         case RAISE_MANIPULATOR:
             if (this.gamePieceManipulator
-                    .moveArmToPosition(CARGO_ARM_POSITION,
-                            MANIPULATOR_SPEED))
+                    .moveArmToPosition(CARGO_ARM_POSITION))
                 {
                 depositCargoState = DepositCargoState.DEPOSIT_CARGO;
                 }
@@ -305,8 +301,7 @@ public boolean depositTeleopStateMachine ()
                 {
                 // has a hatch
                 if (Hardware.manipulator.moveArmToPosition(
-                        DEPOSIT_ARM_TELEOP,
-                        MANIPULATOR_SPEED)
+                        DEPOSIT_ARM_TELEOP)
                 /*
                  * || (Hardware.manipulator
                  * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
@@ -321,8 +316,7 @@ public boolean depositTeleopStateMachine ()
             else
                 {
                 if (Hardware.manipulator.moveArmToPosition(
-                        CARGO_ARM_POSITION,
-                        MANIPULATOR_SPEED)
+                        CARGO_ARM_POSITION)
                 /*
                  * || (Hardware.manipulator
                  * .getCurrentArmPosition() > CARGO_ARM_POSITION
@@ -435,7 +429,7 @@ public void prepToDepositHatch ()
     if (hasDoneThePrep == false)
         {
         System.out.println("*Dabs on haters*");
-        if (Hardware.manipulator.moveArmToPosition(105, .8)
+        if (Hardware.manipulator.moveArmToPosition(105)
         /*
          * || (Hardware.manipulator
          * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN

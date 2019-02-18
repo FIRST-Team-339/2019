@@ -213,12 +213,12 @@ public void moveArmByJoystick (Joystick armJoystick,
             this.deployTargetSpeed = this
                     .calculateDesiredArmMotorVoltage(
                             RequiredArmSpeedState.GO_UP,
-                            overrideButton);
+                            overrideButton, true);
         else
             this.deployTargetSpeed = this
                     .calculateDesiredArmMotorVoltage(
                             RequiredArmSpeedState.GO_DOWN,
-                            overrideButton);
+                            overrideButton, true);
 
         this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
 
@@ -283,14 +283,13 @@ public double getCurrentArmPosition ()
  *                     to move to the specified angle
  *
  */
-public void moveArmByButton (double angle,
-        double armSpeed, QuickSwitch button)
+public void moveArmByButton (double angle, QuickSwitch button)
 {
     // if the button is being held down and was not being held down before
     if (button.getCurrentValue() == true)
         {
         isSetDeployPositionInitReady = true;
-        this.moveArmToPosition(angle, armSpeed);
+        this.moveArmToPosition(angle);
         }
 }
 
@@ -311,7 +310,7 @@ public void moveArmByButton (double angle,
  * @return true when the arm has finished moving to the proper
  *         position, false otherwise
  */
-public boolean moveArmToPosition (double angle, double speed)
+public boolean moveArmToPosition (double angle)
 {
     // Sets the target position and speed, enables "moving-to-position"
     // state.
@@ -331,20 +330,22 @@ public boolean moveArmToPosition (double angle, double speed)
         return true;
         }
 
-    if (deployTargetAngle < this.getCurrentArmPosition())
+    if (deployTargetAngle > this.getCurrentArmPosition())
         {
         this.deployTargetSpeed = this
                 .calculateDesiredArmMotorVoltage(
                         RequiredArmSpeedState.GO_UP,
-                        false);
+                        false, false);
         }
     else // if the manipulator will move down
         {
         this.deployTargetSpeed = this
                 .calculateDesiredArmMotorVoltage(
                         RequiredArmSpeedState.GO_DOWN,
-                        false);
+                        false, false);
         }
+
+    this.deployTargetSpeed = Math.abs(this.deployTargetSpeed);
 
     return false;
 }
@@ -364,8 +365,7 @@ public boolean deployArm ()
     if (this.getDeployState() != DeployState.DEPLOYED)
         {
         isSetDeployPositionInitReady = true;
-        return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED,
-                DEFAULT_DEPLOY_SPEED_UNSCALED);
+        return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED);
         }
     else
         {
@@ -388,8 +388,7 @@ public boolean retractArm ()
     if (this.getDeployState() != DeployState.RETRACTED)
         {
         isSetDeployPositionInitReady = true;
-        return this.moveArmToPosition(RETRACTED_ARM_POSITION_ADJUSTED,
-                DEFAULT_RETRACT_SPEED_UNSCALED);
+        return this.moveArmToPosition(RETRACTED_ARM_POSITION_ADJUSTED);
         }
     return true; // if we are already deployed
 }
@@ -530,7 +529,8 @@ public void deployUpdate ()
 
                     stayAtPositionTempSpeed = this
                             .calculateDesiredArmMotorVoltage(
-                                    RequiredArmSpeedState.HOLD, false);
+                                    RequiredArmSpeedState.HOLD, false,
+                                    false);
 
                     this.stayAtPositionInitIsReady = false;
                     }
@@ -562,7 +562,7 @@ public void deployUpdate ()
 
 private double calculateDesiredArmMotorVoltage (
         RequiredArmSpeedState state,
-        boolean isOverriding)
+        boolean isOverriding, boolean isUsingJoystick)
 {
     double speed = 0.0;
     double currentArmAngle = this.getCurrentArmPosition();
@@ -579,11 +579,15 @@ private double calculateDesiredArmMotorVoltage (
                 if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
                     speed = GO_UP_HOLD_ARM_NO_GRAVITY_SPEED;
                 // else
-                // if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                // if (currentArmAngle >
+                // ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
                 // speed = GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
                 else
                     speed = GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
                 }
+
+            if (isUsingJoystick == false)
+                speed *= SET_POSITION_SPEED_SCALE_FACTOR;
             break;
         case GO_DOWN:
             if (isOverriding == true)
@@ -601,6 +605,8 @@ private double calculateDesiredArmMotorVoltage (
                     // else
                     speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
                 }
+            if (isUsingJoystick == false)
+                speed *= SET_POSITION_SPEED_SCALE_FACTOR;
             break;
         case FORCE_DOWN:
             break;
@@ -663,6 +669,8 @@ private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.4
 private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.3
         * MAX_DEPLOY_SPEED_2019;
 
+private double SET_POSITION_SPEED_SCALE_FACTOR = 1.0;
+
 public enum RequiredArmSpeedState
     {
     GO_UP, GO_DOWN, FORCE_DOWN, HOLD
@@ -722,9 +730,9 @@ public void printDeployDebugInfo ()
             "" + this.armMotor.get());
     SmartDashboard.putString("Deploy State",
             "" + this.getDeployState());
-    SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
-    SmartDashboard.putNumber("Left Operator",
-            Hardware.leftOperator.getY());
+    // SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
+    // SmartDashboard.putNumber("Left Operator",
+    // Hardware.leftOperator.getY());
     SmartDashboard.putNumber("deployTargetSpeed",
             deployTargetSpeed);
     SmartDashboard.putString("stayAtPositionInitIsReady",
@@ -734,6 +742,8 @@ public void printDeployDebugInfo ()
             currentDeployMaxAngle);
     SmartDashboard.putNumber("currentDeployMinAngle",
             currentDeployMinAngle);
+    SmartDashboard.putString("isSetDeployPositionInitReady",
+            "" + isSetDeployPositionInitReady);
 }
 
 // =========================================================================
@@ -858,7 +868,7 @@ private static int MIN_ARM_POSITION_RAW = 10;
 
 private static int MIN_ARM_POSITION_ADJUSTED = 5;
 
-private static int DEPLOYED_ARM_POSITION_ADJUSTED = 10;
+private static int DEPLOYED_ARM_POSITION_ADJUSTED = 15;
 
 private static int RETRACTED_ARM_POSITION_ADJUSTED = 90;
 
