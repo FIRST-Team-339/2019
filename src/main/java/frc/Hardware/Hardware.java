@@ -495,7 +495,7 @@ public static void commonInitialization ()
     // ====================================
     // Relay classes
     // ====================================
-    ringLightRelay = new Relay(3);
+    ringLightRelay = new Relay(0);
 
     // ====================================
     // Digital Inputs

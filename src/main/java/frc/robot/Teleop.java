@@ -259,8 +259,7 @@ public static void periodic ()
 
 
     // vision=====================================
-    System.out.println(
-            "ring light relay: " + Hardware.axisCamera.getRelayValue());
+
 
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 3 && Hardware.telopTimer.get() > .25)
@@ -277,8 +276,7 @@ public static void periodic ()
         Hardware.telopTimer.start();
         }
     if (Hardware.alignVisionButton.isOnCheckNow() == true
-            && Hardware.depositGamePiece.overrideVision() == false
-            && hasFinishedDeposit == false)
+            && Hardware.depositGamePiece.overrideVision() == false)
         {
 
         if (Hardware.depositGamePiece
@@ -372,8 +370,8 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
-    coleTest();
+    connerTest();
+    // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -454,6 +452,8 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
+    System.out.println("ultra sonic: "
+            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
 
 } // end connerTest()
 

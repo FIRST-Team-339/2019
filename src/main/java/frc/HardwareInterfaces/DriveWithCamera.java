@@ -409,6 +409,7 @@ public boolean driveToTargetClose (double speed)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
+                System.out.println("too right");
                 this.getTransmission().driveRaw(
                         motorspeed + correctionValue,
                         motorspeed - correctionValue);
@@ -421,7 +422,7 @@ public boolean driveToTargetClose (double speed)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
-
+                    System.out.println("too left");
                     this.getTransmission().driveRaw(
                             motorspeed - correctionValue,
                             motorspeed + correctionValue);
@@ -712,13 +713,13 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 20;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 25;
+private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
 private final double SLOW_MODIFIER = .7;
 
@@ -728,13 +729,13 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
-private final double DRIVE_CORRECTION_CLOSE = .5;
+private final double DRIVE_CORRECTION_CLOSE = .15;
 
 
 
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 10;
+private final double MIN_INCHES_CLOSE = 5;
 
 }
