@@ -333,7 +333,7 @@ public boolean driveToTarget (double speed)
         case STOP:
             // Hardware.autoTimer.stop();
 
-            Hardware.axisCamera.setRelayValue(Value.kOff);
+            // Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
             System.out.println("We are stopping");
@@ -391,16 +391,20 @@ public boolean driveToTargetClose (double speed)
                                     .getDistance() >= MIN_INCHES_CLOSE))
 
                 {
+                System.out.println("big dumb");
                 state = DriveWithCameraState.STOP;
                 }
 
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
-
-                {
-                motorspeed = motorspeed * SLOW_MODIFIER;
-                correctionValue = correctionValue * SLOW_MODIFIER;
-                }
+            /*
+             * if (this.frontUltrasonic
+             * .getDistanceFromNearestBumper() <=
+             * DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
+             *
+             * {
+             * motorspeed = motorspeed * SLOW_MODIFIER;
+             * correctionValue = correctionValue * SLOW_MODIFIER;
+             * }
+             */
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -440,7 +444,7 @@ public boolean driveToTargetClose (double speed)
 
         default:
         case STOP:
-            Hardware.axisCamera.setRelayValue(Value.kOff);
+            // Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
 
@@ -715,7 +719,7 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 28;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 

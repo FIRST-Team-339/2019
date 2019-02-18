@@ -370,7 +370,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -453,11 +453,13 @@ private static void ashleyTest ()
 private static void connerTest ()
 {
 
-    System.out
-            .println("forkyness: " + Hardware.lift.getForkliftHeight());
+    System.out.println("usingVision: "
+            + Hardware.alignVisionButton.isOnCheckNow());
 
     System.out.println("level "
             + visionHeight);
+
+    System.out.println("ultrasonic: " Hardware.frontUltraSonic.getDistanceFromNearestBumper());
 
 
 } // end connerTest()

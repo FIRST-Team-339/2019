@@ -51,18 +51,29 @@ public boolean depositHatch (boolean inAuto)
 
     switch (depositHatchState)
         {
-        case INIT:
-            if (Hardware.manipulator.moveArmToPosition(
-                    105,
-                    FORK_SPEED)
-            /*
-             * || (Hardware.manipulator
-             * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-             * && Hardware.manipulator
-             * .getCurrentArmPosition() < PREP_FOR_HATCH_MAX)
-             */)
 
-                depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+
+        case INIT:
+            if (inAuto)
+                {
+                if (Hardware.manipulator.moveArmToPosition(
+                        105,
+                        FORK_SPEED))
+                    depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                }
+            else
+                if (depositHeighthatch == 2)
+                    {
+                    if (Hardware.manipulator.moveArmToPosition(
+                            45,
+                            FORK_SPEED))
+                        depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                    }
+                else
+                    {
+                    depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                    }
+
             break;
 
         case DEPOSIT_HATCH:
@@ -89,7 +100,7 @@ public boolean depositHatch (boolean inAuto)
                     }
                 }
             else
-                if (depositHeighthatch == 3)
+                if (depositHeighthatch == 2)
                     {
                     System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
@@ -220,7 +231,8 @@ public int depositHeightCargo = 0;
  */
 public boolean depositTeleopStateMachine ()
 {
-
+    System.out.println("deposit state "
+            + depositTeleopState);
 
     switch (depositTeleopState)
         {
@@ -325,7 +337,9 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.1))
+            if (Hardware.driveWithCamera.driveToTargetClose(.1)
+                    && Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() <= 22)
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
