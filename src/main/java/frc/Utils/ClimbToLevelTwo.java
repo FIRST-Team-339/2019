@@ -7,6 +7,7 @@ import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.UltraSonic;
 import frc.Utils.drive.Drive;
+import frc.robot.Teleop;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -32,16 +33,16 @@ private UltraSonic ultraSonic = null;
 private Timer climbTimer = new Timer();
 
 // state of the climb state machine
-private static enum climberState
+public static enum ClimberState
     {
     STANDBY, START_CLIMB, LOWER_FORKLIFT_TO_POSITION, DELAY_ONE, LOWER_ARM, DELAY_TWO, DEPLOY_BACK_WHEELS, DELAY_THREE, LOWER_FORKLIFT_COMPLETELY, DELAY_FOUR, DRIVE_FORWARD, DELAY_FIVE, RAISE_ARM, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, FINISH_DRIVING, DELAY_INIT, STOP
     }
 
 
 // initializes climb state and prev climb state to standby
-private static climberState climbState = climberState.STANDBY;
+public static ClimberState climbState = ClimberState.STANDBY;
 
-private static climberState prevState = climberState.STANDBY;
+private static ClimberState prevState = ClimberState.STANDBY;
 
 
 /**
@@ -157,7 +158,11 @@ public void climbUpdate ()
         case START_CLIMB:
             // state the climb() function sets the state to and is basically an
             // init state
-            climbState = climberState.LOWER_FORKLIFT_TO_POSITION;
+            Hardware.drive.setGearPercentage(Teleop.FIRST_GEAR_NUMBER,
+                    1.0);
+            Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
+                    1.0);
+            climbState = ClimberState.LOWER_FORKLIFT_TO_POSITION;
             break;
 
         case LOWER_FORKLIFT_TO_POSITION:
@@ -166,8 +171,8 @@ public void climbUpdate ()
             if (this.lowerForkliftToPosition() == true)
                 {
                 // moves on to delay init and then DELAY_ONE
-                prevState = climberState.LOWER_FORKLIFT_TO_POSITION;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.LOWER_FORKLIFT_TO_POSITION;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -178,9 +183,9 @@ public void climbUpdate ()
                 {
                 // sets state to LOWER_ARM
                 climbTimer.stop();
-                prevState = climberState.DELAY_ONE;
+                prevState = ClimberState.DELAY_ONE;
                 // Hardware.intakeDeploySensor.reset();
-                climbState = climberState.LOWER_ARM;
+                climbState = ClimberState.LOWER_ARM;
                 }
             break;
 
@@ -189,8 +194,8 @@ public void climbUpdate ()
             if (this.lowerArm() == true)
                 {
                 // goes to DELAY_TWO after DELAY_INIT
-                prevState = climberState.LOWER_ARM;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.LOWER_ARM;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -200,8 +205,8 @@ public void climbUpdate ()
                 {
                 // sets state to DEPLOY_BACK_WHEELS
                 climbTimer.stop();
-                prevState = climberState.DELAY_TWO;
-                climbState = climberState.DEPLOY_BACK_WHEELS;
+                prevState = ClimberState.DELAY_TWO;
+                climbState = ClimberState.DEPLOY_BACK_WHEELS;
                 }
             break;
 
@@ -211,8 +216,8 @@ public void climbUpdate ()
             if (this.deployBackWheels() == true)
                 {
                 // Goes to DELAY_THREE
-                prevState = climberState.DEPLOY_BACK_WHEELS;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.DEPLOY_BACK_WHEELS;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -224,8 +229,8 @@ public void climbUpdate ()
                 {
                 // goes to LOWER_FORKLIFT_COMPLETELY
                 climbTimer.stop();
-                prevState = climberState.DELAY_THREE;
-                climbState = climberState.LOWER_FORKLIFT_COMPLETELY;
+                prevState = ClimberState.DELAY_THREE;
+                climbState = ClimberState.LOWER_FORKLIFT_COMPLETELY;
                 }
             break;
 
@@ -237,8 +242,8 @@ public void climbUpdate ()
             if (this.lowerForkliftCompletely() == true)
                 {
                 // goes to delay four
-                prevState = climberState.LOWER_FORKLIFT_COMPLETELY;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.LOWER_FORKLIFT_COMPLETELY;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -250,8 +255,8 @@ public void climbUpdate ()
                 {
                 // goes to DRIVE_FORWARD
                 climbTimer.stop();
-                prevState = climberState.DELAY_FOUR;
-                climbState = climberState.DRIVE_FORWARD;
+                prevState = ClimberState.DELAY_FOUR;
+                climbState = ClimberState.DRIVE_FORWARD;
                 }
             break;
 
@@ -263,8 +268,8 @@ public void climbUpdate ()
             if (this.driveForward() == true)
                 {
                 // goes to DELAY_FIVE
-                prevState = climberState.DRIVE_FORWARD;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.DRIVE_FORWARD;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -275,9 +280,9 @@ public void climbUpdate ()
                 {
                 // goes to RAISE_ARM
                 climbTimer.stop();
-                prevState = climberState.DELAY_FIVE;
+                prevState = ClimberState.DELAY_FIVE;
                 // Hardware.intakeDeploySensor.reset();
-                climbState = climberState.RAISE_ARM;
+                climbState = ClimberState.RAISE_ARM;
                 }
             break;
 
@@ -286,8 +291,8 @@ public void climbUpdate ()
             if (this.raiseArm() == true)
                 {
                 // goes to DELAY_SIX
-                prevState = climberState.RAISE_ARM;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.RAISE_ARM;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -297,8 +302,8 @@ public void climbUpdate ()
                 {
                 // goes to RETRACT_WHEELS
                 climbTimer.stop();
-                prevState = climberState.DELAY_SIX;
-                climbState = climberState.RETRACT_WHEELS;
+                prevState = ClimberState.DELAY_SIX;
+                climbState = ClimberState.RETRACT_WHEELS;
                 }
             break;
 
@@ -307,8 +312,8 @@ public void climbUpdate ()
             if (this.retractWheels() == true)
                 {
                 // goes to DELAY_SEVEN
-                prevState = climberState.RETRACT_WHEELS;
-                climbState = climberState.DELAY_INIT;
+                prevState = ClimberState.RETRACT_WHEELS;
+                climbState = ClimberState.DELAY_INIT;
                 }
             break;
 
@@ -318,8 +323,8 @@ public void climbUpdate ()
                 {
                 // goes to FINISH_DRIVING
                 climbTimer.stop();
-                prevState = climberState.DELAY_SEVEN;
-                climbState = climberState.FINISH_DRIVING;
+                prevState = ClimberState.DELAY_SEVEN;
+                climbState = ClimberState.FINISH_DRIVING;
                 }
             break;
 
@@ -328,13 +333,17 @@ public void climbUpdate ()
             if (this.finishDriving() == true)
                 {
                 // goes to stop
-                prevState = climberState.FINISH_DRIVING;
-                climbState = climberState.STOP;
+                prevState = ClimberState.FINISH_DRIVING;
+                climbState = ClimberState.STOP;
                 }
             break;
 
         case STOP:
             // stops stuff
+            Hardware.drive.setGearPercentage(Teleop.FIRST_GEAR_NUMBER,
+                    Teleop.FIRST_GEAR_RATIO_KILROY_XX);
+            Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
+                    Teleop.SECOND_GEAR_RATIO_KILROY_XX);
             this.stop();
             break;
 
@@ -344,39 +353,39 @@ public void climbUpdate ()
             climbTimer.start();
 
             // determines the next state to go to based in the previous state
-            if (prevState == climberState.LOWER_FORKLIFT_TO_POSITION)
+            if (prevState == ClimberState.LOWER_FORKLIFT_TO_POSITION)
                 {
-                climbState = climberState.DELAY_ONE;
+                climbState = ClimberState.DELAY_ONE;
                 }
             else
-                if (prevState == climberState.LOWER_ARM)
+                if (prevState == ClimberState.LOWER_ARM)
                     {
-                    climbState = climberState.DELAY_TWO;
+                    climbState = ClimberState.DELAY_TWO;
                     }
                 else
-                    if (prevState == climberState.DEPLOY_BACK_WHEELS)
+                    if (prevState == ClimberState.DEPLOY_BACK_WHEELS)
                         {
-                        climbState = climberState.DELAY_THREE;
+                        climbState = ClimberState.DELAY_THREE;
                         }
                     else
-                        if (prevState == climberState.LOWER_FORKLIFT_COMPLETELY)
+                        if (prevState == ClimberState.LOWER_FORKLIFT_COMPLETELY)
                             {
-                            climbState = climberState.DELAY_FOUR;
+                            climbState = ClimberState.DELAY_FOUR;
                             }
                         else
-                            if (prevState == climberState.DRIVE_FORWARD)
+                            if (prevState == ClimberState.DRIVE_FORWARD)
                                 {
-                                climbState = climberState.DELAY_FIVE;
+                                climbState = ClimberState.DELAY_FIVE;
                                 }
                             else
-                                if (prevState == climberState.RAISE_ARM)
+                                if (prevState == ClimberState.RAISE_ARM)
                                     {
-                                    climbState = climberState.DELAY_SIX;
+                                    climbState = ClimberState.DELAY_SIX;
                                     }
                                 else
-                                    if (prevState == climberState.RETRACT_WHEELS)
+                                    if (prevState == ClimberState.RETRACT_WHEELS)
                                         {
-                                        climbState = climberState.DELAY_SEVEN;
+                                        climbState = ClimberState.DELAY_SEVEN;
                                         }
             break;
 
@@ -397,7 +406,7 @@ public void climb ()
 {
     // if (climbState == climberState.STANDBY)
     // {
-    climbState = climberState.START_CLIMB;
+    climbState = ClimberState.START_CLIMB;
     // }
 }
 
@@ -413,7 +422,6 @@ private static enum ReverseClimberState
 private static ReverseClimberState reverseClimbState = ReverseClimberState.STANDBY;
 
 private static ReverseClimberState prevReverseState = ReverseClimberState.STANDBY;
-
 
 
 /**
@@ -621,7 +629,7 @@ public void reverseClimbUpdate ()
             this.stop();
             if (finishedEarly == true)
                 {
-                climbState = climberState.STANDBY;
+                climbState = ClimberState.STANDBY;
                 }
             break;
 
@@ -772,7 +780,8 @@ private boolean lowerForkliftCompletely ()
 private boolean deployBackWheels ()
 {
     System.out.println("Trying to deploy back wheels");
-    driveSolenoid.setForward(LOWER_WHEELS_POSITION);
+    // driveSolenoid.setForward(LOWER_WHEELS_POSITION);
+    Hardware.driveSolenoid.setForward(false);
     // sets test solnoid to a position
     // testSolenoid.set(Value.kReverse);
     return true;
@@ -832,7 +841,8 @@ private boolean retractWheels ()
 {
     // sets the solenoid to the correct position
     System.out.println("Trying to retract wheels");
-    driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
+    // driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
+    Hardware.driveSolenoid.setForward(true);
     // testSolenoid.set(Value.kForward);
     return true;
 }
@@ -922,7 +932,7 @@ public void finishEarly ()
 {
     // sets state to STOP
     finishedEarly = true;
-    climbState = climberState.STOP;
+    climbState = ClimberState.STOP;
 }
 
 
@@ -942,9 +952,9 @@ private static final double LIFT_HEIGHT_TO_START_CLIMB = 10.0;
 
 private static final double MIN_LIFT_HEIGHT_TO_CLIMB = 8.0;
 
-private static final Boolean LOWER_WHEELS_POSITION = true;
+private static final Boolean LOWER_WHEELS_POSITION = false;
 
-private static final Boolean RETRACT_WHEELS_POSITION = false;
+private static final Boolean RETRACT_WHEELS_POSITION = true;
 
 
 // SPEEDS
@@ -989,7 +999,7 @@ private static final double DELAY_ONE_TIME = 0.0;
 
 private static final double DELAY_TWO_TIME = 0.0;
 
-private static final double DELAY_THREE_TIME = 1.0;
+private static final double DELAY_THREE_TIME = 5.0;
 
 private static final double DELAY_FOUR_TIME = 0.0;
 

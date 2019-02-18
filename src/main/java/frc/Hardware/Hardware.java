@@ -345,6 +345,14 @@ public static MomentarySwitch alignVisionButton = null;
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
+public static MomentarySwitch solenoidButtonOne = null;
+
+public static MomentarySwitch solenoidButtonTwo = null;
+
+public static MomentarySwitch armHackButton = null;
+
+public static JoystickButton liftHackButton = null;
+
 public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
@@ -487,7 +495,7 @@ public static void commonInitialization ()
     // ====================================
     // Relay classes
     // ====================================
-    ringLightRelay = new Relay(3);
+    ringLightRelay = new Relay(0);
 
     // ====================================
     // Digital Inputs
@@ -594,7 +602,7 @@ public static void commonInitialization ()
 
     USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
-    // USBCamII = CameraServer.getInstance().startAutomaticCapture(1);//TODO
+    USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
 
     // **********************************************************
     // DRIVER STATION CLASSES
@@ -655,7 +663,6 @@ public static void commonInitialization ()
             7);
 
     // ----------Left Driver---------------
-    resetForkliftEncoderButton1 = new JoystickButton(leftDriver, 7);
 
     testDeployButtonTemp = new QuickSwitch(leftDriver,
             8);
@@ -666,11 +673,10 @@ public static void commonInitialization ()
     testSetManipulatorPosition = new QuickSwitch(leftDriver,
             10);
 
-    // ----------Left Driver---------------
-
-
     // ----------Right Driver--------------
-    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 7);
+    resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
+
+    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
 
     climbOneButton = new JoystickButton(rightDriver, 11);
 
@@ -679,6 +685,16 @@ public static void commonInitialization ()
     cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
 
     // Momentary Switches
+
+    solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
+
+    solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
+
+
+    // HaCkETy haCkS
+    armHackButton = new MomentarySwitch(rightDriver, 6, false);
+
+    liftHackButton = new JoystickButton(rightDriver, 5);
 
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 

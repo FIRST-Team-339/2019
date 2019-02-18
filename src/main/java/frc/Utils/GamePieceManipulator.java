@@ -89,11 +89,10 @@ private static enum DeployMovementDirection
 // return GamePiece.NONE;
 // }
 
-
 public void initiliazeConstantsFor2018 ()
 {
-    UP_JOYSTICK_SCALER = UP_JOYSTICK_SCALER_2018;
-    DOWN_JOYSTICK_SCALER = DOWN_JOYSTICK_SCALER_2018;
+    // UP_JOYSTICK_SCALER = UP_JOYSTICK_SCALER_2018;
+    // DOWN_JOYSTICK_SCALER = DOWN_JOYSTICK_SCALER_2018;
     SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER = UPWARD_ARM_MOVEMENT_SCALER_2018;
     SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER = DOWNWARD_ARM_MOVEMENT_SCALER_2018;
     MAX_ARM_POSITION_ADJUSTED = MAX_ARM_POSITION_ADJUSTED_2018;
@@ -131,9 +130,9 @@ public boolean isDeployed ()
 
 public boolean isArmClearOfFrame ()
 {
-    return true; // TODO uncomment the below code instead when
+    // TODO uncomment the below code instead when
     // the manipulator is working on 2019
-    // return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
+    return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
 }
 
 
@@ -188,7 +187,7 @@ public void moveArmByJoystick (Joystick armJoystick,
         // (i.e.: if we are just .01 outside the deadband, and
         // we sent the motor .01, then it might actually move
         // down due to gravity)
-        double speed = armJoystick.getY();
+        double joystickValue = armJoystick.getY();
 
         // if override button is pressed, ignore potentiometer/ encoder.
 
@@ -197,9 +196,9 @@ public void moveArmByJoystick (Joystick armJoystick,
         // arm to stay where it is
         if (overrideButton == false)
             {
-            if ((speed > 0
+            if ((joystickValue > 0
                     && this.getCurrentArmPosition() > currentDeployMaxAngle)
-                    || (speed < 0 && this
+                    || (joystickValue < 0 && this
                             .getCurrentArmPosition() < currentDeployMinAngle))
                 {
                 this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
@@ -210,10 +209,16 @@ public void moveArmByJoystick (Joystick armJoystick,
             }
 
         // scales the speed based on whether it is going up or down
-        if (speed > 0)
-            deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
+        if (joystickValue > 0)
+            this.deployTargetSpeed = this
+                    .calculateDesiredArmMotorVoltage(
+                            RequiredArmSpeedState.GO_UP,
+                            overrideButton);
         else
-            deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
+            this.deployTargetSpeed = this
+                    .calculateDesiredArmMotorVoltage(
+                            RequiredArmSpeedState.GO_DOWN,
+                            overrideButton);
 
         this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
 
@@ -313,30 +318,34 @@ public boolean moveArmToPosition (double angle, double speed)
     if (isSetDeployPositionInitReady == true)
         {
         this.deployTargetAngle = angle;
-
-        this.deployTargetSpeed = Math.abs(speed);
-
         deployDirection = DeployMovementDirection.NEUTRAL;
         this.deployMovementState = DeployMovementState.MOVING_TO_POSITION;
-
-        if (deployTargetAngle < this.getCurrentArmPosition())
-            {
-            deployTargetSpeed *= SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER;
-            }
-        else // if the forklift will move down
-            {
-            deployTargetSpeed *= SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER;
-            }
-
         isSetDeployPositionInitReady = false;
         }
 
     // return true is we are done moving, false is we are still going
     if (this.deployMovementState == DeployMovementState.STAY_AT_POSITION)
+
         {
         isSetDeployPositionInitReady = true;
         return true;
         }
+
+    if (deployTargetAngle < this.getCurrentArmPosition())
+        {
+        this.deployTargetSpeed = this
+                .calculateDesiredArmMotorVoltage(
+                        RequiredArmSpeedState.GO_UP,
+                        false);
+        }
+    else // if the manipulator will move down
+        {
+        this.deployTargetSpeed = this
+                .calculateDesiredArmMotorVoltage(
+                        RequiredArmSpeedState.GO_DOWN,
+                        false);
+        }
+
     return false;
 }
 
@@ -406,7 +415,10 @@ public boolean setDeployMovementState (
         }
 }
 
-
+public void setMaxArmAngle (double angle)
+{
+    this.currentDeployMaxAngle = angle;
+}
 
 /**
  * Update method for the deploy state machine. Is what actually tells
@@ -422,6 +434,7 @@ public void deployUpdate ()
         this.stayAtPosition2018InitIsReady = true;
         this.stayAtPositionInitIsReady = true;
         }
+
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
@@ -514,38 +527,11 @@ public void deployUpdate ()
                 {
                 if (this.stayAtPositionInitIsReady == true)
                     {
-                    double stayUpSpeed = 0;
 
-                    // stayUpSpeed is set to different things
-                    // depending on whether or not the manipulator
-                    // has cargo
-                    if (this.hasCargo() == true)
-                        stayUpSpeed = STAY_UP_WITH_CARGO;
-                    else
-                        stayUpSpeed = STAY_UP_NO_PIECE;
+                    stayAtPositionTempSpeed = this
+                            .calculateDesiredArmMotorVoltage(
+                                    RequiredArmSpeedState.HOLD, false);
 
-
-                    // Scales the arm position based on the cosine
-                    // of the angle, since this means angles closer
-                    // to 0 (parallel to the floor) will get
-                    // more power
-                    if (this.getCurrentArmPosition() > ARM_LEANING_BACK_ANGLE)
-                        {
-                        stayAtPositionTempSpeed = Math
-                                .abs(stayUpSpeed * Math.cos(
-                                        this.getCurrentArmPosition()))
-                                +
-                                DEFAULT_KEEP_ARM_UP_SPEED;
-
-                        }
-                    // If the arm angle is passed a certain point,
-                    // do not scale using cosine since we do
-                    // not want to give the arm a negative holding value
-                    // (maybe, this was just what I thought while testing)
-                    else
-                        {
-                        stayAtPositionTempSpeed = DEFAULT_KEEP_ARM_UP_SPEED;
-                        }
                     this.stayAtPositionInitIsReady = false;
                     }
 
@@ -573,6 +559,114 @@ public void deployUpdate ()
         }
 
 }
+
+private double calculateDesiredArmMotorVoltage (
+        RequiredArmSpeedState state,
+        boolean isOverriding)
+{
+    double speed = 0.0;
+    double currentArmAngle = this.getCurrentArmPosition();
+
+    switch (state)
+        {
+        case GO_UP:
+            if (isOverriding == true)
+                {
+                speed = GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+                }
+            else
+                {
+                if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                    speed = GO_UP_HOLD_ARM_NO_GRAVITY_SPEED;
+                // else
+                // if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                // speed = GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                else
+                    speed = GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+                }
+            break;
+        case GO_DOWN:
+            if (isOverriding == true)
+                {
+                speed = GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED;
+                }
+            else
+                {
+                if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                    speed = GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED;
+                else
+                    // if (currentArmAngle >
+                    // ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                    // speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                    // else
+                    speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+                }
+            break;
+        case FORCE_DOWN:
+            break;
+        case HOLD:
+            // if (this.hasCargo() == true)
+            // {
+
+            // }
+            // else
+            // {
+            // if (currentArmAngle > ARM_GRAVITY_IN_FRAME_ANGLE)
+            // speed = ARM_GRAVITY_IN_FRAME_SPEED;
+            // else
+            if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                speed = HOLD_ARM_NO_GRAVITY_SPEED;
+            else
+                if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                    speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                else
+                    speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+            // }
+            break;
+        }
+    SmartDashboard.putNumber("getArmMotorVoltage", speed);
+    return speed;
+
+}
+
+// measured in degrees
+private double ARM_GRAVITY_IN_FRAME_ANGLE = 100;
+
+private double HOLD_ARM_GRAVITY_IN_FRAME_SPEED = -0.05;
+
+private double ARM_NO_GRAVITY_ANGLE = 80;
+
+private double HOLD_ARM_NO_GRAVITY_SPEED = .03;
+
+private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE = 45;
+
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = 0.07;
+
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.08;
+
+
+private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .75
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 1.0
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED = -.5
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.4
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.3
+        * MAX_DEPLOY_SPEED_2019;
+
+public enum RequiredArmSpeedState
+    {
+    GO_UP, GO_DOWN, FORCE_DOWN, HOLD
+    }
 
 /**
  * Allows the user to manually set the arm motor to a speed using
@@ -610,7 +704,6 @@ public void setArmMotorSpeedManuallyForClimb (double speed)
         return;
         }
 
-    // scales the speed based on whether it is going up or down
     deployTargetSpeed = speed * MAX_DEPLOY_SPEED_2019;
 
     this.deployMovementState = DeployMovementState.SET_MANUALLY_FOR_CLIMB;
@@ -636,6 +729,11 @@ public void printDeployDebugInfo ()
             deployTargetSpeed);
     SmartDashboard.putString("stayAtPositionInitIsReady",
             "" + this.stayAtPositionInitIsReady);
+    SmartDashboard.putString("Has Cargo:", "" + this.hasCargo());
+    SmartDashboard.putNumber("currentDeployMaxAngle",
+            currentDeployMaxAngle);
+    SmartDashboard.putNumber("currentDeployMinAngle",
+            currentDeployMinAngle);
 }
 
 // =========================================================================
@@ -734,15 +832,15 @@ public void resetStateMachine ()
 
 // used to scale all relevant values for 2019 since the max speed
 // the 2019 deploy arm can go is .2
-private static double MAX_DEPLOY_SPEED_2019 = .2;
+private static double MAX_DEPLOY_SPEED_2019 = .4;
 
 // ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
-private static double UP_JOYSTICK_SCALER = 1.0 * MAX_DEPLOY_SPEED_2019;
+// private static double UP_JOYSTICK_SCALER = 1.0 * MAX_DEPLOY_SPEED_2019;
 
-private static double DOWN_JOYSTICK_SCALER = 0.5
-        * MAX_DEPLOY_SPEED_2019;
+// private static double DOWN_JOYSTICK_SCALER = 0.5
+// * MAX_DEPLOY_SPEED_2019;
 
 // ----- Joystick Constants 2018 -----
 
@@ -754,7 +852,7 @@ private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
 private static int MAX_ARM_POSITION_RAW = 0;
 
-private static int MAX_ARM_POSITION_ADJUSTED = 120;
+public int MAX_ARM_POSITION_ADJUSTED = 120;
 
 private static int MIN_ARM_POSITION_RAW = 10;
 
@@ -766,7 +864,10 @@ private static int RETRACTED_ARM_POSITION_ADJUSTED = 90;
 
 private double ARM_LEANING_BACK_ANGLE = 90;
 
-private double IS_CLEAR_OF_FRAME_ANGLE = 80;
+private double IS_CLEAR_OF_FRAME_ANGLE = 70;
+
+// the maximum angle for the deploy so
+public double MAX_FORKLIFT_UP_ANGLE = 65;
 
 private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
@@ -828,7 +929,7 @@ private static double DEFAULT_KEEP_ARM_UP_SPEED = 0.2
 
 private static double STAY_UP_WITH_CARGO = 0.5 * MAX_DEPLOY_SPEED_2019;
 
-private static double STAY_UP_NO_PIECE = 0.2 * MAX_DEPLOY_SPEED_2019;
+private static double STAY_UP_NO_PIECE = 0.3 * MAX_DEPLOY_SPEED_2019;
 
 private static double SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER = 1.0
         * MAX_DEPLOY_SPEED_2019;

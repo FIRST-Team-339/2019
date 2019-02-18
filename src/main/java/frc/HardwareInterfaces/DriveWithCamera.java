@@ -1,15 +1,10 @@
 package frc.HardwareInterfaces;
 
 import frc.Hardware.Hardware;
-// import frc.HardwareInterfaces.Transmission.MecanumTransmission;
-// import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.HardwareInterfaces.Transmission.TransmissionBase;
-// import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
-// import frc.vision.VisionProcessor.ImageType;
-// import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -168,6 +163,8 @@ public DriveWithCamera (TransmissionBase transmission,
  *
  * Multiply the compensationFactor by speed to determine what values we are
  * sending to the motor controller
+ *
+ * Used a compensation factor to slow down as we get closer to the target
  *
  *
  * @param speed
@@ -347,7 +344,14 @@ public boolean driveToTarget (double speed)
     return false;
 }
 
-
+/**
+ * drives to target with speed and compensation lower to allow for aligning from
+ * close distances.
+ *
+ *
+ * @param speed
+ * @return true when completed
+ */
 public boolean driveToTargetClose (double speed)
 {
     System.out.println("vision state: " + state);
@@ -357,8 +361,8 @@ public boolean driveToTargetClose (double speed)
             Hardware.axisCamera.processImage();
             Hardware.axisCamera.setRelayValue(Value.kOn);
             Hardware.drive.resetEncoders();
-            // visionProcessor.saveImage(ImageType.RAW);
-            // visionProcessor.saveImage(ImageType.PROCESSED);
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
 
             double correctionValue = DRIVE_CORRECTION_CLOSE;
             double motorspeed = speed;
@@ -389,19 +393,12 @@ public boolean driveToTargetClose (double speed)
                 }
 
             if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
 
                 {
                 motorspeed = motorspeed * SLOW_MODIFIER;
                 correctionValue = correctionValue * SLOW_MODIFIER;
                 }
-
-
-
-
-            // adjust speed so that motors never reverse
-
-
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -412,12 +409,10 @@ public boolean driveToTargetClose (double speed)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
-
-
+                System.out.println("too right");
                 this.getTransmission().driveRaw(
                         motorspeed + correctionValue,
-                        motorspeed - correctionValue);
-
+                        motorspeed/* - correctionValue */);
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
@@ -427,9 +422,9 @@ public boolean driveToTargetClose (double speed)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
-
+                    System.out.println("too left");
                     this.getTransmission().driveRaw(
-                            motorspeed - correctionValue,
+                            motorspeed/* - correctionValue */,
                             motorspeed + correctionValue);
 
                     }
@@ -459,7 +454,7 @@ public boolean driveToTargetClose (double speed)
  * vision targets on
  *
  * @author Conner McKevitt
- * @return
+ * @return Side
  */
 public Side getTargetSide ()
 {
@@ -718,13 +713,13 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 20;
+private final double DISTANCE_FROM_WALL_TO_STOP = 28;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 25;
+private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
 private final double SLOW_MODIFIER = .7;
 
@@ -734,13 +729,13 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
-private final double DRIVE_CORRECTION_CLOSE = .5;
+private final double DRIVE_CORRECTION_CLOSE = .07;
 
 
 
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 10;
+private final double MIN_INCHES_CLOSE = 25;
 
 }
