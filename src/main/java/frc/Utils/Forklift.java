@@ -758,7 +758,7 @@ public final static double TOP_ROCKET_HATCH = 50;// placeholder value
 
 public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
 
-public final static double LOWER_ROCKET_HATCH = 10;// placeholder value
+public final static double LOWER_ROCKET_HATCH = 15;// placeholder value
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 45;// placeholder value

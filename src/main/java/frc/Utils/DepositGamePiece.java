@@ -265,16 +265,16 @@ public boolean depositTeleopStateMachine ()
                 switch (depositHeightCargo)
                     {
 
-                    case 0:
+                    case 2:
 
                         forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
 
-                    case 1:
+                    case 0:
 
                         forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
                         break;
-                    case 2:
+                    case 1:
 
                         forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
                         break;
@@ -339,7 +339,7 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.25))
+            if (Hardware.driveWithCamera.driveToTargetClose(.2))
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -387,6 +387,7 @@ boolean hasStartedDeposit = false;
  */
 public boolean startTeleopDeposit (int heightLevel, boolean hasCargo)
 {
+    System.out.println("startd deposit: " + hasStartedDeposit);
     if (hasCargo == false)
         {
         depositHeighthatch = heightLevel;
@@ -403,10 +404,6 @@ public boolean startTeleopDeposit (int heightLevel, boolean hasCargo)
         depositTeleopState = DepositTeleopState.INIT;
         }
 
-    if (Hardware.alignVisionButton.isOnCheckNow() == false)
-        {
-        hasStartedDeposit = false;
-        }
     if (depositTeleopState == DepositTeleopState.FINISH)
         {
         hasStartedDeposit = false;
@@ -472,7 +469,7 @@ public boolean overrideVision ()
             || Hardware.rightDriver.getY() < -JOYSTICK_DEADBAND)
         {
         System.out.println("Mission Failed. We'll get'em next time");
-        depositTeleopState = DepositTeleopState.HOLD;
+        depositTeleopState = DepositTeleopState.FINISH;
         return true;
         }
 
@@ -501,7 +498,7 @@ private static final double CARGO_ARM_POSITION = 90;
 
 // otro constants===========================
 
-private static final double JOYSTICK_DEADBAND = .1;
+private static final double JOYSTICK_DEADBAND = .2;
 
 private static boolean usingGyro = true;
 
