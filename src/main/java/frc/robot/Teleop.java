@@ -459,7 +459,8 @@ private static void connerTest ()
     System.out.println("level "
             + visionHeight);
 
-    System.out.println("ultrasonic: " Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+    System.out.println("ultrasonic: "
+            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
 
 
 } // end connerTest()
