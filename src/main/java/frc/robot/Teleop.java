@@ -452,6 +452,12 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
+
+    System.out
+            .println("forkyness: " + Hardware.lift.getForkliftHeight());
+
+    System.out.println("level "
+            + visionHeight);
     System.out.println("ultra sonic: "
             + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
 

@@ -339,7 +339,7 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.2))
+            if (Hardware.driveWithCamera.driveToTargetClose(.13))
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -491,7 +491,7 @@ private static final int FORWARD_TO_DEPOSIT = 4;// TODO
 
 private static final double DEPOSIT_ARM_ANGLE_AUTO = 90;
 
-private static final double DEPOSIT_ARM_TELEOP = 20;
+private static final double DEPOSIT_ARM_TELEOP = 25;
 
 // cargo constants
 private static final double CARGO_ARM_POSITION = 90;
