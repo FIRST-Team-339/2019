@@ -51,17 +51,27 @@ public boolean depositHatch (boolean inAuto)
 
     switch (depositHatchState)
         {
-        case INIT:
-            if (Hardware.manipulator.moveArmToPosition(
-                    105)
-            /*
-             * || (Hardware.manipulator
-             * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-             * && Hardware.manipulator
-             * .getCurrentArmPosition() < PREP_FOR_HATCH_MAX)
-             */)
 
-                depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+
+        case INIT:
+            if (inAuto)
+                {
+                if (Hardware.manipulator.moveArmToPosition(
+                        105))
+                    depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                }
+            else
+                if (depositHeighthatch == 2)
+                    {
+                    if (Hardware.manipulator.moveArmToPosition(
+                            45))
+                        depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                    }
+                else
+                    {
+                    depositHatchState = DepositHatchState.DEPOSIT_HATCH;
+                    }
+
             break;
 
         case DEPOSIT_HATCH:
@@ -87,7 +97,7 @@ public boolean depositHatch (boolean inAuto)
                     }
                 }
             else
-                if (depositHeighthatch == 3)
+                if (depositHeighthatch == 2)
                     {
                     System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
@@ -216,7 +226,8 @@ public int depositHeightCargo = 0;
  */
 public boolean depositTeleopStateMachine ()
 {
-    System.out.println("deposit state: " + depositTeleopState);
+    System.out.println("deposit state "
+            + depositTeleopState);
 
     switch (depositTeleopState)
         {
@@ -232,26 +243,26 @@ public boolean depositTeleopStateMachine ()
 
             if (hasCargo == false)
                 {
-                switch (depositHeightCargo)
+                switch (depositHeighthatch)
                     {
 
                     case 0:
-
+                        System.out.print("0");
                         forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
                         break;
 
                     case 1:
-
+                        System.out.print("1");
                         forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
                         break;
 
                     case 2:
-
+                        System.out.print("2");
                         forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
 
                     case 3:
-
+                        System.out.print("3");
                         forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
@@ -262,16 +273,16 @@ public boolean depositTeleopStateMachine ()
                     {
                     case 0:
 
-                        forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
+                        forkliftHeight = Forklift.LOWER_ROCKET_CARGO;
                         break;
                     case 1:
 
-                        forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
+                        forkliftHeight = Forklift.MIDDLE_ROCKET_CARGO;
                         break;
 
                     case 2:
 
-                        forkliftHeight = Forklift.TOP_ROCKET_HATCH;
+                        forkliftHeight = Forklift.TOP_ROCKET_CARGO;
                         break;
                     case 3:
 
@@ -301,13 +312,7 @@ public boolean depositTeleopStateMachine ()
                 {
                 // has a hatch
                 if (Hardware.manipulator.moveArmToPosition(
-                        DEPOSIT_ARM_TELEOP)
-                /*
-                 * || (Hardware.manipulator
-                 * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-                 * && Hardware.manipulator
-                 * .getCurrentArmPosition() < PREP_FOR_HATCH_MAX)
-                 */)
+                        DEPOSIT_ARM_TELEOP))
                     {
                     depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
                     }
@@ -316,15 +321,7 @@ public boolean depositTeleopStateMachine ()
             else
                 {
                 if (Hardware.manipulator.moveArmToPosition(
-                        CARGO_ARM_POSITION)
-                /*
-                 * || (Hardware.manipulator
-                 * .getCurrentArmPosition() > CARGO_ARM_POSITION
-                 * + 3
-                 * && Hardware.manipulator
-                 * .getCurrentArmPosition() < CARGO_ARM_POSITION
-                 * - 3)
-                 */)
+                        CARGO_ARM_POSITION))
                     {
                     depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
                     }
@@ -333,7 +330,9 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.13))
+            if (Hardware.driveWithCamera.driveToTargetClose(.1)
+                    && Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() <= 22)
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -381,7 +380,7 @@ boolean hasStartedDeposit = false;
  */
 public boolean startTeleopDeposit (int heightLevel, boolean hasCargo)
 {
-    System.out.println("startd deposit: " + hasStartedDeposit);
+
     if (hasCargo == false)
         {
         depositHeighthatch = heightLevel;
