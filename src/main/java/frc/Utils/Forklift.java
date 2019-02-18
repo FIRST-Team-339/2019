@@ -513,11 +513,17 @@ public void update ()
 {
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
-    if (manipulator.isArmClearOfFrame() == false && this
-            .getForkliftHeight() < PAST_CONSIDER_OUT_OF_FRAME_HEIGHT)
+    if (manipulator.isArmClearOfFrame() == false)
         this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
     else
         this.currentLiftMaxHeight = MAX_HEIGHT;
+
+    if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
+        this.manipulator
+                .setMaxArmAngle(manipulator.MAX_ARM_POSITION_ADJUSTED);
+    else
+        this.manipulator
+                .setMaxArmAngle(manipulator.MAX_FORKLIFT_UP_ANGLE);
 
     // main switch statement for the forklift state machine
     switch (liftState)
@@ -694,7 +700,7 @@ private double forkliftTargetHeight = 0.0;
 // what speed to move at
 private double forkliftTargetSpeed = 0.0;
 
-private double currentLiftMinHeight = 1.0;
+private double currentLiftMinHeight = 0.0;
 
 // ===== Constants =====
 
@@ -753,7 +759,9 @@ public final static double CARGO_SHIP_HATCH = 40;// placeholder value
 
 private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
-private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 10;
+private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
+
+private double LIMIT_ARM_ANGLE_HEIGHT = 2;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

@@ -248,6 +248,9 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
+
     Hardware.climber.climbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
@@ -333,6 +336,7 @@ public static void periodic ()
             teleopDrive();
             }
 
+
     printStatements();
 
     // Hardware.lift.printDebugInfo();
@@ -347,7 +351,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    // coleTest();
+    coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -429,11 +433,16 @@ private static void coleTest ()
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
+    if (Hardware.testDeployButtonTemp.getCurrentValue())
+        Hardware.manipulator.deployArm();
 
-    SmartDashboard.putNumber("Delay Pot", Hardware.delayPot.get());
+    if (Hardware.testRetractTemp.getCurrentValue())
+        Hardware.manipulator.retractArm();
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+    if (Hardware.testSetManipulatorPosition.getCurrentValue())
+        Hardware.manipulator.moveArmToPosition(45, 1.0);
+
+
 
     // Manipulator
 

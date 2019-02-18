@@ -415,7 +415,6 @@ private static ReverseClimberState reverseClimbState = ReverseClimberState.STAND
 private static ReverseClimberState prevReverseState = ReverseClimberState.STANDBY;
 
 
-
 /**
  * method that encompasses the reverseClimb state machine, must be called in
  * order for reverseClimb() to work
