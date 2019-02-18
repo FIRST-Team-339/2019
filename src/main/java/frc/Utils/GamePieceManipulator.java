@@ -320,7 +320,10 @@ public boolean moveArmToPosition (double angle, double speed)
 
         if (deployTargetAngle < this.getCurrentArmPosition())
             {
-            deployTargetSpeed *= SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER;
+            this.deployTargetSpeed = this
+                    .calculateDesiredArmMotorVoltage(
+                            RequiredArmSpeedState.GO_UP,
+                            false);
             }
         else // if the forklift will move down
             {
@@ -518,45 +521,10 @@ public void deployUpdate ()
                 if (this.stayAtPositionInitIsReady == true)
                     {
 
-                    stayAtPositionTempSpeed = this.getArmMotorVoltage(
-                            RequiredArmSpeedState.HOLD, false);
-                    // double stayUpSpeed = 0.0;
+                    stayAtPositionTempSpeed = this
+                            .calculateDesiredArmMotorVoltage(
+                                    RequiredArmSpeedState.HOLD, false);
 
-                    // // stayAtPositionTempSpeed = this
-                    // // .getArmMotorVoltage(
-                    // // RequiredArmSpeedState.HOLD, false);
-
-                    // // stayUpSpeed is set to different things
-                    // // depending on whether or not the manipulator
-                    // // has cargo
-                    // this.hasCargo() == true)
-                    // stayUpSpeed = STAY_UP_WITH_CARGO;
-                    //
-                    // stayUpSpeed = STAY_UP_NO_PIECE;
-
-
-                    // // Scales the arm position based on the cosine
-                    // // of the angle, since this means angles closer
-                    // // to 0 (parallel to the floor) will get
-                    // // more power
-                    //
-                    // this.getCurrentArmPosition() < ARM_LEANING_BACK_ANGLE)
-                    // {
-                    // sitionTempSpeed = Math
-                    // yUpSpeed * Math.cos(
-                    // this.getCurrentArmPosition()))
-                    // +
-                    // DEFAULT_KEEP_ARM_UP_SPEED;
-
-                    // }
-                    // // If the arm angle is passed a certain point,
-                    // // do not scale using cosine since we do
-                    // // not want to give the arm a negative holding value
-                    // // (maybe, this was just what I thought while testing)
-                    //
-                    // {
-                    // stayAtPositionTempSpeed = -DEFAULT_KEEP_ARM_UP_SPEED;
-                    // }
                     this.stayAtPositionInitIsReady = false;
                     }
 
@@ -585,7 +553,8 @@ public void deployUpdate ()
 
 }
 
-private double getArmMotorVoltage (RequiredArmSpeedState state,
+private double calculateDesiredArmMotorVoltage (
+        RequiredArmSpeedState state,
         boolean isOverriding)
 {
     double speed = 0.0;
@@ -618,12 +587,12 @@ private double getArmMotorVoltage (RequiredArmSpeedState state,
                 // speed = ARM_GRAVITY_IN_FRAME_SPEED;
                 // else
                 if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
-                    speed = ARM_NO_GRAVITY_SPEED;
+                    speed = HOLD_ARM_NO_GRAVITY_SPEED;
                 else
                     if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
-                        speed = ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                        speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
                     else
-                        speed = ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+                        speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
                 }
             break;
         }
@@ -632,24 +601,40 @@ private double getArmMotorVoltage (RequiredArmSpeedState state,
 
 }
 
+// measured in degrees
 private double ARM_GRAVITY_IN_FRAME_ANGLE = 100;
 
-private double ARM_GRAVITY_IN_FRAME_SPEED = -.25
-        * MAX_DEPLOY_SPEED_2019;
+private double HOLD_ARM_GRAVITY_IN_FRAME_SPEED = -0.05;
 
 private double ARM_NO_GRAVITY_ANGLE = 80;
 
-private double ARM_NO_GRAVITY_SPEED = .1
-        * MAX_DEPLOY_SPEED_2019;
+private double HOLD_ARM_NO_GRAVITY_SPEED = .02;
 
 private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE = 45;
 
-private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .25
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = 0.05;
+
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.06;
+
+
+
+private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
         * MAX_DEPLOY_SPEED_2019;
 
-private double ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = .3
+private double GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .75
         * MAX_DEPLOY_SPEED_2019;
 
+private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 1.0
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED = -.5
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.4
+        * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.3
+        * MAX_DEPLOY_SPEED_2019;
 
 public enum RequiredArmSpeedState
     {

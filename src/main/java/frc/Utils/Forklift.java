@@ -106,6 +106,7 @@ public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
     SmartDashboard.putNumber("Arm Joystick", operator.getY());
+    // SmartDashboard.putString("wasAtMinOrMax", "" + wasAtMinOrMax);
     SmartDashboard.putString("wasAtMin", "" + wasAtMin);
     SmartDashboard.putString("wasAtMax", "" + wasAtMax);
 
@@ -153,12 +154,13 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
 
-        if (wasAtMin == true || wasAtMin == true || ((speed > 0
+        if (wasAtMin == true || wasAtMax == true || ((speed > 0
                 && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
                         .getForkliftHeight() < currentLiftMinHeight)))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
+
             // return so we exit the method and do not accidentally set
             // liftState to MOVE_JOY
             return;
@@ -179,8 +181,8 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
 // it was at the max height
 private boolean wasAtMin = false;
 
-// used to keep track if the forklift already stopped itself b/c
-// it was at the min height
+// // used to keep track if the forklift already stopped itself b/c
+// // it was at the min height
 private boolean wasAtMax = false;
 
 /**
