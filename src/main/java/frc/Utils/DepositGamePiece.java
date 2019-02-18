@@ -264,12 +264,6 @@ public boolean depositTeleopStateMachine ()
                 {
                 switch (depositHeightCargo)
                     {
-
-                    case 2:
-
-                        forkliftHeight = Forklift.TOP_ROCKET_HATCH;
-                        break;
-
                     case 0:
 
                         forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
@@ -277,6 +271,11 @@ public boolean depositTeleopStateMachine ()
                     case 1:
 
                         forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
+                        break;
+
+                    case 2:
+
+                        forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
                     case 3:
 
@@ -290,7 +289,8 @@ public boolean depositTeleopStateMachine ()
             break;
 
         case PREP_FORKLIFT:
-
+            System.out.println(
+                    "forklift height that we watnt: " + forkliftHeight);
             if (Hardware.lift.setLiftPosition(
                     forkliftHeight, FORK_SPEED))
                 {
@@ -477,7 +477,7 @@ public boolean overrideVision ()
 }
 
 //
-public double forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
+public double forkliftHeight = 0;
 
 // constants for prep
 
