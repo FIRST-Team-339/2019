@@ -106,19 +106,17 @@ public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
     SmartDashboard.putNumber("Arm Joystick", operator.getY());
-    // SmartDashboard.putString("wasAtMinOrMax", "" + wasAtMinOrMax);
-    SmartDashboard.putString("wasAtMin", "" + wasAtMin);
-    SmartDashboard.putString("wasAtMax", "" + wasAtMax);
+
+
+    // if (operator.getY() < Forklift.JOYSTICK_DEADBAND)
+    // wasAtMax = false;
+    // if (operator.getY() > -Forklift.JOYSTICK_DEADBAND)
+    // wasAtMin = false;
 
     // TODO scale the joystick as soon as the deaband is
     // exceeded?
     if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
         this.moveForkliftAtSpeed(operator.getY(), overrideButton);
-    else
-        {
-        wasAtMin = false;
-        wasAtMax = false;
-        }
 
 }
 
@@ -154,12 +152,20 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
 
-        if (wasAtMin == true || wasAtMax == true || ((speed > 0
+        if (/* wasAtMin == true || wasAtMax == true || */ ((speed > 0
                 && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
                         .getForkliftHeight() < currentLiftMinHeight)))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
+
+            // if (speed > 0
+            // && this.getForkliftHeight() > currentLiftMaxHeight)
+            // wasAtMax = true;
+
+            // if (speed < 0 && this
+            // .getForkliftHeight() < currentLiftMinHeight)
+            // wasAtMin = true;
 
             // return so we exit the method and do not accidentally set
             // liftState to MOVE_JOY
@@ -177,13 +183,13 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
     this.liftState = ForkliftState.MOVE_JOY;
 }
 
-// used to keep track if the forklift already stopped itself b/c
-// it was at the max height
-private boolean wasAtMin = false;
-
 // // used to keep track if the forklift already stopped itself b/c
-// // it was at the min height
-private boolean wasAtMax = false;
+// // it was at the max height
+// private boolean wasAtMin = false;
+
+// // // used to keep track if the forklift already stopped itself b/c
+// // // it was at the min height
+// private boolean wasAtMax = false;
 
 /**
  * Sets the maximum height for the lift. Use only for demo mode.
