@@ -55,10 +55,12 @@ public boolean depositHatch (boolean inAuto)
             if (Hardware.manipulator.moveArmToPosition(
                     105,
                     FORK_SPEED)
-                    || (Hardware.manipulator
-                            .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-                            && Hardware.manipulator
-                                    .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
+            /*
+             * || (Hardware.manipulator
+             * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
+             * && Hardware.manipulator
+             * .getCurrentArmPosition() < PREP_FOR_HATCH_MAX)
+             */)
 
                 depositHatchState = DepositHatchState.DEPOSIT_HATCH;
             break;
@@ -294,10 +296,12 @@ public boolean depositTeleopStateMachine ()
                     if (Hardware.manipulator.moveArmToPosition(
                             105,
                             1)
-                            || (Hardware.manipulator
-                                    .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
-                                    && Hardware.manipulator
-                                            .getCurrentArmPosition() < PREP_FOR_HATCH_MAX))
+                    /*
+                     * || (Hardware.manipulator
+                     * .getCurrentArmPosition() > PREP_FOR_HATCH_MIN
+                     * && Hardware.manipulator
+                     * .getCurrentArmPosition() < PREP_FOR_HATCH_MAX)
+                     */)
                         {
                         depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
                         }
@@ -463,6 +467,7 @@ public boolean overrideVision ()
     return false;
 }
 
+//
 public double forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
 
 // constants for prep

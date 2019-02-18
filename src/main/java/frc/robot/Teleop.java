@@ -346,7 +346,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -413,11 +413,11 @@ private static void ashleyTest ()
 private static void connerTest ()
 {
 
-    if (Hardware.rightOperator.getRawButton(8))
-        Hardware.axisCamera.setRelayValue(Value.kOn);
+    System.out.println("manipulator angle: "
+            + Hardware.manipulator.getCurrentArmPosition());
 
-    if (Hardware.rightOperator.getRawButton(9))
-        Hardware.axisCamera.setRelayValue(Value.kOff);
+    System.out.println(
+            "lift height: " + Hardware.lift.getForkliftHeight());
 
 
 } // end connerTest()
