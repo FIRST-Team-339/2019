@@ -692,7 +692,7 @@ public void setArmMotorSpeedManuallyForClimb (double speed)
         return;
         }
 
-    deployTargetSpeed = speed * MAX_DEPLOY_SPEED_2019;
+    deployTargetSpeed = speed;
 
     this.deployMovementState = DeployMovementState.SET_MANUALLY_FOR_CLIMB;
 }
@@ -812,6 +812,14 @@ public void resetStateMachine ()
 {
     this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
     this.intake.resetStateMachine();
+}
+
+/**
+ * @return returns the current deploy min angle
+ */
+public double getCurrentDeployMinAngle ()
+{
+    return currentDeployMinAngle;
 }
 
 // =========================================================================

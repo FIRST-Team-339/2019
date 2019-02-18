@@ -250,17 +250,17 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
+    // Hardware.manipulator.printDeployDebugInfo();
 
-    Hardware.climber.climbUpdate();
+    // Hardware.climber.climbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
     // vision=====================================
-    System.out.println(
-            "ring light relay: " + Hardware.axisCamera.getRelayValue());
+    // System.out.println(
+    // "ring light relay: " + Hardware.axisCamera.getRelayValue());
 
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 3 && Hardware.telopTimer.get() > .25)
@@ -334,13 +334,14 @@ public static void periodic ()
     // && Hardware.climbTwoButton.isOnCheckNow() == true)
     if (Hardware.leftDriver.getRawButton(6) == true)
         {
-        Hardware.climber.climb();
+        // Hardware.climber.climb();
+        Hardware.climber.newClimb();
         }
 
     if (Hardware.alignVisionButton.get() == false
             || Hardware.depositGamePiece.overrideVision())
         {
-        if (ClimbToLevelTwo.climbState == ClimbToLevelTwo.ClimberState.STANDBY)
+        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY)
             {
             teleopDrive();
             if (Hardware.solenoidButtonOne.isOnCheckNow() == true
@@ -360,8 +361,6 @@ public static void periodic ()
 
     printStatements();
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
 } // end Periodic()
 
 
@@ -373,7 +372,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    coleTest();
+    // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -384,21 +383,23 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    Hardware.climber.newClimbUpdate();
 
-    if (Hardware.armHackButton.isOnCheckNow() == true)
-        {
-        // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
-        Hardware.armMotor.set(-.6);
-        }
-    else
-        {
-        Hardware.armMotor.set(0.0);
-        }
 
-    if (Hardware.liftHackButton.get() == true)
-        {
-        Hardware.lift.setLiftPosition(0, 3);
-        }
+    // if (Hardware.armHackButton.isOnCheckNow() == true)
+    // {
+    // // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
+    // Hardware.armMotor.set(-.6);
+    // }
+    // else
+    // {
+    // Hardware.armMotor.set(0.0);
+    // }
+
+    // if (Hardware.liftHackButton.get() == true)
+    // {
+    // Hardware.lift.setLiftPosition(0, 2.5);
+    // }
 
     // Hardware.climber.reverseClimbUpdate();
     // if (Hardware.leftDriver.getRawButton(6) == true)

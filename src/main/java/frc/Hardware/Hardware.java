@@ -495,7 +495,7 @@ public static void commonInitialization ()
     // ====================================
     // Relay classes
     // ====================================
-    ringLightRelay = new Relay(3);
+    ringLightRelay = new Relay(0);
 
     // ====================================
     // Digital Inputs
@@ -676,21 +676,20 @@ public static void commonInitialization ()
 
     // ----------Left Driver---------------
 
+    solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
+
+    solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
+
+    climbOneButton = new JoystickButton(leftDriver, 11);
 
     // ----------Right Driver--------------
     resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 7);
 
-    climbOneButton = new JoystickButton(rightDriver, 11);
-
-    climbTwoButton = new JoystickButton(leftDriver, 11);
+    climbTwoButton = new JoystickButton(rightDriver, 11);
 
     cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
 
     // Momentary Switches
-
-    solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
-
-    solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
 
     // HaCkETy haCkS
