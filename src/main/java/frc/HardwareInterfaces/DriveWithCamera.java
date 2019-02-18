@@ -385,8 +385,10 @@ public boolean driveToTargetClose (double speed)
             // if we get close enought to the target and have to stop
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && Hardware.leftFrontDriveEncoder
-                            .getDistance() >= MIN_INCHES_CLOSE)
+                    && (Hardware.leftFrontDriveEncoder
+                            .getDistance() >= MIN_INCHES_CLOSE
+                            || Hardware.rightFrontDriveEncoder
+                                    .getDistance() >= MIN_INCHES_CLOSE))
 
                 {
                 state = DriveWithCameraState.STOP;
@@ -729,13 +731,13 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
-private final double DRIVE_CORRECTION_CLOSE = .07;
+private final double DRIVE_CORRECTION_CLOSE = .05;
 
 
 
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 25;
+private final double MIN_INCHES_CLOSE = 10;
 
 }

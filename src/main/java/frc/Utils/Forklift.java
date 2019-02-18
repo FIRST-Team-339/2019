@@ -745,20 +745,20 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 55; // placeholder value
+public final static double TOP_ROCKET_CARGO = 81; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 35;// placeholder value
+public final static double MIDDLE_ROCKET_CARGO = 55;// placeholder value
 
-public final static double LOWER_ROCKET_CARGO = 15;// placeholder value
+public final static double LOWER_ROCKET_CARGO = 27;// placeholder value
 
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 50;// placeholder value
+public final static double TOP_ROCKET_HATCH = 75;// placeholder value
 
-public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
+public final static double MIDDLE_ROCKET_HATCH = 47;// placeholder value
 
-public final static double LOWER_ROCKET_HATCH = 11;// placeholder value
+public final static double LOWER_ROCKET_HATCH = 12;// placeholder value
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 45;// placeholder value
