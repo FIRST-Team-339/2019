@@ -264,12 +264,6 @@ public boolean depositTeleopStateMachine ()
                 {
                 switch (depositHeightCargo)
                     {
-
-                    case 2:
-
-                        forkliftHeight = Forklift.TOP_ROCKET_HATCH;
-                        break;
-
                     case 0:
 
                         forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
@@ -277,6 +271,11 @@ public boolean depositTeleopStateMachine ()
                     case 1:
 
                         forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
+                        break;
+
+                    case 2:
+
+                        forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
                     case 3:
 
@@ -290,7 +289,8 @@ public boolean depositTeleopStateMachine ()
             break;
 
         case PREP_FORKLIFT:
-
+            System.out.println(
+                    "forklift height that we watnt: " + forkliftHeight);
             if (Hardware.lift.setLiftPosition(
                     forkliftHeight, FORK_SPEED))
                 {
@@ -339,7 +339,7 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.2))
+            if (Hardware.driveWithCamera.driveToTargetClose(.13))
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -477,7 +477,7 @@ public boolean overrideVision ()
 }
 
 //
-public double forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
+public double forkliftHeight = 0;
 
 // constants for prep
 
@@ -491,7 +491,7 @@ private static final int FORWARD_TO_DEPOSIT = 4;// TODO
 
 private static final double DEPOSIT_ARM_ANGLE_AUTO = 90;
 
-private static final double DEPOSIT_ARM_TELEOP = 20;
+private static final double DEPOSIT_ARM_TELEOP = 25;
 
 // cargo constants
 private static final double CARGO_ARM_POSITION = 90;
