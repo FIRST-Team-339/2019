@@ -1,15 +1,10 @@
 package frc.HardwareInterfaces;
 
 import frc.Hardware.Hardware;
-// import frc.HardwareInterfaces.Transmission.MecanumTransmission;
-// import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.HardwareInterfaces.Transmission.TransmissionBase;
-// import frc.HardwareInterfaces.Transmission.TransmissionBase.TransmissionType;
 import frc.Utils.drive.Drive;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.ImageType;
-// import frc.vision.VisionProcessor.ImageType;
-// import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -168,6 +163,8 @@ public DriveWithCamera (TransmissionBase transmission,
  *
  * Multiply the compensationFactor by speed to determine what values we are
  * sending to the motor controller
+ *
+ * Used a compensation factor to slow down as we get closer to the target
  *
  *
  * @param speed
@@ -347,7 +344,14 @@ public boolean driveToTarget (double speed)
     return false;
 }
 
-
+/**
+ * drives to target with speed and compensation lower to allow for aligning from
+ * close distances.
+ *
+ *
+ * @param speed
+ * @return true when completed
+ */
 public boolean driveToTargetClose (double speed)
 {
     System.out.println("vision state: " + state);
@@ -357,8 +361,8 @@ public boolean driveToTargetClose (double speed)
             Hardware.axisCamera.processImage();
             Hardware.axisCamera.setRelayValue(Value.kOn);
             Hardware.drive.resetEncoders();
-            // visionProcessor.saveImage(ImageType.RAW);
-            // visionProcessor.saveImage(ImageType.PROCESSED);
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
 
             double correctionValue = DRIVE_CORRECTION_CLOSE;
             double motorspeed = speed;
@@ -395,13 +399,6 @@ public boolean driveToTargetClose (double speed)
                 motorspeed = motorspeed * SLOW_MODIFIER;
                 correctionValue = correctionValue * SLOW_MODIFIER;
                 }
-
-
-
-
-            // adjust speed so that motors never reverse
-
-
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -412,12 +409,9 @@ public boolean driveToTargetClose (double speed)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
-
-
                 this.getTransmission().driveRaw(
                         motorspeed + correctionValue,
                         motorspeed - correctionValue);
-
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
@@ -459,7 +453,7 @@ public boolean driveToTargetClose (double speed)
  * vision targets on
  *
  * @author Conner McKevitt
- * @return
+ * @return Side
  */
 public Side getTargetSide ()
 {

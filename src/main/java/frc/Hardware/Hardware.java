@@ -594,7 +594,7 @@ public static void commonInitialization ()
 
     USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
-    // USBCamII = CameraServer.getInstance().startAutomaticCapture(1);//TODO
+    USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
 
     // **********************************************************
     // DRIVER STATION CLASSES

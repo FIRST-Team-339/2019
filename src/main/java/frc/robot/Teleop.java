@@ -57,6 +57,7 @@ public class Teleop
  */
 public static void init ()
 {
+    Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -254,6 +255,9 @@ public static void periodic ()
 
 
     // vision=====================================
+    System.out.println(
+            "ring light relay: " + Hardware.axisCamera.getRelayValue());
+
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 3 && Hardware.telopTimer.get() > .25)
         {
@@ -286,7 +290,7 @@ public static void periodic ()
         hasFinishedDeposit = false;
         Hardware.depositGamePiece.resetDepositTeleop();
         }
-    System.out.println("height level:" + visionHeight);
+
     // end vision==============================================
 
     // buttons
@@ -346,7 +350,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -412,13 +416,6 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-
-    System.out.println("manipulator angle: "
-            + Hardware.manipulator.getCurrentArmPosition());
-
-    System.out.println(
-            "lift height: " + Hardware.lift.getForkliftHeight());
-
 
 } // end connerTest()
 
@@ -979,7 +976,7 @@ public static void takePicture ()
         // ring light relay
         if (Hardware.takePictureTimer.get() >= 3.0)
             {
-            Hardware.ringLightRelay.set(Value.kOff);
+            // Hardware.ringLightRelay.set(Value.kOff);//TODO
             firstPress = true;
             pictureButton1 = false;
             pictureButton2 = false;
