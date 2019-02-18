@@ -333,7 +333,7 @@ public boolean driveToTarget (double speed)
         case STOP:
             // Hardware.autoTimer.stop();
 
-            Hardware.axisCamera.setRelayValue(Value.kOff);
+            // Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
             System.out.println("We are stopping");
@@ -385,20 +385,26 @@ public boolean driveToTargetClose (double speed)
             // if we get close enought to the target and have to stop
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && Hardware.leftFrontDriveEncoder
-                            .getDistance() >= MIN_INCHES_CLOSE)
+                    && (Hardware.leftFrontDriveEncoder
+                            .getDistance() >= MIN_INCHES_CLOSE
+                            || Hardware.rightFrontDriveEncoder
+                                    .getDistance() >= MIN_INCHES_CLOSE))
 
                 {
+                System.out.println("big dumb");
                 state = DriveWithCameraState.STOP;
                 }
 
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
-
-                {
-                motorspeed = motorspeed * SLOW_MODIFIER;
-                correctionValue = correctionValue * SLOW_MODIFIER;
-                }
+            /*
+             * if (this.frontUltrasonic
+             * .getDistanceFromNearestBumper() <=
+             * DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
+             *
+             * {
+             * motorspeed = motorspeed * SLOW_MODIFIER;
+             * correctionValue = correctionValue * SLOW_MODIFIER;
+             * }
+             */
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -409,9 +415,10 @@ public boolean driveToTargetClose (double speed)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
+                System.out.println("too right");
                 this.getTransmission().driveRaw(
                         motorspeed + correctionValue,
-                        motorspeed - correctionValue);
+                        motorspeed/* - correctionValue */);
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
@@ -421,9 +428,9 @@ public boolean driveToTargetClose (double speed)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
-
+                    System.out.println("too left");
                     this.getTransmission().driveRaw(
-                            motorspeed - correctionValue,
+                            motorspeed/* - correctionValue */,
                             motorspeed + correctionValue);
 
                     }
@@ -437,7 +444,7 @@ public boolean driveToTargetClose (double speed)
 
         default:
         case STOP:
-            Hardware.axisCamera.setRelayValue(Value.kOff);
+            // Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
 
@@ -712,13 +719,13 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 20;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 25;
+private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
 private final double SLOW_MODIFIER = .7;
 
@@ -728,7 +735,7 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
-private final double DRIVE_CORRECTION_CLOSE = .5;
+private final double DRIVE_CORRECTION_CLOSE = .05;
 
 
 

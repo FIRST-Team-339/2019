@@ -259,8 +259,6 @@ public static void periodic ()
 
 
     // vision=====================================
-    // System.out.println(
-    // "ring light relay: " + Hardware.axisCamera.getRelayValue());
 
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 3 && Hardware.telopTimer.get() > .25)
@@ -277,8 +275,7 @@ public static void periodic ()
         Hardware.telopTimer.start();
         }
     if (Hardware.alignVisionButton.isOnCheckNow() == true
-            && Hardware.depositGamePiece.overrideVision() == false
-            && hasFinishedDeposit == false)
+            && Hardware.depositGamePiece.overrideVision() == false)
         {
 
         if (Hardware.depositGamePiece
@@ -456,6 +453,16 @@ private static void ashleyTest ()
 private static void connerTest ()
 {
 
+    System.out.println("usingVision: "
+            + Hardware.alignVisionButton.isOnCheckNow());
+
+    System.out.println("level "
+            + visionHeight);
+
+    System.out.println("ultrasonic: "
+            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+
+
 } // end connerTest()
 
 private static void coleTest ()
@@ -465,14 +472,17 @@ private static void coleTest ()
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
-    if (Hardware.testDeployButtonTemp.getCurrentValue())
+    // if (Hardware.testDeployButtonTemp.getCurrentValue())
+    if (Hardware.leftDriver.getRawButton(3))
         Hardware.manipulator.deployArm();
 
-    if (Hardware.testRetractTemp.getCurrentValue())
+    // if (Hardware.rightOperator.getRawButton(5))
+    if (Hardware.leftDriver.getRawButton(4))
         Hardware.manipulator.retractArm();
 
-    if (Hardware.testSetManipulatorPosition.getCurrentValue())
-        Hardware.manipulator.moveArmToPosition(45, 1.0);
+    // if (Hardware.testSetManipulatorPosition.getCurrentValue())
+    if (Hardware.leftDriver.getRawButton(5))
+        Hardware.manipulator.moveArmToPosition(45);
 
 
 

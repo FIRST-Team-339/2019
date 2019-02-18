@@ -106,18 +106,17 @@ public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
     SmartDashboard.putNumber("Arm Joystick", operator.getY());
-    SmartDashboard.putString("wasAtMin", "" + wasAtMin);
-    SmartDashboard.putString("wasAtMax", "" + wasAtMax);
+
+
+    // if (operator.getY() < Forklift.JOYSTICK_DEADBAND)
+    // wasAtMax = false;
+    // if (operator.getY() > -Forklift.JOYSTICK_DEADBAND)
+    // wasAtMin = false;
 
     // TODO scale the joystick as soon as the deaband is
     // exceeded?
     if (Math.abs(operator.getY()) > Forklift.JOYSTICK_DEADBAND)
         this.moveForkliftAtSpeed(operator.getY(), overrideButton);
-    else
-        {
-        wasAtMin = false;
-        wasAtMax = false;
-        }
 
 }
 
@@ -153,12 +152,21 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
         // move down and below the min height, tell the forklift to stay where
         // it is
 
-        if (wasAtMin == true || wasAtMin == true || ((speed > 0
+        if (/* wasAtMin == true || wasAtMax == true || */ ((speed > 0
                 && this.getForkliftHeight() > currentLiftMaxHeight)
                 || (speed < 0 && this
                         .getForkliftHeight() < currentLiftMinHeight)))
             {
             this.liftState = ForkliftState.STAY_AT_POSITION;
+
+            // if (speed > 0
+            // && this.getForkliftHeight() > currentLiftMaxHeight)
+            // wasAtMax = true;
+
+            // if (speed < 0 && this
+            // .getForkliftHeight() < currentLiftMinHeight)
+            // wasAtMin = true;
+
             // return so we exit the method and do not accidentally set
             // liftState to MOVE_JOY
             return;
@@ -175,13 +183,13 @@ private void moveForkliftAtSpeed (double speed, boolean overrideButton)
     this.liftState = ForkliftState.MOVE_JOY;
 }
 
-// used to keep track if the forklift already stopped itself b/c
-// it was at the max height
-private boolean wasAtMin = false;
+// // used to keep track if the forklift already stopped itself b/c
+// // it was at the max height
+// private boolean wasAtMin = false;
 
-// used to keep track if the forklift already stopped itself b/c
-// it was at the min height
-private boolean wasAtMax = false;
+// // // used to keep track if the forklift already stopped itself b/c
+// // // it was at the min height
+// private boolean wasAtMax = false;
 
 /**
  * Sets the maximum height for the lift. Use only for demo mode.
@@ -708,7 +716,7 @@ private double currentLiftMinHeight = 0.0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.6;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.4;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
@@ -737,25 +745,25 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 55; // placeholder value
+public final static double TOP_ROCKET_CARGO = 56; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 35;// placeholder value
+public final static double MIDDLE_ROCKET_CARGO = 55;
 
-public final static double LOWER_ROCKET_CARGO = 15;// placeholder value
+public final static double LOWER_ROCKET_CARGO = 27;
 
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 50;// placeholder value
+public final static double TOP_ROCKET_HATCH = 56;// placeholder value
 
-public final static double MIDDLE_ROCKET_HATCH = 30;// placeholder value
+public final static double MIDDLE_ROCKET_HATCH = 51;
 
-public final static double LOWER_ROCKET_HATCH = 10;// placeholder value
+public final static double LOWER_ROCKET_HATCH = 12;
 
 // heights for the cargo and hatch openings on the cargo ship
-public final static double CARGO_SHIP_CARGO = 45;// placeholder value
+public final static double CARGO_SHIP_CARGO = 45;
 
-public final static double CARGO_SHIP_HATCH = 40;// placeholder value
+public final static double CARGO_SHIP_HATCH = 40;
 
 private static final double MAX_HEIGHT = 57; // placeholder value from last year
 

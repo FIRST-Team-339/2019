@@ -181,7 +181,7 @@ public static void periodic ()
         }
     Teleop.printStatements();
     // Hardware.lift.update();
-    System.out.println(autoState + "yeeeeeeeee");
+    // System.out.println(autoState + "yeeeeeeeee");
     switch (autoState)
         {
         case INIT:
@@ -330,7 +330,7 @@ private static void setPositionAndLevel ()
     // state of the levelSwitch
     // hardcoded, change when switch is fixed
     // autoLevel = Level.LEVEL_TWO;
-    System.out.println("woooooooooooo");
+    // System.out.println("woooooooooooo");
     // getting the level.
     if (Hardware.levelOneSwitch.isOn() == true)
         {
@@ -360,13 +360,14 @@ private static CrossAutoState cross = CrossAutoState.INIT;
 
 private static boolean crossAutoline ()
 {
+    System.out.println("CrossAutoState = " + cross);
     switch (cross)
         {
         case INIT:
             // initial state for crossing the autoline
             Hardware.leftFrontDriveEncoder.reset();
             Hardware.rightFrontDriveEncoder.reset();
-            System.out.println("Priming Nukes!");
+            // System.out.println("Initialising");
             switch (autoPosition)
                 {
                 case LEFT:
@@ -388,7 +389,7 @@ private static boolean crossAutoline ()
         case L2_DESCEND:
 
             // only run if going off of level 2
-            System.out.println("Manoevering, clear the datum!");
+            // System.out.println("Manoevering, clear the datum!");
             if (autoLevel == Level.LEVEL_TWO)
                 {
                 if (descendFromLevelTwo(usingAlignByWall,
@@ -412,7 +413,7 @@ private static boolean crossAutoline ()
             // 17 February 2019
             // Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.manipulator.printDeployDebugInfo();
-            System.out.println("*distant screaming*");
+            // System.out.println("*distant screaming*");
             Hardware.gyro.reset();
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
@@ -427,7 +428,7 @@ private static boolean crossAutoline ()
         case BRAKE:
             // don't ever use drive.stop to break - leaves you coasting for
             // another foot and a half.
-            System.out.println("Correcting Trajectory");
+            // System.out.println("SLAM THE BRAKES!");
             if ((Hardware.drive
                     .brake(BrakeType.AFTER_DRIVE)) == true)
                 {
@@ -440,8 +441,8 @@ private static boolean crossAutoline ()
             // end of crossing the autoline
             // TODO figure out how to make the below line WORK
             // HardwareInterfaces.Transmission.TransmissionBase.stop();
-            System.out.println(
-                    "You Have Nuked The Sun");
+            // System.out.println(
+            // "Finite Incatem");
             break;
         }
     return false;
@@ -644,7 +645,7 @@ private static boolean depositRocketHatch ()
 
             if (autoLevel == Level.LEVEL_TWO)
                 {
-                System.out.println("AAAAAAAAHHHHHHHHHHHHHHHHHHHH");
+                // System.out.println("AAAAAAAAHHHHHHHHHHHHHHHHHHHH");
                 if (descendFromLevelTwo(usingAlignByWall,
                         goingBackwards, turningAroundAfter) == true)
                     {
@@ -852,7 +853,7 @@ private static boolean depositRocketHatch ()
             switch (driveWithCameraStates)
                 {
                 case INIT:
-                    System.out.println("the dumb kidz code");
+                    // System.out.println("the dumb kidz code");
 
                     driveWithCameraStates = DriveWithCameraStates.DRIVE;
                     break;
@@ -968,8 +969,7 @@ private static boolean depositRocketHatch ()
                 }
             break;
         case FINISH:
-            System.out.println(
-                    "YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO IT WORKED");
+            // System.out.println("YOOOOOOOOOO IT WORKED");
             return true;
         default:
             break;
@@ -1278,8 +1278,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
             break;
 
         case FINISH:
-            System.out.println(
-                    "YEEt! XD");
+            // System.out.println("YEEt! XD");
             return true;
 
         default:
