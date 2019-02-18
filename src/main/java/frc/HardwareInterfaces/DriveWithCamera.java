@@ -393,7 +393,7 @@ public boolean driveToTargetClose (double speed)
                 }
 
             if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP)
+                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
 
                 {
                 motorspeed = motorspeed * SLOW_MODIFIER;
@@ -729,13 +729,13 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
-private final double DRIVE_CORRECTION_CLOSE = .15;
+private final double DRIVE_CORRECTION_CLOSE = .1;
 
 
 
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 5;
+private final double MIN_INCHES_CLOSE = 15;
 
 }

@@ -265,16 +265,16 @@ public boolean depositTeleopStateMachine ()
                 switch (depositHeightCargo)
                     {
 
-                    case 0:
+                    case 2:
 
                         forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
 
-                    case 1:
+                    case 0:
 
                         forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
                         break;
-                    case 2:
+                    case 1:
 
                         forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
                         break;
@@ -339,7 +339,7 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
 
-            if (Hardware.driveWithCamera.driveToTargetClose(.25))
+            if (Hardware.driveWithCamera.driveToTargetClose(.2))
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
