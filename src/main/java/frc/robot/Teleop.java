@@ -35,6 +35,7 @@ import frc.Hardware.Hardware;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.vision.VisionProcessor.ImageType;
 
@@ -57,6 +58,7 @@ public class Teleop
  */
 public static void init ()
 {
+    Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -257,6 +259,9 @@ public static void periodic ()
 
 
     // vision=====================================
+    System.out.println(
+            "ring light relay: " + Hardware.axisCamera.getRelayValue());
+
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 3 && Hardware.telopTimer.get() > .25)
         {
@@ -289,7 +294,7 @@ public static void periodic ()
         hasFinishedDeposit = false;
         Hardware.depositGamePiece.resetDepositTeleop();
         }
-    System.out.println("height level:" + visionHeight);
+
     // end vision==============================================
 
     // buttons
@@ -319,6 +324,8 @@ public static void periodic ()
 
     takePicture();
 
+
+
     // Hardware.telemetry.printToShuffleboard();
 
     // Hardware.telemetry.printToConsole();
@@ -329,17 +336,32 @@ public static void periodic ()
         {
         Hardware.climber.climb();
         }
-    else
-        if (Hardware.alignVisionButton.get() == false
-                || Hardware.depositGamePiece.overrideVision())
+
+    if (Hardware.alignVisionButton.get() == false
+            || Hardware.depositGamePiece.overrideVision())
+        {
+        if (ClimbToLevelTwo.climbState == ClimbToLevelTwo.ClimberState.STANDBY)
             {
             teleopDrive();
+            if (Hardware.solenoidButtonOne.isOnCheckNow() == true
+                    && Hardware.solenoidButtonTwo
+                            .isOnCheckNow() == true)
+                {
+                Hardware.driveSolenoid.setForward(false);
+                }
+            else
+                {
+                Hardware.driveSolenoid.setForward(true);
+                }
             }
+        }
+
 
 
     printStatements();
 
-    // Hardware.lift.printDebugInfo();
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
 } // end Periodic()
 
 
@@ -362,6 +384,22 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+
+    if (Hardware.armHackButton.isOnCheckNow() == true)
+        {
+        // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
+        Hardware.armMotor.set(-.6);
+        }
+    else
+        {
+        Hardware.armMotor.set(0.0);
+        }
+
+    if (Hardware.liftHackButton.get() == true)
+        {
+        Hardware.lift.setLiftPosition(0, 3);
+        }
+
     // Hardware.climber.reverseClimbUpdate();
     // if (Hardware.leftDriver.getRawButton(6) == true)
     // {
@@ -416,13 +454,6 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-
-    if (Hardware.rightOperator.getRawButton(8))
-        Hardware.axisCamera.setRelayValue(Value.kOn);
-
-    if (Hardware.rightOperator.getRawButton(9))
-        Hardware.axisCamera.setRelayValue(Value.kOff);
-
 
 } // end connerTest()
 
@@ -988,7 +1019,7 @@ public static void takePicture ()
         // ring light relay
         if (Hardware.takePictureTimer.get() >= 3.0)
             {
-            Hardware.ringLightRelay.set(Value.kOff);
+            // Hardware.ringLightRelay.set(Value.kOff);//TODO
             firstPress = true;
             pictureButton1 = false;
             pictureButton2 = false;
@@ -1036,17 +1067,17 @@ private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 // more than 3 unless the code is fixed. Thanks McGee.
 private static final int MAX_GEAR_NUMBERS = 2;
 
-private static final int FIRST_GEAR_NUMBER = 0;
+public static final int FIRST_GEAR_NUMBER = 0;
 
-private static final int SECOND_GEAR_NUMBER = 1;
+public static final int SECOND_GEAR_NUMBER = 1;
 
 private static final double FIRST_GEAR_RATIO_KILROY_XIX = .4;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XIX = .7;
 
-private static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
+public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 
-private static final double SECOND_GEAR_RATIO_KILROY_XX = .5;
+public static final double SECOND_GEAR_RATIO_KILROY_XX = .5;
 
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
@@ -1092,4 +1123,5 @@ private static boolean pictureButton2;
 
 public static boolean hasFinishedDeposit = false;
 
+public static boolean solenoidInit = false;
 } // end class
