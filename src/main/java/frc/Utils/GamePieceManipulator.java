@@ -91,8 +91,8 @@ private static enum DeployMovementDirection
 
 public void initiliazeConstantsFor2018 ()
 {
-    UP_JOYSTICK_SCALER = UP_JOYSTICK_SCALER_2018;
-    DOWN_JOYSTICK_SCALER = DOWN_JOYSTICK_SCALER_2018;
+    // UP_JOYSTICK_SCALER = UP_JOYSTICK_SCALER_2018;
+    // DOWN_JOYSTICK_SCALER = DOWN_JOYSTICK_SCALER_2018;
     SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER = UPWARD_ARM_MOVEMENT_SCALER_2018;
     SET_ANGLE_DOWNWARD_ARM_MOVEMENT_SCALER = DOWNWARD_ARM_MOVEMENT_SCALER_2018;
     MAX_ARM_POSITION_ADJUSTED = MAX_ARM_POSITION_ADJUSTED_2018;
@@ -187,7 +187,7 @@ public void moveArmByJoystick (Joystick armJoystick,
         // (i.e.: if we are just .01 outside the deadband, and
         // we sent the motor .01, then it might actually move
         // down due to gravity)
-        double speed = armJoystick.getY();
+        double joystickValue = armJoystick.getY();
 
         // if override button is pressed, ignore potentiometer/ encoder.
 
@@ -196,9 +196,9 @@ public void moveArmByJoystick (Joystick armJoystick,
         // arm to stay where it is
         if (overrideButton == false)
             {
-            if ((speed > 0
+            if ((joystickValue > 0
                     && this.getCurrentArmPosition() > currentDeployMaxAngle)
-                    || (speed < 0 && this
+                    || (joystickValue < 0 && this
                             .getCurrentArmPosition() < currentDeployMinAngle))
                 {
                 this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
@@ -209,10 +209,16 @@ public void moveArmByJoystick (Joystick armJoystick,
             }
 
         // scales the speed based on whether it is going up or down
-        if (speed > 0)
-            deployTargetSpeed = speed * UP_JOYSTICK_SCALER;
+        if (joystickValue > 0)
+            this.deployTargetSpeed = this
+                    .calculateDesiredArmMotorVoltage(
+                            RequiredArmSpeedState.GO_UP,
+                            overrideButton);
         else
-            deployTargetSpeed = speed * DOWN_JOYSTICK_SCALER;
+            this.deployTargetSpeed = this
+                    .calculateDesiredArmMotorVoltage(
+                            RequiredArmSpeedState.GO_DOWN,
+                            overrideButton);
 
         this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
 
@@ -312,33 +318,34 @@ public boolean moveArmToPosition (double angle, double speed)
     if (isSetDeployPositionInitReady == true)
         {
         this.deployTargetAngle = angle;
-
-        this.deployTargetSpeed = Math.abs(speed);
-
         deployDirection = DeployMovementDirection.NEUTRAL;
         this.deployMovementState = DeployMovementState.MOVING_TO_POSITION;
-
-        if (deployTargetAngle < this.getCurrentArmPosition())
-            {
-            this.deployTargetSpeed = this
-                    .calculateDesiredArmMotorVoltage(
-                            RequiredArmSpeedState.GO_UP,
-                            false);
-            }
-        else // if the forklift will move down
-            {
-            deployTargetSpeed *= SET_ANGLE_UPWARD_ARM_MOVEMENT_SCALER;
-            }
-
         isSetDeployPositionInitReady = false;
         }
 
     // return true is we are done moving, false is we are still going
     if (this.deployMovementState == DeployMovementState.STAY_AT_POSITION)
+
         {
         isSetDeployPositionInitReady = true;
         return true;
         }
+
+    if (deployTargetAngle < this.getCurrentArmPosition())
+        {
+        this.deployTargetSpeed = this
+                .calculateDesiredArmMotorVoltage(
+                        RequiredArmSpeedState.GO_UP,
+                        false);
+        }
+    else // if the manipulator will move down
+        {
+        this.deployTargetSpeed = this
+                .calculateDesiredArmMotorVoltage(
+                        RequiredArmSpeedState.GO_DOWN,
+                        false);
+        }
+
     return false;
 }
 
@@ -565,35 +572,56 @@ private double calculateDesiredArmMotorVoltage (
         case GO_UP:
             if (isOverriding == true)
                 {
-
+                speed = GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
                 }
             else
                 {
-
+                if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                    speed = GO_UP_HOLD_ARM_NO_GRAVITY_SPEED;
+                // else
+                // if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                // speed = GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                else
+                    speed = GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
                 }
             break;
         case GO_DOWN:
+            if (isOverriding == true)
+                {
+                speed = GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED;
+                }
+            else
+                {
+                if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                    speed = GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED;
+                else
+                    // if (currentArmAngle >
+                    // ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                    // speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                    // else
+                    speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+                }
             break;
         case FORCE_DOWN:
             break;
         case HOLD:
-            if (this.hasCargo() == true)
-                {
+            // if (this.hasCargo() == true)
+            // {
 
-                }
+            // }
+            // else
+            // {
+            // if (currentArmAngle > ARM_GRAVITY_IN_FRAME_ANGLE)
+            // speed = ARM_GRAVITY_IN_FRAME_SPEED;
+            // else
+            if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                speed = HOLD_ARM_NO_GRAVITY_SPEED;
             else
-                {
-                // if (currentArmAngle > ARM_GRAVITY_IN_FRAME_ANGLE)
-                // speed = ARM_GRAVITY_IN_FRAME_SPEED;
-                // else
-                if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
-                    speed = HOLD_ARM_NO_GRAVITY_SPEED;
+                if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                    speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
                 else
-                    if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
-                        speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
-                    else
-                        speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
-                }
+                    speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+            // }
             break;
         }
     SmartDashboard.putNumber("getArmMotorVoltage", speed);
@@ -615,7 +643,6 @@ private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE = 45;
 private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = 0.07;
 
 private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.08;
-
 
 
 private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
@@ -805,15 +832,15 @@ public void resetStateMachine ()
 
 // used to scale all relevant values for 2019 since the max speed
 // the 2019 deploy arm can go is .2
-private static double MAX_DEPLOY_SPEED_2019 = .2;
+private static double MAX_DEPLOY_SPEED_2019 = .4;
 
 // ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
-private static double UP_JOYSTICK_SCALER = 1.0 * MAX_DEPLOY_SPEED_2019;
+// private static double UP_JOYSTICK_SCALER = 1.0 * MAX_DEPLOY_SPEED_2019;
 
-private static double DOWN_JOYSTICK_SCALER = 0.5
-        * MAX_DEPLOY_SPEED_2019;
+// private static double DOWN_JOYSTICK_SCALER = 0.5
+// * MAX_DEPLOY_SPEED_2019;
 
 // ----- Joystick Constants 2018 -----
 

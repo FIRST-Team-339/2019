@@ -663,7 +663,6 @@ public static void commonInitialization ()
             7);
 
     // ----------Left Driver---------------
-    resetForkliftEncoderButton1 = new JoystickButton(leftDriver, 7);
 
     testDeployButtonTemp = new QuickSwitch(leftDriver,
             8);
@@ -674,11 +673,10 @@ public static void commonInitialization ()
     testSetManipulatorPosition = new QuickSwitch(leftDriver,
             10);
 
-    // ----------Left Driver---------------
-
-
     // ----------Right Driver--------------
-    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 7);
+    resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
+
+    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
 
     climbOneButton = new JoystickButton(rightDriver, 11);
 
