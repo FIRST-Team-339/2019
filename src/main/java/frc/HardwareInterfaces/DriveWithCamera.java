@@ -174,7 +174,7 @@ public DriveWithCamera (TransmissionBase transmission,
  */
 public boolean driveToTarget (double speed)
 {
-    System.out.println("vision state: " + state);
+    // System.out.println("vision state: " + state);
     switch (state)
         {
         case INIT:
@@ -198,9 +198,9 @@ public boolean driveToTarget (double speed)
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             // adjust speed based on distance
-            System.out.println("ultrasonic distance: "
-                    + this.frontUltrasonic
-                            .getDistanceFromNearestBumper());
+            // System.out.println("ultrasonic distance: "
+            // + this.frontUltrasonic
+            // .getDistanceFromNearestBumper());
 
             // if we lose camera before aligned
             if (this.frontUltrasonic
@@ -242,7 +242,7 @@ public boolean driveToTarget (double speed)
                     {
                     slowAmount = 1;
                     }
-            System.out.println("slow amount: " + slowAmount);
+            // System.out.println("slow amount: " + slowAmount);
 
             motorspeed = speed * slowAmount;
 
@@ -256,10 +256,10 @@ public boolean driveToTarget (double speed)
                 slowestSpeed = motorspeed/* - DRIVE_CORRECTION */;
                 }
 
-            System.out.println("right speed: "
-                    + Hardware.rightFrontCANMotor.get());
-            System.out.println("left speed: "
-                    + Hardware.leftFrontCANMotor.get());
+            // System.out.println("right speed: "
+            // + Hardware.rightFrontCANMotor.get());
+            // System.out.println("left speed: "
+            // + Hardware.leftFrontCANMotor.get());
 
 
 
@@ -292,15 +292,15 @@ public boolean driveToTarget (double speed)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
-                    System.out.println("WE ARE TOO RIGHT");
+                    // System.out.println("WE ARE TOO RIGHT");
                     this.getTransmission().driveRaw(slowestSpeed,
                             motorspeed + correctionValue);
 
                     }
                 else
                     {
-                    System.out.println(
-                            "Driving straight center of blobs");
+                    // System.out.println(
+                    // "Driving straight center of blobs");
                     driveStraight(motorspeed, 2, true);
                     }
 
@@ -336,7 +336,7 @@ public boolean driveToTarget (double speed)
             // Hardware.axisCamera.setRelayValue(Value.kOff);
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
-            System.out.println("We are stopping");
+            // System.out.println("We are stopping");
             this.getTransmission().driveRaw(0, 0);
             state = DriveWithCameraState.INIT;
             return true;
@@ -663,8 +663,8 @@ public double getCameraCenterValue ()
                 + visionProcessor.getNthSizeBlob(1).center.x) / 2;
 
 
-        System.out.println("TWO BLOBS");
-        System.out.println("blob center: " + center);
+        // System.out.println("TWO BLOBS");
+        // System.out.println("blob center: " + center);
         }
     // if we only can detect one blob, the center is equal to the center x
     // position of the blob
@@ -672,8 +672,8 @@ public double getCameraCenterValue ()
         if (visionProcessor.getParticleReports().length == 1)
             {
             center = visionProcessor.getNthSizeBlob(0).center.x;
-            System.out.println("ONE BLOBS");
-            System.out.println("blob center: " + center);
+            // System.out.println("ONE BLOBS");
+            // System.out.println("blob center: " + center);
             }
         // if we don't have any blobs, set the center equal to the constanct
         // center,
@@ -681,7 +681,7 @@ public double getCameraCenterValue ()
         else
             {
             center = SWITCH_CAMERA_CENTER;
-            System.out.println("NO BLOBS");
+            // System.out.println("NO BLOBS");
             }
     return center;
 }
