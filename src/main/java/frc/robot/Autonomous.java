@@ -36,7 +36,6 @@ import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
 
@@ -411,7 +410,6 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO closely monitor merge tomorrow
             // 17 February 2019
             // Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.manipulator.printDeployDebugInfo();
@@ -1405,7 +1403,7 @@ public static final double CAMERA_TURN_SPEED = .5;
 public static final double CAMERA_ACCELERATION = .2;
 
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .35;
 
 public static final int TURN_FOR_CAMERA_DEGREES = 45;
 

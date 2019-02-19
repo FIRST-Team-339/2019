@@ -247,7 +247,7 @@ public boolean driveToTarget (double speed)
             motorspeed = speed * slowAmount;
 
             // adjust speed so that motors never reverse
-            if (motorspeed - DRIVE_CORRECTION <= 0) // TODO
+            if (motorspeed - DRIVE_CORRECTION <= 0)
                 {
                 slowestSpeed = 0.05;
                 }
@@ -514,7 +514,7 @@ private enum DriveWithCameraState
  */
 
 
-private DriveWithCameraState jankyState = DriveWithCameraState.INIT;
+
 
 /**
  * Method to test a new way to align with vision
@@ -716,7 +716,7 @@ private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
+// private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
 private final double SLOW_MODIFIER = .7;
 
