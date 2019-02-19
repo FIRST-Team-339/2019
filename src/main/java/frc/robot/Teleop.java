@@ -277,8 +277,6 @@ public static void periodic ()
         Hardware.telopTimer.start();
         }
 
-    System.out.println(
-            "vision button is on:" + Hardware.alignVisionButton.isOn());
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
