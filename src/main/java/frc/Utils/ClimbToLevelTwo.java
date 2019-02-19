@@ -181,6 +181,7 @@ public void newClimbUpdate ()
             Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
                     1.0);
             driveTimerInit();
+            this.lift.setLiftPosition(0.0);
             newClimbState = NewClimberState.PREP_ARM;
             break;
 
@@ -342,9 +343,11 @@ public void newClimbUpdate ()
             Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
                     Teleop.SECOND_GEAR_RATIO_KILROY_XX);
             this.stop();
+            newClimbState = NewClimberState.FINISH;
             break;
         case FINISH:
             System.out.println("WE'VE CLIMBED MOUNT EVEREST!!!");
+            newClimbState = NewClimberState.STANDBY;
             break;
         // welp heres a default just in case
         default:
@@ -1302,6 +1305,7 @@ public void finishEarly ()
     // sets state to STOP
     finishedEarly = true;
     climbState = ClimberState.STOP;
+    newClimbState = NewClimberState.STOP;
 }
 
 
@@ -1387,7 +1391,7 @@ public static boolean reverseClimb = false;
 
 
 // new climb stuff
-public static double SPEED_BACK_UP_TIL_BUMPERS_HIT = -.3;
+public static double SPEED_BACK_UP_TIL_BUMPERS_HIT = -.25;
 
 public static double TIME_TO_BACK_UP_TIL_BUMPERS_HIT = .25;
 // --------------------------------

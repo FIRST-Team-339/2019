@@ -252,9 +252,6 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    // Hardware.lift.printDebugInfo();
-    // Hardware.manipulator.printDeployDebugInfo();
-
     // Hardware.climber.climbUpdate();
 
     Hardware.climber.newClimbUpdate();
@@ -327,9 +324,9 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
-    // if (Hardware.climbOneButton.isOnCheckNow() == true
-    // && Hardware.climbTwoButton.isOnCheckNow() == true)
-    if (Hardware.leftDriver.getRawButton(6) == true)
+    if (Hardware.climbOneButton.get() == true
+            && Hardware.climbTwoButton.get() == true)
+    // if (Hardware.leftDriver.getRawButton(6) == true)
         {
         // Hardware.climber.climb();
         Hardware.climber.newClimb();
@@ -472,11 +469,14 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
 
-
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
 
