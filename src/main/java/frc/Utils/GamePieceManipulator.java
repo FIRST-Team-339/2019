@@ -431,6 +431,31 @@ public void setMaxArmAngle (double angle)
 }
 
 /**
+ *
+ */
+public void setAngleForForkliftNextPostion (double angle)
+{
+    double tempCurrentAngle = this.getCurrentArmPosition();
+
+    if (Math.abs(tempCurrentAngle
+            - angle) > SET_ANGLE_DEADBAND)
+        {
+
+        }
+
+
+
+
+}
+
+private final double SET_ANGLE_DEADBAND = 3.0;
+
+private final double NEXT_NEXT_ANGLE_ADJUSTMENT = 10;
+
+private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 5;
+
+
+/**
  * Update method for the deploy state machine. Is what actually tells
  * the armMotor what to do based off the current deployMovementState.
  * This method needs to be called in Teleop or Autonomous periodic

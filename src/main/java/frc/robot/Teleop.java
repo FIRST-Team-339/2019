@@ -250,14 +250,11 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    // Hardware.lift.printDebugInfo();
-    // Hardware.manipulator.printDeployDebugInfo();
-
     // Hardware.climber.climbUpdate();
 
     Hardware.climber.newClimbUpdate();
 
-    Hardware.depositGamePiece.depositTeleopStateMachine();
+    // Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
     // vision=====================================
@@ -472,11 +469,14 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
 
-
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
 
