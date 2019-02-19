@@ -149,7 +149,7 @@ public ClimbToLevelTwo (DoubleSolenoid driveSolenoid,
 // state of the climb state machine
 public static enum NewClimberState
     {
-    STANDBY, START_CLIMB, BACK_UP_TIL_BUMPERS_HIT, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, BACK_UP_TIL_REAR_WHEELS_HIT, DELAY_THREE, RETRACT_WHEELS, DELAY_FOUR, BACK_UP_TIL_MID_WHEELS_ON_PLATFORM, DELAY_FIVE, POWERED_ARM_DOWN, DELAY_SIX, DRIVE_BACKWARDS_ONTO_PLATFORM, DELAY_SEVEN, RAISE_ARM, STOP, FINISH
+    STANDBY, START_CLIMB, PREP_ARM, BACK_UP_TIL_BUMPERS_HIT, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, BACK_UP_TIL_REAR_WHEELS_HIT, DELAY_THREE, RETRACT_WHEELS, DELAY_FOUR, BACK_UP_TIL_MID_WHEELS_ON_PLATFORM, DELAY_FIVE, POWERED_ARM_DOWN, DELAY_SIX, DRIVE_BACKWARDS_ONTO_PLATFORM, DELAY_SEVEN, RAISE_ARM, STOP, FINISH
     }
 
 
@@ -163,7 +163,7 @@ public void newClimb ()
 
 public void newClimbUpdate ()
 {
-    System.out.println(newClimbState);
+    // System.out.println(newClimbState);
 
     switch (newClimbState)
         {
@@ -181,7 +181,14 @@ public void newClimbUpdate ()
             Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
                     1.0);
             driveTimerInit();
-            newClimbState = NewClimberState.BACK_UP_TIL_BUMPERS_HIT;
+            newClimbState = NewClimberState.PREP_ARM;
+            break;
+
+        case PREP_ARM:
+            if (this.lowerArm() == true)
+                {
+                newClimbState = NewClimberState.BACK_UP_TIL_BUMPERS_HIT;
+                }
             break;
 
         case BACK_UP_TIL_BUMPERS_HIT:
@@ -353,7 +360,7 @@ public void newClimbUpdate ()
 // will not work
 public void climbUpdate ()
 {
-    System.out.println(climbState);
+    // System.out.println(climbState);
 
     switch (climbState)
         {
@@ -640,7 +647,7 @@ private static ReverseClimberState prevReverseState = ReverseClimberState.STANDB
 // must reorganize @ANE
 public void reverseClimbUpdate ()
 {
-    System.out.println(reverseClimbState);
+    // System.out.println(reverseClimbState);
 
     switch (reverseClimbState)
         {
@@ -885,8 +892,8 @@ public void reverseClimbUpdate ()
 
         case FINISH:
             this.stop();
-            System.out.println(
-                    "WE HAVE FINISHED WHAT WE WANTED TO OF REVERSE CLIMB");
+            // System.out.println(
+            // "WE HAVE FINISHED WHAT WE WANTED TO OF REVERSE CLIMB");
             break;
 
 
@@ -919,7 +926,7 @@ private boolean lowerForkliftToPosition ()
     // liftMotor.set(LOWER_LIFT_SPEED);
     // } else {
     // liftMotor.set(0.0);
-    System.out.println("Trying to lower forklift to position ");
+    // System.out.println("Trying to lower forklift to position ");
     if (this.lift.setLiftPosition(LIFT_HEIGHT_TO_START_CLIMB) == true)
         {
         return true;
@@ -935,7 +942,7 @@ private boolean lowerArm ()
 {
     // checks the position of the arm and if it has not gone far enough, sets
     // the motor to the sped to lower the arm
-    System.out.println("Trying to lower arm");
+    // System.out.println("Trying to lower arm");
     // if (this.armSensor.get() <= LOWERED_ARM_POSITION)
     // {
     // armMotor.set(LOWER_ARM_SPEED);
@@ -965,7 +972,7 @@ private void holdArmToSupportDrive ()
  */
 private boolean lowerForkliftCompletely ()
 {
-    System.out.println("Trying to lower forklift completely");
+    // System.out.println("Trying to lower forklift completely");
     // if (liftEncoder.get() >= MIN_LIFT_HEIGHT_TO_CLIMB) {
     // liftMotor.set(LOWER_LIFT_SPEED);
     // } else {
@@ -987,7 +994,7 @@ private boolean lowerForkliftCompletely ()
  */
 private boolean deployBackWheels ()
 {
-    System.out.println("Trying to deploy back wheels");
+    // System.out.println("Trying to deploy back wheels");
     // driveSolenoid.setForward(LOWER_WHEELS_POSITION);
     Hardware.driveSolenoid.setForward(false);
     // sets test solnoid to a position
@@ -1004,7 +1011,7 @@ private boolean deployBackWheels ()
 private boolean driveForward ()
 {
     // drive forward a set distance
-    System.out.println("Trying to drive forward");
+    // System.out.println("Trying to drive forward");
     if (drive.driveStraightInches(DISTANCE_TO_DRIVE_B4_RETRACTION_NORM,
             SPEED_TO_DRIVE_UP, ACCELERATION_TIME, false) == true)
         {
@@ -1022,7 +1029,7 @@ private boolean raiseArm ()
 {
     // checks to see if the arm has gone far enough, if not it sets th ar to the
     // raise arm speed
-    System.out.println("Trying to raise arm");
+    // System.out.println("Trying to raise arm");
     // if (armSensor.get() >= RAISED_ARM_POSITION)
     // {
     // armMotor.set(RAISE_ARM_SPEED);
@@ -1048,7 +1055,7 @@ private boolean raiseArm ()
 private boolean retractWheels ()
 {
     // sets the solenoid to the correct position
-    System.out.println("Trying to retract wheels");
+    // System.out.println("Trying to retract wheels");
     // driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
     Hardware.driveSolenoid.setForward(true);
     // testSolenoid.set(Value.kForward);
