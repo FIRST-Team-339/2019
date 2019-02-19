@@ -644,9 +644,9 @@ public void update ()
             // print out we reached the default case (which we shouldn't
             // have),
             // then fall through to STAY_AT_POSITION
-            System.out.println(
-                    "Reached default in the liftState switch in "
-                            + "forkliftUpdate in Forklift");
+            // System.out.println(
+            // "Reached default in the liftState switch in "
+            // + "forkliftUpdate in Forklift");
         case STAY_AT_POSITION:
             // If the manipulator has a cargo piece, send the appropriate
             // value to the motor so the forklift does not slide down due to
@@ -832,7 +832,7 @@ private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double LIMIT_ARM_ANGLE_HEIGHT = 2;
+private double LIMIT_ARM_ANGLE_HEIGHT = 1;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

@@ -250,8 +250,8 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
+    // Hardware.manipulator.printDeployDebugInfo();
 
     // Hardware.climber.climbUpdate();
 
