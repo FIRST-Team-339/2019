@@ -353,6 +353,7 @@ public void setToNextHigherPreset (double forkliftSpeed,
     if (goToHeightButton.getCurrentValue() == true)
         {
         double position = -1;
+        double angle = -1;
         double forkliftHeight = this.getForkliftHeight()
                 + NEXT_HIGHER_POSITION_DEADBAND;
 
@@ -365,16 +366,19 @@ public void setToNextHigherPreset (double forkliftSpeed,
             if (forkliftHeight < LOWER_ROCKET_CARGO)
                 {
                 position = LOWER_ROCKET_CARGO;
+                angle = LOWER_ROCKET_CARGO_ANGLE;
                 }
             else
                 if (forkliftHeight < MIDDLE_ROCKET_CARGO)
                     {
                     position = MIDDLE_ROCKET_CARGO;
+                    angle = MIDDLE_ROCKET_CARGO_ANGLE;
                     }
                 else
                     if (forkliftHeight < TOP_ROCKET_CARGO)
                         {
                         position = TOP_ROCKET_CARGO;
+                        position = TOP_ROCKET_CARGO_ANGLE;
                         }
             }
         else
@@ -384,20 +388,23 @@ public void setToNextHigherPreset (double forkliftSpeed,
             if (forkliftHeight < LOWER_ROCKET_HATCH)
                 {
                 position = LOWER_ROCKET_HATCH;
+                position = LOWER_ROCKET_HATCH_ANGLE;
                 }
             else
                 if (forkliftHeight < MIDDLE_ROCKET_HATCH)
                     {
                     position = MIDDLE_ROCKET_HATCH;
+                    position = MIDDLE_ROCKET_HATCH_ANGLE;
                     }
                 else
                     if (forkliftHeight < TOP_ROCKET_HATCH)
                         {
                         position = TOP_ROCKET_HATCH;
+                        position = TOP_ROCKET_HATCH_ANGLE;
                         }
             }
 
-        System.out.println("Next Highest Position: " + position);
+
         // if position was set to one of the prest heights
         // (if it was not it would still be -1)
         if (position >= 0.0)
@@ -406,6 +413,10 @@ public void setToNextHigherPreset (double forkliftSpeed,
             // position
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
+            if (angle >= 0.0)
+                {
+                this.manipulator.moveArmToPosition(angle);
+                }
             }
         }
 }
@@ -443,9 +454,12 @@ private final double NEXT_HIGHER_POSITION_DEADBAND = 1;
 public void setToNextLowerPreset (double forkliftSpeed,
         QuickSwitch goToHeightButton, boolean goingToCargoButtonValue)
 {
+
+
     if (goToHeightButton.getCurrentValue() == true)
         {
         double position = -1;
+        double angle = -1;
         double forkliftHeight = this.getForkliftHeight()
                 - NEXT_LOWER_POSITION_DEADBAND;
 
@@ -458,16 +472,19 @@ public void setToNextLowerPreset (double forkliftSpeed,
             if (forkliftHeight > TOP_ROCKET_CARGO)
                 {
                 position = TOP_ROCKET_CARGO;
+                angle = TOP_ROCKET_CARGO_ANGLE;
                 }
             else
                 if (forkliftHeight > MIDDLE_ROCKET_CARGO)
                     {
                     position = MIDDLE_ROCKET_CARGO;
+                    angle = MIDDLE_ROCKET_CARGO_ANGLE;
                     }
                 else
                     if (forkliftHeight > LOWER_ROCKET_CARGO)
                         {
                         position = LOWER_ROCKET_CARGO;
+                        angle = LOWER_ROCKET_CARGO_ANGLE;
                         }
             }
         else
@@ -477,20 +494,22 @@ public void setToNextLowerPreset (double forkliftSpeed,
             if (forkliftHeight > TOP_ROCKET_HATCH)
                 {
                 position = TOP_ROCKET_HATCH;
+                angle = TOP_ROCKET_HATCH_ANGLE;
                 }
             else
                 if (forkliftHeight > MIDDLE_ROCKET_HATCH)
                     {
                     position = MIDDLE_ROCKET_HATCH;
+                    angle = MIDDLE_ROCKET_HATCH_ANGLE;
                     }
                 else
                     if (forkliftHeight > LOWER_ROCKET_HATCH)
                         {
                         position = LOWER_ROCKET_HATCH;
+                        angle = LOWER_ROCKET_HATCH_ANGLE;
                         }
             }
 
-        System.out.println("Next Lowest Position: " + position);
         // if position was set to one of the prest heights
         // (if it was not it would still be -1)
         if (position >= 0.0)
@@ -499,9 +518,15 @@ public void setToNextLowerPreset (double forkliftSpeed,
             // position
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
+            if (angle >= 0.0)
+                {
+                this.manipulator.moveArmToPosition(angle);
+                }
             }
         }
 }
+
+
 
 // # of feet that the forklift can be off of the next lowest position to
 // count as already being there
@@ -716,7 +741,7 @@ private double currentLiftMinHeight = 0.0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.4;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.6;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
@@ -745,25 +770,41 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 56; // placeholder value
+public final static double TOP_ROCKET_CARGO = 57; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 35;
+public final static double MIDDLE_ROCKET_CARGO = 36.5;
 
-public final static double LOWER_ROCKET_CARGO = 27;
+public final static double LOWER_ROCKET_CARGO = 8.5;
 
+public final static double TOP_ROCKET_CARGO_ANGLE = 80; // placeholder value
+
+public final static double MIDDLE_ROCKET_CARGO_ANGLE = 60;
+
+public final static double LOWER_ROCKET_CARGO_ANGLE = 60;
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 56;// placeholder value
+public final static double TOP_ROCKET_HATCH = 57;// placeholder value
 
-public final static double MIDDLE_ROCKET_HATCH = 51;
+public final static double MIDDLE_ROCKET_HATCH = 35;
 
-public final static double LOWER_ROCKET_HATCH = 12;
+public final static double LOWER_ROCKET_HATCH = 10;
+
+public final static double TOP_ROCKET_HATCH_ANGLE = 40;// placeholder value
+
+public final static double MIDDLE_ROCKET_HATCH_ANGLE = 20;
+
+public final static double LOWER_ROCKET_HATCH_ANGLE = 20;
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 45;
 
 public final static double CARGO_SHIP_HATCH = 40;
+
+public final static double CARGO_SHIP_CARGO_ANGLE = 45;
+
+public final static double CARGO_SHIP_HATCH_ANGLE = 40;
+
 
 private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
