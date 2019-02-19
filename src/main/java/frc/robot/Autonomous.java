@@ -420,7 +420,8 @@ private static boolean crossAutoline ()
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
-                    DRIVE_SPEED, ACCELERATION_TIME, true) == true)
+                    LEAVE_LEVEL_ONE_SPEED, ACCELERATION_TIME,
+                    true) == true)
                 {
 
                 cross = CrossAutoState.BRAKE;
