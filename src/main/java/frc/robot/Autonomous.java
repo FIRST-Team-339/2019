@@ -1447,7 +1447,7 @@ public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .45; // @ANE
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .35; // @ANE
 
 public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
 
