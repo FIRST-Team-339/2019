@@ -454,7 +454,7 @@ private static boolean crossAutoline ()
 // depositCargoHatch() goes straight ahead to the front end of the cargo ship.
 private static enum DepositCargoHatchState
     {
-    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_CARGO, FINISHED
+    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_HATCH, DRIVE_2_CENTER, FINISHED
     }
 
 private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
@@ -496,9 +496,24 @@ private static boolean depositCargoHatch ()
                     depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE;
                     }
                 else
-                    {
-                    depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE;
-                    }
+                    if (autoPosition == Position.LEFT)
+                        {
+                        depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE;
+                        }
+                    else
+                        {
+                        depositCargoHatchState = DepositCargoHatchState.DRIVE_2_CENTER;
+
+                        }
+                }
+            break;
+        case DRIVE_2_CENTER:
+            Hardware.depositGamePiece.prepToDepositHatch();
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_SHIP_CENTER, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
             break;
         case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE: // first turn, when
@@ -550,7 +565,7 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE:
-            if (Hardware.drive.turnDegrees(-TURN_LEFT90,
+            if (Hardware.drive.turnDegrees(TURN_LEFT90,
                     TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
@@ -580,7 +595,7 @@ private static boolean depositCargoHatch ()
                 {
                 // System.out
                 // .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
 
 
@@ -594,13 +609,13 @@ private static boolean depositCargoHatch ()
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                 {
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
 
 
 
             break;
-        case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
+        case STRAIGHT_DEPOSIT_DEPOSIT_HATCH:
             // System.out.println("Deposit");
             if (Hardware.depositGamePiece.depositHatch(true))
                 {
@@ -863,8 +878,8 @@ private static boolean depositRocketHatch ()
                     break;
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
-                            /* DISTANCE_TO_CROSS_AUTOLINE_CAMERA */2,
-                            .6,
+                            DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
+                            SPEED_TO_DRIVE_OFF_PLATFORM,
                             ACCELERATION_TIME, USING_GYRO))
                         {
 
@@ -1323,7 +1338,7 @@ private static boolean usingAlignByWall = true;
 private static boolean usingVision = true;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = false;
+private static boolean usingVisionOnStraight = true;
 
 private static boolean descendInit = false;
 
@@ -1382,7 +1397,7 @@ public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
 
 // straight cargo hatch constants
-
+public static final double DISTANCE_TO_SHIP_CENTER = 105;
 
 // rocket hatch contstants- no vision
 
