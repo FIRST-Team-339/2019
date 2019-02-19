@@ -420,7 +420,8 @@ private static boolean crossAutoline ()
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
-                    DRIVE_SPEED, ACCELERATION_TIME, true) == true)
+                    LEAVE_LEVEL_ONE_SPEED, ACCELERATION_TIME,
+                    true) == true)
                 {
 
                 cross = CrossAutoState.BRAKE;
@@ -486,7 +487,7 @@ private static boolean depositCargoHatch ()
 
         case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
             if (Hardware.drive.driveStraightInches(
-                    60, DRIVE_SPEED,
+                    60, LEAVE_LEVEL_ONE_SPEED/* DRIVE_SPEED */,
                     ACCELERATION_TIME,
                     USING_GYRO))
                 {
