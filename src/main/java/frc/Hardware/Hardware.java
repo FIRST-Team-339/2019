@@ -326,6 +326,8 @@ public static JoystickButton visionHeightDownButton = null;
 
 public static JoystickButton visionHeightUpButton = null;
 
+public static JoystickButton upshiftButton = null;
+
 // ----- Right Operator -----
 
 public static JoystickButton pictureButtonOne = null;
@@ -341,6 +343,8 @@ public static QuickSwitch nextHigherLiftHeightButton = null;
 public static QuickSwitch nextLowerLiftHeightButton = null;
 
 public static MomentarySwitch alignVisionButton = null;
+
+public static JoystickButton downshiftButton = null;
 
 // ------------------------------------
 // Momentary Switches
@@ -673,6 +677,8 @@ public static void commonInitialization ()
     testSetManipulatorPosition = new QuickSwitch(leftDriver,
             10);
 
+    upshiftButton = new JoystickButton(leftDriver, 3);
+
     // ----------Right Driver--------------
     resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
 
@@ -683,6 +689,8 @@ public static void commonInitialization ()
     climbTwoButton = new JoystickButton(leftDriver, 11);
 
     cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
+
+    downshiftButton = new JoystickButton(rightDriver, 3);
 
     // Momentary Switches
 

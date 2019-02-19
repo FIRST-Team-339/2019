@@ -1051,8 +1051,8 @@ public static void teleopDrive ()
     Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
     Hardware.drive.shiftGears(
-            Hardware.rightDriver.getRawButton(GEAR_DOWN_SHIFT_BUTTON),
-            Hardware.leftDriver.getRawButton(GEAR_UP_SHIFT_BUTTON));
+            Hardware.downshiftButton.get(),
+            Hardware.upshiftButton.get());
 
     // makes sure the gear never goes over 2
     if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
@@ -1066,10 +1066,6 @@ public static void teleopDrive ()
 // ================================
 // Constants
 // ================================
-
-private static final int GEAR_UP_SHIFT_BUTTON = 3;
-
-private static final int GEAR_DOWN_SHIFT_BUTTON = 3;
 
 // The number of gears we want to not go over. There is no reason to make this
 // more than 3 unless the code is fixed. Thanks McGee.
