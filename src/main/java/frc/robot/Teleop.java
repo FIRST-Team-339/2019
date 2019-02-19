@@ -280,7 +280,7 @@ public static void periodic ()
 
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        false/* Hardware.manipulator.hasCargo() */))
+                        true/* Hardware.manipulator.hasCargo() */))
             {
             hasFinishedDeposit = true;
             Hardware.depositGamePiece.resetDepositTeleop();
@@ -368,7 +368,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();

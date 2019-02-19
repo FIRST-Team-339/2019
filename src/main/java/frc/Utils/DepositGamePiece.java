@@ -64,7 +64,7 @@ public boolean depositHatch (boolean inAuto)
                 if (depositHeighthatch == 2)
                     {
                     if (Hardware.manipulator.moveArmToPosition(
-                            45))
+                            80))
                         depositHatchState = DepositHatchState.DEPOSIT_HATCH;
                     }
                 else
@@ -331,8 +331,10 @@ public boolean depositTeleopStateMachine ()
         case ALIGN_TO_TARGET:
 
             if (Hardware.driveWithCamera.driveToTargetClose(.1)
-                    && Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() <= 22)
+                    || (Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() <= 22
+                            && Hardware.rightFrontDriveEncoder
+                                    .getDistance() > 10))
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
@@ -415,6 +417,8 @@ public void resetDepositTeleop ()
 {
     hasStartedDeposit = false;
     depositTeleopState = DepositTeleopState.HOLD;
+    Hardware.drive.resetEncoders();
+
 }
 
 public static boolean hasDoneThePrep = false;
@@ -487,7 +491,7 @@ private static final double DEPOSIT_ARM_ANGLE_AUTO = 90;
 private static final double DEPOSIT_ARM_TELEOP = 25;
 
 // cargo constants
-private static final double CARGO_ARM_POSITION = 90;
+private static final double CARGO_ARM_POSITION = 70;
 
 // otro constants===========================
 
