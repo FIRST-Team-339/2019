@@ -220,7 +220,7 @@ public static void periodic ()
             break;
 
         case DEPOSIT_ROCKET_HATCH:
-            System.out.println("rocket hatch");
+            // System.out.println("rocket hatch");
             usingVision = true;
             if (depositRocketHatch() == true)
                 {
@@ -313,7 +313,7 @@ private static void setPositionAndLevel ()
     if (Hardware.autoCenterSwitch.getPosition() == LEFT)
         {
         autoPosition = Position.LEFT;
-        System.out.println("position and level set");
+        // System.out.println("position and level set");
         }
     else
         if (Hardware.autoCenterSwitch.getPosition() == RIGHT)
@@ -360,7 +360,7 @@ private static CrossAutoState cross = CrossAutoState.INIT;
 
 private static boolean crossAutoline ()
 {
-    System.out.println("CrossAutoState = " + cross);
+    // System.out.println("CrossAutoState = " + cross);
     switch (cross)
         {
         case INIT:
@@ -458,8 +458,8 @@ private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatch
 
 private static boolean depositCargoHatch ()
 {
-    System.out.println(
-            "depositCargoHatchState:" + depositCargoHatchState);
+    // System.out.println(
+    // "depositCargoHatchState:" + depositCargoHatchState);
     switch (depositCargoHatchState)
         {
         case INIT:
@@ -559,12 +559,12 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_DRIVE_3:
-            System.out.println(
-                    "Ultrasosnic" + Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper());
-            System.out.println(
-                    "encoders" + Hardware.rightFrontDriveEncoder
-                            .getDistance());
+            // System.out.println(
+            // "Ultrasosnic" + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
+            // System.out.println(
+            // "encoders" + Hardware.rightFrontDriveEncoder
+            // .getDistance());
 
             Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
@@ -574,17 +574,17 @@ private static boolean depositCargoHatch ()
                     || Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper() < 30)
                 {
-                System.out
-                        .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                // System.out
+                // .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
                 }
 
 
             break;
         case STRAIGHT_DEPOSIT_ALIGN_TO_CARGO:
-            System.out.println(
-                    "Ultrasosnic" + Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper());
+            // System.out.println(
+            // "Ultrasosnic" + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
             Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
             if (Hardware.driveWithCamera
@@ -597,7 +597,7 @@ private static boolean depositCargoHatch ()
 
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
-            System.out.println("Deposit");
+            // System.out.println("Deposit");
             if (Hardware.depositGamePiece.depositHatch(true))
                 {
                 depositCargoHatchState = DepositCargoHatchState.FINISHED;
@@ -630,7 +630,7 @@ private static DriveWithCameraStates driveWithCameraStates = DriveWithCameraStat
 private static boolean depositRocketHatch ()
 {
     Hardware.drive.setBrakeDeadband(20, BrakeType.AFTER_DRIVE);
-    System.out.println(rocketHatchState);
+    // System.out.println(rocketHatchState);
     if (rocketHatchState == RocketHatchState.STANDBY)
         {
         rocketHatchState = RocketHatchState.DESCEND;
@@ -692,18 +692,18 @@ private static boolean depositRocketHatch ()
                 }
             else
                 {
-                System.out.println("DRIVE STRAIGHT POWER : "
-                        + Hardware.leftFrontCANMotor.get() + "  "
-                        + Hardware.rightFrontCANMotor.get());
+                // System.out.println("DRIVE STRAIGHT POWER : "
+                // + Hardware.leftFrontCANMotor.get() + " "
+                // + Hardware.rightFrontCANMotor.get());
                 }
             break;
 
         case BREAKIE_AFTER_DRIVIE:
 
-            System.out.println(
-                    "left : " + Hardware.leftFrontCANMotor.get());
-            System.out.println(
-                    "right : " + Hardware.rightFrontCANMotor.get());
+            // System.out.println(
+            // "left : " + Hardware.leftFrontCANMotor.get());
+            // System.out.println(
+            // "right : " + Hardware.rightFrontCANMotor.get());
             if (Hardware.drive.brake(BrakeType.AFTER_DRIVE) == true)
                 {
                 rocketHatchState = RocketHatchState.TURN_TOWARDS_FIELD_WALL;
@@ -775,7 +775,7 @@ private static boolean depositRocketHatch ()
 
 
         case TURN_ALONG_FIELD_WALL:
-            System.out.println(" gyro " + Hardware.gyro.getAngle());
+            // System.out.println(" gyro " + Hardware.gyro.getAngle());
             // turn for if we are on the right side of the field
             if (autoPosition == Position.RIGHT
                     && Hardware.drive
@@ -844,12 +844,12 @@ private static boolean depositRocketHatch ()
 
         case DRIVE_BY_CAMERA:
 
-            System.out.println("camera state" + driveWithCameraStates);
-            System.out.println(
-                    "ultrasonic distance: " + Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper());
-            System.out.println("encoder: "
-                    + Hardware.rightFrontDriveEncoder.getDistance());
+            // System.out.println("camera state" + driveWithCameraStates);
+            // System.out.println(
+            // "ultrasonic distance: " + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
+            // System.out.println("encoder: "
+            // + Hardware.rightFrontDriveEncoder.getDistance());
             switch (driveWithCameraStates)
                 {
                 case INIT:
@@ -906,7 +906,7 @@ private static boolean depositRocketHatch ()
                             }
                     break;
                 case TURN_RIGHT:
-                    System.out.println("right");
+                    // System.out.println("right");
 
                     if (Hardware.drive.turnDegrees(
                             TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
@@ -916,9 +916,9 @@ private static boolean depositRocketHatch ()
                         }
                     break;
                 case TURN_LEFT:
-                    System.out.println(
-                            "gyro degrees" + Hardware.gyro.getAngle());
-                    System.out.println("left");
+                    // System.out.println(
+                    // "gyro degrees" + Hardware.gyro.getAngle());
+                    // System.out.println("left");
                     if (Hardware.drive.turnDegrees(
                             -TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
                             CAMERA_ACCELERATION, USING_GYRO))
@@ -1117,7 +1117,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
         } // if
 
 
-    System.out.println(descentState);
+    // System.out.println(descentState);
     // System.out.println(descentTimer.get());
     switch (descentState)
         {

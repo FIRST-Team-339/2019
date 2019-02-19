@@ -255,6 +255,8 @@ public static void periodic ()
 
     // Hardware.climber.climbUpdate();
 
+    Hardware.climber.newClimbUpdate();
+
     Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
@@ -352,8 +354,6 @@ public static void periodic ()
             }
         }
 
-
-
     printStatements();
 
 } // end Periodic()
@@ -378,7 +378,7 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    Hardware.climber.newClimbUpdate();
+
 
 
     // if (Hardware.armHackButton.isOnCheckNow() == true)
