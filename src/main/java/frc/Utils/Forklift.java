@@ -378,7 +378,7 @@ public void setToNextHigherPreset (double forkliftSpeed,
                     if (forkliftHeight < TOP_ROCKET_CARGO)
                         {
                         position = TOP_ROCKET_CARGO;
-                        position = TOP_ROCKET_CARGO_ANGLE;
+                        angle = TOP_ROCKET_CARGO_ANGLE;
                         }
             }
         else
@@ -388,19 +388,19 @@ public void setToNextHigherPreset (double forkliftSpeed,
             if (forkliftHeight < LOWER_ROCKET_HATCH)
                 {
                 position = LOWER_ROCKET_HATCH;
-                position = LOWER_ROCKET_HATCH_ANGLE;
+                angle = LOWER_ROCKET_HATCH_ANGLE;
                 }
             else
                 if (forkliftHeight < MIDDLE_ROCKET_HATCH)
                     {
                     position = MIDDLE_ROCKET_HATCH;
-                    position = MIDDLE_ROCKET_HATCH_ANGLE;
+                    angle = MIDDLE_ROCKET_HATCH_ANGLE;
                     }
                 else
                     if (forkliftHeight < TOP_ROCKET_HATCH)
                         {
                         position = TOP_ROCKET_HATCH;
-                        position = TOP_ROCKET_HATCH_ANGLE;
+                        angle = TOP_ROCKET_HATCH_ANGLE;
                         }
             }
 
@@ -413,13 +413,31 @@ public void setToNextHigherPreset (double forkliftSpeed,
             // position
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
-            if (angle >= 0.0)
-                {
-                this.manipulator.moveArmToPosition(angle);
-                }
+            SmartDashboard.putNumber("Set Higher Angle", angle);
+            this.manipulator.moveArmToPosition(angle);
+            // if (angle >= 0.0)
+            // {
+            // if (Math.abs(this.manipulator.getCurrentArmPosition()
+            // - angle) > SET_ANGLE_DEADBAND)
+            // this.manipulator.moveArmToPosition(angle);
+            // }
             }
         }
 }
+
+private void setForliftAndManipulator (double height, double angle,
+        double forkliftSpeed)
+{
+    this.setLiftPosition(height, forkliftSpeed);
+    if (angle >= 0.0)
+        {
+        if (Math.abs(this.manipulator.getCurrentArmPosition()
+                - angle) > SET_ANGLE_DEADBAND)
+            this.manipulator.moveArmToPosition(angle);
+        }
+}
+
+private final double SET_ANGLE_DEADBAND = 3.0;
 
 // # of feet that the forklift can be off of the next highest position to
 // count as already being there
@@ -518,10 +536,14 @@ public void setToNextLowerPreset (double forkliftSpeed,
             // position
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
-            if (angle >= 0.0)
-                {
-                this.manipulator.moveArmToPosition(angle);
-                }
+            SmartDashboard.putNumber("Set Lower Angle", angle);
+            this.manipulator.moveArmToPosition(angle);
+            // if (angle >= 0.0)
+            // {
+            // if (Math.abs(this.manipulator.getCurrentArmPosition()
+            // - angle) > SET_ANGLE_DEADBAND)
+            // this.manipulator.moveArmToPosition(angle);
+            // }
             }
         }
 }

@@ -368,12 +368,6 @@ public static JoystickButton resetForkliftEncoderButton1 = null;
 
 public static JoystickButton cancelOneButton = null;
 
-public static QuickSwitch testDeployButtonTemp = null;
-
-public static QuickSwitch testRetractTemp = null;
-
-public static QuickSwitch testSetManipulatorPosition = null;
-
 public static JoystickButton cancelAutoLeftDriver = null;
 
 // ----------Right Driver--------------
@@ -672,12 +666,6 @@ public static void commonInitialization ()
     solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
     climbOneButton = new JoystickButton(leftDriver, 11);
-
-    testRetractTemp = new QuickSwitch(leftDriver,
-            4);
-
-    testSetManipulatorPosition = new QuickSwitch(leftDriver,
-            5);
 
     climbTwoButton = new JoystickButton(leftDriver, 11);
 
