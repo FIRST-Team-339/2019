@@ -58,6 +58,8 @@ public class Teleop
  */
 public static void init ()
 {
+
+    Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)

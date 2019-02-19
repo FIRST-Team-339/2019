@@ -487,7 +487,7 @@ private static boolean depositCargoHatch ()
 
         case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
             if (Hardware.drive.driveStraightInches(
-                    60, LEAVE_LEVEL_ONE_SPEED/* DRIVE_SPEED */,
+                    distanceToCrossAutoline, LEAVE_LEVEL_ONE_SPEED,
                     ACCELERATION_TIME,
                     USING_GYRO))
                 {
@@ -578,12 +578,6 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_DRIVE_3:
-            // System.out.println(
-            // "Ultrasosnic" + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
-            // System.out.println(
-            // "encoders" + Hardware.rightFrontDriveEncoder
-            // .getDistance());
 
             Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
@@ -591,10 +585,9 @@ private static boolean depositCargoHatch ()
                     ACCELERATION_TIME,
                     USING_GYRO)
                     || Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() < 30)
+                            .getDistanceFromNearestBumper() < 20)
                 {
-                // System.out
-                // .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
 
@@ -863,12 +856,7 @@ private static boolean depositRocketHatch ()
 
         case DRIVE_BY_CAMERA:
 
-            // System.out.println("camera state" + driveWithCameraStates);
-            // System.out.println(
-            // "ultrasonic distance: " + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
-            // System.out.println("encoder: "
-            // + Hardware.rightFrontDriveEncoder.getDistance());
+
             switch (driveWithCameraStates)
                 {
                 case INIT:
@@ -988,7 +976,7 @@ private static boolean depositRocketHatch ()
                 }
             break;
         case FINISH:
-            // System.out.println("YOOOOOOOOOO IT WORKED");
+
             return true;
         default:
             break;
@@ -1371,7 +1359,7 @@ public static final int TURN_LEFT90 = -90;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
-public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
+public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = true;
 
 public static final boolean USING_GYRO = true;
 
