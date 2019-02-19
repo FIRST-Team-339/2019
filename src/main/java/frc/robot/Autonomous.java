@@ -36,7 +36,6 @@ import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
 
@@ -79,6 +78,7 @@ public static void init ()
             // ------------------------------------------------------
             DRIVE_SPEED = KILROY_XIX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
+            LEAVE_LEVEL_ONE_SPEED = KILROY_XIX_LEAVE_LEVEL_ONE_SPEED;
             break;
 
         default:
@@ -93,6 +93,7 @@ public static void init ()
             // ---------------------------------------------------------
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
+            LEAVE_LEVEL_ONE_SPEED = KILROY_XX_LEAVE_LEVEL_ONE_SPEED;
             break;
 
         case TEST_BOARD:
@@ -409,7 +410,6 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO closely monitor merge tomorrow
             // 17 February 2019
             // Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.manipulator.printDeployDebugInfo();
@@ -418,7 +418,8 @@ private static boolean crossAutoline ()
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
-                    DRIVE_SPEED, ACCELERATION_TIME, true) == true)
+                    LEAVE_LEVEL_ONE_SPEED, ACCELERATION_TIME,
+                    true) == true)
                 {
 
                 cross = CrossAutoState.BRAKE;
@@ -451,7 +452,7 @@ private static boolean crossAutoline ()
 // depositCargoHatch() goes straight ahead to the front end of the cargo ship.
 private static enum DepositCargoHatchState
     {
-    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_CARGO, FINISHED
+    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_HATCH, DRIVE_2_CENTER, FINISHED
     }
 
 private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatchState.INIT;
@@ -484,7 +485,7 @@ private static boolean depositCargoHatch ()
 
         case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
             if (Hardware.drive.driveStraightInches(
-                    60, DRIVE_SPEED,
+                    distanceToCrossAutoline, LEAVE_LEVEL_ONE_SPEED,
                     ACCELERATION_TIME,
                     USING_GYRO))
                 {
@@ -493,9 +494,24 @@ private static boolean depositCargoHatch ()
                     depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE;
                     }
                 else
-                    {
-                    depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE;
-                    }
+                    if (autoPosition == Position.LEFT)
+                        {
+                        depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE;
+                        }
+                    else
+                        {
+                        depositCargoHatchState = DepositCargoHatchState.DRIVE_2_CENTER;
+
+                        }
+                }
+            break;
+        case DRIVE_2_CENTER:
+            Hardware.depositGamePiece.prepToDepositHatch();
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_SHIP_CENTER, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
             break;
         case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE: // first turn, when
@@ -547,7 +563,7 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE:
-            if (Hardware.drive.turnDegrees(-TURN_LEFT90,
+            if (Hardware.drive.turnDegrees(TURN_LEFT90,
                     TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
@@ -560,12 +576,6 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_DRIVE_3:
-            // System.out.println(
-            // "Ultrasosnic" + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
-            // System.out.println(
-            // "encoders" + Hardware.rightFrontDriveEncoder
-            // .getDistance());
 
             Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
@@ -573,11 +583,10 @@ private static boolean depositCargoHatch ()
                     ACCELERATION_TIME,
                     USING_GYRO)
                     || Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() < 30)
+                            .getDistanceFromNearestBumper() < 20)
                 {
-                // System.out
-                // .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
+
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
 
 
@@ -591,13 +600,13 @@ private static boolean depositCargoHatch ()
             if (Hardware.driveWithCamera
                     .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                 {
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_CARGO;
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
 
 
 
             break;
-        case STRAIGHT_DEPOSIT_DEPOSIT_CARGO:
+        case STRAIGHT_DEPOSIT_DEPOSIT_HATCH:
             // System.out.println("Deposit");
             if (Hardware.depositGamePiece.depositHatch(true))
                 {
@@ -684,7 +693,7 @@ private static boolean depositRocketHatch ()
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET
                             - Hardware.drive.getBrakeStoppingDistance(),
-                    DRIVE_SPEED, .3
+                    LEAVE_LEVEL_ONE_SPEED, .3
                     /* ACCELERATION_TIME */,
                     true) == true)
                 {
@@ -845,12 +854,7 @@ private static boolean depositRocketHatch ()
 
         case DRIVE_BY_CAMERA:
 
-            // System.out.println("camera state" + driveWithCameraStates);
-            // System.out.println(
-            // "ultrasonic distance: " + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
-            // System.out.println("encoder: "
-            // + Hardware.rightFrontDriveEncoder.getDistance());
+
             switch (driveWithCameraStates)
                 {
                 case INIT:
@@ -860,8 +864,8 @@ private static boolean depositRocketHatch ()
                     break;
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
-                            /* DISTANCE_TO_CROSS_AUTOLINE_CAMERA */2,
-                            .6,
+                            DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
+                            SPEED_TO_DRIVE_OFF_PLATFORM,
                             ACCELERATION_TIME, USING_GYRO))
                         {
 
@@ -970,7 +974,7 @@ private static boolean depositRocketHatch ()
                 }
             break;
         case FINISH:
-            // System.out.println("YOOOOOOOOOO IT WORKED");
+
             return true;
         default:
             break;
@@ -1320,7 +1324,7 @@ private static boolean usingAlignByWall = true;
 private static boolean usingVision = true;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = false;
+private static boolean usingVisionOnStraight = true;
 
 private static boolean descendInit = false;
 
@@ -1341,6 +1345,8 @@ public static int distanceToCrossAutoline = 60;
 public static double DRIVE_SPEED;
 
 public static double TURN_SPEED;
+
+public static double LEAVE_LEVEL_ONE_SPEED;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
@@ -1351,7 +1357,7 @@ public static final int TURN_LEFT90 = -90;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
-public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
+public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = true;
 
 public static final boolean USING_GYRO = true;
 
@@ -1377,7 +1383,7 @@ public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
 
 // straight cargo hatch constants
-
+public static final double DISTANCE_TO_SHIP_CENTER = 105;
 
 // rocket hatch contstants- no vision
 
@@ -1397,7 +1403,7 @@ public static final double CAMERA_TURN_SPEED = .5;
 public static final double CAMERA_ACCELERATION = .2;
 
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .35;
 
 public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
@@ -1427,7 +1433,7 @@ public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .45; // @ANE
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .35; // @ANE
 
 public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
 
@@ -1466,6 +1472,10 @@ public static final double KILROY_XX_DRIVE_SPEED = .4;
 public static final double KILROY_XIX_TURN_SPEED = .4;
 
 public static final double KILROY_XX_TURN_SPEED = .7;// .5;
+
+public static final double KILROY_XIX_LEAVE_LEVEL_ONE_SPEED = .25;
+
+public static final double KILROY_XX_LEAVE_LEVEL_ONE_SPEED = .25;
 
 
 

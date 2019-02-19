@@ -58,6 +58,8 @@ public class Teleop
  */
 public static void init ()
 {
+    Hardware.depositGamePiece.resetDepositTeleop();
+    Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
@@ -250,15 +252,12 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    // Hardware.lift.printDebugInfo();
-    // Hardware.manipulator.printDeployDebugInfo();
-
     // Hardware.climber.climbUpdate();
 
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
-
+    Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
 
@@ -277,8 +276,6 @@ public static void periodic ()
         Hardware.telopTimer.start();
         }
 
-    System.out.println(
-            "vision button is on:" + Hardware.alignVisionButton.isOn());
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
@@ -327,9 +324,9 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
-    // if (Hardware.climbOneButton.isOnCheckNow() == true
-    // && Hardware.climbTwoButton.isOnCheckNow() == true)
-    if (Hardware.leftDriver.getRawButton(6) == true)
+    if (Hardware.climbOneButton.get() == true
+            && Hardware.climbTwoButton.get() == true)
+    // if (Hardware.leftDriver.getRawButton(6) == true)
         {
         // Hardware.climber.climb();
         Hardware.climber.newClimb();
@@ -472,11 +469,14 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
 
-
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
 

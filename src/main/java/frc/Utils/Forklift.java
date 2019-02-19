@@ -425,18 +425,6 @@ public void setToNextHigherPreset (double forkliftSpeed,
         }
 }
 
-private void setForliftAndManipulator (double height, double angle,
-        double forkliftSpeed)
-{
-    this.setLiftPosition(height, forkliftSpeed);
-    if (angle >= 0.0)
-        {
-        if (Math.abs(this.manipulator.getCurrentArmPosition()
-                - angle) > SET_ANGLE_DEADBAND)
-            this.manipulator.moveArmToPosition(angle);
-        }
-}
-
 private final double SET_ANGLE_DEADBAND = 3.0;
 
 // # of feet that the forklift can be off of the next highest position to
@@ -538,22 +526,21 @@ public void setToNextLowerPreset (double forkliftSpeed,
             this.setLiftPosition(position, forkliftSpeed);
             SmartDashboard.putNumber("Set Lower Angle", angle);
             this.manipulator.moveArmToPosition(angle);
-            // if (angle >= 0.0)
-            // {
-            // if (Math.abs(this.manipulator.getCurrentArmPosition()
-            // - angle) > SET_ANGLE_DEADBAND)
-            // this.manipulator.moveArmToPosition(angle);
-            // }
+            if (angle >= 0.0)
+                {
+                if (Math.abs(this.manipulator.getCurrentArmPosition()
+                        - angle) > SET_ANGLE_DEADBAND)
+                    this.manipulator.moveArmToPosition(angle);
+                }
             }
         }
 }
-
-
 
 // # of feet that the forklift can be off of the next lowest position to
 // count as already being there
 private final double NEXT_LOWER_POSITION_DEADBAND = 1;
 
+private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 10;
 
 /**
  * For use in teleop and autonomous periodic.
