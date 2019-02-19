@@ -79,6 +79,7 @@ public static void init ()
             // ------------------------------------------------------
             DRIVE_SPEED = KILROY_XIX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
+            LEAVE_LEVEL_ONE_SPEED = KILROY_XIX_LEAVE_LEVEL_ONE_SPEED;
             break;
 
         default:
@@ -93,6 +94,7 @@ public static void init ()
             // ---------------------------------------------------------
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
+            LEAVE_LEVEL_ONE_SPEED = KILROY_XX_LEAVE_LEVEL_ONE_SPEED;
             break;
 
         case TEST_BOARD:
@@ -684,7 +686,7 @@ private static boolean depositRocketHatch ()
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET
                             - Hardware.drive.getBrakeStoppingDistance(),
-                    DRIVE_SPEED, .3
+                    LEAVE_LEVEL_ONE_SPEED, .3
                     /* ACCELERATION_TIME */,
                     true) == true)
                 {
@@ -1341,6 +1343,8 @@ public static int distanceToCrossAutoline = 60;
 public static double DRIVE_SPEED;
 
 public static double TURN_SPEED;
+
+public static double LEAVE_LEVEL_ONE_SPEED;
 // turn stuff
 
 public static final double TURN_BY_GYRO_SPEED = .5;
@@ -1466,6 +1470,10 @@ public static final double KILROY_XX_DRIVE_SPEED = .4;
 public static final double KILROY_XIX_TURN_SPEED = .4;
 
 public static final double KILROY_XX_TURN_SPEED = .7;// .5;
+
+public static final double KILROY_XIX_LEAVE_LEVEL_ONE_SPEED = .25;
+
+public static final double KILROY_XX_LEAVE_LEVEL_ONE_SPEED = .25;
 
 
 
