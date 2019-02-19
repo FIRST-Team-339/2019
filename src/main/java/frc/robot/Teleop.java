@@ -250,8 +250,8 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    // Hardware.lift.printDebugInfo();
-    // Hardware.manipulator.printDeployDebugInfo();
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
 
     // Hardware.climber.climbUpdate();
 
@@ -473,16 +473,16 @@ private static void coleTest ()
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
     // if (Hardware.testDeployButtonTemp.getCurrentValue())
-    if (Hardware.leftDriver.getRawButton(3))
-        Hardware.manipulator.deployArm();
+    // if (Hardware.leftDriver.getRawButton(3))
+    // Hardware.manipulator.deployArm();
 
     // if (Hardware.rightOperator.getRawButton(5))
-    if (Hardware.leftDriver.getRawButton(4))
-        Hardware.manipulator.retractArm();
+    // if (Hardware.leftDriver.getRawButton(4))
+    // Hardware.manipulator.retractArm();
 
     // if (Hardware.testSetManipulatorPosition.getCurrentValue())
-    if (Hardware.leftDriver.getRawButton(5))
-        Hardware.manipulator.moveArmToPosition(45);
+    // if (Hardware.leftDriver.getRawButton(5))
+    // Hardware.manipulator.moveArmToPosition(45);
 
 
 
