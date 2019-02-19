@@ -231,7 +231,7 @@ public void newClimbUpdate ()
                 {
                 // Goes to DELAY_THREE
                 this.delayInit();
-                newClimbState = NewClimberState.FINISH;// .DELAY_THREE;
+                newClimbState = NewClimberState.DELAY_THREE;
                 }
             break;
 
@@ -239,6 +239,7 @@ public void newClimbUpdate ()
             if (climbTimer.get() >= NEW_DELAY_THREE_TIME)
                 {
                 climbTimer.stop();
+                driveTimerInit();
                 newClimbState = NewClimberState.RETRACT_WHEELS;
                 }
             break;
@@ -274,7 +275,7 @@ public void newClimbUpdate ()
             if (climbTimer.get() >= NEW_DELAY_FIVE_TIME)
                 {
                 climbTimer.stop();
-                newClimbState = NewClimberState.POWERED_ARM_DOWN;
+                newClimbState = NewClimberState.DRIVE_BACKWARDS_ONTO_PLATFORM;// .POWERED_ARM_DOWN;
                 }
             break;
 
@@ -293,7 +294,8 @@ public void newClimbUpdate ()
             if (climbTimer.get() >= NEW_DELAY_SIX_TIME)
                 {
                 climbTimer.stop();
-                newClimbState = NewClimberState.DRIVE_BACKWARDS_ONTO_PLATFORM;
+                driveTimerInit();
+                newClimbState = NewClimberState.FINISH;// .DRIVE_BACKWARDS_ONTO_PLATFORM;
                 }
             break;
 
@@ -1183,17 +1185,27 @@ public boolean backUpTilMidWheelsOnPlatform ()
  */
 public boolean poweredArmDown ()
 {
-    if (Hardware.manipulator
-            .getCurrentArmPosition() >= Hardware.manipulator
-                    .getCurrentDeployMinAngle())
+
+    if (driveTimer.get() >= TIME_TO_POWER_ARM_DOWN)
+        {
+        return true;
+        }
+    else
         {
         this.holdArmToSupportDrive();
         return false;
         }
-    else
-        {
-        return true;
-        }
+    // if (Hardware.manipulator
+    // .getCurrentArmPosition() >= Hardware.manipulator
+    // .getCurrentDeployMinAngle())
+    // {
+    // this.holdArmToSupportDrive();
+    // return false;
+    // }
+    // else
+    // {
+    // return true;
+    // }
 
 }
 
@@ -1203,17 +1215,40 @@ public boolean poweredArmDown ()
  */
 public boolean driveBackwardsOntoPlatform ()
 {
-    if (driveTimer.get() >= TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM)
-        {
-        drive.stop();
-        return true;
-        }
-    else
+
+
+    if (driveTimer.get() >= delayBeforeDriveFromPower
+            && driveTimer.get() <= TIME_TO_POWER_ARM_DOWN)
         {
         drive.driveStraight(SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM, 0.0,
                 true);
+        }
+    else
+        {
+        drive.stop();
+        }
+
+    if (driveTimer.get() <= TIME_TO_POWER_ARM_DOWN)
+        {
+        this.holdArmToSupportDrive();
         return false;
         }
+    else
+        {
+        return true;
+        }
+
+    // if (driveTimer.get() >= TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM)
+    // {
+    // drive.stop();
+    // return true;
+    // }
+    // else
+    // {
+    // drive.driveStraight(SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM, 0.0,
+    // true);
+    // return false;
+    // }
 }
 // -------------------------------------------------------------------------
 
@@ -1350,33 +1385,41 @@ public static double SPEED_BACK_UP_TIL_BUMPERS_HIT = -.3;
 public static double TIME_TO_BACK_UP_TIL_BUMPERS_HIT = .25;
 // --------------------------------
 
-public static double SPEED_BACK_UP_TIL_REAR_WHEELS_HIT = -.5;
+public static double SPEED_BACK_UP_TIL_REAR_WHEELS_HIT = -.25;// .3; changed at
+                                                              // 8:20 2/18
 
-public static double TIME_TO_BACK_UP_TIL_REAR_WHEELS_HIT = 1.0;
+public static double TIME_TO_BACK_UP_TIL_REAR_WHEELS_HIT = .5;
 // --------------------------------
 
-public static double SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = -.5;
+public static double SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = -.4;// .5;
+                                                                    // changed
+                                                                    // at 8:20
+                                                                    // 2/18
 
-public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = .5;
+public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = 1.0;
 // --------------------------------
 
-public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.5;
+public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.75;
 
 public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = .5;
+
+private static final double TIME_TO_POWER_ARM_DOWN = 3.2;
 // --------------------------------
 
 private static final double NEW_DELAY_ONE_TIME = 0.0;
 
 private static final double NEW_DELAY_TWO_TIME = 1.25;// after solenoids
 
-private static final double NEW_DELAY_THREE_TIME = 5.0;
+private static final double NEW_DELAY_THREE_TIME = 0.5;
 
-private static final double NEW_DELAY_FOUR_TIME = 0.0;
+private static final double NEW_DELAY_FOUR_TIME = 0.75;
 
-private static final double NEW_DELAY_FIVE_TIME = 0.0;
+private static final double NEW_DELAY_FIVE_TIME = 0.2;
 
 private static final double NEW_DELAY_SIX_TIME = 0.0;
 
 private static final double NEW_DELAY_SEVEN_TIME = 1.0;
+
+private static final double delayBeforeDriveFromPower = 1.0;
 
 }

@@ -359,17 +359,10 @@ public boolean driveToTargetClose (double speed)
         {
         case INIT:
             Hardware.axisCamera.processImage();
-            Hardware.axisCamera.setRelayValue(Value.kOn);
             Hardware.drive.resetEncoders();
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
-
             double correctionValue = DRIVE_CORRECTION_CLOSE;
             double motorspeed = speed;
-
-
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
-
             break;
         case DRIVE_WITH_CAMERA:
             correctionValue = DRIVE_CORRECTION;
@@ -378,9 +371,6 @@ public boolean driveToTargetClose (double speed)
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             // adjust speed based on distance
-
-
-
 
             // if we get close enought to the target and have to stop
             if (this.frontUltrasonic
@@ -448,8 +438,9 @@ public boolean driveToTargetClose (double speed)
             // if we are too close to the wall, brake, then set all motors to
             // zero, else drive by ultrasonic
 
-            this.getTransmission().driveRaw(0, 0);
             state = DriveWithCameraState.INIT;
+            this.getTransmission().driveRaw(0, 0);
+
             return true;
         }
     return false;

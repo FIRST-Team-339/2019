@@ -261,7 +261,7 @@ public static void periodic ()
     // vision=====================================
 
     if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 3 && Hardware.telopTimer.get() > .25)
+            && visionHeight < 2 && Hardware.telopTimer.get() > .25)
         {
         Hardware.telopTimer.reset();
         visionHeight++;
@@ -452,17 +452,8 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-
-    System.out.println("usingVision: "
-            + Hardware.alignVisionButton.isOnCheckNow());
-
-    System.out.println("level "
-            + visionHeight);
-
     System.out.println("ultrasonic: "
             + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
-
-
 } // end connerTest()
 
 private static void coleTest ()

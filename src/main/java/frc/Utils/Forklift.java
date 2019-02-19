@@ -810,7 +810,7 @@ public final static double TOP_ROCKET_HATCH = 57;// placeholder value
 
 public final static double MIDDLE_ROCKET_HATCH = 35;
 
-public final static double LOWER_ROCKET_HATCH = 10;
+public final static double LOWER_ROCKET_HATCH = 12;
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 40;// placeholder value
 
