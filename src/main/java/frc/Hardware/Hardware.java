@@ -692,7 +692,7 @@ public static void commonInitialization ()
 
 
 
-    // HaCkETy haCkS
+    // hacks
     armHackButton = new MomentarySwitch(rightDriver, 6, false);
 
     liftHackButton = new JoystickButton(rightDriver, 5);
