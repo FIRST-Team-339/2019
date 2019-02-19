@@ -367,7 +367,7 @@ public static void periodic ()
 
 private static void individualTest ()
 {
-    // ashleyTest();
+    ashleyTest();
     // connerTest();
     // coleTest();
     // guidoTest();

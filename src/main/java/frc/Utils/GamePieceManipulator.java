@@ -841,7 +841,7 @@ public void resetStateMachine ()
  */
 public double getCurrentDeployMinAngle ()
 {
-    return currentDeployMinAngle;
+    return MIN_ARM_POSITION_ADJUSTED;// currentDeployMinAngle;
 }
 
 // =========================================================================
