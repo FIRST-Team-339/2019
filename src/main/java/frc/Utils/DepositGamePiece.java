@@ -34,7 +34,7 @@ public DepositGamePiece (Drive drive, Forklift forklift,
 
 public enum DepositHatchState
     {
-    INIT, DEPOSIT_HATCH, BACKUP_HATCH, BACKUP_HATCH_AFTER_FORK, LOWER_FORKLIFT_HATCH, STOP
+    INIT, DEPOSIT_HATCH, BACKUP_HATCH, BACKUP_HATCH_AFTER_FORK, STOP
     }
 
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
@@ -217,7 +217,7 @@ public boolean depositTeleopStateMachine ()
 
         case HOLD:
 
-            // Hardware.axisCamera.setRelayValue(Value.kOff);
+
 
             break;
 
@@ -230,22 +230,22 @@ public boolean depositTeleopStateMachine ()
                     {
 
                     case 0:
-                        System.out.print("0");
+                        // System.out.print("0");
                         forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
                         break;
 
                     case 1:
-                        System.out.print("1");
+                        // System.out.print("1");
                         forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
                         break;
 
                     case 2:
-                        System.out.print("2");
+                        // System.out.print("2");
                         forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
 
                     case 3:
-                        System.out.print("3");
+                        // System.out.print("3");
                         forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
@@ -279,8 +279,7 @@ public boolean depositTeleopStateMachine ()
             break;
 
         case PREP_FORKLIFT:
-            System.out.println(
-                    "forklift height that we watnt: " + forkliftHeight);
+
             if (Hardware.lift.setLiftPosition(
                     forkliftHeight, FORK_SPEED))
                 {
@@ -297,7 +296,7 @@ public boolean depositTeleopStateMachine ()
                     {
 
                     case 0:
-                        System.out.print("0");
+
 
                         if (Hardware.manipulator.moveArmToPosition(
                                 Forklift.LOWER_ROCKET_HATCH_ANGLE))
@@ -308,7 +307,7 @@ public boolean depositTeleopStateMachine ()
                         break;
 
                     case 1:
-                        System.out.print("1");
+
                         if (Hardware.manipulator.moveArmToPosition(
                                 Forklift.MIDDLE_ROCKET_HATCH_ANGLE))
                             {
@@ -325,7 +324,7 @@ public boolean depositTeleopStateMachine ()
                         break;
 
                     case 3:
-                        System.out.print("3");
+
                         forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
@@ -397,8 +396,7 @@ public boolean depositTeleopStateMachine ()
             break;
         default:
         case FINISH:
-
-            depositTeleopState = DepositTeleopState.HOLD;
+            this.resetDepositTeleop();
             return true;
         }
 
@@ -452,6 +450,7 @@ public boolean startTeleopDeposit (int heightLevel, boolean hasCargo)
  */
 public void resetDepositTeleop ()
 {
+    Hardware.alignVisionButton.setValue(false);
     hasStartedDeposit = false;
     depositTeleopState = DepositTeleopState.HOLD;
     Hardware.drive.resetEncoders();
@@ -468,11 +467,11 @@ public void prepToDepositHatch ()
 {
     if (hasDoneThePrep == false)
         {
-        System.out.println("*Dabs on haters*");
+        // System.out.println("*Dabs on haters*");
         if (Hardware.manipulator
                 .moveArmToPosition(105))
             {
-            System.out.println("*Hater has been dabbed on*");
+            // System.out.println("*Hater has been dabbed on*");
             hasDoneThePrep = true;
 
             }
@@ -497,7 +496,7 @@ public boolean overrideVision ()
             || Hardware.rightDriver.getY() > JOYSTICK_DEADBAND
             || Hardware.rightDriver.getY() < -JOYSTICK_DEADBAND)
         {
-        System.out.println("Mission Failed. We'll get'em next time");
+        // System.out.println("Mission Failed. We'll get'em next time");
         depositTeleopState = DepositTeleopState.FINISH;
         return true;
         }

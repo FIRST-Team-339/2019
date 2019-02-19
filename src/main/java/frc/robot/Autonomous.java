@@ -110,7 +110,7 @@ public static void init ()
     // Hardware.rightFrontDriveEncoder.reset();
     Hardware.gyro.reset();
 
-    Hardware.axisCamera.setRelayValue(Value.kOff);
+    // Hardware.axisCamera.setRelayValue(Value.kOff);
 
     Hardware.liftingEncoder.reset();
 

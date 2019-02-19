@@ -862,9 +862,6 @@ private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 // ----- Joystick Constants 2018 -----
 
-private static final double UP_JOYSTICK_SCALER_2018 = .65;
-
-private static final double DOWN_JOYSTICK_SCALER_2018 = .1;
 
 // ----- Deploy Position Constants 2019 -----
 
@@ -901,8 +898,8 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 // it to degrees
 private static double ARM_POT_SCALE_TO_DEGREES = -1.0; // placeholder
 
-// value that is multiplied by the number of ticks to convert it to degrees
-private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
+// // value that is multiplied by the number of ticks to convert it to degrees
+// private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
 
 
 // ----- Deploy Position Constants 2018 -----
