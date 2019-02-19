@@ -2,6 +2,7 @@ package frc.Utils;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
@@ -225,6 +226,16 @@ public void moveArmByJoystick (Joystick armJoystick,
         }
 
 }
+
+public void poweredDeployDownForClimb (JoystickButton button)
+{
+    if (button.get() == true)
+        this.setArmMotorSpeedManuallyForClimb(
+                SUPPORT_DRIVE_FOR_CLIMB_ARM_SPEED);
+}
+
+
+private static final double SUPPORT_DRIVE_FOR_CLIMB_ARM_SPEED = -.5;
 
 /**
  * Returns angle of the arm by scaling the potentiometer value
@@ -630,7 +641,7 @@ private double calculateDesiredArmMotorVoltage (
             // }
             break;
         }
-    SmartDashboard.putNumber("getArmMotorVoltage", speed);
+    // SmartDashboard.putNumber("getArmMotorVoltage", speed);
     return speed;
 
 }
@@ -899,7 +910,8 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 private static double ARM_POT_SCALE_TO_DEGREES = -1.0; // placeholder
 
 // // value that is multiplied by the number of ticks to convert it to degrees
-// private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; // placeholder
+// private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //
+// placeholder
 
 
 // ----- Deploy Position Constants 2018 -----
