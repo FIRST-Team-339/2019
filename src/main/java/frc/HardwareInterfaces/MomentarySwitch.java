@@ -255,6 +255,19 @@ public Joystick setJoystick ()
     return this.joystickToCheck;
 } // end getJoystick()
 
+/**
+ *
+ * sets the value of the momentary switch
+ *
+ * @param on
+ *               true or false
+ */
+public void setValue (boolean on)
+{
+    this.isOn = on;
+
+}
+
 // ---------------------------------------------------------
 /**
  * update the present state of the momentary switch. uses

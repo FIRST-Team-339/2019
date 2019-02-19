@@ -250,8 +250,8 @@ public static void periodic ()
 
     Hardware.manipulator.masterUpdate();
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
+    // Hardware.manipulator.printDeployDebugInfo();
 
     // Hardware.climber.climbUpdate();
 
@@ -274,7 +274,10 @@ public static void periodic ()
         visionHeight--;
         Hardware.telopTimer.start();
         }
-    if (Hardware.alignVisionButton.isOnCheckNow()
+
+    System.out.println(
+            "vision button is on:" + Hardware.alignVisionButton.isOn());
+    if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
 
@@ -282,8 +285,8 @@ public static void periodic ()
                 .startTeleopDeposit(visionHeight,
                         false/* Hardware.manipulator.hasCargo() */))
             {
-            hasFinishedDeposit = true;
-
+            Hardware.alignVisionButton.setValue(false);
+            System.out.println("we have depositd the gamepiece");
             }
         }
 
@@ -447,8 +450,7 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    System.out.println("ultrasonic: "
-            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+
 } // end connerTest()
 
 private static void coleTest ()
@@ -1016,7 +1018,7 @@ public static void takePicture ()
         // ring light relay
         if (Hardware.takePictureTimer.get() >= 3.0)
             {
-            // Hardware.ringLightRelay.set(Value.kOff);//TODO
+            // Hardware.ringLightRelay.set(Value.kOff);
             firstPress = true;
             pictureButton1 = false;
             pictureButton2 = false;
@@ -1117,4 +1119,6 @@ private static boolean pictureButton2;
 public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
+
+
 } // end class

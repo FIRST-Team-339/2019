@@ -247,13 +247,13 @@ public boolean driveToTarget (double speed)
             motorspeed = speed * slowAmount;
 
             // adjust speed so that motors never reverse
-            if (motorspeed - DRIVE_CORRECTION <= 0)
+            if (motorspeed /* - DRIVE_CORRECTION */ <= 0) // TODO
                 {
                 slowestSpeed = 0.05;
                 }
             else
                 {
-                slowestSpeed = motorspeed - DRIVE_CORRECTION;
+                slowestSpeed = motorspeed/* - DRIVE_CORRECTION */;
                 }
 
             System.out.println("right speed: "
@@ -733,6 +733,6 @@ private final double DRIVE_CORRECTION_CLOSE = .05;
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 15;
+private final double MIN_INCHES_CLOSE = 10;
 
 }
