@@ -679,6 +679,8 @@ public static void commonInitialization ()
 
     cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
 
+    cancelAutoLeftDriver = new JoystickButton(leftDriver, 10);
+
     downshiftButton = new JoystickButton(rightDriver, 3);
 
     // Momentary Switches
