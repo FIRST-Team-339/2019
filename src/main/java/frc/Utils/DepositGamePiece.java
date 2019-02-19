@@ -397,7 +397,7 @@ public boolean depositTeleopStateMachine ()
             break;
         default:
         case FINISH:
-
+            this.resetDepositTeleop();
             depositTeleopState = DepositTeleopState.HOLD;
             return true;
         }

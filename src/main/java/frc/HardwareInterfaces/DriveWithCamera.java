@@ -733,6 +733,6 @@ private final double DRIVE_CORRECTION_CLOSE = .05;
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 10;
+private final double MIN_INCHES_CLOSE = 15;
 
 }

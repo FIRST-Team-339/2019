@@ -274,7 +274,7 @@ public static void periodic ()
         visionHeight--;
         Hardware.telopTimer.start();
         }
-    if (Hardware.alignVisionButton.isOnCheckNow() == true
+    if (Hardware.alignVisionButton.isOnCheckNow()
             && Hardware.depositGamePiece.overrideVision() == false)
         {
 
@@ -283,13 +283,8 @@ public static void periodic ()
                         false/* Hardware.manipulator.hasCargo() */))
             {
             hasFinishedDeposit = true;
-            Hardware.depositGamePiece.resetDepositTeleop();
+
             }
-        }
-    else
-        {
-        hasFinishedDeposit = false;
-        Hardware.depositGamePiece.resetDepositTeleop();
         }
 
     // end vision==============================================
