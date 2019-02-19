@@ -372,12 +372,6 @@ public static JoystickButton resetForkliftEncoderButton1 = null;
 
 public static JoystickButton cancelOneButton = null;
 
-public static QuickSwitch testDeployButtonTemp = null;
-
-public static QuickSwitch testRetractTemp = null;
-
-public static QuickSwitch testSetManipulatorPosition = null;
-
 public static JoystickButton cancelAutoLeftDriver = null;
 
 // ----------Right Driver--------------
@@ -668,25 +662,20 @@ public static void commonInitialization ()
 
     // ----------Left Driver---------------
 
-    testDeployButtonTemp = new QuickSwitch(leftDriver,
-            8);
 
-    testRetractTemp = new QuickSwitch(leftDriver,
-            9);
-
-    testSetManipulatorPosition = new QuickSwitch(leftDriver,
-            10);
+    // Momentary Switches
 
     upshiftButton = new JoystickButton(leftDriver, 3);
 
     // ----------Right Driver--------------
-    resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
 
-    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
+    solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
 
-    climbOneButton = new JoystickButton(rightDriver, 11);
+    solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
-    climbTwoButton = new JoystickButton(leftDriver, 11);
+    climbOneButton = new JoystickButton(leftDriver, 11);
+
+    climbTwoButton = new JoystickButton(rightDriver, 11);
 
     cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
 
@@ -694,9 +683,11 @@ public static void commonInitialization ()
 
     // Momentary Switches
 
-    solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
+    // ----------Right Driver--------------
+    resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
 
-    solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
+    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
+
 
 
     // HaCkETy haCkS

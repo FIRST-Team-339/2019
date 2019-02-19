@@ -253,16 +253,15 @@ public static void periodic ()
     Hardware.lift.printDebugInfo();
     Hardware.manipulator.printDeployDebugInfo();
 
-    Hardware.climber.climbUpdate();
+    // Hardware.climber.climbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
     // vision=====================================
 
-
     if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 3 && Hardware.telopTimer.get() > .25)
+            && visionHeight < 2 && Hardware.telopTimer.get() > .25)
         {
         Hardware.telopTimer.reset();
         visionHeight++;
@@ -332,13 +331,14 @@ public static void periodic ()
     // && Hardware.climbTwoButton.isOnCheckNow() == true)
     if (Hardware.leftDriver.getRawButton(6) == true)
         {
-        Hardware.climber.climb();
+        // Hardware.climber.climb();
+        Hardware.climber.newClimb();
         }
 
     if (Hardware.alignVisionButton.get() == false
             || Hardware.depositGamePiece.overrideVision())
         {
-        if (ClimbToLevelTwo.climbState == ClimbToLevelTwo.ClimberState.STANDBY)
+        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY)
             {
             teleopDrive();
             if (Hardware.solenoidButtonOne.isOnCheckNow() == true
@@ -358,8 +358,6 @@ public static void periodic ()
 
     printStatements();
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
 } // end Periodic()
 
 
@@ -370,7 +368,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -382,21 +380,23 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    Hardware.climber.newClimbUpdate();
 
-    if (Hardware.armHackButton.isOnCheckNow() == true)
-        {
-        // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
-        Hardware.armMotor.set(-.6);
-        }
-    else
-        {
-        Hardware.armMotor.set(0.0);
-        }
 
-    if (Hardware.liftHackButton.get() == true)
-        {
-        Hardware.lift.setLiftPosition(0, 3);
-        }
+    // if (Hardware.armHackButton.isOnCheckNow() == true)
+    // {
+    // // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
+    // Hardware.armMotor.set(-.6);
+    // }
+    // else
+    // {
+    // Hardware.armMotor.set(0.0);
+    // }
+
+    // if (Hardware.liftHackButton.get() == true)
+    // {
+    // Hardware.lift.setLiftPosition(0, 2.5);
+    // }
 
     // Hardware.climber.reverseClimbUpdate();
     // if (Hardware.leftDriver.getRawButton(6) == true)
@@ -452,17 +452,8 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-
-    System.out.println("usingVision: "
-            + Hardware.alignVisionButton.isOnCheckNow());
-
-    System.out.println("level "
-            + visionHeight);
-
     System.out.println("ultrasonic: "
             + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
-
-
 } // end connerTest()
 
 private static void coleTest ()
@@ -472,14 +463,17 @@ private static void coleTest ()
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
-    if (Hardware.testDeployButtonTemp.getCurrentValue())
-        Hardware.manipulator.deployArm();
+    // if (Hardware.testDeployButtonTemp.getCurrentValue())
+    // if (Hardware.leftDriver.getRawButton(3))
+    // Hardware.manipulator.deployArm();
 
-    if (Hardware.testRetractTemp.getCurrentValue())
-        Hardware.manipulator.retractArm();
+    // if (Hardware.rightOperator.getRawButton(5))
+    // if (Hardware.leftDriver.getRawButton(4))
+    // Hardware.manipulator.retractArm();
 
-    if (Hardware.testSetManipulatorPosition.getCurrentValue())
-        Hardware.manipulator.moveArmToPosition(45, 1.0);
+    // if (Hardware.testSetManipulatorPosition.getCurrentValue())
+    // if (Hardware.leftDriver.getRawButton(5))
+    // Hardware.manipulator.moveArmToPosition(45);
 
 
 

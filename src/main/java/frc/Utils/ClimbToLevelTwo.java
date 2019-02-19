@@ -32,6 +32,10 @@ private UltraSonic ultraSonic = null;
 
 private Timer climbTimer = new Timer();
 
+private Timer newClimbTimer = new Timer();
+
+private Timer driveTimer = new Timer();
+
 // state of the climb state machine
 public static enum ClimberState
     {
@@ -100,6 +104,7 @@ public ClimbToLevelTwo ()
 // this.ultraSonic = ultraSonic;
 // }
 
+
 /**
  * Constructor for the new robot- has armPot and single solenoid
  *
@@ -138,6 +143,209 @@ public ClimbToLevelTwo (DoubleSolenoid driveSolenoid,
     this.lift = lift;
     this.ultraSonic = ultraSonic;
 }
+
+
+
+// state of the climb state machine
+public static enum NewClimberState
+    {
+    STANDBY, START_CLIMB, BACK_UP_TIL_BUMPERS_HIT, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, BACK_UP_TIL_REAR_WHEELS_HIT, DELAY_THREE, RETRACT_WHEELS, DELAY_FOUR, BACK_UP_TIL_MID_WHEELS_ON_PLATFORM, DELAY_FIVE, POWERED_ARM_DOWN, DELAY_SIX, DRIVE_BACKWARDS_ONTO_PLATFORM, DELAY_SEVEN, RAISE_ARM, STOP, FINISH
+    }
+
+
+// initializes climb state and prev climb state to standby
+public static NewClimberState newClimbState = NewClimberState.STANDBY;
+
+public void newClimb ()
+{
+    newClimbState = NewClimberState.START_CLIMB;
+}
+
+public void newClimbUpdate ()
+{
+    System.out.println(newClimbState);
+
+    switch (newClimbState)
+        {
+        case STANDBY:
+            // state to wait in during the match until climb() or reverseClimb()
+            // is called
+            // testSolenoid.set(Value.kForward);
+            break;
+
+        case START_CLIMB:
+            // state the climb() function sets the state to and is basically an
+            // init state
+            Hardware.drive.setGearPercentage(Teleop.FIRST_GEAR_NUMBER,
+                    1.0);
+            Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
+                    1.0);
+            driveTimerInit();
+            newClimbState = NewClimberState.BACK_UP_TIL_BUMPERS_HIT;
+            break;
+
+        case BACK_UP_TIL_BUMPERS_HIT:
+            // lowers forklift to the first position needed to climb, not all
+            // the way down but mostly dwn
+            if (this.backUpTilBumpersHit() == true)
+                {
+                // moves on to delay init and then DELAY_ONE
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_ONE;
+                }
+            break;
+
+        case DELAY_ONE:
+            // first delay state after LOWER_FORKLIFT_TO_POSITION and before
+            // LOWER_ARM
+            if (climbTimer.get() >= NEW_DELAY_ONE_TIME)
+                {
+                climbTimer.stop();
+                newClimbState = NewClimberState.DEPLOY_BACK_WHEELS;
+                }
+            break;
+
+        case DEPLOY_BACK_WHEELS:
+            // lowers nessie head all the way
+            if (this.deployBackWheels() == true)
+                {
+                // goes to DELAY_TWO after DELAY_INIT
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_TWO;
+                }
+            break;
+
+        case DELAY_TWO:
+            // delay state after LOWER_ARM and before DEPLOY_BACK_WHEELS
+            if (climbTimer.get() >= NEW_DELAY_TWO_TIME)
+                {
+                // sets state to
+                climbTimer.stop();
+                driveTimerInit();
+                newClimbState = NewClimberState.BACK_UP_TIL_REAR_WHEELS_HIT;
+                }
+            break;
+
+        case BACK_UP_TIL_REAR_WHEELS_HIT:
+            if (this.backUpTilRearWheelsHit() == true)
+                {
+                // Goes to DELAY_THREE
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_THREE;
+                }
+            break;
+
+        case DELAY_THREE:
+            if (climbTimer.get() >= NEW_DELAY_THREE_TIME)
+                {
+                climbTimer.stop();
+                driveTimerInit();
+                newClimbState = NewClimberState.RETRACT_WHEELS;
+                }
+            break;
+
+        case RETRACT_WHEELS:
+            if (this.retractWheels() == true)
+                {
+                // goes to delay four
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_FOUR;
+                }
+            break;
+
+        case DELAY_FOUR:
+            if (climbTimer.get() >= NEW_DELAY_FOUR_TIME)
+                {
+                climbTimer.stop();
+                newClimbState = NewClimberState.BACK_UP_TIL_MID_WHEELS_ON_PLATFORM;
+                }
+            break;
+
+        case BACK_UP_TIL_MID_WHEELS_ON_PLATFORM:
+
+            if (this.backUpTilMidWheelsOnPlatform() == true)
+                {
+                // goes to DELAY_FIVE
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_FIVE;
+                }
+            break;
+
+        case DELAY_FIVE:
+            if (climbTimer.get() >= NEW_DELAY_FIVE_TIME)
+                {
+                climbTimer.stop();
+                newClimbState = NewClimberState.DRIVE_BACKWARDS_ONTO_PLATFORM;// .POWERED_ARM_DOWN;
+                }
+            break;
+
+        case POWERED_ARM_DOWN:
+            // raises nessie head all the way
+            if (this.poweredArmDown() == true)
+                {
+                // goes to DELAY_SIX
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_SIX;
+                }
+            break;
+
+        case DELAY_SIX:
+            // delay state after
+            if (climbTimer.get() >= NEW_DELAY_SIX_TIME)
+                {
+                climbTimer.stop();
+                driveTimerInit();
+                newClimbState = NewClimberState.FINISH;// .DRIVE_BACKWARDS_ONTO_PLATFORM;
+                }
+            break;
+
+        case DRIVE_BACKWARDS_ONTO_PLATFORM:
+
+            if (this.driveBackwardsOntoPlatform() == true)
+                {
+                // goes to DELAY_SEVEN
+                this.delayInit();
+                newClimbState = NewClimberState.DELAY_SEVEN;
+                }
+            break;
+
+        case DELAY_SEVEN:
+            // delay after RETRACT_WHEELS and before FINISH_DRIVING
+            if (climbTimer.get() >= NEW_DELAY_SEVEN_TIME)
+                {
+                climbTimer.stop();
+                newClimbState = NewClimberState.RAISE_ARM;
+                }
+            break;
+
+        case RAISE_ARM:
+            //
+            if (this.raiseArm() == true)
+                {
+                // goes to stop
+                this.delayInit();
+                newClimbState = NewClimberState.STOP;
+                }
+            break;
+
+        case STOP:
+            // stops stuff
+            Hardware.drive.setGearPercentage(Teleop.FIRST_GEAR_NUMBER,
+                    Teleop.FIRST_GEAR_RATIO_KILROY_XX);
+            Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
+                    Teleop.SECOND_GEAR_RATIO_KILROY_XX);
+            this.stop();
+            break;
+        case FINISH:
+            System.out.println("WE'VE CLIMBED MOUNT EVEREST!!!");
+            break;
+        // welp heres a default just in case
+        default:
+            System.out.println("DEFAULT CLIMB CASE REACHED");
+            break;
+        }
+}
+
 
 
 // method that deals with the states of climbing
@@ -905,12 +1113,144 @@ public boolean reverseDriveOffCompletely ()
     return false;
 }
 
+// -------------------------------------------------------------------------
+// NEW CLIMB FUNCTIONS
+// -------------------------------------------------------------------------
+
+/**
+ * function to back up and straighten out on the wall in order to be lind up to
+ * climb using the new method
+ */
+public boolean backUpTilBumpersHit ()
+{
+    if (driveTimer.get() >= TIME_TO_BACK_UP_TIL_BUMPERS_HIT)
+        {
+        drive.stop();
+        return true;
+        }
+    else
+        {
+        drive.driveStraight(SPEED_BACK_UP_TIL_BUMPERS_HIT, 0.0, true);
+        return false;
+        }
+}
+
+
+/**
+ * function to back up while the wheels are retracted til the point where the
+ * rear wheels hit the wall to climb using the new method
+ */
+public boolean backUpTilRearWheelsHit ()
+{
+    if (driveTimer.get() >= TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM)
+        {
+        drive.stop();
+        return true;
+        }
+    else
+        {
+        drive.driveStraight(SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM, 0.0,
+                true);
+        return false;
+        }
+}
 
 
 
+/**
+ * drive backwards until the second set of wheels are on the platform and
+ * actually have traction
+ */
+public boolean backUpTilMidWheelsOnPlatform ()
+{
+    if (driveTimer.get() >= TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM)
+        {
+        drive.stop();
+        return true;
+        }
+    else
+        {
+        drive.driveStraight(SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM,
+                0.0, true);
+        return false;
+        }
+}
 
 
+/**
+ * gives increased power in order to lower the arm and rock the robot onto the
+ * platform while the solenoids are retracted and we have two wheels on the
+ *
+ * runs for a set amount of time
+ */
+public boolean poweredArmDown ()
+{
 
+    if (driveTimer.get() >= TIME_TO_POWER_ARM_DOWN)
+        {
+        return true;
+        }
+    else
+        {
+        this.holdArmToSupportDrive();
+        return false;
+        }
+    // if (Hardware.manipulator
+    // .getCurrentArmPosition() >= Hardware.manipulator
+    // .getCurrentDeployMinAngle())
+    // {
+    // this.holdArmToSupportDrive();
+    // return false;
+    // }
+    // else
+    // {
+    // return true;
+    // }
+
+}
+
+/**
+ * drive backwards until we rock back on to the platform and slam against the
+ * wall
+ */
+public boolean driveBackwardsOntoPlatform ()
+{
+
+
+    if (driveTimer.get() >= delayBeforeDriveFromPower
+            && driveTimer.get() <= TIME_TO_POWER_ARM_DOWN)
+        {
+        drive.driveStraight(SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM, 0.0,
+                true);
+        }
+    else
+        {
+        drive.stop();
+        }
+
+    if (driveTimer.get() <= TIME_TO_POWER_ARM_DOWN)
+        {
+        this.holdArmToSupportDrive();
+        return false;
+        }
+    else
+        {
+        return true;
+        }
+
+    // if (driveTimer.get() >= TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM)
+    // {
+    // drive.stop();
+    // return true;
+    // }
+    // else
+    // {
+    // drive.driveStraight(SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM, 0.0,
+    // true);
+    // return false;
+    // }
+}
+// -------------------------------------------------------------------------
 
 /**
  * stops all the various mechanisms so we just sit there on the platform
@@ -924,6 +1264,28 @@ private void stop ()
     lift.liftState = Forklift.ForkliftState.STOP;
     driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
 }
+
+/**
+ * resets and starts delay timer to use in delay states
+ */
+public void delayInit ()
+{
+    // resets and starts delayTimer
+    this.climbTimer.reset();
+    this.climbTimer.start();
+}
+
+/**
+ * resets and starts the driveTimer
+ */
+public void driveTimerInit ()
+{
+    // resets and starts timer
+    driveTimer.reset();
+    driveTimer.start();
+}
+
+
 
 /**
  * method to end climbing early
@@ -1015,5 +1377,49 @@ private static final double DELAY_SEVEN_TIME = 1.0;
 public static boolean finishedEarly = false;
 
 public static boolean reverseClimb = false;
+
+
+// new climb stuff
+public static double SPEED_BACK_UP_TIL_BUMPERS_HIT = -.3;
+
+public static double TIME_TO_BACK_UP_TIL_BUMPERS_HIT = .25;
+// --------------------------------
+
+public static double SPEED_BACK_UP_TIL_REAR_WHEELS_HIT = -.25;// .3; changed at
+                                                              // 8:20 2/18
+
+public static double TIME_TO_BACK_UP_TIL_REAR_WHEELS_HIT = .5;
+// --------------------------------
+
+public static double SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = -.4;// .5;
+                                                                    // changed
+                                                                    // at 8:20
+                                                                    // 2/18
+
+public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = 1.0;
+// --------------------------------
+
+public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.75;
+
+public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = .5;
+
+private static final double TIME_TO_POWER_ARM_DOWN = 3.2;
+// --------------------------------
+
+private static final double NEW_DELAY_ONE_TIME = 0.0;
+
+private static final double NEW_DELAY_TWO_TIME = 1.25;// after solenoids
+
+private static final double NEW_DELAY_THREE_TIME = 0.5;
+
+private static final double NEW_DELAY_FOUR_TIME = 0.75;
+
+private static final double NEW_DELAY_FIVE_TIME = 0.2;
+
+private static final double NEW_DELAY_SIX_TIME = 0.0;
+
+private static final double NEW_DELAY_SEVEN_TIME = 1.0;
+
+private static final double delayBeforeDriveFromPower = 1.0;
 
 }
