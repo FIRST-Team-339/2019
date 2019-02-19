@@ -4,6 +4,7 @@ import frc.Utils.drive.*;
 import frc.Hardware.Hardware;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -504,6 +505,24 @@ public boolean overrideVision ()
         }
 
     return false;
+}
+
+public void printDebugStatements ()
+{
+
+    SmartDashboard.putString("deposit teleop",
+            this.depositTeleopState.toString());
+
+    SmartDashboard.putBoolean("hasDoneThePrep",
+            hasDoneThePrep);
+    SmartDashboard.putBoolean("deposit with vision enabled",
+            Hardware.alignVisionButton.isOnCheckNow());
+
+    SmartDashboard.putNumber("forklift height",
+            forkliftHeight);
+
+    SmartDashboard.putBoolean("has cargo",
+            hasCargo);
 }
 
 //

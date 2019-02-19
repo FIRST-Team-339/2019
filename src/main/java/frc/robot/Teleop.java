@@ -260,7 +260,7 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
-
+    Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
 
