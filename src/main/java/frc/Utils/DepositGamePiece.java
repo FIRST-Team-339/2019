@@ -457,6 +457,8 @@ public void resetDepositTeleop ()
 
 }
 
+
+
 public static boolean hasDoneThePrep = false;
 
 /**
@@ -515,14 +517,9 @@ public static final double PREP_FOR_HATCH_MIN = 100;
 
 // Hatch constants======================
 
-private static final int FORWARD_TO_DEPOSIT = 4;// TODO
+private static final int FORWARD_TO_DEPOSIT = 4;
 
 private static final double DEPOSIT_ARM_ANGLE_AUTO = 90;
-
-private static final double DEPOSIT_ARM_TELEOP = 25;
-
-// cargo constants
-private static final double CARGO_ARM_POSITION = 70;
 
 // otro constants===========================
 
@@ -530,7 +527,7 @@ private static final double JOYSTICK_DEADBAND = .2;
 
 private static boolean usingGyro = true;
 
-private static final double BACKUP_INCHES = 10;// TODO
+private static final double BACKUP_INCHES = 10;
 
 private static final double BACKUP_ACCELERATION = .1;
 
@@ -538,7 +535,7 @@ private static final double BACKUP_SPEED = .3;
 
 private static final double FORK_SPEED = 1;
 
-private static final double MANIPULATOR_SPEED = 1;
+
 
 
 }
