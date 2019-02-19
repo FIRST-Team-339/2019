@@ -537,7 +537,7 @@ public void saveImage (ImageType type)
     // grab the image
     Mat tempImage = new Mat();
 
-    // TODO this is Cole's problem line
+
     // maybe check to see if we have an image first before using this
     // test if we are getting an image, and then try putting it in a loop
     // until we get one
@@ -593,7 +593,7 @@ public void saveImage (ImageType type)
         } // switch
           // Save the image to the folder specified with the name specified
 
-    // TODO this is what is printing Cole's problem
+
 
     Imgcodecs.imwrite(SAVE_IMAGE_PATH + timeStamp + "/" + fileName,
             tempImage);
@@ -673,7 +673,7 @@ public void takeLitPicture (boolean button)
 
             this.saveImageSafely(false, ImageType.RAW);
 
-            this.setRelayValue(Value.kOff);
+            // this.setRelayValue(Value.kOff);
             this.pictureTimer.stop();
             this.pictureTimer.reset();
             } // end if
@@ -916,7 +916,7 @@ private final int maxProcessedImagesAllowedToCollect = 29;
 // -------------------------------------
 private final int maxRawImagesAllowedToCollect = 25;
 
-private final int numImageFolders = 5;
+// private final int numImageFolders = 5;
 
 private final static String timeStamp = new SimpleDateFormat("MMddHHmm")
         .format(new Date());

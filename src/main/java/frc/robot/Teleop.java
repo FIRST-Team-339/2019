@@ -255,6 +255,8 @@ public static void periodic ()
 
     // Hardware.climber.climbUpdate();
 
+    Hardware.climber.newClimbUpdate();
+
     Hardware.depositGamePiece.depositTeleopStateMachine();
 
 
@@ -274,6 +276,9 @@ public static void periodic ()
         visionHeight--;
         Hardware.telopTimer.start();
         }
+
+    System.out.println(
+            "vision button is on:" + Hardware.alignVisionButton.isOn());
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
@@ -282,14 +287,9 @@ public static void periodic ()
                 .startTeleopDeposit(visionHeight,
                         false/* Hardware.manipulator.hasCargo() */))
             {
-            hasFinishedDeposit = true;
-            Hardware.depositGamePiece.resetDepositTeleop();
+            Hardware.alignVisionButton.setValue(false);
+            System.out.println("we have depositd the gamepiece");
             }
-        }
-    else
-        {
-        hasFinishedDeposit = false;
-        Hardware.depositGamePiece.resetDepositTeleop();
         }
 
     // end vision==============================================
@@ -354,8 +354,6 @@ public static void periodic ()
             }
         }
 
-
-
     printStatements();
 
 } // end Periodic()
@@ -380,7 +378,7 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-    Hardware.climber.newClimbUpdate();
+
 
 
     // if (Hardware.armHackButton.isOnCheckNow() == true)
@@ -452,8 +450,7 @@ private static void ashleyTest ()
 
 private static void connerTest ()
 {
-    System.out.println("ultrasonic: "
-            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+
 } // end connerTest()
 
 private static void coleTest ()
@@ -1021,7 +1018,7 @@ public static void takePicture ()
         // ring light relay
         if (Hardware.takePictureTimer.get() >= 3.0)
             {
-            // Hardware.ringLightRelay.set(Value.kOff);//TODO
+            // Hardware.ringLightRelay.set(Value.kOff);
             firstPress = true;
             pictureButton1 = false;
             pictureButton2 = false;
@@ -1122,4 +1119,6 @@ private static boolean pictureButton2;
 public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
+
+
 } // end class
