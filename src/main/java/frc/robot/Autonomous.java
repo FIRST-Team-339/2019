@@ -872,7 +872,7 @@ private static boolean depositRocketHatch ()
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
                             DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
-                            SPEED_TO_DRIVE_OFF_PLATFORM,
+                            LEAVE_LEVEL_ONE_SPEED,
                             ACCELERATION_TIME, USING_GYRO))
                         {
 
