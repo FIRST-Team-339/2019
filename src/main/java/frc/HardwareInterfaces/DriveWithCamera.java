@@ -317,10 +317,12 @@ public boolean driveToTarget (double speed)
 
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && (Hardware.leftFrontDriveEncoder
-                            .getDistance() >= MIN_INCHES
-                            || Hardware.rightFrontDriveEncoder
-                                    .getDistance() >= MIN_INCHES))
+            /*
+             * (Hardware.leftFrontDriveEncoder
+             * .getDistance() >= MIN_INCHES
+             * || Hardware.rightFrontDriveEncoder
+             * .getDistance() >= MIN_INCHES)
+             */)
                 {
 
                 visionProcessor.saveImage(ImageType.RAW);

@@ -225,9 +225,10 @@ public boolean depositTeleopStateMachine ()
 
 
         case INIT:
-
+            Hardware.axisCamera.setRelayValue(Value.kOn);
             if (depositHeighthatch == 1 || depositHeightCargo == 1)
                 {
+                System.out.println("level 2 align first");
                 if (Hardware.driveWithCamera.driveToTargetClose(.1)
                         || (Hardware.frontUltraSonic
                                 .getDistanceFromNearestBumper() <= 22
@@ -236,12 +237,13 @@ public boolean depositTeleopStateMachine ()
                     {
                     Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
 
-                    depositTeleopState = DepositTeleopState.DEPOSIT;
+                    depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
                     }
                 }
-            Hardware.axisCamera.setRelayValue(Value.kOn);
-
-            depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
+            else
+                {
+                depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
+                }
             break;
 
         case PREP_FORKLIFT:

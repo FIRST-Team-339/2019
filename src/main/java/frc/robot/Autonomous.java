@@ -502,8 +502,14 @@ private static boolean depositCargoHatch ()
                         }
                     else
                         {
-                        depositCargoHatchState = DepositCargoHatchState.DRIVE_2_CENTER;
-
+                        if (!usingVisionOnStraight)
+                            {
+                            depositCargoHatchState = DepositCargoHatchState.DRIVE_2_CENTER;
+                            }
+                        else
+                            {
+                            depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
+                            }
                         }
                 }
             break;
@@ -1385,7 +1391,7 @@ public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
 
 // straight cargo hatch constants
-public static final double DISTANCE_TO_SHIP_CENTER = 105;
+public static final double DISTANCE_TO_SHIP_CENTER = 100;
 
 // rocket hatch contstants- no vision
 

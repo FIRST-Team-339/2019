@@ -527,7 +527,7 @@ public void saveImage (ImageType type)
                 .exec("ls -ld " + IMAGE_BASIC_PATH + "; sleep 30");
 
         // Runtime.getRuntime().exec(
-        // "ls -l | find -name \"images*\" | tail -n +6 | xargs rm -r");
+        // "ls -lt | find -name \"images*\" | tail -n +6 | xargs rm -r");
         } // end try
     catch (IOException e)
         {
