@@ -247,7 +247,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
                         // System.out.print("3");
-                        forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        //forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -270,7 +270,7 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                        //forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
@@ -326,7 +326,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        //forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -360,7 +360,7 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                       // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }

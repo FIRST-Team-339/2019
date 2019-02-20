@@ -58,7 +58,7 @@ public class Teleop
  */
 public static void init ()
 {
-
+    Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.telopTimer.start();
