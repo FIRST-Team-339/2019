@@ -32,6 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
@@ -872,7 +873,7 @@ private static boolean depositRocketHatch ()
                 case DRIVE:
                     if (Hardware.drive.driveStraightInches(
                             DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
-                            SPEED_TO_DRIVE_OFF_PLATFORM,
+                            LEAVE_LEVEL_ONE_SPEED,
                             ACCELERATION_TIME, USING_GYRO))
                         {
 
@@ -1305,7 +1306,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
 
 public static void endAutoPath ()
 {
-
+    Hardware.driveWithCamera.state = DriveWithCamera.DriveWithCameraState.INIT;
     sideCargoHatchState = SideCargoHatchState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
