@@ -315,7 +315,9 @@ public static JoystickButton intakeTriggerLeft = null;
 
 public static JoystickButton intakeTriggerRight = null;
 
-public static JoystickButton outtakeButton = null;
+public static JoystickButton outtakeButtonLeft = null;
+
+public static JoystickButton outtakeButtonRight = null;
 
 public static JoystickButton intakeOverride = null;
 
@@ -632,7 +634,7 @@ public static void commonInitialization ()
     // left trigger
     intakeTriggerLeft = new JoystickButton(leftOperator, 1);
 
-    outtakeButton = new JoystickButton(leftOperator, 2);
+    outtakeButtonLeft = new JoystickButton(leftOperator, 2);
 
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
@@ -657,6 +659,8 @@ public static void commonInitialization ()
     // right trigger
 
     intakeTriggerRight = new JoystickButton(rightOperator, 1);
+
+    outtakeButtonRight = new JoystickButton(rightOperator, 2);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 

@@ -214,15 +214,15 @@ public static void periodic ()
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
-    if (Hardware.intakeTriggerLeft.get() == true
-            || Hardware.intakeTriggerRight.get() == true)
-        {
-        runIntake = true;
-        }
-    else
-        {
-        runIntake = false;
-        }
+    // if (Hardware.intakeTriggerLeft.get() == true
+    // || Hardware.intakeTriggerRight.get() == true)
+    // {
+    // runIntake = true;
+    // }
+    // else
+    // {
+    // runIntake = false;
+    // }
 
 
     // // Forklift
@@ -252,14 +252,16 @@ public static void periodic ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTriggerLeft.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTriggerLeft.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            runIntake/* Hardware.intakeTriggerLeft.get() */,// TODO
-            Hardware.outtakeButton.get(),
+            (Hardware.intakeTriggerLeft.get() == true
+                    || Hardware.intakeTriggerRight.get() == true),// TODO
+            (Hardware.outtakeButtonLeft.get() == true
+                    || Hardware.outtakeButtonRight.get() == true),
             Hardware.intakeOverride.get());
 
     // // =================================================================
@@ -271,7 +273,7 @@ public static void periodic ()
 
     Hardware.climber.newClimbUpdate();
 
-    // Hardware.depositGamePiece.depositTeleopStateMachine();
+    Hardware.depositGamePiece.depositTeleopStateMachine();
     // Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
@@ -493,6 +495,26 @@ private static void coleTest ()
 
 
     // Manipulator
+
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // (Hardware.intakeTriggerLeft.get() == true
+    // || Hardware.intakeTriggerRight.get() == true),// TODO
+    // (Hardware.outtakeButtonLeft.get() == true
+    // || Hardware.outtakeButtonRight.get() == true),
+    // Hardware.intakeOverride.get());
+
+    // SmartDashboard.putString("intakeTriggerLeft",
+    // "" + Hardware.intakeTriggerLeft.get());
+
+    // SmartDashboard.putString("intakeTriggerRight",
+    // "" + Hardware.intakeTriggerRight.get());
+
+    // SmartDashboard.putString("outtakeButtonLeft",
+    // "" + Hardware.outtakeButtonLeft.get());
+
+    // SmartDashboard.putString("outtakeButtonRight",
+    // "" + Hardware.outtakeButtonRight.get());
+
 
     Hardware.lift.printDebugInfo();
     Hardware.manipulator.printDeployDebugInfo();
@@ -1139,7 +1161,7 @@ public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
 
-public static boolean runIntake = false;
+// public static boolean runIntake = false;
 
 
 } // end class
