@@ -796,20 +796,20 @@ public final static double MIDDLE_ROCKET_HATCH_ANGLE = 20;
 public final static double LOWER_ROCKET_HATCH_ANGLE = 20;
 
 // heights for the cargo and hatch openings on the cargo ship
-public final static double CARGO_SHIP_CARGO = 45;
+public final static double CARGO_SHIP_CARGO = 28;
 
-public final static double CARGO_SHIP_HATCH = 40;
+public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 
-private final static double CARGO_SHIP_CARGO_ANGLE = 45;
+// private final static double CARGO_SHIP_CARGO_ANGLE = 45;
 
-private final static double CARGO_SHIP_HATCH_ANGLE = 40;
+// private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
 private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double LIMIT_ARM_ANGLE_HEIGHT = .75;
+private double LIMIT_ARM_ANGLE_HEIGHT = .6;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

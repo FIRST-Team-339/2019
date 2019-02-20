@@ -275,7 +275,8 @@ public static void periodic ()
     Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
-
+    System.out.println("ultrasonic values: "
+            + Hardware.frontUltraSonic.getDistanceFromNearestBumper());
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 2 && Hardware.telopTimer.get() > .25)
         {
