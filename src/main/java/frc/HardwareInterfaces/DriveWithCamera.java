@@ -383,7 +383,7 @@ public boolean driveToTargetClose (double speed)
                                     .getDistance() >= MIN_INCHES_CLOSE))
 
                 {
-                System.out.println("big dumb");
+
                 state = DriveWithCameraState.STOP;
                 }
 
@@ -407,7 +407,7 @@ public boolean driveToTargetClose (double speed)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
-                System.out.println("too right");
+                // System.out.println("too right");
                 this.getTransmission().driveRaw(
                         motorspeed + correctionValue,
                         motorspeed/* - correctionValue */);
@@ -420,7 +420,7 @@ public boolean driveToTargetClose (double speed)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
-                    System.out.println("too left");
+                    // System.out.println("too left");
                     this.getTransmission().driveRaw(
                             motorspeed/* - correctionValue */,
                             motorspeed + correctionValue);

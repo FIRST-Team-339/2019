@@ -382,7 +382,7 @@ public boolean depositTeleopStateMachine ()
                 }
             break;
         case ALIGN_TO_TARGET:
-            System.out.println("in vision");
+            // System.out.println("in vision");
             if (depositHeighthatch == 1 || depositHeightCargo == 1)
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
@@ -453,8 +453,8 @@ public boolean startTeleopDeposit (int heightLevel, boolean hasCargo)
         }
     if (!hasStartedDeposit)
         {
-        System.out
-                .println("Stop. It's Conner Time");
+        // System.out
+        // .println("Stop. It's Conner Time");
         hasStartedDeposit = true;
         depositTeleopState = DepositTeleopState.INIT;
         }

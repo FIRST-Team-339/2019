@@ -271,8 +271,8 @@ public static void periodic ()
 
     Hardware.climber.newClimbUpdate();
 
-    Hardware.depositGamePiece.depositTeleopStateMachine();
-    Hardware.depositGamePiece.printDebugStatements();
+    // Hardware.depositGamePiece.depositTeleopStateMachine();
+    // Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
 
@@ -300,7 +300,7 @@ public static void periodic ()
                         false/* Hardware.manipulator.hasCargo() */))
             {
             Hardware.alignVisionButton.setValue(false);
-            System.out.println("we have depositd the gamepiece");
+
             }
         }
     else
