@@ -214,6 +214,16 @@ public static void periodic ()
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
+    if (Hardware.intakeTriggerLeft.get() == true
+            || Hardware.intakeTriggerRight.get() == true)
+        {
+        runIntake = true;
+        }
+    else
+        {
+        runIntake = false;
+        }
+
 
     // // Forklift
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
@@ -243,7 +253,12 @@ public static void periodic ()
             Hardware.deployOverride.get());
 
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTrigger.get(),
+            Hardware.intakeTriggerLeft.get(),
+            Hardware.outtakeButton.get(),
+            Hardware.intakeOverride.get());
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            runIntake/* Hardware.intakeTriggerLeft.get() */,// TODO
             Hardware.outtakeButton.get(),
             Hardware.intakeOverride.get());
 
@@ -1124,6 +1139,8 @@ private static boolean pictureButton2;
 public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
+
+public static boolean runIntake = false;
 
 
 } // end class
