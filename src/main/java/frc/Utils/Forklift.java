@@ -105,7 +105,7 @@ public double getForkliftHeight ()
 public void moveForkliftWithController (Joystick operator,
         boolean overrideButton)
 {
-    SmartDashboard.putNumber("Arm Joystick", operator.getY());
+    // SmartDashboard.putNumber("Arm Joystick", operator.getY());
 
 
     // if (operator.getY() < Forklift.JOYSTICK_DEADBAND)

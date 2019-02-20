@@ -119,8 +119,8 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
  */
 public boolean spinOutCargoByTimer ()
 {
-    System.out.println(intakeState);
-    System.out.println(depositInit);
+    // System.out.println(intakeState);
+    // System.out.println(depositInit);
     if (depositInit == false)
         {
 
