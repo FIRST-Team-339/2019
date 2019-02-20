@@ -771,7 +771,7 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 // rocket ship
 public final static double TOP_ROCKET_CARGO = 57; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 36.5;
+public final static double MIDDLE_ROCKET_CARGO = 35;
 
 public final static double LOWER_ROCKET_CARGO = 8.5;
 
