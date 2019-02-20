@@ -414,26 +414,9 @@ public void setToNextHigherPreset (double forkliftSpeed,
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
             SmartDashboard.putNumber("Set Higher Angle", angle);
-            this.manipulator.moveArmToPosition(angle);
-            // if (angle >= 0.0)
-            // {
-            // if (Math.abs(this.manipulator.getCurrentArmPosition()
-            // - angle) > SET_ANGLE_DEADBAND)
-            // this.manipulator.moveArmToPosition(angle);
-            // }
+            if (angle >= 0.0)
+                this.manipulator.setAngleForForkliftNextPostion(angle);
             }
-        }
-}
-
-private void setForliftAndManipulator (double height, double angle,
-        double forkliftSpeed)
-{
-    this.setLiftPosition(height, forkliftSpeed);
-    if (angle >= 0.0)
-        {
-        if (Math.abs(this.manipulator.getCurrentArmPosition()
-                - angle) > SET_ANGLE_DEADBAND)
-            this.manipulator.moveArmToPosition(angle);
         }
 }
 
@@ -537,23 +520,17 @@ public void setToNextLowerPreset (double forkliftSpeed,
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
             SmartDashboard.putNumber("Set Lower Angle", angle);
-            this.manipulator.moveArmToPosition(angle);
-            // if (angle >= 0.0)
-            // {
-            // if (Math.abs(this.manipulator.getCurrentArmPosition()
-            // - angle) > SET_ANGLE_DEADBAND)
-            // this.manipulator.moveArmToPosition(angle);
-            // }
+            if (angle >= 0.0)
+                this.manipulator.setAngleForForkliftNextPostion(angle);
             }
         }
 }
-
-
 
 // # of feet that the forklift can be off of the next lowest position to
 // count as already being there
 private final double NEXT_LOWER_POSITION_DEADBAND = 1;
 
+private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 10;
 
 /**
  * For use in teleop and autonomous periodic.
@@ -794,11 +771,11 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 // rocket ship
 public final static double TOP_ROCKET_CARGO = 57; // placeholder value
 
-public final static double MIDDLE_ROCKET_CARGO = 36.5;
+public final static double MIDDLE_ROCKET_CARGO = 35;
 
 public final static double LOWER_ROCKET_CARGO = 8.5;
 
-public final static double TOP_ROCKET_CARGO_ANGLE = 80; // placeholder value
+public final static double TOP_ROCKET_CARGO_ANGLE = 70; // placeholder value
 
 public final static double MIDDLE_ROCKET_CARGO_ANGLE = 60;
 
@@ -810,7 +787,7 @@ public final static double TOP_ROCKET_HATCH = 57;// placeholder value
 
 public final static double MIDDLE_ROCKET_HATCH = 35;
 
-public final static double LOWER_ROCKET_HATCH = 12;
+public final static double LOWER_ROCKET_HATCH = 10;
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 40;// placeholder value
 
@@ -819,20 +796,20 @@ public final static double MIDDLE_ROCKET_HATCH_ANGLE = 20;
 public final static double LOWER_ROCKET_HATCH_ANGLE = 20;
 
 // heights for the cargo and hatch openings on the cargo ship
-public final static double CARGO_SHIP_CARGO = 45;
+public final static double CARGO_SHIP_CARGO = 28;
 
-public final static double CARGO_SHIP_HATCH = 40;
+public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 
-public final static double CARGO_SHIP_CARGO_ANGLE = 45;
+// private final static double CARGO_SHIP_CARGO_ANGLE = 45;
 
-public final static double CARGO_SHIP_HATCH_ANGLE = 40;
+// private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
 private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double LIMIT_ARM_ANGLE_HEIGHT = 1;
+private double LIMIT_ARM_ANGLE_HEIGHT = .6;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

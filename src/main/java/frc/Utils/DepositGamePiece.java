@@ -2,8 +2,10 @@ package frc.Utils;
 
 import frc.Utils.drive.*;
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -70,7 +72,7 @@ public boolean depositHatch (boolean inAuto)
             break;
 
         case BACKUP_HATCH:
-            System.out.println("in auto: " + inAuto);
+
             if (inAuto)
                 {
                 Hardware.manipulator.moveArmToPosition(
@@ -224,6 +226,26 @@ public boolean depositTeleopStateMachine ()
 
         case INIT:
 
+            if (depositHeighthatch == 1 || depositHeightCargo == 1)
+                {
+                if (Hardware.driveWithCamera.driveToTargetClose(.1)
+                        || (Hardware.frontUltraSonic
+                                .getDistanceFromNearestBumper() <= 22
+                                && Hardware.rightFrontDriveEncoder
+                                        .getDistance() > 10))
+                    {
+                    Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+
+                    depositTeleopState = DepositTeleopState.DEPOSIT;
+                    }
+                }
+            Hardware.axisCamera.setRelayValue(Value.kOn);
+
+            depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
+            break;
+
+        case PREP_FORKLIFT:
+
             if (hasCargo == false)
                 {
                 switch (depositHeighthatch)
@@ -240,13 +262,13 @@ public boolean depositTeleopStateMachine ()
                         break;
 
                     case 2:
-                        // System.out.print("2");
+
                         forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
 
                     case 3:
                         // System.out.print("3");
-                        forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        // forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -269,17 +291,10 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                        // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
-            Hardware.axisCamera.setRelayValue(Value.kOn);
-
-            depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
-            break;
-
-        case PREP_FORKLIFT:
-
             if (Hardware.lift.setLiftPosition(
                     forkliftHeight, FORK_SPEED))
                 {
@@ -325,7 +340,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        // forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -359,21 +374,28 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                        // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
             break;
         case ALIGN_TO_TARGET:
-
-            if (Hardware.driveWithCamera.driveToTargetClose(.1)
-                    || (Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() <= 22
-                            && Hardware.rightFrontDriveEncoder
-                                    .getDistance() > 10))
+            System.out.println("in vision");
+            if (depositHeighthatch == 1 || depositHeightCargo == 1)
                 {
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
+            else
+                if (Hardware.driveWithCamera.driveToTargetClose(.1)
+                        || (Hardware.frontUltraSonic
+                                .getDistanceFromNearestBumper() <= 22
+                                && Hardware.rightFrontDriveEncoder
+                                        .getDistance() > 10))
+                    {
+                    Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+
+                    depositTeleopState = DepositTeleopState.DEPOSIT;
+                    }
             break;
 
         case DEPOSIT:
@@ -397,6 +419,7 @@ public boolean depositTeleopStateMachine ()
         default:
         case FINISH:
             this.resetDepositTeleop();
+            Hardware.drive.resetEncoders();
             return true;
         }
 
@@ -453,9 +476,11 @@ public void resetDepositTeleop ()
     Hardware.alignVisionButton.setValue(false);
     hasStartedDeposit = false;
     depositTeleopState = DepositTeleopState.HOLD;
-    Hardware.drive.resetEncoders();
+
 
 }
+
+
 
 public static boolean hasDoneThePrep = false;
 
@@ -504,6 +529,24 @@ public boolean overrideVision ()
     return false;
 }
 
+public void printDebugStatements ()
+{
+
+    SmartDashboard.putString("deposit teleop",
+            this.depositTeleopState.toString());
+
+    SmartDashboard.putBoolean("hasDoneThePrep",
+            hasDoneThePrep);
+    SmartDashboard.putBoolean("deposit with vision enabled",
+            Hardware.alignVisionButton.isOnCheckNow());
+
+    SmartDashboard.putNumber("forklift height",
+            forkliftHeight);
+
+    SmartDashboard.putBoolean("has cargo",
+            hasCargo);
+}
+
 //
 public double forkliftHeight = 0;
 
@@ -515,14 +558,9 @@ public static final double PREP_FOR_HATCH_MIN = 100;
 
 // Hatch constants======================
 
-private static final int FORWARD_TO_DEPOSIT = 4;// TODO
+private static final int FORWARD_TO_DEPOSIT = 4;
 
 private static final double DEPOSIT_ARM_ANGLE_AUTO = 90;
-
-private static final double DEPOSIT_ARM_TELEOP = 25;
-
-// cargo constants
-private static final double CARGO_ARM_POSITION = 70;
 
 // otro constants===========================
 
@@ -530,7 +568,7 @@ private static final double JOYSTICK_DEADBAND = .2;
 
 private static boolean usingGyro = true;
 
-private static final double BACKUP_INCHES = 10;// TODO
+private static final double BACKUP_INCHES = 10;
 
 private static final double BACKUP_ACCELERATION = .1;
 
@@ -538,7 +576,7 @@ private static final double BACKUP_SPEED = .3;
 
 private static final double FORK_SPEED = 1;
 
-private static final double MANIPULATOR_SPEED = 1;
+
 
 
 }

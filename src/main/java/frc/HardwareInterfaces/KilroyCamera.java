@@ -22,6 +22,7 @@ package frc.HardwareInterfaces;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import edu.wpi.cscore.AxisCamera;
+import frc.Hardware.Hardware;
 
 /**
  * A camera container/interface that holds an instance of the AxisCamera
@@ -45,8 +46,8 @@ private boolean haveCamera;
 // the return value for integers when we have no camera
 public static final int noCameraIntReturnValue = -1;
 
-// TODO
-private static String KILROY_CAMERA_IP = "10.13.39.11";
+
+private static String KILROY_CAMERA_IP = Hardware.axisCameraIp;
 
 private static int imageNumber = 0;
 
@@ -93,7 +94,8 @@ public KilroyCamera (boolean hasCamera)
     if (hasCamera)
         {
         this.camera = new AxisCamera("Kilroy Axis", KILROY_CAMERA_IP);
-        } else
+        }
+    else
         {
         this.camera = null;
         }
@@ -122,7 +124,8 @@ public KilroyCamera (boolean hasCamera, String ip)
         {
         KILROY_CAMERA_IP = ip;
         this.camera = new AxisCamera("Kilroy Axis", KILROY_CAMERA_IP);
-        } else
+        }
+    else
         {
         this.camera = null;
         }

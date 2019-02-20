@@ -36,7 +36,6 @@ import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
 
@@ -80,6 +79,7 @@ public static void init ()
             DRIVE_SPEED = KILROY_XIX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
             LEAVE_LEVEL_ONE_SPEED = KILROY_XIX_LEAVE_LEVEL_ONE_SPEED;
+
             break;
 
         default:
@@ -91,6 +91,7 @@ public static void init ()
                     SECOND_AUTO_GEAR_RATIO_KILROY_XX);
             // sets the gear to 0 at the beginning.
             Hardware.drive.setGear(0);
+            Hardware.drive.setBrakePower(.5, BrakeType.AFTER_DRIVE);
             // ---------------------------------------------------------
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
@@ -411,7 +412,6 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO closely monitor merge tomorrow
             // 17 February 2019
             // Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.manipulator.printDeployDebugInfo();
@@ -420,7 +420,8 @@ private static boolean crossAutoline ()
             if (Hardware.drive.driveStraightInches(
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
-                    DRIVE_SPEED, ACCELERATION_TIME, true) == true)
+                    LEAVE_LEVEL_ONE_SPEED, ACCELERATION_TIME,
+                    true) == true)
                 {
 
                 cross = CrossAutoState.BRAKE;
@@ -486,7 +487,7 @@ private static boolean depositCargoHatch ()
 
         case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
             if (Hardware.drive.driveStraightInches(
-                    60, DRIVE_SPEED,
+                    distanceToCrossAutoline, LEAVE_LEVEL_ONE_SPEED,
                     ACCELERATION_TIME,
                     USING_GYRO))
                 {
@@ -577,12 +578,6 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case STRAIGHT_DEPOSIT_DRIVE_3:
-            // System.out.println(
-            // "Ultrasosnic" + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
-            // System.out.println(
-            // "encoders" + Hardware.rightFrontDriveEncoder
-            // .getDistance());
 
             Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
@@ -590,10 +585,9 @@ private static boolean depositCargoHatch ()
                     ACCELERATION_TIME,
                     USING_GYRO)
                     || Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() < 30)
+                            .getDistanceFromNearestBumper() < 20)
                 {
-                // System.out
-                // .println("Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
 
@@ -862,12 +856,7 @@ private static boolean depositRocketHatch ()
 
         case DRIVE_BY_CAMERA:
 
-            // System.out.println("camera state" + driveWithCameraStates);
-            // System.out.println(
-            // "ultrasonic distance: " + Hardware.frontUltraSonic
-            // .getDistanceFromNearestBumper());
-            // System.out.println("encoder: "
-            // + Hardware.rightFrontDriveEncoder.getDistance());
+
             switch (driveWithCameraStates)
                 {
                 case INIT:
@@ -987,7 +976,7 @@ private static boolean depositRocketHatch ()
                 }
             break;
         case FINISH:
-            // System.out.println("YOOOOOOOOOO IT WORKED");
+
             return true;
         default:
             break;
@@ -1370,7 +1359,7 @@ public static final int TURN_LEFT90 = -90;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
-public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = false;
+public static final boolean USING_GYRO_FOR_DRIVE_STARIGHT = true;
 
 public static final boolean USING_GYRO = true;
 
@@ -1416,7 +1405,7 @@ public static final double CAMERA_TURN_SPEED = .5;
 public static final double CAMERA_ACCELERATION = .2;
 
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .35;
 
 public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
@@ -1446,11 +1435,11 @@ public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .45; // @ANE
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .4; // @ANE
 
-public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .35;
+public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .4;
 
-// reverse descent stuff
+// reverse descent Stuff
 
 public static int TURN_180 = 180;
 

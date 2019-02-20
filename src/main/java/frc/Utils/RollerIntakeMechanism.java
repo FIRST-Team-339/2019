@@ -142,7 +142,10 @@ public boolean spinOutCargoByTimer ()
 /** Returns whether or not the manipulator has cargo */
 public boolean hasCargo ()
 {
-    return !this.photoSwitch.isOn();
+    // TODO uncomment lower return when photoSwitch is
+    // working on the robot
+    return false;
+    // return !this.photoSwitch.isOn();
 }
 
 

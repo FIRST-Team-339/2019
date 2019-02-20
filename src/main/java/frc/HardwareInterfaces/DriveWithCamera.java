@@ -247,7 +247,7 @@ public boolean driveToTarget (double speed)
             motorspeed = speed * slowAmount;
 
             // adjust speed so that motors never reverse
-            if (motorspeed - DRIVE_CORRECTION <= 0) // TODO
+            if (motorspeed - DRIVE_CORRECTION <= 0)
                 {
                 slowestSpeed = 0.05;
                 }
@@ -488,11 +488,11 @@ public static enum Side
 
 private Side side = Side.NULL;
 
-private DriveWithCameraState state = DriveWithCameraState.INIT;
+public DriveWithCameraState state = DriveWithCameraState.INIT;
 
 // private boolean takePicture = false;
 
-private enum DriveWithCameraState
+public enum DriveWithCameraState
     {
     INIT, DRIVE_WITH_CAMERA, DRIVE_WITH_US, STOP
     }
@@ -514,7 +514,7 @@ private enum DriveWithCameraState
  */
 
 
-private DriveWithCameraState jankyState = DriveWithCameraState.INIT;
+
 
 /**
  * Method to test a new way to align with vision
@@ -710,13 +710,13 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 25;
+private final double DISTANCE_FROM_WALL_TO_STOP = 30;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
-private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
+// private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
 private final double SLOW_MODIFIER = .7;
 
@@ -726,13 +726,13 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .2;
 
-private final double DRIVE_CORRECTION_CLOSE = .05;
+private final double DRIVE_CORRECTION_CLOSE = .07;
 
 
 
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 10;
+private final double MIN_INCHES_CLOSE = 8;
 
 }

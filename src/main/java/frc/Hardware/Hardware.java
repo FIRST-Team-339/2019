@@ -328,6 +328,8 @@ public static JoystickButton visionHeightUpButton = null;
 
 public static JoystickButton upshiftButton = null;
 
+public static JoystickButton poweredManipulatorForClimbButton = null;
+
 // ----- Right Operator -----
 
 public static JoystickButton pictureButtonOne = null;
@@ -637,6 +639,8 @@ public static void commonInitialization ()
 
     visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
+    poweredManipulatorForClimbButton = new JoystickButton(leftOperator,
+            11);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
