@@ -413,7 +413,7 @@ public void setToNextHigherPreset (double forkliftSpeed,
             // position
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
-            SmartDashboard.putNumber("Set Higher Angle", angle);
+            // SmartDashboard.putNumber("Set Higher Angle", angle);
             if (angle >= 0.0)
                 this.manipulator.setAngleForForkliftNextPostion(angle);
             }
@@ -519,7 +519,7 @@ public void setToNextLowerPreset (double forkliftSpeed,
             // position
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
-            SmartDashboard.putNumber("Set Lower Angle", angle);
+            // SmartDashboard.putNumber("Set Lower Angle", angle);
             if (angle >= 0.0)
                 this.manipulator.setAngleForForkliftNextPostion(angle);
             }
@@ -740,15 +740,15 @@ private double currentLiftMinHeight = 0.0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.6;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.7;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.2;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.35;
 
-private double UP_JOYSTICK_SCALAR = 0.6;
+private double UP_JOYSTICK_SCALAR = 0.7;
 
-private double DOWN_JOYSTICK_SCALAR = 0.2;
+private double DOWN_JOYSTICK_SCALAR = 0.35;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -769,34 +769,34 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 57; // placeholder value
+public final static double TOP_ROCKET_CARGO = 57;
 
 public final static double MIDDLE_ROCKET_CARGO = 35;
 
-public final static double LOWER_ROCKET_CARGO = 8.5;
+public final static double LOWER_ROCKET_CARGO = 11;
 
-public final static double TOP_ROCKET_CARGO_ANGLE = 70; // placeholder value
+public final static double TOP_ROCKET_CARGO_ANGLE = 63;
 
-public final static double MIDDLE_ROCKET_CARGO_ANGLE = 60;
+public final static double MIDDLE_ROCKET_CARGO_ANGLE = 48;
 
-public final static double LOWER_ROCKET_CARGO_ANGLE = 60;
+public final static double LOWER_ROCKET_CARGO_ANGLE = 48;
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 57;// placeholder value
+public final static double TOP_ROCKET_HATCH = 57;
 
-public final static double MIDDLE_ROCKET_HATCH = 35;
+public final static double MIDDLE_ROCKET_HATCH = 30;
 
-public final static double LOWER_ROCKET_HATCH = 10;
+public final static double LOWER_ROCKET_HATCH = 4;
 
-public final static double TOP_ROCKET_HATCH_ANGLE = 40;// placeholder value
+public final static double TOP_ROCKET_HATCH_ANGLE = 33;
 
-public final static double MIDDLE_ROCKET_HATCH_ANGLE = 20;
+public final static double MIDDLE_ROCKET_HATCH_ANGLE = 28;
 
-public final static double LOWER_ROCKET_HATCH_ANGLE = 20;
+public final static double LOWER_ROCKET_HATCH_ANGLE = 28;
 
 // heights for the cargo and hatch openings on the cargo ship
-public final static double CARGO_SHIP_CARGO = 28;
+public final static double CARGO_SHIP_CARGO = 30;
 
 public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 

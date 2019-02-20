@@ -444,15 +444,15 @@ public void setAngleForForkliftNextPostion (double angle)
         if (tempCurrentAngle < angle)
             {
             angle -= NEXT_HIGHER_ANGLE_ADJUSTMENT;
-            SmartDashboard.putNumber("Next Higher Angle Adjustment",
-                    angle);
+            // SmartDashboard.putNumber("Next Higher Angle Adjustment",
+            // angle);
             }
         // we are above the target angle, move down
         else
             {
             angle += NEXT_LOWER_ANGLE_ADJUSTMENT;
-            SmartDashboard.putNumber("Next Lower Angle Adjustment",
-                    angle);
+            // SmartDashboard.putNumber("Next Lower Angle Adjustment",
+            // angle);
             }
 
         this.moveArmToPosition(angle);
@@ -460,9 +460,9 @@ public void setAngleForForkliftNextPostion (double angle)
 
 }
 
-private final double SET_ANGLE_DEADBAND = 4.0;
+private final double SET_ANGLE_DEADBAND = 3.0;
 
-private final double NEXT_HIGHER_ANGLE_ADJUSTMENT = 5;
+private final double NEXT_HIGHER_ANGLE_ADJUSTMENT = 3;
 
 private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 3;
 
@@ -926,16 +926,16 @@ private static int RETRACTED_ARM_POSITION_ADJUSTED = 90;
 
 private double ARM_LEANING_BACK_ANGLE = 90;
 
-private double IS_CLEAR_OF_FRAME_ANGLE = 70;
+private double IS_CLEAR_OF_FRAME_ANGLE = 75;
 
 // the maximum angle for the deploy so
-public double MAX_FORKLIFT_UP_ANGLE = 65;
+public double MAX_FORKLIFT_UP_ANGLE = 70;
 
 private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 143; // placeholder
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 150; // placeholder
 
 private static final double ACCEPTABLE_ERROR = 0.0;
 
