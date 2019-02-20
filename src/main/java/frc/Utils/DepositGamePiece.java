@@ -4,6 +4,7 @@ import frc.Utils.drive.*;
 import frc.Hardware.Hardware;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -246,7 +247,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
                         // System.out.print("3");
-                        forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        //forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -269,7 +270,7 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                        //forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
@@ -325,7 +326,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        //forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -359,7 +360,7 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                       // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
@@ -504,6 +505,24 @@ public boolean overrideVision ()
         }
 
     return false;
+}
+
+public void printDebugStatements ()
+{
+
+    SmartDashboard.putString("deposit teleop",
+            this.depositTeleopState.toString());
+
+    SmartDashboard.putBoolean("hasDoneThePrep",
+            hasDoneThePrep);
+    SmartDashboard.putBoolean("deposit with vision enabled",
+            Hardware.alignVisionButton.isOnCheckNow());
+
+    SmartDashboard.putNumber("forklift height",
+            forkliftHeight);
+
+    SmartDashboard.putBoolean("has cargo",
+            hasCargo);
 }
 
 //

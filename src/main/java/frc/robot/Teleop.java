@@ -58,7 +58,7 @@ public class Teleop
  */
 public static void init ()
 {
-
+    Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.telopTimer.start();
@@ -256,8 +256,8 @@ public static void periodic ()
 
     Hardware.climber.newClimbUpdate();
 
-    // Hardware.depositGamePiece.depositTeleopStateMachine();
-
+    Hardware.depositGamePiece.depositTeleopStateMachine();
+    Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
 

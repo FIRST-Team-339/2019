@@ -36,7 +36,6 @@ import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
 
@@ -80,6 +79,7 @@ public static void init ()
             DRIVE_SPEED = KILROY_XIX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
             LEAVE_LEVEL_ONE_SPEED = KILROY_XIX_LEAVE_LEVEL_ONE_SPEED;
+
             break;
 
         default:
@@ -91,6 +91,7 @@ public static void init ()
                     SECOND_AUTO_GEAR_RATIO_KILROY_XX);
             // sets the gear to 0 at the beginning.
             Hardware.drive.setGear(0);
+            Hardware.drive.setBrakePower(.5, BrakeType.AFTER_DRIVE);
             // ---------------------------------------------------------
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
@@ -411,7 +412,6 @@ private static boolean crossAutoline ()
 
         case ONWARD:
             // a.k.a. drive straight
-            // TODO closely monitor merge tomorrow
             // 17 February 2019
             // Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.manipulator.printDeployDebugInfo();
@@ -1405,7 +1405,7 @@ public static final double CAMERA_TURN_SPEED = .5;
 public static final double CAMERA_ACCELERATION = .2;
 
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;// TODO
+public static final double DRIVE_WITH_CAMERA_SPEED = .35;
 
 public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
