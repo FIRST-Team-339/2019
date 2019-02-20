@@ -414,13 +414,8 @@ public void setToNextHigherPreset (double forkliftSpeed,
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
             SmartDashboard.putNumber("Set Higher Angle", angle);
-            this.manipulator.moveArmToPosition(angle);
-            // if (angle >= 0.0)
-            // {
-            // if (Math.abs(this.manipulator.getCurrentArmPosition()
-            // - angle) > SET_ANGLE_DEADBAND)
-            // this.manipulator.moveArmToPosition(angle);
-            // }
+            if (angle >= 0.0)
+                this.manipulator.setAngleForForkliftNextPostion(angle);
             }
         }
 }
@@ -525,13 +520,8 @@ public void setToNextLowerPreset (double forkliftSpeed,
             setLiftPositionInit = true;
             this.setLiftPosition(position, forkliftSpeed);
             SmartDashboard.putNumber("Set Lower Angle", angle);
-            this.manipulator.moveArmToPosition(angle);
             if (angle >= 0.0)
-                {
-                if (Math.abs(this.manipulator.getCurrentArmPosition()
-                        - angle) > SET_ANGLE_DEADBAND)
-                    this.manipulator.moveArmToPosition(angle);
-                }
+                this.manipulator.setAngleForForkliftNextPostion(angle);
             }
         }
 }
@@ -785,7 +775,7 @@ public final static double MIDDLE_ROCKET_CARGO = 36.5;
 
 public final static double LOWER_ROCKET_CARGO = 8.5;
 
-public final static double TOP_ROCKET_CARGO_ANGLE = 80; // placeholder value
+public final static double TOP_ROCKET_CARGO_ANGLE = 70; // placeholder value
 
 public final static double MIDDLE_ROCKET_CARGO_ANGLE = 60;
 
@@ -797,7 +787,7 @@ public final static double TOP_ROCKET_HATCH = 57;// placeholder value
 
 public final static double MIDDLE_ROCKET_HATCH = 35;
 
-public final static double LOWER_ROCKET_HATCH = 12;
+public final static double LOWER_ROCKET_HATCH = 10;
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 40;// placeholder value
 
@@ -810,16 +800,16 @@ public final static double CARGO_SHIP_CARGO = 45;
 
 public final static double CARGO_SHIP_HATCH = 40;
 
-public final static double CARGO_SHIP_CARGO_ANGLE = 45;
+private final static double CARGO_SHIP_CARGO_ANGLE = 45;
 
-public final static double CARGO_SHIP_HATCH_ANGLE = 40;
+private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
 private static final double MAX_HEIGHT = 57; // placeholder value from last year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double LIMIT_ARM_ANGLE_HEIGHT = 1;
+private double LIMIT_ARM_ANGLE_HEIGHT = .75;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

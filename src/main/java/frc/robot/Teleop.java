@@ -469,8 +469,8 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
-    Hardware.manipulator.poweredDeployDownForClimb(
-            Hardware.poweredManipulatorForClimbButton);
+    // Hardware.manipulator.poweredDeployDownForClimb(
+    // Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
