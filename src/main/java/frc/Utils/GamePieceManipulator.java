@@ -440,17 +440,29 @@ public void setAngleForForkliftNextPostion (double angle)
     if (Math.abs(tempCurrentAngle
             - angle) > SET_ANGLE_DEADBAND)
         {
+        // we are below the target angle, move up
+        if (tempCurrentAngle < angle)
+            {
+            angle -= NEXT_HIGHER_ANGLE_ADJUSTMENT;
+            SmartDashboard.putNumber("Next Higher Angle Adjustment",
+                    angle);
+            }
+        // we are above the target angle, move down
+        else
+            {
+            angle += NEXT_LOWER_ANGLE_ADJUSTMENT;
+            SmartDashboard.putNumber("Next Lower Angle Adjustment",
+                    angle);
+            }
 
+        this.moveArmToPosition(angle);
         }
-
-
-
 
 }
 
 private final double SET_ANGLE_DEADBAND = 3.0;
 
-private final double NEXT_NEXT_ANGLE_ADJUSTMENT = 10;
+private final double NEXT_HIGHER_ANGLE_ADJUSTMENT = 10;
 
 private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 5;
 
@@ -684,8 +696,7 @@ private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE = 45;
 
 private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = 0.07;
 
-private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.08;
-
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.1;
 
 private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
         * MAX_DEPLOY_SPEED_2019;
@@ -737,16 +748,16 @@ public void setArmMotorSpeedManuallyForClimb (double speed)
     // If we are trying to move up and past the max angle, or
     // trying to move down and below the min height, tell the
     // arm to stay where it is
-    if ((speed > 0
-            && this.getCurrentArmPosition() > currentDeployMaxAngle)
-            || (speed < 0 && this
-                    .getCurrentArmPosition() < currentDeployMinAngle))
-        {
-        this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
-        // return so we exit the method and do not accidentally set
-        // deployMovementState to SET_MANUALLY_FOR_CLIMB;
-        return;
-        }
+    // if ((speed > 0
+    // && this.getCurrentArmPosition() > currentDeployMaxAngle)
+    // || (speed < 0 && this
+    // .getCurrentArmPosition() < currentDeployMinAngle))
+    // {
+    // this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
+    // // return so we exit the method and do not accidentally set
+    // // deployMovementState to SET_MANUALLY_FOR_CLIMB;
+    // return;
+    // }
 
     deployTargetSpeed = speed;
 
