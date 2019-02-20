@@ -460,11 +460,11 @@ public void setAngleForForkliftNextPostion (double angle)
 
 }
 
-private final double SET_ANGLE_DEADBAND = 3.0;
+private final double SET_ANGLE_DEADBAND = 4.0;
 
-private final double NEXT_HIGHER_ANGLE_ADJUSTMENT = 10;
+private final double NEXT_HIGHER_ANGLE_ADJUSTMENT = 5;
 
-private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 5;
+private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 3;
 
 
 /**
