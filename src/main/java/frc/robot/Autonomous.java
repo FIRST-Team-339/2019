@@ -32,6 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
@@ -1305,7 +1306,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
 
 public static void endAutoPath ()
 {
-
+    Hardware.driveWithCamera.state = DriveWithCamera.DriveWithCameraState.INIT;
     sideCargoHatchState = SideCargoHatchState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
