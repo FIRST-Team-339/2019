@@ -79,6 +79,7 @@ public static void init ()
             DRIVE_SPEED = KILROY_XIX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
             LEAVE_LEVEL_ONE_SPEED = KILROY_XIX_LEAVE_LEVEL_ONE_SPEED;
+
             break;
 
         default:
@@ -90,6 +91,7 @@ public static void init ()
                     SECOND_AUTO_GEAR_RATIO_KILROY_XX);
             // sets the gear to 0 at the beginning.
             Hardware.drive.setGear(0);
+            Hardware.drive.setBrakePower(.5, BrakeType.AFTER_DRIVE);
             // ---------------------------------------------------------
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
