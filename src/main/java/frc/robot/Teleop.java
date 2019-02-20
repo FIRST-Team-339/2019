@@ -288,6 +288,10 @@ public static void periodic ()
             System.out.println("we have depositd the gamepiece");
             }
         }
+    else
+        {
+        Hardware.depositGamePiece.resetDepositTeleop();
+        }
 
     // end vision==============================================
 
@@ -469,8 +473,8 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
-    Hardware.manipulator.poweredDeployDownForClimb(
-            Hardware.poweredManipulatorForClimbButton);
+    // Hardware.manipulator.poweredDeployDownForClimb(
+    // Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
