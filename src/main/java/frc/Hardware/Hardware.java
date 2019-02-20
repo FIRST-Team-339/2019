@@ -28,6 +28,7 @@ import frc.HardwareInterfaces.SingleThrowSwitch;
 import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
+import frc.Utils.drive.Drive.BrakeType;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
@@ -310,7 +311,9 @@ public static Joystick rightOperator = null;
 // ------------------------------------
 // ----- Left Operator -----
 
-public static JoystickButton intakeTrigger = null;
+public static JoystickButton intakeTriggerLeft = null;
+
+public static JoystickButton intakeTriggerRight = null;
 
 public static JoystickButton outtakeButton = null;
 
@@ -627,7 +630,7 @@ public static void commonInitialization ()
     cancelOneButton = new JoystickButton(leftOperator, 10);
 
     // left trigger
-    intakeTrigger = new JoystickButton(leftOperator, 1);
+    intakeTriggerLeft = new JoystickButton(leftOperator, 1);
 
     outtakeButton = new JoystickButton(leftOperator, 2);
 
@@ -650,6 +653,10 @@ public static void commonInitialization ()
     pictureButtonTwo = new JoystickButton(rightOperator, 9);
 
     cancelTwoButton = new JoystickButton(rightOperator, 10);
+
+    // right trigger
+
+    intakeTriggerRight = new JoystickButton(rightOperator, 1);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
@@ -696,7 +703,7 @@ public static void commonInitialization ()
 
 
 
-    // HaCkETy haCkS
+    // hacks
     armHackButton = new MomentarySwitch(rightDriver, 6, false);
 
     liftHackButton = new JoystickButton(rightDriver, 5);
@@ -1221,6 +1228,8 @@ public static void setHardwareSettings2019 ()
 
     Hardware.drive
             .setMaxBrakeIterations(KILROY_XX_MAX_BRAKE_ITERATIONS);
+
+    Hardware.drive.setBrakePower(.5, BrakeType.AFTER_DRIVE);
 } // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
@@ -1234,7 +1243,7 @@ private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.67;
 private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0092;
 
 
-private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 1;
+private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 5;
 
 private static final double JOYSTICK_DEADBAND = 0.2;
 

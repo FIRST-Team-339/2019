@@ -91,7 +91,6 @@ public static void init ()
                     SECOND_AUTO_GEAR_RATIO_KILROY_XX);
             // sets the gear to 0 at the beginning.
             Hardware.drive.setGear(0);
-            Hardware.drive.setBrakePower(.5, BrakeType.AFTER_DRIVE);
             // ---------------------------------------------------------
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
@@ -502,8 +501,14 @@ private static boolean depositCargoHatch ()
                         }
                     else
                         {
-                        depositCargoHatchState = DepositCargoHatchState.DRIVE_2_CENTER;
-
+                        if (!usingVisionOnStraight)
+                            {
+                            depositCargoHatchState = DepositCargoHatchState.DRIVE_2_CENTER;
+                            }
+                        else
+                            {
+                            depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
+                            }
                         }
                 }
             break;
@@ -1385,11 +1390,11 @@ public static final Relay.Value LEVEL_TWO = Relay.Value.kReverse;
 
 
 // straight cargo hatch constants
-public static final double DISTANCE_TO_SHIP_CENTER = 105;
+public static final double DISTANCE_TO_SHIP_CENTER = 100;
 
 // rocket hatch contstants- no vision
 
-public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = 60;// 60;
+public static final double DISTANCE_TO_DRIVE_TO_FIRST_TURN_ROCKET = distanceToCrossAutoline;// 60;
 
 public static final int DISTANCE_NEEDED_TO_TURN = 35;// change @ANE
 
