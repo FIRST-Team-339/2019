@@ -488,11 +488,11 @@ public static enum Side
 
 private Side side = Side.NULL;
 
-private DriveWithCameraState state = DriveWithCameraState.INIT;
+public DriveWithCameraState state = DriveWithCameraState.INIT;
 
 // private boolean takePicture = false;
 
-private enum DriveWithCameraState
+public enum DriveWithCameraState
     {
     INIT, DRIVE_WITH_CAMERA, DRIVE_WITH_US, STOP
     }

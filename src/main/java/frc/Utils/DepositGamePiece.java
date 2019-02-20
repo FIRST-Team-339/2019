@@ -2,6 +2,7 @@ package frc.Utils;
 
 import frc.Utils.drive.*;
 import frc.Hardware.Hardware;
+import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -71,7 +72,7 @@ public boolean depositHatch (boolean inAuto)
             break;
 
         case BACKUP_HATCH:
-            System.out.println("in auto: " + inAuto);
+
             if (inAuto)
                 {
                 Hardware.manipulator.moveArmToPosition(
@@ -247,7 +248,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
                         // System.out.print("3");
-                        //forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        // forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -270,7 +271,7 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                        //forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                        // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
@@ -326,7 +327,7 @@ public boolean depositTeleopStateMachine ()
 
                     case 3:
 
-                        //forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                        // forkliftHeight = Forklift.CARGO_SHIP_HATCH;
                         break;
                     }
                 }
@@ -360,12 +361,13 @@ public boolean depositTeleopStateMachine ()
                         break;
                     case 3:
 
-                       // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
+                        // forkliftHeight = Forklift.CARGO_SHIP_CARGO;
                         break;
                     }
                 }
             break;
         case ALIGN_TO_TARGET:
+            System.out.println("in vision");
 
             if (Hardware.driveWithCamera.driveToTargetClose(.1)
                     || (Hardware.frontUltraSonic
@@ -373,6 +375,8 @@ public boolean depositTeleopStateMachine ()
                             && Hardware.rightFrontDriveEncoder
                                     .getDistance() > 10))
                 {
+                Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
             break;
@@ -398,6 +402,7 @@ public boolean depositTeleopStateMachine ()
         default:
         case FINISH:
             this.resetDepositTeleop();
+            Hardware.drive.resetEncoders();
             return true;
         }
 
@@ -454,7 +459,7 @@ public void resetDepositTeleop ()
     Hardware.alignVisionButton.setValue(false);
     hasStartedDeposit = false;
     depositTeleopState = DepositTeleopState.HOLD;
-    Hardware.drive.resetEncoders();
+
 
 }
 
