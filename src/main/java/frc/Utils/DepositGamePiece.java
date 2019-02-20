@@ -86,7 +86,7 @@ public boolean depositHatch (boolean inAuto)
             else
                 if (depositHeighthatch == 2)
                     {
-                    System.out.println("hadsjoafno");
+                    // System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
                             Hardware.manipulator.getCurrentArmPosition()
                                     - 10))
@@ -228,7 +228,7 @@ public boolean depositTeleopStateMachine ()
             Hardware.axisCamera.setRelayValue(Value.kOn);
             if (depositHeighthatch == 1 || depositHeightCargo == 1)
                 {
-                System.out.println("level 2 align first");
+                // System.out.println("level 2 align first");
                 if (Hardware.driveWithCamera.driveToTargetClose(.1)
                         || (Hardware.frontUltraSonic
                                 .getDistanceFromNearestBumper() <= 22
