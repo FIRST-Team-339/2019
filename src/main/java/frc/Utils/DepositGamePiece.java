@@ -226,6 +226,26 @@ public boolean depositTeleopStateMachine ()
 
         case INIT:
 
+            if (depositHeighthatch == 1 || depositHeightCargo == 1)
+                {
+                if (Hardware.driveWithCamera.driveToTargetClose(.1)
+                        || (Hardware.frontUltraSonic
+                                .getDistanceFromNearestBumper() <= 22
+                                && Hardware.rightFrontDriveEncoder
+                                        .getDistance() > 10))
+                    {
+                    Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+
+                    depositTeleopState = DepositTeleopState.DEPOSIT;
+                    }
+                }
+            Hardware.axisCamera.setRelayValue(Value.kOn);
+
+            depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
+            break;
+
+        case PREP_FORKLIFT:
+
             if (hasCargo == false)
                 {
                 switch (depositHeighthatch)
@@ -242,7 +262,7 @@ public boolean depositTeleopStateMachine ()
                         break;
 
                     case 2:
-                        // System.out.print("2");
+
                         forkliftHeight = Forklift.TOP_ROCKET_HATCH;
                         break;
 
@@ -275,13 +295,6 @@ public boolean depositTeleopStateMachine ()
                         break;
                     }
                 }
-            Hardware.axisCamera.setRelayValue(Value.kOn);
-
-            depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
-            break;
-
-        case PREP_FORKLIFT:
-
             if (Hardware.lift.setLiftPosition(
                     forkliftHeight, FORK_SPEED))
                 {
@@ -368,17 +381,21 @@ public boolean depositTeleopStateMachine ()
             break;
         case ALIGN_TO_TARGET:
             System.out.println("in vision");
-
-            if (Hardware.driveWithCamera.driveToTargetClose(.1)
-                    || (Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() <= 22
-                            && Hardware.rightFrontDriveEncoder
-                                    .getDistance() > 10))
+            if (depositHeighthatch == 1 || depositHeightCargo == 1)
                 {
-                Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
-
                 depositTeleopState = DepositTeleopState.DEPOSIT;
                 }
+            else
+                if (Hardware.driveWithCamera.driveToTargetClose(.1)
+                        || (Hardware.frontUltraSonic
+                                .getDistanceFromNearestBumper() <= 22
+                                && Hardware.rightFrontDriveEncoder
+                                        .getDistance() > 10))
+                    {
+                    Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+
+                    depositTeleopState = DepositTeleopState.DEPOSIT;
+                    }
             break;
 
         case DEPOSIT:
