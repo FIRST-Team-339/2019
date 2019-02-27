@@ -129,6 +129,11 @@ public boolean isDeployed ()
     return this.getDeployState() == DeployState.DEPLOYED;
 }
 
+/**
+ * returns true is the arm is clear of the frame and if we are able to raise the
+ * forklift
+ *
+ */
 public boolean isArmClearOfFrame ()
 {
     // TODO uncomment the below code instead when
@@ -227,6 +232,13 @@ public void moveArmByJoystick (Joystick armJoystick,
 
 }
 
+
+/**
+ * set the power of the manipulator to prepare to climb to level two
+ *
+ * @param button
+ *                   joystick button to be pressed to run the function
+ */
 public void poweredDeployDownForClimb (JoystickButton button)
 {
     if (button.get() == true)
@@ -608,6 +620,19 @@ public void deployUpdate ()
 
 }
 
+
+/**
+ *
+ *
+ * @param state
+ *                            the state that is callingthis function
+ * @param isOverriding
+ *                            if we are overridingwhile calling this function
+ * @param isUsingJoystick
+ *                            if we are using the joystick while calling this
+ *                            function
+ * @return
+ */
 private double calculateDesiredArmMotorVoltage (
         RequiredArmSpeedState state,
         boolean isOverriding, boolean isUsingJoystick)
@@ -624,6 +649,7 @@ private double calculateDesiredArmMotorVoltage (
                 }
             else
                 {
+                // if not overridingis false
                 if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
                     speed = GO_UP_HOLD_ARM_NO_GRAVITY_SPEED;
                 // else
@@ -879,6 +905,7 @@ public boolean spinOutCargoByTimer ()
  */
 public void resetStateMachine ()
 {
+    // *resets*
     this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
     this.intake.resetStateMachine();
 }
