@@ -604,7 +604,8 @@ public static void commonInitialization ()
     // declare the USB camera server and the
     // USB camera it serves at the same time
     // -------------------------------------
-
+    // TODO: put somewhere useful
+    // Camera settings: 320-240, 20fps, 87 ????
     USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
     USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
@@ -1244,7 +1245,7 @@ private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.67;
 
 // This value was tested on 15 Feb 2019; it gives values within
 // .1 inch of what we want
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0092;
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0094;
 
 
 private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 5;

@@ -45,7 +45,8 @@ public static DepositHatchState depositHatchState = DepositHatchState.INIT;
  * a statemachine that deposits and hatch. The forklift must already be at the
  * correct height and the manipulator at the correct angle. For auto use
  * prepToDepost to set up for a rocket hatch
- *
+ * 
+ * @return
  */
 public boolean depositHatch (boolean inAuto)
 {

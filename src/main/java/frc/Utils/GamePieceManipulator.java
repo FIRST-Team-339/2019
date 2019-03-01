@@ -261,7 +261,6 @@ public double getCurrentArmPosition ()
     // // assumes that the value from the encoder is reset to 0
     // // when the robot is started and negative when the manipulator
     // // is below the starting position
-    // // TODO should getDistance be used instead of get?
     // double valueFromHorizontal = (armEncoder.get()
     // - ARM_ENCODER_RAW_HORIZONTAL_VALUE)
     // * ARM_ENCODER_SCALE_TO_DEGREES;
@@ -935,7 +934,7 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 150; // placeholder
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 150;
 
 private static final double ACCEPTABLE_ERROR = 0.0;
 

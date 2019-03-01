@@ -769,7 +769,7 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 57;
+public final static double TOP_ROCKET_CARGO = 56.5;
 
 public final static double MIDDLE_ROCKET_CARGO = 35;
 
@@ -783,7 +783,7 @@ public final static double LOWER_ROCKET_CARGO_ANGLE = 48;
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 57;
+public final static double TOP_ROCKET_HATCH = 56.5;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
@@ -805,7 +805,8 @@ public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 // private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
-private static final double MAX_HEIGHT = 57; // placeholder value from last year
+private static final double MAX_HEIGHT = 56.5; // placeholder value from last
+                                               // year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
