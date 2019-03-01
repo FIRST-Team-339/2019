@@ -466,8 +466,17 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
+public static boolean aligned = false;
+
 private static void connerTest ()
 {
+
+    if (Hardware.driveWithCamera.driveToTarget(.35) && aligned == false)
+        {
+        aligned = true;
+
+        }
+
 
 } // end connerTest()
 
@@ -490,8 +499,8 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
-    // Hardware.manipulator.poweredDeployDownForClimb(
-    // Hardware.poweredManipulatorForClimbButton);
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
@@ -515,6 +524,9 @@ private static void coleTest ()
     // SmartDashboard.putString("outtakeButtonRight",
     // "" + Hardware.outtakeButtonRight.get());
 
+
+    SmartDashboard.putString("Make break switch",
+            "" + Hardware.armBallDetector.get());
 
     Hardware.lift.printDebugInfo();
     Hardware.manipulator.printDeployDebugInfo();
