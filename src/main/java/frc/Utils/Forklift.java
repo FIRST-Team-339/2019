@@ -740,15 +740,15 @@ private double currentLiftMinHeight = 0.0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.7;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.8;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.35;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.3;
 
-private double UP_JOYSTICK_SCALAR = 0.7;
+private double UP_JOYSTICK_SCALAR = 0.8;
 
-private double DOWN_JOYSTICK_SCALAR = 0.35;
+private double DOWN_JOYSTICK_SCALAR = 0.3;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -769,7 +769,7 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 57;
+public final static double TOP_ROCKET_CARGO = 56.5;
 
 public final static double MIDDLE_ROCKET_CARGO = 35;
 
@@ -783,7 +783,7 @@ public final static double LOWER_ROCKET_CARGO_ANGLE = 48;
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 57;
+public final static double TOP_ROCKET_HATCH = 56.5;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
@@ -805,7 +805,8 @@ public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 // private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
-private static final double MAX_HEIGHT = 57; // placeholder value from last year
+private static final double MAX_HEIGHT = 56.5; // placeholder value from last
+                                               // year
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
