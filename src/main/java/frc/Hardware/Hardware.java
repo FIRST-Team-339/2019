@@ -1240,7 +1240,7 @@ private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
-private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.67;
+private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.68;
 
 // This value was tested on 15 Feb 2019; it gives values within
 // .1 inch of what we want

@@ -1452,7 +1452,7 @@ public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.75;
 
 public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = .5;
 
-private static final double TIME_TO_POWER_ARM_DOWN = 3.2;
+private static final double TIME_TO_POWER_ARM_DOWN = 1.5;
 // --------------------------------
 
 private static final double NEW_DELAY_ONE_TIME = 0.0;
@@ -1469,6 +1469,6 @@ private static final double NEW_DELAY_SIX_TIME = 0.0;
 
 private static final double NEW_DELAY_SEVEN_TIME = 1.0;
 
-private static final double delayBeforeDriveFromPower = 1.0;
+private static final double delayBeforeDriveFromPower = .5;
 
 }

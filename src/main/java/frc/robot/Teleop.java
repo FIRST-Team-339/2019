@@ -788,8 +788,8 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Left Front Encoder Inches = "
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
-        // System.out.println("LF encoder ticks: "
-        // + Hardware.leftFrontDriveEncoder.get());
+        System.out.println("LF encoder ticks: "
+                + Hardware.leftFrontDriveEncoder.getRaw());
         // SmartDashboard.putNumber("Left front encoder ticks: ",
         // Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
@@ -802,8 +802,8 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("Right Front Inches = "
         // + Hardware.rightFrontDriveEncoder.getDistance());
 
-        // System.out.println("Right Front Ticks "
-        // + Hardware.rightFrontDriveEncoder.get());
+        System.out.println("Right Front Ticks "
+                + Hardware.rightFrontDriveEncoder.getRaw());
         // SmartDashboard.putNumber("Right Front Ticks ",
         // Hardware.rightFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right Front Ticks "
