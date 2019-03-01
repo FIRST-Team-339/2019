@@ -252,6 +252,9 @@ public static void periodic ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
+
     // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
     // Hardware.intakeTriggerLeft.get(),
     // Hardware.outtakeButton.get(),
@@ -385,7 +388,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    coleTest();
+    // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -492,15 +495,12 @@ private static void coleTest ()
         Hardware.manipulator.deployArm();
 
     // if (Hardware.rightOperator.getRawButton(5))
-    if (Hardware.leftDriver.getRawButton(4))
+    if (Hardware.leftOperator.getRawButton(11))
         Hardware.manipulator.retractArm();
 
     // if (Hardware.testSetManipulatorPosition.getCurrentValue())
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
-
-    Hardware.manipulator.poweredDeployDownForClimb(
-            Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
