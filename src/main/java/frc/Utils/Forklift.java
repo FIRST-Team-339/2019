@@ -744,11 +744,11 @@ private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.8;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.3;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.25;
 
 private double UP_JOYSTICK_SCALAR = 0.8;
 
-private double DOWN_JOYSTICK_SCALAR = 0.3;
+private double DOWN_JOYSTICK_SCALAR = 0.25;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -810,7 +810,7 @@ private static final double MAX_HEIGHT = 56.5; // placeholder value from last
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double LIMIT_ARM_ANGLE_HEIGHT = .6;
+private double LIMIT_ARM_ANGLE_HEIGHT = .4;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 
