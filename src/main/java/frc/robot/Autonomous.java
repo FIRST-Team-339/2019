@@ -1332,7 +1332,7 @@ private static boolean usingAlignByWall = true;
 private static boolean usingVision = true;
 
 // use vision for the put hatch straght auto path
-private static boolean usingVisionOnStraight = true;
+private static boolean usingVisionOnStraight = true;;
 
 private static boolean descendInit = false;
 
