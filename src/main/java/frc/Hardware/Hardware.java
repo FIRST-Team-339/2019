@@ -645,9 +645,6 @@ public static void commonInitialization ()
 
     visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
-    poweredManipulatorForClimbButton = new JoystickButton(leftOperator,
-            11);
-
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
 
@@ -702,6 +699,12 @@ public static void commonInitialization ()
     // Momentary Switches
 
     // ----------Right Driver--------------
+
+
+    poweredManipulatorForClimbButton = new JoystickButton(rightDriver,
+            6);
+
+
     resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
 
     resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
@@ -709,9 +712,9 @@ public static void commonInitialization ()
 
 
     // hacks
-    armHackButton = new MomentarySwitch(rightDriver, 6, false);
+    // armHackButton = new MomentarySwitch(rightDriver, 6, false);
 
-    liftHackButton = new JoystickButton(rightDriver, 5);
+    // liftHackButton = new JoystickButton(rightDriver, 5);
 
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 

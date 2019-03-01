@@ -247,7 +247,7 @@ public void poweredDeployDownForClimb (JoystickButton button)
 }
 
 
-private static final double SUPPORT_DRIVE_FOR_CLIMB_ARM_SPEED = -.5;
+private static final double SUPPORT_DRIVE_FOR_CLIMB_ARM_SPEED = -.8;
 
 /**
  * Returns angle of the arm by scaling the potentiometer value
@@ -938,11 +938,7 @@ private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 // ----- Deploy Position Constants 2019 -----
 
-private static int MAX_ARM_POSITION_RAW = 0;
-
 public int MAX_ARM_POSITION_ADJUSTED = 120;
-
-private static int MIN_ARM_POSITION_RAW = 10;
 
 private static int MIN_ARM_POSITION_ADJUSTED = 5;
 
@@ -961,7 +957,7 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 150;
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 151;
 
 private static final double ACCEPTABLE_ERROR = 0.0;
 
