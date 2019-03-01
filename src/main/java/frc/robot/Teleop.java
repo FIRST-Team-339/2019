@@ -385,7 +385,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    // coleTest();
+    coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -479,12 +479,12 @@ private static void coleTest ()
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
     // if (Hardware.testDeployButtonTemp.getCurrentValue())
-    // if (Hardware.leftDriver.getRawButton(3))
-    // Hardware.manipulator.deployArm();
+    if (Hardware.leftDriver.getRawButton(3))
+        Hardware.manipulator.deployArm();
 
     // if (Hardware.rightOperator.getRawButton(5))
-    // if (Hardware.leftDriver.getRawButton(4))
-    // Hardware.manipulator.retractArm();
+    if (Hardware.leftDriver.getRawButton(4))
+        Hardware.manipulator.retractArm();
 
     // if (Hardware.testSetManipulatorPosition.getCurrentValue())
     // if (Hardware.leftDriver.getRawButton(5))
