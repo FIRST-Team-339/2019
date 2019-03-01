@@ -977,7 +977,7 @@ private static double ARM_POT_SCALE_TO_DEGREES = -1.0; // placeholder
 
 private static final int MAX_ARM_POSITION_ADJUSTED_2018 = 85;
 
-private static final int MIN_ARM_POSITION_ADJUSTED_2018 = 5;
+public static final int MIN_ARM_POSITION_ADJUSTED_2018 = 5;// software stop
 
 private static final int RETRACTED_ARM_POSITION_ADJUSTED_2018 = 80;
 

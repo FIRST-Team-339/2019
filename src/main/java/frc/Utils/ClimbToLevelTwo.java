@@ -219,7 +219,7 @@ public void newClimbUpdate ()
             Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
                     1.0);
             driveTimerInit();
-            this.lift.setLiftPosition(0.0);
+            this.lift.setLiftPosition(0.5);
             newClimbState = NewClimberState.PREP_ARM;
             break;
 
@@ -993,7 +993,8 @@ private boolean lowerArm ()
     // armMotor.set(0.0);
     // return true;
     // }
-    if (Hardware.manipulator.deployArm() == true)
+    if (Hardware.manipulator.moveArmToPosition(
+            GamePieceManipulator.MIN_ARM_POSITION_ADJUSTED_2018) == true)
         {
         return true;
         }
@@ -1236,6 +1237,7 @@ public boolean poweredArmDown ()
 
     if (driveTimer.get() >= TIME_TO_POWER_ARM_DOWN)
         {
+        Hardware.manipulator.setArmMotorSpeedManuallyForClimb(0.0);
         return true;
         }
     else
@@ -1445,14 +1447,14 @@ public static double SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = -.4;// .5;
                                                                     // at 8:20
                                                                     // 2/18
 
-public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = 1.0;
+public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = .8;
 // --------------------------------
 
 public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.75;
 
-public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = .5;
+public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = 1.0;
 
-private static final double TIME_TO_POWER_ARM_DOWN = 1.5;
+private static final double TIME_TO_POWER_ARM_DOWN = 2.5;
 // --------------------------------
 
 private static final double NEW_DELAY_ONE_TIME = 0.0;
@@ -1467,7 +1469,7 @@ private static final double NEW_DELAY_FIVE_TIME = 0.2;
 
 private static final double NEW_DELAY_SIX_TIME = 0.0;
 
-private static final double NEW_DELAY_SEVEN_TIME = 1.0;
+private static final double NEW_DELAY_SEVEN_TIME = 0.4;
 
 private static final double delayBeforeDriveFromPower = .5;
 
