@@ -42,10 +42,12 @@ public enum DepositHatchState
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
 
 /**
- * a statemachine that deposits and hatch. The forklift must already be at the
- * correct height and the manipulator at the correct angle. For auto use
- * prepToDepost to set up for a rocket hatch
- *
+ * Function for use in autonomous that uses a statemachine to
+ * deposit a hatch. The forklift must already be at the correct
+ * height and the manipulator at the correct angle. To move the
+ * manipulator to the correct height, use prepToDeposit. The
+ * forklift does not need to be moved up from its starting
+ * position in order to deposit a hatch.
  */
 public boolean depositHatch (boolean inAuto)
 {
@@ -54,13 +56,16 @@ public boolean depositHatch (boolean inAuto)
     switch (depositHatchState)
         {
 
-
+        // State machine waits in INIT before before called, and, once
+        // called, moves on to the next machine
         case INIT:
 
             depositHatchState = DepositHatchState.DEPOSIT_HATCH;
 
             break;
 
+        // Drives the robot forward so the hatch becomes attached
+        // to the velcro
         case DEPOSIT_HATCH:
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
                     .2, BACKUP_ACCELERATION, usingGyro))
@@ -71,10 +76,14 @@ public boolean depositHatch (boolean inAuto)
                 }
             break;
 
+
         case BACKUP_HATCH:
 
             if (inAuto)
                 {
+                // TODO maybe move this moveArmToPosition call to a seperate
+                // seperate; can be run in background, but don't want
+                // to keep calling it after it already arrived
                 Hardware.manipulator.moveArmToPosition(
                         DEPOSIT_ARM_ANGLE_AUTO);
                 if (this.drive.driveStraightInches(BACKUP_INCHES,
@@ -86,6 +95,12 @@ public boolean depositHatch (boolean inAuto)
             else
                 if (depositHeighthatch == 2)
                     {
+                    // TODO this should be seperated into several states
+                    // right now it will keep trying to move the manipulator
+                    // back from its current position, which will keep
+                    // changing and keep calling the moveArmToPosition over
+                    // and over, which is bad
+
                     // System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
                             Hardware.manipulator.getCurrentArmPosition()
@@ -137,10 +152,12 @@ public enum DepositCargoState
 public static DepositCargoState depositCargoState = DepositCargoState.INIT;
 
 /**
- * use this to deposit a cargo gamepiece. The forklift and manipulator must
- * already be set to the proper height and angle.
+ * Function to autonomously deposit cargo (for autonomous).
+ * The forklift and manipulator must already be set to the
+ * proper height and angle.
  *
- * @return
+ * @return true if the function finished, false if it
+ *         still needs to be called
  */
 public boolean depositCargo ()
 {

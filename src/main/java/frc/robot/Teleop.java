@@ -252,6 +252,9 @@ public static void periodic ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
+
     // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
     // Hardware.intakeTriggerLeft.get(),
     // Hardware.outtakeButton.get(),
@@ -466,8 +469,17 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
+public static boolean aligned = false;
+
 private static void connerTest ()
 {
+
+    if (Hardware.driveWithCamera.driveToTarget(.35) && aligned == false)
+        {
+        aligned = true;
+
+        }
+
 
 } // end connerTest()
 
@@ -479,19 +491,16 @@ private static void coleTest ()
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
     // if (Hardware.testDeployButtonTemp.getCurrentValue())
-    // if (Hardware.leftDriver.getRawButton(3))
-    // Hardware.manipulator.deployArm();
+    if (Hardware.leftDriver.getRawButton(3))
+        Hardware.manipulator.deployArm();
 
     // if (Hardware.rightOperator.getRawButton(5))
-    // if (Hardware.leftDriver.getRawButton(4))
-    // Hardware.manipulator.retractArm();
+    if (Hardware.leftOperator.getRawButton(11))
+        Hardware.manipulator.retractArm();
 
     // if (Hardware.testSetManipulatorPosition.getCurrentValue())
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
-
-    // Hardware.manipulator.poweredDeployDownForClimb(
-    // Hardware.poweredManipulatorForClimbButton);
 
 
     // Manipulator
@@ -515,6 +524,9 @@ private static void coleTest ()
     // SmartDashboard.putString("outtakeButtonRight",
     // "" + Hardware.outtakeButtonRight.get());
 
+
+    SmartDashboard.putString("Make break switch",
+            "" + Hardware.armBallDetector.get());
 
     Hardware.lift.printDebugInfo();
     Hardware.manipulator.printDeployDebugInfo();
