@@ -129,6 +129,11 @@ public boolean isDeployed ()
     return this.getDeployState() == DeployState.DEPLOYED;
 }
 
+/**
+ * returns true is the arm is clear of the frame and if we are able to raise the
+ * forklift
+ *
+ */
 public boolean isArmClearOfFrame ()
 {
     // TODO uncomment the below code instead when
@@ -227,6 +232,13 @@ public void moveArmByJoystick (Joystick armJoystick,
 
 }
 
+
+/**
+ * set the power of the manipulator to prepare to climb to level two
+ *
+ * @param button
+ *                   joystick button to be pressed to run the function
+ */
 public void poweredDeployDownForClimb (JoystickButton button)
 {
     if (button.get() == true)
@@ -235,7 +247,7 @@ public void poweredDeployDownForClimb (JoystickButton button)
 }
 
 
-private static final double SUPPORT_DRIVE_FOR_CLIMB_ARM_SPEED = -.5;
+private static final double SUPPORT_DRIVE_FOR_CLIMB_ARM_SPEED = -.8;
 
 /**
  * Returns angle of the arm by scaling the potentiometer value
@@ -261,7 +273,6 @@ public double getCurrentArmPosition ()
     // // assumes that the value from the encoder is reset to 0
     // // when the robot is started and negative when the manipulator
     // // is below the starting position
-    // // TODO should getDistance be used instead of get?
     // double valueFromHorizontal = (armEncoder.get()
     // - ARM_ENCODER_RAW_HORIZONTAL_VALUE)
     // * ARM_ENCODER_SCALE_TO_DEGREES;
@@ -608,6 +619,19 @@ public void deployUpdate ()
 
 }
 
+
+/**
+ *
+ *
+ * @param state
+ *                            the state that is callingthis function
+ * @param isOverriding
+ *                            if we are overridingwhile calling this function
+ * @param isUsingJoystick
+ *                            if we are using the joystick while calling this
+ *                            function
+ * @return
+ */
 private double calculateDesiredArmMotorVoltage (
         RequiredArmSpeedState state,
         boolean isOverriding, boolean isUsingJoystick)
@@ -624,6 +648,7 @@ private double calculateDesiredArmMotorVoltage (
                 }
             else
                 {
+                // if not overridingis false
                 if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
                     speed = GO_UP_HOLD_ARM_NO_GRAVITY_SPEED;
                 // else
@@ -879,6 +904,7 @@ public boolean spinOutCargoByTimer ()
  */
 public void resetStateMachine ()
 {
+    // *resets*
     this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
     this.intake.resetStateMachine();
 }
@@ -912,11 +938,7 @@ private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 // ----- Deploy Position Constants 2019 -----
 
-private static int MAX_ARM_POSITION_RAW = 0;
-
 public int MAX_ARM_POSITION_ADJUSTED = 120;
-
-private static int MIN_ARM_POSITION_RAW = 10;
 
 private static int MIN_ARM_POSITION_ADJUSTED = 5;
 
@@ -935,7 +957,7 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 150; // placeholder
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 151;
 
 private static final double ACCEPTABLE_ERROR = 0.0;
 
@@ -955,7 +977,7 @@ private static double ARM_POT_SCALE_TO_DEGREES = -1.0; // placeholder
 
 private static final int MAX_ARM_POSITION_ADJUSTED_2018 = 85;
 
-private static final int MIN_ARM_POSITION_ADJUSTED_2018 = 5;
+public static final int MIN_ARM_POSITION_ADJUSTED_2018 = 5;// software stop
 
 private static final int RETRACTED_ARM_POSITION_ADJUSTED_2018 = 80;
 
