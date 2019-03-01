@@ -360,13 +360,15 @@ public void newClimbUpdate ()
             if (climbTimer.get() >= NEW_DELAY_SEVEN_TIME)
                 {
                 climbTimer.stop();
+                climbTimer.reset();
+                climbTimer.start();
                 newClimbState = NewClimberState.RAISE_ARM;
                 }
             break;
 
         case RAISE_ARM:
             //
-            if (this.raiseArm() == true)
+            if (this.raiseArm() == true || climbTimer.get() >= 3.0)
                 {
                 // goes to stop
                 this.delayInit();

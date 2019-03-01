@@ -399,9 +399,6 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-
-
-
     // if (Hardware.armHackButton.isOnCheckNow() == true)
     // {
     // // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
