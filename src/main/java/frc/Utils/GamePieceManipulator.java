@@ -226,6 +226,16 @@ public void moveArmByJoystick (Joystick armJoystick,
                             RequiredArmSpeedState.GO_DOWN,
                             overrideButton, true);
 
+
+        // double minScaler = .5;
+        // ((Math.abs(joystickValue) - deadband) * (1 - minScaler)/ (1 -
+        // deadband)) + minScaler
+
+        // this.deployTargetSpeed *= ((Math.abs(joystickValue) - .2)
+        // * .625) + .5;
+        this.deployTargetSpeed *= ((Math.abs(joystickValue) - .2)
+                * .9375) + .25;
+
         this.deployMovementState = DeployMovementState.MOVING_BY_JOY;
 
         }
@@ -281,6 +291,44 @@ public double getCurrentArmPosition ()
     // }
 }
 
+
+// public double getCurrentArmPositionOld ()
+// {
+//     return (this.armPot.get()
+//             - ARM_POT_RAW_HORIZONTAL_VALUE)
+//             * ARM_POT_SCALE_TO_DEGREES;
+// }
+
+// public double getCurrentArmPositionAverage ()
+// {
+// return (armAngle1Ago + armAngle2Ago + armAngle3Ago) / 3;
+// }
+
+// public void initiliazeArmPositonAverage ()
+// {
+// armAngle1Ago = this.getCurrentArmPositionOld();
+// armAngle2Ago = armAngle1Ago;
+// armAngle3Ago = armAngle1Ago;
+// }
+
+// public void updatePastArmPositions ()
+// {
+// armAngle3Ago = armAngle2Ago;
+
+// armAngle2Ago = armAngle1Ago;
+
+// armAngle1Ago = this.getCurrentArmPositionOld();
+// }
+
+// // ToDO maybe replace this with an array in future
+// // was not done since it would require a for loop
+// // average values in array
+
+// private double armAngle1Ago = 0.0;
+
+// private double armAngle2Ago = 0.0;
+
+// private double armAngle3Ago = 0.0;
 
 
 /**
@@ -486,6 +534,8 @@ private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 3;
  */
 public void deployUpdate ()
 {
+
+    // this.updatePastArmPositions();
 
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
         {
@@ -732,13 +782,13 @@ private double GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .75
 private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 1.0
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED = -.5
+private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED = -.7
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.4
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.6
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.3
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.5
         * MAX_DEPLOY_SPEED_2019;
 
 private double SET_POSITION_SPEED_SCALE_FACTOR = 1.0;
@@ -951,7 +1001,7 @@ private double ARM_LEANING_BACK_ANGLE = 90;
 private double IS_CLEAR_OF_FRAME_ANGLE = 75;
 
 // the maximum angle for the deploy so
-public double MAX_FORKLIFT_UP_ANGLE = 70;
+public double MAX_FORKLIFT_UP_ANGLE = 65;
 
 private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 

@@ -243,7 +243,7 @@ public void update ()
 // if via testing we determine this is 0.0 on te new robot,
 // we can probably change the HOLD sate in intakeUpdate to not use
 // this anymore
-private static final double HOLD_INTAKE_SPEED_WITH_CARGO = 0.0;
+private static final double HOLD_INTAKE_SPEED_WITH_CARGO = -0.1;
 
 // speed given to the armRollers when not in use. Should be 0
 private static final double HOLD_INTAKE_SPEED_NO_CARGO = 0.0;

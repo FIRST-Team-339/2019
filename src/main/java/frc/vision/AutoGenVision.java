@@ -63,7 +63,7 @@ public void process (Mat source0)
     double filterContoursMinPerimeter = 0;
     double filterContoursMinWidth = 4;
     double filterContoursMaxWidth = 1000;
-    double filterContoursMinHeight = 0;
+    double filterContoursMinHeight = 10;
     double filterContoursMaxHeight = 100;
     double[] filterContoursSolidity =
         {0, 100};

@@ -235,6 +235,27 @@ public void setLiftPositionByButton (double position,
         }
 }
 
+public void setLiftPositionByButton (double position, double angle,
+        double forkliftSpeed, QuickSwitch button)
+{
+    // if the button is being held down and was not being held down before
+    if (button.getCurrentValue() == true)
+        {
+        // tell the forklift state machine we want to move to a particular
+        // position
+        setLiftPositionInit = true;
+
+        // forklift is going up
+        if (position > this.getForkliftHeight())
+            position -= NEXT_HIGHER_HEIGHT_ADJUSTMENT;
+        else
+            position += NEXT_LOWER_HEIGHT_ADJUSTMENT;
+
+        this.setLiftPosition(position, forkliftSpeed);
+        this.manipulator.setAngleForForkliftNextPostion(angle);
+        }
+}
+
 /**
  * Moves the arm to the the position input, FORKLIFT_MAX_HEIGHT being the top
  * soft stop, and FORKLIFT_MIN_HEIGHT being the FORKLIFT_MIN_HEIGHT.
@@ -412,7 +433,9 @@ public void setToNextHigherPreset (double forkliftSpeed,
             // tell the forklift state machine we want to move to said
             // position
             setLiftPositionInit = true;
-            this.setLiftPosition(position, forkliftSpeed);
+            this.setLiftPosition(
+                    position - NEXT_HIGHER_HEIGHT_ADJUSTMENT,
+                    forkliftSpeed);
             // SmartDashboard.putNumber("Set Higher Angle", angle);
             if (angle >= 0.0)
                 this.manipulator.setAngleForForkliftNextPostion(angle);
@@ -425,6 +448,8 @@ private final double SET_ANGLE_DEADBAND = 3.0;
 // # of feet that the forklift can be off of the next highest position to
 // count as already being there
 private final double NEXT_HIGHER_POSITION_DEADBAND = 1;
+
+private final double NEXT_HIGHER_HEIGHT_ADJUSTMENT = 1.3;
 
 /**
  * Sets the forklift to the next lower Cargo or Hatch height on the
@@ -518,7 +543,9 @@ public void setToNextLowerPreset (double forkliftSpeed,
             // tell the forklift state machine we want to move to said
             // position
             setLiftPositionInit = true;
-            this.setLiftPosition(position, forkliftSpeed);
+            this.setLiftPosition(
+                    position + NEXT_LOWER_HEIGHT_ADJUSTMENT,
+                    forkliftSpeed);
             // SmartDashboard.putNumber("Set Lower Angle", angle);
             if (angle >= 0.0)
                 this.manipulator.setAngleForForkliftNextPostion(angle);
@@ -531,6 +558,8 @@ public void setToNextLowerPreset (double forkliftSpeed,
 private final double NEXT_LOWER_POSITION_DEADBAND = 1;
 
 private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 10;
+
+private final double NEXT_LOWER_HEIGHT_ADJUSTMENT = 0.0;
 
 /**
  * For use in teleop and autonomous periodic.
@@ -740,13 +769,13 @@ private double currentLiftMinHeight = 0.0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.8;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.75;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
 private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.25;
 
-private double UP_JOYSTICK_SCALAR = 0.8;
+private double UP_JOYSTICK_SCALAR = 0.75;
 
 private double DOWN_JOYSTICK_SCALAR = 0.25;
 
@@ -787,18 +816,22 @@ public final static double TOP_ROCKET_HATCH = 56;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
-public final static double LOWER_ROCKET_HATCH = 4;
+public final static double LOWER_ROCKET_HATCH = 9;
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 33;
 
 public final static double MIDDLE_ROCKET_HATCH_ANGLE = 28;
 
-public final static double LOWER_ROCKET_HATCH_ANGLE = 28;
+public final static double LOWER_ROCKET_HATCH_ANGLE = 26;
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 30;
 
 public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
+
+public final static double PLAYER_STATION_HEIGHT = 4.25;
+
+public final static double PLAYER_STATION_ANGLE = 15;
 
 // private final static double CARGO_SHIP_CARGO_ANGLE = 45;
 

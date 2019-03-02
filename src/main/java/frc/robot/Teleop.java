@@ -193,6 +193,7 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+    // Hardware.manipulator.initiliazeArmPositonAverage();
     Hardware.lift.resetStateMachine();
     Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
@@ -233,7 +234,13 @@ public static void periodic ()
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipCargoButton);
 
-    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.cargoShipHatchButton);
+
+    Hardware.lift.setLiftPositionByButton(
+            Forklift.PLAYER_STATION_HEIGHT,
+            Forklift.PLAYER_STATION_ANGLE,
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipHatchButton);
 
@@ -471,12 +478,11 @@ public static boolean aligned = false;
 private static void connerTest ()
 {
 
-    if (Hardware.driveWithCamera.driveToTarget(.35) && aligned == false)
+    if (aligned == false
+            && Hardware.depositGamePiece.depositHatch(true))
         {
         aligned = true;
-
         }
-
 
 } // end connerTest()
 
@@ -519,8 +525,8 @@ private static void coleTest ()
     // SmartDashboard.putString("Make break switch",
     // "" + Hardware.armBallDetector.isOn());
 
-    // Hardware.lift.printDebugInfo();
-    // Hardware.manipulator.printDeployDebugInfo();
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
 

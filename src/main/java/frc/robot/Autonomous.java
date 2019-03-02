@@ -37,6 +37,7 @@ import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
 
@@ -85,7 +86,8 @@ public static void init ()
 
         default:
         case KILROY_2019:
-
+            Hardware.ringLightRelay.set(Value.kOn);
+            Hardware.axisCamera.processImage();
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -96,6 +98,7 @@ public static void init ()
             DRIVE_SPEED = KILROY_XX_DRIVE_SPEED;
             TURN_SPEED = KILROY_XIX_TURN_SPEED;
             LEAVE_LEVEL_ONE_SPEED = KILROY_XX_LEAVE_LEVEL_ONE_SPEED;
+            // Hardware.manipulator.initiliazeArmPositonAverage();
             break;
 
         case TEST_BOARD:
@@ -131,7 +134,7 @@ public static void init ()
  */
 public static enum State
     {
-    INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, BLIND_ROCKET_HATCH, FINISH
+    INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, BLIND_ROCKET_HATCH, JANKY_DEPOSIT_STRAIGHT, FINISH
     }
 
 /**
@@ -244,6 +247,13 @@ public static void periodic ()
                 {
                 autoState = State.FINISH;
                 }
+        case JANKY_DEPOSIT_STRAIGHT:
+            usingVision = true;
+            usingVisionOnStraight = true;
+            if (jankyDepositCargoHatch() == true)
+                {
+                autoState = State.FINISH;
+                }
             break;
 
         case FINISH:
@@ -292,7 +302,8 @@ private static void choosePath ()
             break;
 
         case 5:
-
+            autoState = State.JANKY_DEPOSIT_STRAIGHT;
+            break;
         default:
             // end of autonomous
             System.out.println(
@@ -946,7 +957,6 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
-                    Hardware.depositGamePiece.prepToDepositHatch();
                     if (Hardware.driveWithCamera
                             .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
                         {
@@ -954,6 +964,9 @@ private static boolean depositRocketHatch ()
 
                         rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                         }
+
+                    Hardware.depositGamePiece.prepToDepositHatch();
+
 
                     break;
                 }
@@ -978,8 +991,7 @@ private static boolean depositRocketHatch ()
 
 
         case DEPOSIT_HATCH:
-            if (Hardware.drive.driveStraightInches(6, -.5, .6,
-                    USING_GYRO) == true)
+            if (Hardware.depositGamePiece.depositHatch(true))
                 {
                 rocketHatchState = RocketHatchState.FINISH;
                 }
@@ -1305,7 +1317,121 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
 } // end descendFromLevelTwo()
 
 
+private static enum JankyDepositCargoHatchState
+    {
+    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_HATCH, DRIVE_2_CENTER, FINISHED
+    }
 
+private static JankyDepositCargoHatchState jankyDepositCargoHatchState = JankyDepositCargoHatchState.INIT;
+
+private static boolean jankyDepositCargoHatch ()
+{
+    // System.out.println(
+    // "depositCargoHatchState:" + depositCargoHatchState);
+    switch (jankyDepositCargoHatchState)
+        {
+        case INIT:
+
+            // if on level two decend, turn base on start position
+            if (autoLevel == Level.LEVEL_TWO)
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.DESCEND;
+                }
+            else
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
+                }
+            break;
+        case DESCEND: // driving off of level 2
+            if (descendFromLevelTwo(true, false, false))
+                {
+                // turn based on start position
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
+                }
+            break;
+
+        case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
+            if (Hardware.drive.driveStraightInches(
+                    distanceToCrossAutoline, LEAVE_LEVEL_ONE_SPEED,
+                    ACCELERATION_TIME,
+                    USING_GYRO))
+                {
+                if (autoPosition == Position.RIGHT)
+                    {
+                    jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE;
+                    }
+                else
+                    if (autoPosition == Position.LEFT)
+                        {
+                        jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE;
+                        }
+                    else
+                        {
+
+                        jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
+
+                        }
+                }
+            break;
+        case DRIVE_2_CENTER:
+            Hardware.depositGamePiece.prepToDepositHatch();
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_SHIP_CENTER, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+                }
+            break;
+        case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE: // first turn, when
+                                                 // autoPosition is set to RIGHT
+            if (Hardware.drive.turnDegrees(-30,
+                    TURN_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
+
+                }
+            break;
+        case STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE: // first turn, when autoPosition
+                                                // is set to LEFT
+            if (Hardware.drive.turnDegrees(30,
+                    TURN_SPEED,
+                    ACCELERATION_TIME, USING_GYRO))
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
+                }
+            break;
+
+        case STRAIGHT_DEPOSIT_ALIGN_TO_CARGO:
+            // System.out.println(
+            // "Ultrasosnic" + Hardware.frontUltraSonic
+            // .getDistanceFromNearestBumper());
+            Hardware.manipulator
+                    .moveArmToPosition(105);
+            // Hardware.depositGamePiece.prepToDepositHatch();
+            // maybe align with vision
+            if (Hardware.driveWithCamera
+                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+                }
+
+
+
+            break;
+        case STRAIGHT_DEPOSIT_DEPOSIT_HATCH:
+            // System.out.println("Deposit");
+            if (Hardware.depositGamePiece.depositHatch(true))
+                {
+                jankyDepositCargoHatchState = JankyDepositCargoHatchState.FINISHED;
+                }
+            break;
+        case FINISHED:
+            return true;
+
+        }
+    return false;
+}
 
 public static void endAutoPath ()
 {
@@ -1414,7 +1540,7 @@ public static final double CAMERA_TURN_SPEED = .5;
 public static final double CAMERA_ACCELERATION = .2;
 
 
-public static final double DRIVE_WITH_CAMERA_SPEED = .35;
+public static final double DRIVE_WITH_CAMERA_SPEED = .3;
 
 public static final int TURN_FOR_CAMERA_DEGREES = 60;
 

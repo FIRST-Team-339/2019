@@ -178,8 +178,8 @@ public boolean driveToTarget (double speed)
     switch (state)
         {
         case INIT:
-            Hardware.axisCamera.processImage();
-            Hardware.axisCamera.setRelayValue(Value.kOn);
+            // Hardware.axisCamera.processImage();
+            // Hardware.axisCamera.setRelayValue(Value.kOn);
             Hardware.drive.resetEncoders();
             // visionProcessor.saveImage(ImageType.RAW);
             // visionProcessor.saveImage(ImageType.PROCESSED);
@@ -195,24 +195,26 @@ public boolean driveToTarget (double speed)
         case DRIVE_WITH_CAMERA:
             correctionValue = DRIVE_CORRECTION;
 
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
+            // visionProcessor.saveImage(ImageType.RAW);
+            // visionProcessor.saveImage(ImageType.PROCESSED);
             // adjust speed based on distance
             // System.out.println("ultrasonic distance: "
             // + this.frontUltrasonic
             // .getDistanceFromNearestBumper());
 
             // if we lose camera before aligned
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
-                    && (Hardware.rightFrontDriveEncoder
-                            .getDistance() >= CAMERA_NO_LONGER_WORKS
-                            || Hardware.leftFrontDriveEncoder
-                                    .getDistance() >= CAMERA_NO_LONGER_WORKS))
-                {
-
-                state = DriveWithCameraState.DRIVE_WITH_US;
-                }
+            /*
+             * if (this.frontUltrasonic
+             * .getDistanceFromNearestBumper() <= CAMERA_NO_LONGER_WORKS
+             * && (Hardware.rightFrontDriveEncoder
+             * .getDistance() >= MIN_INCHES
+             * || Hardware.leftFrontDriveEncoder
+             * .getDistance() >= MIN_INCHES))
+             * {
+             *
+             * state = DriveWithCameraState.DRIVE_WITH_US;
+             * }
+             */
 
             // if we get close enought to the target and have to stop
             if (this.frontUltrasonic
@@ -726,7 +728,7 @@ private final double SLOW_MODIFIER = .7;
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .2;
+private final double DRIVE_CORRECTION = .13;
 
 private final double DRIVE_CORRECTION_CLOSE = .07;
 
