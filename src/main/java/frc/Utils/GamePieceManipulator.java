@@ -384,15 +384,15 @@ public boolean moveArmToPosition (double angle)
  */
 public boolean deployArm ()
 {
-    if (this.getDeployState() != DeployState.DEPLOYED)
-        {
-        isSetDeployPositionInitReady = true;
-        return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED);
-        }
-    else
-        {
-        return true; // if we are already deployed
-        }
+    // if (this.getDeployState() != DeployState.DEPLOYED)
+    // {
+    // isSetDeployPositionInitReady = true;
+    return this.moveArmToPosition(DEPLOYED_ARM_POSITION_ADJUSTED);
+    // }
+    // else
+    // {
+    // return true; // if we are already deployed
+    // }
 }
 
 /**
@@ -407,12 +407,12 @@ public boolean deployArm ()
  */
 public boolean retractArm ()
 {
-    if (this.getDeployState() != DeployState.RETRACTED)
-        {
-        isSetDeployPositionInitReady = true;
-        return this.moveArmToPosition(RETRACTED_ARM_POSITION_ADJUSTED);
-        }
-    return true; // if we are already deployed
+    // if (this.getDeployState() != DeployState.RETRACTED)
+    // {
+    // isSetDeployPositionInitReady = true;
+    return this.moveArmToPosition(RETRACTED_ARM_POSITION_ADJUSTED);
+    // }
+    // return true; // if we are already deployed
 }
 
 
@@ -805,17 +805,17 @@ public void printDeployDebugInfo ()
     // SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
     // SmartDashboard.putNumber("Left Operator",
     // Hardware.leftOperator.getY());
-    SmartDashboard.putNumber("deployTargetSpeed",
-            deployTargetSpeed);
-    SmartDashboard.putString("stayAtPositionInitIsReady",
-            "" + this.stayAtPositionInitIsReady);
-    SmartDashboard.putString("Has Cargo:", "" + this.hasCargo());
-    SmartDashboard.putNumber("currentDeployMaxAngle",
-            currentDeployMaxAngle);
-    SmartDashboard.putNumber("currentDeployMinAngle",
-            currentDeployMinAngle);
-    SmartDashboard.putString("isSetDeployPositionInitReady",
-            "" + isSetDeployPositionInitReady);
+    // SmartDashboard.putNumber("deployTargetSpeed",
+    // deployTargetSpeed);
+    // SmartDashboard.putString("stayAtPositionInitIsReady",
+    // "" + this.stayAtPositionInitIsReady);
+    // SmartDashboard.putString("Has Cargo:", "" + this.hasCargo());
+    // SmartDashboard.putNumber("currentDeployMaxAngle",
+    // currentDeployMaxAngle);
+    // SmartDashboard.putNumber("currentDeployMinAngle",
+    // currentDeployMinAngle);
+    // SmartDashboard.putString("isSetDeployPositionInitReady",
+    // "" + isSetDeployPositionInitReady);
 }
 
 // =========================================================================
@@ -923,7 +923,7 @@ public double getCurrentDeployMinAngle ()
 
 // used to scale all relevant values for 2019 since the max speed
 // the 2019 deploy arm can go is .2
-private static double MAX_DEPLOY_SPEED_2019 = .4;
+private static double MAX_DEPLOY_SPEED_2019 = .6;
 
 // ----- Joystick Constants 2019 -----
 private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;

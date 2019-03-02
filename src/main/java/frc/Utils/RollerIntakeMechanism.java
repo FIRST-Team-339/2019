@@ -144,8 +144,11 @@ public boolean hasCargo ()
 {
     // TODO uncomment lower return when photoSwitch is
     // working on the robot
-    return false;
-    // return !this.photoSwitch.isOn();
+    // return false;
+    // in a perfect world, we should return !photoSwith.isOn()
+    // however, for some reason isOn is returning false when
+    // the make break is not broken, so we do not need the !
+    return this.photoSwitch.isOn();
 }
 
 

@@ -629,10 +629,10 @@ public void update ()
             // value to the motor so the forklift does not slide down due to
             // gravity
 
-            if (manipulator.hasCargo() == true)
-                this.forkliftMotor.set(STAY_UP_WITH_CARGO);
-            else
-                this.forkliftMotor.set(STAY_UP_NO_PIECE);
+            // if (manipulator.hasCargo() == true)
+            // this.forkliftMotor.set(STAY_UP_WITH_CARGO);
+            // else
+            this.forkliftMotor.set(STAY_UP_NO_PIECE);
 
             // Reset the direction for next move-to-position.
             forkliftDirection = ForkliftDirectionState.NEUTRAL;
@@ -673,15 +673,15 @@ public void printDebugInfo ()
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
     SmartDashboard.putNumber("FL Encoder Ticks: ",
             this.forkliftEncoder.get());
-    SmartDashboard.putNumber("FL current max height",
-            currentLiftMaxHeight);
-    SmartDashboard.putNumber("FL current min height",
-            currentLiftMinHeight);
+    // SmartDashboard.putNumber("FL current max height",
+    // currentLiftMaxHeight);
+    // SmartDashboard.putNumber("FL current min height",
+    // currentLiftMinHeight);
     SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
-    SmartDashboard.putString("FL Direction State: ",
-            "" + this.forkliftDirection);
-    SmartDashboard.putBoolean("FL setLiftPositionInit: ",
-            setLiftPositionInit);
+    // SmartDashboard.putString("FL Direction State: ",
+    // "" + this.forkliftDirection);
+    // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
+    // setLiftPositionInit);
     SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
 }
 
@@ -769,7 +769,7 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 
 // heights for the top, middle, and bottom openings for the cargo on the
 // rocket ship
-public final static double TOP_ROCKET_CARGO = 56.5;
+public final static double TOP_ROCKET_CARGO = 56;
 
 public final static double MIDDLE_ROCKET_CARGO = 35;
 
@@ -783,7 +783,7 @@ public final static double LOWER_ROCKET_CARGO_ANGLE = 48;
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 56.5;
+public final static double TOP_ROCKET_HATCH = 56;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
@@ -805,8 +805,7 @@ public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 // private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
-private static final double MAX_HEIGHT = 56.5; // placeholder value from last
-                                               // year
+private static final double MAX_HEIGHT = 56;
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 

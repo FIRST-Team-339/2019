@@ -338,7 +338,7 @@ public static void periodic ()
         Hardware.lift.resetEncoder();
         }
 
-    individualTest();
+    // individualTest();
 
     takePicture();
 
@@ -375,7 +375,7 @@ public static void periodic ()
             }
         }
 
-    printStatements();
+    // printStatements();
 
 } // end Periodic()
 
@@ -488,26 +488,20 @@ private static void coleTest ()
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
     // if (Hardware.testDeployButtonTemp.getCurrentValue())
-    if (Hardware.leftDriver.getRawButton(3))
-        Hardware.manipulator.deployArm();
 
-    // if (Hardware.rightOperator.getRawButton(5))
-    if (Hardware.leftOperator.getRawButton(11))
-        Hardware.manipulator.retractArm();
+    // if (Hardware.rightOperator.getRawButton(11))
+    // Hardware.manipulator.deployArm();
 
-    // if (Hardware.testSetManipulatorPosition.getCurrentValue())
+    // if (Hardware.leftOperator.getRawButton(11))
+    // Hardware.manipulator.retractArm();
+
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
 
     // Manipulator
 
-    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-    // (Hardware.intakeTriggerLeft.get() == true
-    // || Hardware.intakeTriggerRight.get() == true),// TODO
-    // (Hardware.outtakeButtonLeft.get() == true
-    // || Hardware.outtakeButtonRight.get() == true),
-    // Hardware.intakeOverride.get());
+
 
     // SmartDashboard.putString("intakeTriggerLeft",
     // "" + Hardware.intakeTriggerLeft.get());
@@ -522,11 +516,11 @@ private static void coleTest ()
     // "" + Hardware.outtakeButtonRight.get());
 
 
-    SmartDashboard.putString("Make break switch",
-            "" + Hardware.armBallDetector.get());
+    // SmartDashboard.putString("Make break switch",
+    // "" + Hardware.armBallDetector.isOn());
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
+    // Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
 

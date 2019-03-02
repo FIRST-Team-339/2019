@@ -295,6 +295,8 @@ private static void choosePath ()
 
         default:
             // end of autonomous
+            System.out.println(
+                    "WE DONE MESSED UP THE SIX POSITION SWITCH");
             autoState = State.FINISH;
             break;
         }
@@ -441,12 +443,13 @@ private static boolean crossAutoline ()
             break;
 
         case FINISH:
-            // end of crossing the autoline
-            // TODO figure out how to make the below line WORK
-            // HardwareInterfaces.Transmission.TransmissionBase.stop();
-            // System.out.println(
-            // "Finite Incatem");
-            break;
+            return true;
+        // end of crossing the autoline
+        // TODO figure out how to make the below line WORK
+        // HardwareInterfaces.Transmission.TransmissionBase.stop();
+        // System.out.println(
+        // "Finite Incatem");
+
         }
     return false;
 }
@@ -1413,7 +1416,7 @@ public static final double CAMERA_ACCELERATION = .2;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .35;
 
-public static final int TURN_FOR_CAMERA_DEGREES = 45;
+public static final int TURN_FOR_CAMERA_DEGREES = 60;
 
 
 // changed to correct-ish number 2 February 2019
