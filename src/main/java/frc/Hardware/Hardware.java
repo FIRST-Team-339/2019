@@ -558,8 +558,8 @@ public static void commonInitialization ()
 
     // Double Solenoids
 
-    driveSolenoid = new DoubleSolenoid(0,
-            1);
+    driveSolenoid = new DoubleSolenoid(2,
+            3);
 
 
     // Single Solenoids

@@ -816,7 +816,7 @@ public final static double TOP_ROCKET_HATCH = 56;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
-public final static double LOWER_ROCKET_HATCH = 9;
+public final static double LOWER_ROCKET_HATCH = 6;// TODO changed from 9
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 33;
 

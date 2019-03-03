@@ -285,7 +285,9 @@ public static void periodic ()
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
     // Hardware.depositGamePiece.printDebugStatements();
-
+    SmartDashboard.putNumber("Gyro angle", Hardware.gyro.getAngle());// TODO
+    SmartDashboard.putNumber("ultrasonic",
+            Hardware.frontUltraSonic.getDistanceFromNearestBumper());// TODO
     // vision=====================================
 
     if (Hardware.visionHeightUpButton.get() == true
@@ -334,6 +336,12 @@ public static void periodic ()
         Hardware.manipulator.resetStateMachine();
         } // end if
 
+
+    if (Hardware.cancelAutoLeftDriver.get() == true
+            && Hardware.cancelAutoRightDriver.get() == true)
+        {
+        Hardware.climber.finishEarly();
+        }
 
     // Buttons to reset the forklift encoder. Should never be called during
     // a match; only is in the final code for the purpsoe of speeding up
