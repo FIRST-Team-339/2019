@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
  * Contains all game specific vision code, including code to drive to the switch
  * using vision
  *
- * @author: Becky Button
+ * @author: Becky Button and Conner McKevitt
  */
 public class DriveWithCamera extends Drive
 {
@@ -220,7 +220,7 @@ public boolean driveToTarget (double speed)
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
                     && Hardware.rightFrontDriveEncoder
-                            .getDistance() > MIN_INCHES)
+                            .getDistance() >= MIN_INCHES)
                 {
                 state = DriveWithCameraState.STOP;
                 }
@@ -228,7 +228,7 @@ public boolean driveToTarget (double speed)
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
                     && this.frontUltrasonic
-                            .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
+                            .getDistanceFromNearestBumper() >= DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
                 correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
@@ -714,7 +714,7 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 30;
+private final double DISTANCE_FROM_WALL_TO_STOP = 15;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
@@ -722,13 +722,13 @@ private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
 // private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
-private final double SLOW_MODIFIER = .7;
+private final double SLOW_MODIFIER = .8;// lower for slower
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .13;
+private final double DRIVE_CORRECTION = .15;
 
 private final double DRIVE_CORRECTION_CLOSE = .07;
 
@@ -737,6 +737,6 @@ private final double DRIVE_CORRECTION_CLOSE = .07;
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 8;
+private final double MIN_INCHES_CLOSE = 15;
 
 }

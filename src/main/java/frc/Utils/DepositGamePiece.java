@@ -36,7 +36,7 @@ public DepositGamePiece (Drive drive, Forklift forklift,
 
 public enum DepositHatchState
     {
-    INIT, DEPOSIT_HATCH, BACKUP_HATCH, BACKUP_HATCH_AFTER_FORK, STOP
+    INIT, DEPOSIT_HATCH, BACKUP_HATCH, BACKUP_HATCH_AFTER_FORK, PREP_TO_BACKUP, STOP
     }
 
 public static DepositHatchState depositHatchState = DepositHatchState.INIT;
@@ -73,54 +73,33 @@ public boolean depositHatch (boolean inAuto)
                     .2, BACKUP_ACCELERATION, usingGyro))
                 {
 
-                depositHatchState = DepositHatchState.BACKUP_HATCH;
+                depositHatchState = DepositHatchState.PREP_TO_BACKUP;
 
                 }
             break;
 
-
-        case BACKUP_HATCH:
-
+        case PREP_TO_BACKUP:
             if (inAuto)
                 {
-                // TODO maybe move this moveArmToPosition call to a seperate
-                // seperate; can be run in background, but don't want
-                // to keep calling it after it already arrived
-                if (hasLoweredAuto
-                        || Hardware.manipulator.moveArmToPosition(
-                                DEPOSIT_ARM_ANGLE_AUTO))
+                if (Hardware.manipulator
+                        .moveArmToPosition(DEPOSIT_ARM_ANGLE_AUTO))
                     {
-                    hasLoweredAuto = true;
-                    if (this.drive.driveStraightInches(BACKUP_INCHES,
-                            -BACKUP_SPEED, BACKUP_ACCELERATION,
-                            usingGyro))
-                        {
-                        depositHatchState = DepositHatchState.STOP;
-                        }
+                    depositHatchState = DepositHatchState.BACKUP_HATCH;
+
                     }
                 }
             else
                 if (depositHeighthatch == 2)
 
                     {
-                    // TODO this should be seperated into several states
-                    // right now it will keep trying to move the manipulator
-                    // back from its current position, which will keep
-                    // changing and keep calling the moveArmToPosition over
-                    // and over, which is bad
 
-                    // System.out.println("hadsjoafno");
                     if (Hardware.manipulator.moveArmToPosition(
                             Hardware.manipulator.getCurrentArmPosition()
                                     - 10))
                         {
-                        if (this.drive.driveStraightInches(
-                                BACKUP_INCHES,
-                                -BACKUP_SPEED, BACKUP_ACCELERATION,
-                                usingGyro))
-                            {
-                            depositHatchState = DepositHatchState.STOP;
-                            }
+
+                        depositHatchState = DepositHatchState.BACKUP_HATCH;
+
                         }
                     }
                 else
@@ -133,10 +112,21 @@ public boolean depositHatch (boolean inAuto)
                         }
                     }
             break;
+        case BACKUP_HATCH:
+
+
+            if (this.drive.driveStraightInches(BACKUP_INCHES,
+                    -BACKUP_SPEED, BACKUP_ACCELERATION,
+                    usingGyro))
+                {
+                depositHatchState = DepositHatchState.STOP;
+                }
+
+            break;
 
         case BACKUP_HATCH_AFTER_FORK:
-            if (this.drive.driveStraightInches(BACKUP_INCHES,
-                    -BACKUP_SPEED, BACKUP_ACCELERATION, usingGyro))
+            if (this.drive.driveStraightInches(BACKUP_INCHES_3,
+                    -BACKUP_SPEED_3, BACKUP_ACCELERATION, usingGyro))
                 {
                 depositHatchState = DepositHatchState.STOP;
                 }
@@ -204,7 +194,7 @@ public boolean depositCargo ()
 
 private enum DepositTeleopState
     {
-    INIT, HOLD, PREP_FORKLIFT, PREP_MANIPULATOR, ALIGN_TO_TARGET, DEPOSIT, FINISH
+    INIT, HOLD, PREP_FORKLIFT, PREP_MANIPULATOR, ALIGN_TO_TARGET, LOWER_FORK_1, DEPOSIT, FINISH
     }
 
 public DepositTeleopState depositTeleopState = DepositTeleopState.INIT;
@@ -384,7 +374,8 @@ public boolean depositTeleopStateMachine ()
                     case 0:
                         if (Hardware.manipulator
                                 .moveArmToPosition(
-                                        Forklift.LOWER_ROCKET_CARGO_ANGLE))
+                                        Forklift.LOWER_ROCKET_CARGO_ANGLE
+                                                + 3))
                             {
                             depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
                             }
@@ -424,18 +415,24 @@ public boolean depositTeleopStateMachine ()
                 }
             else
                 if (Hardware.driveWithCamera
-                        .driveToTargetClose(.1)
-                        || (Hardware.frontUltraSonic
-                                .getDistanceFromNearestBumper() <= 22
-                                && Hardware.rightFrontDriveEncoder
-                                        .getDistance() > 10))
+                        .driveToTargetClose(.1))
                     {
                     Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
-
+                    if (depositHeighthatch == 0)
+                        {
+                        depositTeleopState = DepositTeleopState.LOWER_FORK_1;
+                        }
                     depositTeleopState = DepositTeleopState.DEPOSIT;
                     }
             break;
-
+        case LOWER_FORK_1:
+            if (Hardware.manipulator
+                    .moveArmToPosition(
+                            Forklift.LOWER_ROCKET_CARGO_ANGLE))
+                {
+                depositTeleopState = DepositTeleopState.DEPOSIT;
+                }
+            break;
         case DEPOSIT:
             if (hasCargo == false)
                 {
@@ -615,9 +612,13 @@ private static boolean usingGyro = true;
 
 private static final double BACKUP_INCHES = 10;
 
+private static final double BACKUP_INCHES_3 = 4;
+
 private static final double BACKUP_ACCELERATION = .1;
 
-private static final double BACKUP_SPEED = .1;
+private static final double BACKUP_SPEED = .2;
+
+private static final double BACKUP_SPEED_3 = .07;
 
 private static final double FORK_SPEED = 1;
 
