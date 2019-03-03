@@ -144,8 +144,11 @@ public boolean hasCargo ()
 {
     // TODO uncomment lower return when photoSwitch is
     // working on the robot
-    return false;
-    // return !this.photoSwitch.isOn();
+    // return false;
+    // in a perfect world, we should return !photoSwith.isOn()
+    // however, for some reason isOn is returning false when
+    // the make break is not broken, so we do not need the !
+    return this.photoSwitch.isOn();
 }
 
 
@@ -240,7 +243,7 @@ public void update ()
 // if via testing we determine this is 0.0 on te new robot,
 // we can probably change the HOLD sate in intakeUpdate to not use
 // this anymore
-private static final double HOLD_INTAKE_SPEED_WITH_CARGO = 0.0;
+private static final double HOLD_INTAKE_SPEED_WITH_CARGO = -0.1;
 
 // speed given to the armRollers when not in use. Should be 0
 private static final double HOLD_INTAKE_SPEED_NO_CARGO = 0.0;

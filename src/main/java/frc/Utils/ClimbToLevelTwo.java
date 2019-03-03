@@ -1452,7 +1452,8 @@ public static double SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = -.4;// .5;
 public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = .8;
 // --------------------------------
 
-public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.75;
+public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.55;// @ANE 3/2/19
+                                                                // 10:05
 
 public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = 1.0;
 
