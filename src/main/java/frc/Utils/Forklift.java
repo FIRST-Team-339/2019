@@ -829,7 +829,7 @@ public final static double CARGO_SHIP_CARGO = 30;
 
 public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 
-public final static double PLAYER_STATION_HEIGHT = 4.25;
+public final static double PLAYER_STATION_HEIGHT = 5;
 
 public final static double PLAYER_STATION_ANGLE = 15;
 

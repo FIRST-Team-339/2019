@@ -247,6 +247,8 @@ public static void periodic ()
                 {
                 autoState = State.FINISH;
                 }
+            // TODO C.R. added a break
+            break;
         case JANKY_DEPOSIT_STRAIGHT:
             usingVision = true;
             usingVisionOnStraight = true;
@@ -1328,6 +1330,7 @@ private static boolean jankyDepositCargoHatch ()
 {
     // System.out.println(
     // "depositCargoHatchState:" + depositCargoHatchState);
+    // TODO C.R. trace order of the states
     switch (jankyDepositCargoHatchState)
         {
         case INIT:
@@ -1373,12 +1376,17 @@ private static boolean jankyDepositCargoHatch ()
                         }
                 }
             break;
+        // TODO this code is not currently being reached
         case DRIVE_2_CENTER:
+            // TODO C.R. is the static variable used by this
+            // function being called elsewhere
             Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_SHIP_CENTER, DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
+                // Hardware.manipulator
+                // .moveArmToPosition(105);
                 jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
             break;
@@ -1388,6 +1396,8 @@ private static boolean jankyDepositCargoHatch ()
                     TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
+                // Hardware.manipulator
+                // .moveArmToPosition(105);
                 jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
 
                 }
@@ -1398,6 +1408,8 @@ private static boolean jankyDepositCargoHatch ()
                     TURN_SPEED,
                     ACCELERATION_TIME, USING_GYRO))
                 {
+                // Hardware.manipulator
+                // .moveArmToPosition(105);
                 jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_ALIGN_TO_CARGO;
                 }
             break;
@@ -1406,6 +1418,11 @@ private static boolean jankyDepositCargoHatch ()
             // System.out.println(
             // "Ultrasosnic" + Hardware.frontUltraSonic
             // .getDistanceFromNearestBumper());
+            // TODO C.R. I'm worried that this will keep setting
+            // manipulator even after it reaches 105
+            // consider moving this function call to inside
+            // the { } of previous state's if statement so it is
+            // only called once
             Hardware.manipulator
                     .moveArmToPosition(105);
             // Hardware.depositGamePiece.prepToDepositHatch();
@@ -1421,6 +1438,9 @@ private static boolean jankyDepositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_HATCH:
             // System.out.println("Deposit");
+            // TODO C.R. this is calling a faulty function,
+            // but passing in the true should help avoid the
+            // faulty section
             if (Hardware.depositGamePiece.depositHatch(true))
                 {
                 jankyDepositCargoHatchState = JankyDepositCargoHatchState.FINISHED;
@@ -1441,7 +1461,7 @@ public static void endAutoPath ()
     rocketHatchState = RocketHatchState.FINISH;
     descentState = DescentState.FINISH;
     cross = CrossAutoState.FINISH;
-
+    // TODO C.R. add something for jankety and blind rocket
 } // end endAutoPath()
 
 
