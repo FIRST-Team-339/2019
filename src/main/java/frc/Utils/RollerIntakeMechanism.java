@@ -171,6 +171,9 @@ public void resetStateMachine ()
 public void update ()
 {
 
+    if (intakeState != IntakeState.HOLD)
+        hasUsedIntake = true;
+
     switch (intakeState) // main state machine of intake
         {
         // sets the motors to bring in a cargo
@@ -223,7 +226,7 @@ public void update ()
             // to keep in cargo (it may not be, in which case the constant
             // passed to the motors is still 0.0)
         case HOLD:
-            if (this.hasCargo() == true)
+            if (this.hasCargo() == true && hasUsedIntake == true)
                 {
                 this.armRollers.set(HOLD_INTAKE_SPEED_WITH_CARGO);
                 }
@@ -234,6 +237,9 @@ public void update ()
             break;
         }
 }
+
+
+private boolean hasUsedIntake = false;
 
 // =========================================================================
 // Constants
