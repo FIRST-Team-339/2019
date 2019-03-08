@@ -358,17 +358,25 @@ public boolean driveToTarget (double speed)
  */
 public boolean driveToTargetClose (double speed)
 {
+
+    // TODO make this not use the ultrasonic. I am thinking that we lower the
+    // adjustment value each time we change directions. This ways we can retrun
+    // true when we align and not rely on the ultrasonic. Also need to make it
+    // override by a button.
     System.out.println("vision state: " + state);
     switch (state)
         {
         case INIT:
-            Hardware.axisCamera.processImage();
+
             Hardware.drive.resetEncoders();
             double correctionValue = DRIVE_CORRECTION_CLOSE;
             double motorspeed = speed;
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
+
+            Hardware.lift.setLiftPosition(LIFT_OUT_OF_WAY);// TODO
+            Hardware.manipulator.moveArmToPosition(ARM_OUT_OF_WAY);// TODO
             correctionValue = DRIVE_CORRECTION;
 
             motorspeed = speed;
@@ -377,28 +385,6 @@ public boolean driveToTargetClose (double speed)
             // adjust speed based on distance
 
             // if we get close enought to the target and have to stop
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && (Hardware.leftFrontDriveEncoder
-                            .getDistance() >= MIN_INCHES_CLOSE
-                            || Hardware.rightFrontDriveEncoder
-                                    .getDistance() >= MIN_INCHES_CLOSE))
-
-                {
-
-                state = DriveWithCameraState.STOP;
-                }
-
-            /*
-             * if (this.frontUltrasonic
-             * .getDistanceFromNearestBumper() <=
-             * DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
-             *
-             * {
-             * motorspeed = motorspeed * SLOW_MODIFIER;
-             * correctionValue = correctionValue * SLOW_MODIFIER;
-             * }
-             */
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -416,7 +402,6 @@ public boolean driveToTargetClose (double speed)
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-
             else
                 if (centerX <= SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
                     {
@@ -426,16 +411,12 @@ public boolean driveToTargetClose (double speed)
                     this.getTransmission().driveRaw(
                             motorspeed/* - correctionValue */,
                             motorspeed + correctionValue);
-
                     }
                 else
                     {
-
-                    driveStraight(motorspeed - correctionValue, 2,
-                            true);
+                    state = DriveWithCameraState.STOP;
                     }
             break;
-
         default:
         case STOP:
             // Hardware.axisCamera.setRelayValue(Value.kOff);
@@ -689,6 +670,10 @@ public double getCameraCenterValue ()
             }
     return center;
 }
+
+private final double LIFT_OUT_OF_WAY = Hardware.lift.LOWER_ROCKET_HATCH;
+
+private final double ARM_OUT_OF_WAY = Hardware.lift.LOWER_ROCKET_HATCH_ANGLE;
 
 // ================VISION CONSTANTS================
 private final double DEFAULT_COMPENSTATE_TEST = 0;

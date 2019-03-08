@@ -61,6 +61,7 @@ public static void init ()
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -212,6 +213,8 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
+
+
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -283,27 +286,11 @@ public static void periodic ()
 
     Hardware.climber.newClimbUpdate();
 
-    Hardware.depositGamePiece.depositTeleopStateMachine();
+    Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
     // Hardware.depositGamePiece.printDebugStatements();
-    SmartDashboard.putNumber("Gyro angle", Hardware.gyro.getAngle());// TODO
-    SmartDashboard.putNumber("ultrasonic",
-            Hardware.frontUltraSonic.getDistanceFromNearestBumper());// TODO
-    // vision=====================================
 
-    if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 2 && Hardware.telopTimer.get() > .25)
-        {
-        Hardware.telopTimer.reset();
-        visionHeight++;
-        Hardware.telopTimer.start();
-        }
-    if (Hardware.visionHeightDownButton.get() == true
-            && visionHeight > 0 && Hardware.telopTimer.get() > .25)
-        {
-        Hardware.telopTimer.reset();
-        visionHeight--;
-        Hardware.telopTimer.start();
-        }
+    // vision=====================================
+    // 8 and 9
 
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
@@ -311,7 +298,7 @@ public static void periodic ()
 
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        false/* Hardware.manipulator.hasCargo() */))
+                        false))
             {
             Hardware.alignVisionButton.setValue(false);
 
@@ -353,7 +340,7 @@ public static void periodic ()
         Hardware.lift.resetEncoder();
         }
 
-    // individualTest();
+    individualTest();
 
     takePicture();
 
@@ -403,7 +390,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    // coleTest();
+    coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -496,6 +483,9 @@ private static void connerTest ()
 
 private static void coleTest ()
 {
+
+    Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
