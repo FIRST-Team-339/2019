@@ -327,9 +327,9 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
-public static JoystickButton visionHeightDownButton = null;
+public static MomentarySwitch driveForwardButton = null;
 
-public static JoystickButton visionHeightUpButton = null;
+public static MomentarySwitch lowerForkliftButton = null;
 
 public static JoystickButton upshiftButton = null;
 
@@ -641,9 +641,9 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    visionHeightUpButton = new JoystickButton(leftOperator, 9);
+    lowerForkliftButton = new MomentarySwitch(leftOperator, 9, false);
 
-    visionHeightDownButton = new JoystickButton(leftOperator, 8);
+    driveForwardButton = new MomentarySwitch(leftOperator, 8, false);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
