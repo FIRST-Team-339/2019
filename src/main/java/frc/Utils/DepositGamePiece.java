@@ -39,7 +39,7 @@ public enum DepositHatchState
     INIT, DEPOSIT_HATCH, BACKUP_HATCH, BACKUP_HATCH_AFTER_FORK, PREP_TO_BACKUP, STOP
     }
 
-public static DepositHatchState depositHatchState = DepositHatchState.INIT;
+public DepositHatchState depositHatchState = DepositHatchState.INIT;
 
 public static boolean hasLoweredAuto = false;
 
@@ -587,6 +587,9 @@ public void printDebugStatements ()
 
     SmartDashboard.putBoolean("has cargo",
             hasCargo);
+
+    SmartDashboard.putString("deposit hatch state",
+            this.depositHatchState.toString());
 }
 
 //
