@@ -503,9 +503,20 @@ private static void coleTest ()
     // Hardware.manipulator.moveArmToPosition(45);
 
 
+
+
+
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+
+
+
+
+
     // Manipulator
-
-
 
     // SmartDashboard.putString("intakeTriggerLeft",
     // "" + Hardware.intakeTriggerLeft.get());
@@ -518,7 +529,6 @@ private static void coleTest ()
 
     // SmartDashboard.putString("outtakeButtonRight",
     // "" + Hardware.outtakeButtonRight.get());
-
 
     // SmartDashboard.putString("Make break switch",
     // "" + Hardware.armBallDetector.isOn());
