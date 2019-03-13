@@ -70,7 +70,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2019;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -315,7 +315,9 @@ public static JoystickButton intakeTriggerLeft = null;
 
 public static JoystickButton intakeTriggerRight = null;
 
-public static JoystickButton outtakeButton = null;
+public static JoystickButton outtakeButtonLeft = null;
+
+public static JoystickButton outtakeButtonRight = null;
 
 public static JoystickButton intakeOverride = null;
 
@@ -325,9 +327,9 @@ public static QuickSwitch cargoShipCargoButton = null;
 
 public static QuickSwitch cargoShipHatchButton = null;
 
-public static JoystickButton visionHeightDownButton = null;
+public static MomentarySwitch driveForwardButton = null;
 
-public static JoystickButton visionHeightUpButton = null;
+public static MomentarySwitch lowerForkliftButton = null;
 
 public static JoystickButton upshiftButton = null;
 
@@ -556,8 +558,8 @@ public static void commonInitialization ()
 
     // Double Solenoids
 
-    driveSolenoid = new DoubleSolenoid(0,
-            1);
+    driveSolenoid = new DoubleSolenoid(2,
+            3);
 
 
     // Single Solenoids
@@ -602,7 +604,8 @@ public static void commonInitialization ()
     // declare the USB camera server and the
     // USB camera it serves at the same time
     // -------------------------------------
-
+    // TODO: put somewhere useful
+    // Camera settings: 320-240, 20fps, 87 ????
     USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
     USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
@@ -632,18 +635,15 @@ public static void commonInitialization ()
     // left trigger
     intakeTriggerLeft = new JoystickButton(leftOperator, 1);
 
-    outtakeButton = new JoystickButton(leftOperator, 2);
+    outtakeButtonLeft = new JoystickButton(leftOperator, 2);
 
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    visionHeightUpButton = new JoystickButton(leftOperator, 9);
+    lowerForkliftButton = new MomentarySwitch(leftOperator, 9, false);
 
-    visionHeightDownButton = new JoystickButton(leftOperator, 8);
-
-    poweredManipulatorForClimbButton = new JoystickButton(leftOperator,
-            11);
+    driveForwardButton = new MomentarySwitch(leftOperator, 8, false);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
@@ -657,6 +657,8 @@ public static void commonInitialization ()
     // right trigger
 
     intakeTriggerRight = new JoystickButton(rightOperator, 1);
+
+    outtakeButtonRight = new JoystickButton(rightOperator, 2);
 
     chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
@@ -697,6 +699,12 @@ public static void commonInitialization ()
     // Momentary Switches
 
     // ----------Right Driver--------------
+
+
+    poweredManipulatorForClimbButton = new JoystickButton(rightDriver,
+            6);
+
+
     resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
 
     resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
@@ -704,9 +712,9 @@ public static void commonInitialization ()
 
 
     // hacks
-    armHackButton = new MomentarySwitch(rightDriver, 6, false);
+    // armHackButton = new MomentarySwitch(rightDriver, 6, false);
 
-    liftHackButton = new JoystickButton(rightDriver, 5);
+    // liftHackButton = new JoystickButton(rightDriver, 5);
 
     // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
@@ -1236,11 +1244,11 @@ private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;
 
 private static final double KILROY_XIX_LIFT_ENCODER_DPP = 0.02;
 
-private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.67;
+private static final double KILROY_XX_DRIVE_ENCODER_DPP = 1.68;
 
 // This value was tested on 15 Feb 2019; it gives values within
 // .1 inch of what we want
-private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0092;
+private static final double KILROY_XX_LIFT_ENCODER_DPP = 0.0094;
 
 
 private static final int KILROY_XX_MAX_BRAKE_ITERATIONS = 5;

@@ -13,30 +13,40 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class ClimbToLevelTwo
 {
-
+// swing arm double solenoid to lift back frame/drop back wheels
 private DoubleSolenoid driveSolenoid = null;
 
+// motor that rotates the arm DO NOT USE
 private SpeedController armMotor = null;
 
+// encoder in the event that we change from a pot to an encoder DO NOT USE
 private KilroyEncoder armEncoder = null;
 
+// potentiometer to sense the ticks of the arm, can be replaced with an encoder
+// DO NOT USE
 private RobotPotentiometer armSensor = null;
 
 // private DoubleSolenoid testSolenoid = null;
 
+// drive system to...wait for it...drive
 private Drive drive = null;
 
+// lift thats an object of the Forklift class
 private Forklift lift = null;
 
+// ultrasonic that senses the distance to the front til the nearest object
 private UltraSonic ultraSonic = null;
 
+// timer used to time the various functions of climb
 private Timer climbTimer = new Timer();
 
+// not actually used but TODO change over newClimb() to this timer
 private Timer newClimbTimer = new Timer();
 
+// timer to deal with how long we need to drive
 private Timer driveTimer = new Timer();
 
-// state of the climb state machine
+// states of the climb state machine
 public static enum ClimberState
     {
     STANDBY, START_CLIMB, LOWER_FORKLIFT_TO_POSITION, DELAY_ONE, LOWER_ARM, DELAY_TWO, DEPLOY_BACK_WHEELS, DELAY_THREE, LOWER_FORKLIFT_COMPLETELY, DELAY_FOUR, DRIVE_FORWARD, DELAY_FIVE, RAISE_ARM, DELAY_SIX, RETRACT_WHEELS, DELAY_SEVEN, FINISH_DRIVING, DELAY_INIT, STOP
@@ -50,7 +60,8 @@ private static ClimberState prevState = ClimberState.STANDBY;
 
 
 /**
- * default construstor
+ * default construstor sets everything to null so we know to fix ourselves and
+ * pass in all of our objects
  */
 public ClimbToLevelTwo ()
 {
@@ -68,9 +79,9 @@ public ClimbToLevelTwo ()
  * double solenoid
  *
  * @author Ashley Espeland
- * @param -
- *            testSolenoid
- *            solenoid to simulate the drive solenoids to lower the back wheels
+ * @param-testSolenoid
+ *                     solenoid to simulate the drive solenoids to lower the
+ *                     back wheels
  *
  * @param-armMotor
  *                 motor controller that controls the nessie head's movements
@@ -109,33 +120,33 @@ public ClimbToLevelTwo ()
  * Constructor for the new robot- has armPot and single solenoid
  *
  * @author Ashley Espeland
- * @param -
- *            driveSolenoid
+ * @param -driveSolenoid
  *            single solenoid to lower and raise the back wheels
  *
- * @param-armMotor
- *                 motor controller that controls the nessie head's movements
- *                 about a point
+ * @param -armMotor
+ *            motor controller that controls the nessie head's movements
+ *            about a point
  *
- * @param-armPot
- *               potentiometer that reads the nessie head's position
+ * @param -armPot
+ *            potentiometer that reads the nessie head's position
  *
- * @param-drive
- *              drive object that obviously drves and deals with all that
+ * @param -drive
+ *            drive object that obviously drves and deals with all that
  *
- * @param-lift
- *             Forklift object that controlls the forklift's up and down motions
+ * @param -lift
+ *            Forklift object that controlls the forklift's up and down motions
  *
- * @param- ultraSonic
- *         Ultrasonic that is mounted on the front of the robot and used to tell
- *         us when to stop based on how far away from the wall we are
+ * @param -ultraSonic
+ *            Ultrasonic that is mounted on the front of the robot and used to
+ *            tell
+ *            us when to stop based on how far away from the wall we are
  *
  */
 public ClimbToLevelTwo (DoubleSolenoid driveSolenoid,
         SpeedController armMotor, RobotPotentiometer armSensor,
         Drive drive, Forklift lift, UltraSonic ultraSonic)
 {
-
+    // assigns the parameters to the appropriate variables
     this.driveSolenoid = driveSolenoid;
     this.armMotor = armMotor;
     this.armSensor = armSensor;
@@ -146,23 +157,50 @@ public ClimbToLevelTwo (DoubleSolenoid driveSolenoid,
 
 
 
-// state of the climb state machine
+// state of the new climb state machine
 public static enum NewClimberState
     {
     STANDBY, START_CLIMB, PREP_ARM, BACK_UP_TIL_BUMPERS_HIT, DELAY_ONE, DEPLOY_BACK_WHEELS, DELAY_TWO, BACK_UP_TIL_REAR_WHEELS_HIT, DELAY_THREE, RETRACT_WHEELS, DELAY_FOUR, BACK_UP_TIL_MID_WHEELS_ON_PLATFORM, DELAY_FIVE, POWERED_ARM_DOWN, DELAY_SIX, DRIVE_BACKWARDS_ONTO_PLATFORM, DELAY_SEVEN, RAISE_ARM, STOP, FINISH
     }
 
 
-// initializes climb state and prev climb state to standby
+// initializes new climb state to standby
 public static NewClimberState newClimbState = NewClimberState.STANDBY;
 
+/**
+ *
+ * @author Ashley Espeland
+ *
+ *         function that sets the newClimbState to startClimb and essentially is
+ *         the catalyst for climbing
+ */
 public void newClimb ()
 {
     newClimbState = NewClimberState.START_CLIMB;
 }
 
+/**
+ * @author Ashley Espeland
+ *
+ *         must be called periodically in order for newClimb() to work, runs the
+ *         state machine and contains all that you really need to have in terms
+ *         of the procession of events needed to climb
+ *
+ *         stays in standby until newClimb() is called which starts the chain of
+ *         events
+ *
+ *         when the process is finished it will shut down every component and
+ *         then loop back into stand by
+ *
+ *         finishEarly() has been modified to deal with this new version of
+ *         climb
+ *         and will send it to stop and then finish and then loop to standby in
+ *         order to possibly rerun the climb code
+ *
+ */
 public void newClimbUpdate ()
 {
+    // good for debugging
     // System.out.println(newClimbState);
 
     switch (newClimbState)
@@ -181,7 +219,7 @@ public void newClimbUpdate ()
             Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
                     1.0);
             driveTimerInit();
-            this.lift.setLiftPosition(0.0);
+            this.lift.setLiftPosition(0.5);
             newClimbState = NewClimberState.PREP_ARM;
             break;
 
@@ -322,13 +360,15 @@ public void newClimbUpdate ()
             if (climbTimer.get() >= NEW_DELAY_SEVEN_TIME)
                 {
                 climbTimer.stop();
+                climbTimer.reset();
+                climbTimer.start();
                 newClimbState = NewClimberState.RAISE_ARM;
                 }
             break;
 
         case RAISE_ARM:
             //
-            if (this.raiseArm() == true)
+            if (this.raiseArm() == true || climbTimer.get() >= 3.0)
                 {
                 // goes to stop
                 this.delayInit();
@@ -955,7 +995,8 @@ private boolean lowerArm ()
     // armMotor.set(0.0);
     // return true;
     // }
-    if (Hardware.manipulator.deployArm() == true)
+    if (Hardware.manipulator.moveArmToPosition(
+            GamePieceManipulator.MIN_ARM_POSITION_ADJUSTED_2018) == true)
         {
         return true;
         }
@@ -1198,6 +1239,7 @@ public boolean poweredArmDown ()
 
     if (driveTimer.get() >= TIME_TO_POWER_ARM_DOWN)
         {
+        Hardware.manipulator.setArmMotorSpeedManuallyForClimb(0.0);
         return true;
         }
     else
@@ -1407,14 +1449,15 @@ public static double SPEED_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = -.4;// .5;
                                                                     // at 8:20
                                                                     // 2/18
 
-public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = 1.0;
+public static double TIME_TO_BACK_UP_TIL_MID_WHEELS_ON_PLATFORM = .8;
 // --------------------------------
 
-public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.75;
+public static double SPEED_DRIVE_BACKWARDS_ONTO_PLATFORM = -.55;// @ANE 3/2/19
+                                                                // 10:05
 
-public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = .5;
+public static double TIME_TO_DRIVE_BACKWARDS_ONTO_PLATFORM = 1.0;
 
-private static final double TIME_TO_POWER_ARM_DOWN = 3.2;
+private static final double TIME_TO_POWER_ARM_DOWN = 2.5;
 // --------------------------------
 
 private static final double NEW_DELAY_ONE_TIME = 0.0;
@@ -1429,8 +1472,8 @@ private static final double NEW_DELAY_FIVE_TIME = 0.2;
 
 private static final double NEW_DELAY_SIX_TIME = 0.0;
 
-private static final double NEW_DELAY_SEVEN_TIME = 1.0;
+private static final double NEW_DELAY_SEVEN_TIME = 0.4;
 
-private static final double delayBeforeDriveFromPower = 1.0;
+private static final double delayBeforeDriveFromPower = .5;
 
 }

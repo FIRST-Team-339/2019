@@ -148,8 +148,50 @@ public int get ()
         // output must be divided by 4
         default:
             return 0;
-        }
-}
+        } // switch
+} // end get()
+
+/**
+ * Encoders read revolutions / distances by counting a number of pulses based on
+ * how much a shaft it is connecting to has rotated. Each pulse is known as a
+ * "tick".
+ *
+ * @return the number of pulses that has taken place since last reset().
+ */
+public double getRaw ()
+{
+    switch (type)
+        {
+        case CAN:
+            return canSensor.getSelectedSensorPosition(0);
+        case D_IO:
+            return dioSensor.get();
+        case REV_CAN:
+            // Spark Motor Controllers return an double based on the number of
+            // rotations it
+            // has completed
+
+            // sparkTicksPerRevolution is the number we multi the value of
+            // revolutions by to
+            // get a larger integer imitating ticks
+            // getPosition - savedPosition --- Reference reset() function
+            if (canEncoder.getInverted() == true)
+                {
+                return -(this.sparkTicksPerRevolution
+                        * (canEncoder.getEncoder().getPosition()
+                                - savedPosition));
+                }
+            return (this.sparkTicksPerRevolution
+                    * (canEncoder.getEncoder().getPosition()
+                            - savedPosition));
+        case CAN_HAT:
+            return talonSensor.getSelectedSensorPosition(0) / 4;
+        // can talonSRX read the encoder as 4X instead of 1X, so the
+        // output must be divided by 4
+        default:
+            return 0;
+        } // switch
+} // end getRaw()
 
 /**
  * When we want to measure distance based on the encoder, we multiply by a

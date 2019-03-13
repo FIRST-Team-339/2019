@@ -61,6 +61,7 @@ public static void init ()
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -193,6 +194,7 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
+    // Hardware.manipulator.initiliazeArmPositonAverage();
     Hardware.lift.resetStateMachine();
     Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
@@ -211,18 +213,20 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
+
+
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
-    if (Hardware.intakeTriggerLeft.get() == true
-            || Hardware.intakeTriggerRight.get() == true)
-        {
-        runIntake = true;
-        }
-    else
-        {
-        runIntake = false;
-        }
+    // if (Hardware.intakeTriggerLeft.get() == true
+    // || Hardware.intakeTriggerRight.get() == true)
+    // {
+    // runIntake = true;
+    // }
+    // else
+    // {
+    // runIntake = false;
+    // }
 
 
     // // Forklift
@@ -233,7 +237,13 @@ public static void periodic ()
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipCargoButton);
 
-    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.cargoShipHatchButton);
+
+    Hardware.lift.setLiftPositionByButton(
+            Forklift.PLAYER_STATION_HEIGHT,
+            Forklift.PLAYER_STATION_ANGLE,
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipHatchButton);
 
@@ -252,14 +262,19 @@ public static void periodic ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            Hardware.intakeTriggerLeft.get(),
-            Hardware.outtakeButton.get(),
-            Hardware.intakeOverride.get());
+    Hardware.manipulator.poweredDeployDownForClimb(
+            Hardware.poweredManipulatorForClimbButton);
+
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTriggerLeft.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
 
     Hardware.manipulator.intakeOuttakeByButtonsSeperated(
-            runIntake/* Hardware.intakeTriggerLeft.get() */,// TODO
-            Hardware.outtakeButton.get(),
+            (Hardware.intakeTriggerLeft.get() == true
+                    || Hardware.intakeTriggerRight.get() == true),// TODO
+            (Hardware.outtakeButtonLeft.get() == true
+                    || Hardware.outtakeButtonRight.get() == true),
             Hardware.intakeOverride.get());
 
     // // =================================================================
@@ -271,25 +286,11 @@ public static void periodic ()
 
     Hardware.climber.newClimbUpdate();
 
-    // Hardware.depositGamePiece.depositTeleopStateMachine();
+    Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
     // Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
-
-    if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 2 && Hardware.telopTimer.get() > .25)
-        {
-        Hardware.telopTimer.reset();
-        visionHeight++;
-        Hardware.telopTimer.start();
-        }
-    if (Hardware.visionHeightDownButton.get() == true
-            && visionHeight > 0 && Hardware.telopTimer.get() > .25)
-        {
-        Hardware.telopTimer.reset();
-        visionHeight--;
-        Hardware.telopTimer.start();
-        }
+    // 8 and 9
 
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
@@ -297,7 +298,7 @@ public static void periodic ()
 
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        false/* Hardware.manipulator.hasCargo() */))
+                        false))
             {
             Hardware.alignVisionButton.setValue(false);
 
@@ -322,6 +323,12 @@ public static void periodic ()
         Hardware.manipulator.resetStateMachine();
         } // end if
 
+
+    if (Hardware.cancelAutoLeftDriver.get() == true
+            && Hardware.cancelAutoRightDriver.get() == true)
+        {
+        Hardware.climber.finishEarly();
+        }
 
     // Buttons to reset the forklift encoder. Should never be called during
     // a match; only is in the final code for the purpsoe of speeding up
@@ -370,7 +377,7 @@ public static void periodic ()
             }
         }
 
-    printStatements();
+    // printStatements();
 
 } // end Periodic()
 
@@ -394,9 +401,6 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
-
-
-
     // if (Hardware.armHackButton.isOnCheckNow() == true)
     // {
     // // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
@@ -464,32 +468,64 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
+public static boolean aligned = false;
+
 private static void connerTest ()
 {
+
+    if (aligned == false
+            && Hardware.depositGamePiece.depositHatch(true))
+        {
+        aligned = true;
+        }
 
 } // end connerTest()
 
 private static void coleTest ()
 {
+
+
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
     // Then deployArm/ retractArm/ setDeploy45DegreeButton
 
     // if (Hardware.testDeployButtonTemp.getCurrentValue())
-    // if (Hardware.leftDriver.getRawButton(3))
+
+    // if (Hardware.rightOperator.getRawButton(11))
     // Hardware.manipulator.deployArm();
 
-    // if (Hardware.rightOperator.getRawButton(5))
-    // if (Hardware.leftDriver.getRawButton(4))
+    // if (Hardware.leftOperator.getRawButton(11))
     // Hardware.manipulator.retractArm();
 
-    // if (Hardware.testSetManipulatorPosition.getCurrentValue())
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
-    // Hardware.manipulator.poweredDeployDownForClimb(
-    // Hardware.poweredManipulatorForClimbButton);
+
+
+    // if (Hardware.rightOperator.getRawButton(6) == true)
+    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+
+    // if (Hardware.rightOperator.getRawButton(7) == true)
+    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
+
+    // if (Hardware.rightOperator.getRawButton(6) == true)
+    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+
+    // if (Hardware.rightOperator.getRawButton(7) == true)
+    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
 
 
     // Manipulator
@@ -767,7 +803,7 @@ public static void printStatements ()
         // + Hardware.leftFrontDriveEncoder.getDistance());
 
         // System.out.println("LF encoder ticks: "
-        // + Hardware.leftFrontDriveEncoder.get());
+        // + Hardware.leftFrontDriveEncoder.getRaw());
         // SmartDashboard.putNumber("Left front encoder ticks: ",
         // Hardware.leftFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Left front encoder ticks: "
@@ -781,7 +817,7 @@ public static void printStatements ()
         // + Hardware.rightFrontDriveEncoder.getDistance());
 
         // System.out.println("Right Front Ticks "
-        // + Hardware.rightFrontDriveEncoder.get());
+        // + Hardware.rightFrontDriveEncoder.getRaw());
         // SmartDashboard.putNumber("Right Front Ticks ",
         // Hardware.rightFrontDriveEncoder.get());
         // Hardware.telemetry.printToConsole("Right Front Ticks "
@@ -1139,7 +1175,7 @@ public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
 
-public static boolean runIntake = false;
+// public static boolean runIntake = false;
 
 
 } // end class
