@@ -399,7 +399,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    coleTest();
+    // coleTest();
     // guidoTest();
     // patrickTest();
     // annaTest();
@@ -493,8 +493,7 @@ private static void connerTest ()
 private static void coleTest ()
 {
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
@@ -513,7 +512,11 @@ private static void coleTest ()
 
 
 
+    // if (Hardware.rightOperator.getRawButton(6) == true)
+    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
 
+    // if (Hardware.rightOperator.getRawButton(7) == true)
+    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
     // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
@@ -521,26 +524,20 @@ private static void coleTest ()
     // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
     // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
 
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
 
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
 
+    // if (Hardware.rightOperator.getRawButton(6) == true)
+    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+
+    // if (Hardware.rightOperator.getRawButton(7) == true)
+    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
 
 
     // Manipulator
-
-    // SmartDashboard.putString("intakeTriggerLeft",
-    // "" + Hardware.intakeTriggerLeft.get());
-
-    // SmartDashboard.putString("intakeTriggerRight",
-    // "" + Hardware.intakeTriggerRight.get());
-
-    // SmartDashboard.putString("outtakeButtonLeft",
-    // "" + Hardware.outtakeButtonLeft.get());
-
-    // SmartDashboard.putString("outtakeButtonRight",
-    // "" + Hardware.outtakeButtonRight.get());
-
-    // SmartDashboard.putString("Make break switch",
-    // "" + Hardware.armBallDetector.isOn());
 
     Hardware.lift.printDebugInfo();
     Hardware.manipulator.printDeployDebugInfo();

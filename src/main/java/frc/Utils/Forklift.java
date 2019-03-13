@@ -629,8 +629,8 @@ public void update ()
                     .setMaxArmAngle(manipulator.MAX_FORKLIFT_UP_ANGLE);
         }
 
-
-
+        if(this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
+            setPositionPreciseInit = true;
 
     // main switch statement for the forklift state machine
     switch (liftState)
@@ -726,7 +726,7 @@ public void update ()
 }
 
 
-public void movingToPositionPreciseState ()
+private void movingToPositionPreciseState ()
 {
     double currentHeight = this.getForkliftHeight();
     double adjustedSpeed = this.forkliftTargetSpeed;
