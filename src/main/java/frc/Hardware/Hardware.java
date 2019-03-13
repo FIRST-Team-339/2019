@@ -381,6 +381,7 @@ public static JoystickButton cancelOneButton = null;
 
 public static JoystickButton cancelAutoLeftDriver = null;
 
+
 // ----------Right Driver--------------
 public static JoystickButton resetForkliftEncoderButton2 = null;
 
@@ -388,6 +389,7 @@ public static JoystickButton cancelTwoButton = null;
 
 public static JoystickButton cancelAutoRightDriver = null;
 
+public static JoystickButton retrievalButton = null;
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -437,6 +439,8 @@ public static ClimbToLevelTwo climber = null;
 public static AlignPerpendicularToTape alignByTape = null;
 
 public static DepositGamePiece depositGamePiece = null;
+
+public static RetrieveHatch retriever = null;
 
 // ====================================
 // Methods
@@ -686,6 +690,9 @@ public static void commonInitialization ()
 
     solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
+    retrievalButton = new JoystickButton(leftDriver, 9);// fix button
+                                                        // yeeeeeeeeeeee
+
     climbOneButton = new JoystickButton(leftDriver, 11);
 
     climbTwoButton = new JoystickButton(rightDriver, 11);
@@ -774,6 +781,9 @@ public static void commonInitialization ()
     climber = new ClimbToLevelTwo(
             driveSolenoid, armMotor, armPot,
             drive, lift, frontUltraSonic);
+
+
+    retriever = new RetrieveHatch();
 
 } // end of commonInitialization()
 

@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
+import frc.Utils.RetrieveHatch;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -284,6 +285,8 @@ public static void periodic ()
 
     // Hardware.climber.climbUpdate();
 
+    Hardware.retriever.retrievalUpdate();
+
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
@@ -358,10 +361,16 @@ public static void periodic ()
         Hardware.climber.newClimb();
         }
 
+    if (Hardware.retrievalButton.get() == true)
+        {
+        Hardware.retriever.retrieveHatch();
+        }
+
     if (Hardware.alignVisionButton.get() == false
             || Hardware.depositGamePiece.overrideVision())
         {
-        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY)
+        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
+                && RetrieveHatch.retrievalState == RetrieveHatch.RetrievalState.STANDBY)
             {
             teleopDrive();
             if (Hardware.solenoidButtonOne.isOnCheckNow() == true
