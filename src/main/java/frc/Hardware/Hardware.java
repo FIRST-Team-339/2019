@@ -565,6 +565,9 @@ public static void commonInitialization ()
     driveSolenoid = new DoubleSolenoid(2,
             3);
 
+armIntakeSolenoid = new DoubleSolenoid(4, 5);
+
+
 
     // Single Solenoids
 
