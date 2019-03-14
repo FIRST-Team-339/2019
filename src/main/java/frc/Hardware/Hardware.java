@@ -645,7 +645,7 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    lowerForkliftButton = new MomentarySwitch(leftOperator, 9, false);
+    lowerForkliftButton = new MomentarySwitch(leftOperator, 9, false);//
 
     driveForwardButton = new MomentarySwitch(leftOperator, 8, false);
 

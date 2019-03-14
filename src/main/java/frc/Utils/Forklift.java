@@ -629,8 +629,8 @@ public void update ()
                     .setMaxArmAngle(manipulator.MAX_FORKLIFT_UP_ANGLE);
         }
 
-        if(this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
-            setPositionPreciseInit = true;
+    if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
+        setPositionPreciseInit = true;
 
     // main switch statement for the forklift state machine
     switch (liftState)
@@ -942,7 +942,8 @@ public final static double TOP_ROCKET_HATCH = 56;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
-public final static double LOWER_ROCKET_HATCH = 6;// TODO changed from 9
+public final static double LOWER_ROCKET_HATCH = 6;// TODO changed from 9 cole
+                                                  // pls recheck lower values
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 33;
 
