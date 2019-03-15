@@ -61,8 +61,8 @@ public static void init ()
 {
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
-    Hardware.axisCamera.setRelayValue(Value.kOn);
-    Hardware.axisCamera.processImage();
+    // Hardware.axisCamera.setRelayValue(Value.kOn);
+    // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -300,7 +300,7 @@ public static void periodic ()
         {
 
         if (Hardware.depositGamePiece
-                .startTeleopDeposit(visionHeight,
+                .startTeleopDeposit(0,
                         false))
             {
             Hardware.alignVisionButton.setValue(false);

@@ -375,8 +375,7 @@ public boolean driveToTargetClose (double speed)
             break;
         case DRIVE_WITH_CAMERA:
 
-            Hardware.lift.setLiftPosition(LIFT_OUT_OF_WAY);// TODO
-            Hardware.manipulator.moveArmToPosition(ARM_OUT_OF_WAY);// TODO
+
             correctionValue = DRIVE_CORRECTION;
 
             motorspeed = speed;
@@ -671,9 +670,7 @@ public double getCameraCenterValue ()
     return center;
 }
 
-private final double LIFT_OUT_OF_WAY = Hardware.lift.LOWER_ROCKET_HATCH;
 
-private final double ARM_OUT_OF_WAY = Hardware.lift.LOWER_ROCKET_HATCH_ANGLE;
 
 // ================VISION CONSTANTS================
 private final double DEFAULT_COMPENSTATE_TEST = 0;
@@ -707,7 +704,7 @@ private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
 // private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
-private final double SLOW_MODIFIER = .8;// lower for slower
+private final double SLOW_MODIFIER = .75;// lower for slower
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
@@ -715,7 +712,7 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .15;
 
-private final double DRIVE_CORRECTION_CLOSE = .07;
+private final double DRIVE_CORRECTION_CLOSE = .08;
 
 
 
