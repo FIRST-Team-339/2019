@@ -131,7 +131,7 @@ public void moveForkliftWithController (Joystick operator,
  * Does not use deadbands. For that, use moveForkLiftWithController()
  *
  * @param overrideButton
- *                           the button that, if helf, activates forklift
+ *                           the button that, if held, activates forklift
  *                           override
  * @param speed
  *                           How fast the forklift should be moving, as a
@@ -318,12 +318,12 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
 
         forkliftTargetSpeed = Math.abs(forkliftSpeed);
         forkliftDirection = ForkliftDirectionState.NEUTRAL;
-        // if the forklift will move up
+        // if the forklift will move down
         if (forkliftTargetHeight < this.getForkliftHeight())
             {
             forkliftTargetSpeed *= SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER;
             }
-        else // if the forklift will move down
+        else // if the forklift will move up
             {
             forkliftTargetSpeed *= SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER;
             }

@@ -402,6 +402,7 @@ public static void periodic ()
 
     // printStatements();
 
+
 } // end Periodic()
 
 
@@ -664,8 +665,50 @@ private static void meghanTest ()
 
 private static void dionTest ()
 {
+    if (Hardware.leftDriver.getRawButton(4))
+        {
+        ringLightFlash = true;
+        initialStart = true;
+        }
+    if (Hardware.rightDriver.getRawButton(4))
+        {
+        ringLightFlash = false;
+        }
+    if (ringLightFlash == true)
+        {
+        if (initialStart == true)
+            {
+            Hardware.ringLightTimer.reset();
+            Hardware.ringLightTimer.start();
+            Hardware.ringLightRelay.set(Value.kOff);
+            System.out.println("Light off");
+            }
+        if (Hardware.ringLightTimer.get() >= ringLightDelay)
+            {
+            System.out.println("Light on");
+            Hardware.ringLightRelay.set(Value.kOn);
+            }
+        if (Hardware.ringLightTimer.get() >= 2 * ringLightDelay)
+            {
+            Hardware.ringLightRelay.set(Value.kOff);
+            Hardware.ringLightTimer.stop();
+            Hardware.ringLightTimer.reset();
+            System.out.println("Light off");
+            }
 
-} // end dionTest()
+        }
+
+
+
+
+    else
+        {
+        System.out.println("Cancelled");
+        Hardware.ringLightRelay.set(Value.kOn);
+        }
+}
+
+// end dionTest()
 
 private static void nithyaTest ()
 {
@@ -1197,6 +1240,13 @@ private static boolean pictureButton2;
 public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
+
+private static boolean ringLightFlash = false;
+
+private static double ringLightDelay = .5;
+
+private static boolean initialStart = false;
+
 
 // public static boolean runIntake = false;
 
