@@ -411,6 +411,8 @@ public static Timer takePictureTimer = null;
 
 public static Timer telopTimer = null;
 
+public static Timer ringLightTimer = null;
+
 public static Telemetry telemetry = null;
 
 // ------------------------------------
@@ -741,6 +743,10 @@ public static void commonInitialization ()
     takePictureTimer = new Timer();
 
     telopTimer = new Timer();
+
+    ringLightTimer = new Timer();
+
+
 
     telemetry = new Telemetry(10000);
 
