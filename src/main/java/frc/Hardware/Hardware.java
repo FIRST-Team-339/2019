@@ -411,6 +411,8 @@ public static Timer takePictureTimer = null;
 
 public static Timer telopTimer = null;
 
+public static Timer ringLightTimer = null;
+
 public static Telemetry telemetry = null;
 
 // ------------------------------------
@@ -648,10 +650,9 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    visionHeightUpButton = new JoystickButton(leftOperator, 9, false);//
+    visionHeightUpButton = new JoystickButton(leftOperator, 9);//
 
-    visionHeightDownButton = new JoystickButton(leftOperator, 8,
-            false);
+    visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
@@ -742,6 +743,10 @@ public static void commonInitialization ()
     takePictureTimer = new Timer();
 
     telopTimer = new Timer();
+
+    ringLightTimer = new Timer();
+
+
 
     telemetry = new Telemetry(10000);
 
