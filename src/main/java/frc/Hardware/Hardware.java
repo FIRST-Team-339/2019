@@ -648,10 +648,9 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    visionHeightUpButton = new JoystickButton(leftOperator, 9, false);//
+    visionHeightUpButton = new JoystickButton(leftOperator, 9);//
 
-    visionHeightDownButton = new JoystickButton(leftOperator, 8,
-            false);
+    visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
