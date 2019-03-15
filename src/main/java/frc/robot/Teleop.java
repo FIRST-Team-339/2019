@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
+import frc.Utils.RetrieveHatch;
 import frc.vision.VisionProcessor.ImageType;
 
 /**
@@ -60,7 +61,8 @@ public static void init ()
 {
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+    // Hardware.axisCamera.setRelayValue(Value.kOn);
+    // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -212,6 +214,8 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
+
+
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -281,13 +285,15 @@ public static void periodic ()
 
     // Hardware.climber.climbUpdate();
 
+    Hardware.retriever.retrievalUpdate();
+
     Hardware.climber.newClimbUpdate();
 
-    Hardware.depositGamePiece.depositTeleopStateMachine();
+    Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
     // Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
-
+    // 8 and 9visionHeightDownButton
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 2 && Hardware.telopTimer.get() > .25)
         {
@@ -309,7 +315,7 @@ public static void periodic ()
 
         if (Hardware.depositGamePiece
                 .startTeleopDeposit(visionHeight,
-                        false/* Hardware.manipulator.hasCargo() */))
+                        false))
             {
             Hardware.alignVisionButton.setValue(false);
 
@@ -334,6 +340,12 @@ public static void periodic ()
         Hardware.manipulator.resetStateMachine();
         } // end if
 
+
+    if (Hardware.cancelAutoLeftDriver.get() == true
+            && Hardware.cancelAutoRightDriver.get() == true)
+        {
+        Hardware.climber.finishEarly();
+        }
 
     // Buttons to reset the forklift encoder. Should never be called during
     // a match; only is in the final code for the purpsoe of speeding up
@@ -363,10 +375,16 @@ public static void periodic ()
         Hardware.climber.newClimb();
         }
 
+    if (Hardware.retrievalButton.get() == true)
+        {
+        Hardware.retriever.retrieveHatch();
+        }
+
     if (Hardware.alignVisionButton.get() == false
             || Hardware.depositGamePiece.overrideVision())
         {
-        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY)
+        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
+                && RetrieveHatch.retrievalState == RetrieveHatch.RetrievalState.STANDBY)
             {
             teleopDrive();
             if (Hardware.solenoidButtonOne.isOnCheckNow() == true
@@ -489,6 +507,8 @@ private static void connerTest ()
 
 private static void coleTest ()
 {
+
+
     // TODO retest forklift with the new way the scaling factor works
     // (applies even during override), and well as how manipulator
     // should now have scaling factor apploied to override as well
@@ -506,25 +526,33 @@ private static void coleTest ()
     // Hardware.manipulator.moveArmToPosition(45);
 
 
+
+    // if (Hardware.rightOperator.getRawButton(6) == true)
+    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+
+    // if (Hardware.rightOperator.getRawButton(7) == true)
+    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
+
+    // if (Hardware.rightOperator.getRawButton(6) == true)
+    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+
+    // if (Hardware.rightOperator.getRawButton(7) == true)
+    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
+
+
     // Manipulator
-
-
-
-    // SmartDashboard.putString("intakeTriggerLeft",
-    // "" + Hardware.intakeTriggerLeft.get());
-
-    // SmartDashboard.putString("intakeTriggerRight",
-    // "" + Hardware.intakeTriggerRight.get());
-
-    // SmartDashboard.putString("outtakeButtonLeft",
-    // "" + Hardware.outtakeButtonLeft.get());
-
-    // SmartDashboard.putString("outtakeButtonRight",
-    // "" + Hardware.outtakeButtonRight.get());
-
-
-    // SmartDashboard.putString("Make break switch",
-    // "" + Hardware.armBallDetector.isOn());
 
     Hardware.lift.printDebugInfo();
     Hardware.manipulator.printDeployDebugInfo();

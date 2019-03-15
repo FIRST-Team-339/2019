@@ -70,7 +70,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2019;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -381,6 +381,7 @@ public static JoystickButton cancelOneButton = null;
 
 public static JoystickButton cancelAutoLeftDriver = null;
 
+
 // ----------Right Driver--------------
 public static JoystickButton resetForkliftEncoderButton2 = null;
 
@@ -388,6 +389,7 @@ public static JoystickButton cancelTwoButton = null;
 
 public static JoystickButton cancelAutoRightDriver = null;
 
+public static JoystickButton retrievalButton = null;
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -437,6 +439,8 @@ public static ClimbToLevelTwo climber = null;
 public static AlignPerpendicularToTape alignByTape = null;
 
 public static DepositGamePiece depositGamePiece = null;
+
+public static RetrieveHatch retriever = null;
 
 // ====================================
 // Methods
@@ -558,8 +562,11 @@ public static void commonInitialization ()
 
     // Double Solenoids
 
-    driveSolenoid = new DoubleSolenoid(0,
-            1);
+    driveSolenoid = new DoubleSolenoid(2,
+            3);
+
+    armIntakeSolenoid = new DoubleSolenoid(4, 5);
+
 
 
     // Single Solenoids
@@ -641,9 +648,10 @@ public static void commonInitialization ()
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
 
-    visionHeightUpButton = new JoystickButton(leftOperator, 9);
+    visionHeightUpButton = new JoystickButton(leftOperator, 9, false);//
 
-    visionHeightDownButton = new JoystickButton(leftOperator, 8);
+    visionHeightDownButton = new JoystickButton(leftOperator, 8,
+            false);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
     // ----- Right Operator -----
@@ -685,6 +693,9 @@ public static void commonInitialization ()
     solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
 
     solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
+
+    retrievalButton = new JoystickButton(leftDriver, 9);// fix button
+                                                        // yeeeeeeeeeeee
 
     climbOneButton = new JoystickButton(leftDriver, 11);
 
@@ -774,6 +785,9 @@ public static void commonInitialization ()
     climber = new ClimbToLevelTwo(
             driveSolenoid, armMotor, armPot,
             drive, lift, frontUltraSonic);
+
+
+    retriever = new RetrieveHatch();
 
 } // end of commonInitialization()
 

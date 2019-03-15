@@ -66,7 +66,7 @@ public static enum DeployState
 
 public static enum DeployMovementState
     {
-    MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP, SET_MANUALLY_FOR_CLIMB
+    MOVING_TO_POSITION, MOVING_BY_JOY, STAY_AT_POSITION, STOP, SET_MANUALLY_FOR_CLIMB, MOVING_TO_POSITION_PRECISE
     }
 
 private static enum DeployMovementDirection
@@ -233,6 +233,8 @@ public void moveArmByJoystick (Joystick armJoystick,
 
         // this.deployTargetSpeed *= ((Math.abs(joystickValue) - .2)
         // * .625) + .5;
+
+        // Scales the target speed based off the joystick
         this.deployTargetSpeed *= ((Math.abs(joystickValue) - .2)
                 * .9375) + .25;
 
@@ -294,9 +296,9 @@ public double getCurrentArmPosition ()
 
 // public double getCurrentArmPositionOld ()
 // {
-//     return (this.armPot.get()
-//             - ARM_POT_RAW_HORIZONTAL_VALUE)
-//             * ARM_POT_SCALE_TO_DEGREES;
+// return (this.armPot.get()
+// - ARM_POT_RAW_HORIZONTAL_VALUE)
+// * ARM_POT_SCALE_TO_DEGREES;
 // }
 
 // public double getCurrentArmPositionAverage ()
@@ -420,6 +422,52 @@ public boolean moveArmToPosition (double angle)
     return false;
 }
 
+public boolean moveArmToPositionPrecise (double angle)
+{
+    if (deployTargetAngle != angle)
+        moveArmToPositionPreciseInit = true;
+
+    // Sets the target position and speed, enables "moving-to-position"
+    // state.
+    if (moveArmToPositionPreciseInit == true)
+        {
+        this.deployTargetAngle = angle;
+        deployDirection = DeployMovementDirection.NEUTRAL;
+        this.deployMovementState = DeployMovementState.MOVING_TO_POSITION_PRECISE;
+        moveArmToPositionPreciseInit = false;
+        }
+
+    // return true is we are done moving, false is we are still going
+    if (this.deployMovementState == DeployMovementState.STAY_AT_POSITION)
+
+        {
+        moveArmToPositionPreciseInit = true;
+        return true;
+        }
+
+    if (deployTargetAngle > this.getCurrentArmPosition())
+        {
+        this.deployTargetSpeed = this
+                .calculateDesiredArmMotorVoltage(
+                        RequiredArmSpeedState.GO_UP,
+                        false, false);
+        }
+    else // if the manipulator will move down
+        {
+        this.deployTargetSpeed = this
+                .calculateDesiredArmMotorVoltage(
+                        RequiredArmSpeedState.GO_DOWN,
+                        false, false);
+        }
+
+    this.deployTargetSpeed = Math.abs(this.deployTargetSpeed);
+
+    return false;
+}
+
+private boolean moveArmToPositionPreciseInit = true;
+
+
 /**
  * Tells the state machine to deploy the arm, if it is not
  * already retracted
@@ -542,6 +590,8 @@ public void deployUpdate ()
         this.stayAtPosition2018InitIsReady = true;
         this.stayAtPositionInitIsReady = true;
         }
+    if (deployMovementState != DeployMovementState.MOVING_TO_POSITION_PRECISE)
+        moveArmToPositionPreciseInit = true;
 
     switch (deployMovementState)
         {
@@ -590,6 +640,11 @@ public void deployUpdate ()
                 this.armMotor.set(-deployTargetSpeed);
                 }
             break;
+
+        case MOVING_TO_POSITION_PRECISE:
+            this.movingToPositionPreciseState();
+            break;
+
         case MOVING_BY_JOY:
             isSetDeployPositionInitReady = true;
             this.armMotor.set(deployTargetSpeed);
@@ -670,6 +725,95 @@ public void deployUpdate ()
 }
 
 
+private void movingToPositionPreciseState ()
+{
+    double currentAngle = this.getCurrentArmPosition();
+    double adjustedSpeed = this.deployTargetSpeed;
+    double distanceFromHeight = Math
+            .abs(currentAngle - this.deployTargetAngle);
+
+    // Begins by stating whether we are increasing or decreasing
+    if (deployDirection == DeployMovementDirection.NEUTRAL)
+        {
+        if (deployTargetAngle < currentAngle)
+            {
+            deployDirection = DeployMovementDirection.MOVING_DOWN;
+            }
+        else
+            deployDirection = DeployMovementDirection.MOVING_UP;
+        }
+
+    // Differentiate moving up from down
+    if (deployDirection == DeployMovementDirection.MOVING_UP)
+        {
+        // If we have passed the value we want to stop at, adjusted
+        // so the manipulator does not overshoot
+        if (distanceFromHeight < UPWARD_EARLIER_STOP_ADJUSTMENT)
+            {
+            deployMovementState = DeployMovementState.STAY_AT_POSITION;
+            return;
+            }
+        // When we are close enough to the target height, set the adjusted
+        // speed to a preset speed that will slow down the manipulator so
+        // it will not overshoot/ will only overshoot by a predictable
+        // amount
+        if (distanceFromHeight < UPWARD_DECELLERATION_START_ADJUSTMENT)
+            adjustedSpeed = this.calculateDesiredArmMotorVoltage(
+                    RequiredArmSpeedState.GO_UP_PRECISE,
+                    false, false);
+        else
+            adjustedSpeed = this.calculateDesiredArmMotorVoltage(
+                    RequiredArmSpeedState.GO_UP,
+                    false, false);
+
+        // we have NOT passed the value , keep going up.
+        this.armMotor.set(adjustedSpeed);
+        }
+    else
+        {
+        // If we have passed the value we want to stop at, adjusted
+        // so the manipulator does not overshoot
+        if (distanceFromHeight < DOWNWARD_EARLIER_STOP_ADJUSTMENT)
+            {
+            deployMovementState = DeployMovementState.STAY_AT_POSITION;
+            return;
+            }
+        // When we are close enough to the target height, set the adjusted
+        // speed to a preset speed that will slow down the manipulator so
+        // it will not overshoot/ will only overshoot by a predictable
+        // amount
+        if (distanceFromHeight < DOWNWARD_DECELLERATION_START_ADJUSTMENT)
+            adjustedSpeed = this.calculateDesiredArmMotorVoltage(
+                    RequiredArmSpeedState.GO_DOWN_PRECISE,
+                    false, false);
+        else
+            adjustedSpeed = this.calculateDesiredArmMotorVoltage(
+                    RequiredArmSpeedState.GO_DOWN,
+                    false, false);
+
+        // we have NOT passed the value , keep going down.
+        this.armMotor.set(adjustedSpeed);
+        }
+
+
+}
+
+private double UPWARD_EARLIER_STOP_ADJUSTMENT = 1.0;
+
+// private double UPWARD_SLOWED_PRECISE_SCALER = 0.5;
+
+private double UPWARD_DECELLERATION_START_ADJUSTMENT = 10.0;
+
+private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 1.0;
+
+// private double DOWNWARD_SLOWED_PRECISE_SCALER = .2;
+
+private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 10.0;
+
+// private final double UPWARD_SLOWED_SPEED_2018 = 0.7;
+
+
+
 /**
  *
  *
@@ -731,6 +875,26 @@ private double calculateDesiredArmMotorVoltage (
             if (isUsingJoystick == false)
                 speed *= SET_POSITION_SPEED_SCALE_FACTOR;
             break;
+        case GO_UP_PRECISE:
+            if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                speed = GO_UP_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE;
+            // else
+            // if (currentArmAngle >
+            // ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+            // speed = GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+            else
+                speed = GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE;
+            break;
+        case GO_DOWN_PRECISE:
+            if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                speed = GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE;
+            else
+                // if (currentArmAngle >
+                // ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                // speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                // else
+                speed = GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE;
+            break;
         case FORCE_DOWN:
             break;
         case HOLD:
@@ -776,14 +940,20 @@ private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.1;
 private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
         * MAX_DEPLOY_SPEED_2019;
 
+private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE = .15; // .3
+
 private double GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .75
         * MAX_DEPLOY_SPEED_2019;
 
 private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 1.0
         * MAX_DEPLOY_SPEED_2019;
 
+private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE = 0.3; // .6
+
 private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED = -.7
         * MAX_DEPLOY_SPEED_2019;
+
+private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE = -.21; // -.42
 
 private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.6
         * MAX_DEPLOY_SPEED_2019;
@@ -791,11 +961,13 @@ private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.6
 private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.5
         * MAX_DEPLOY_SPEED_2019;
 
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE = -.15; // -.3
+
 private double SET_POSITION_SPEED_SCALE_FACTOR = 1.0;
 
 public enum RequiredArmSpeedState
     {
-    GO_UP, GO_DOWN, FORCE_DOWN, HOLD
+    GO_UP, GO_DOWN, FORCE_DOWN, HOLD, GO_UP_PRECISE, GO_DOWN_PRECISE
     }
 
 /**

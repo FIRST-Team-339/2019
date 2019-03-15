@@ -185,7 +185,7 @@ public static void periodic ()
         endAutoPath();
         autoState = State.FINISH;
         }
-    Teleop.printStatements();
+    // Teleop.printStatements();
     // Hardware.lift.update();
     // System.out.println(autoState + "yeeeeeeeee");
     switch (autoState)
@@ -905,6 +905,8 @@ private static boolean depositRocketHatch ()
                                 }
                             else
                                 {
+                                System.out.println(
+                                        "the code did not recieve the side switch value");
                                 driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
                                 }
 
@@ -935,7 +937,7 @@ private static boolean depositRocketHatch ()
                             }
                     break;
                 case TURN_RIGHT:
-                    // System.out.println("right");
+                    // System.out.println("right");[]
 
                     if (Hardware.drive.turnDegrees(
                             TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
@@ -1321,7 +1323,7 @@ public static boolean descendFromLevelTwo (boolean usingAlignByWall,
 
 private static enum JankyDepositCargoHatchState
     {
-    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_2, STRAIGHT_DEPOSIT_TURN_2_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_2_LEFT_SIDE, STRAIGHT_DEPOSIT_DRIVE_3, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_HATCH, DRIVE_2_CENTER, FINISHED
+    INIT, DESCEND, STRAIGHT_DEPOSIT_DRIVE_1, STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE, STRAIGHT_DEPOSIT_TURN_1_LEFT_SIDE, STRAIGHT_DEPOSIT_ALIGN_TO_CARGO, STRAIGHT_DEPOSIT_DEPOSIT_HATCH, FINISHED
     }
 
 private static JankyDepositCargoHatchState jankyDepositCargoHatchState = JankyDepositCargoHatchState.INIT;
@@ -1330,7 +1332,7 @@ private static boolean jankyDepositCargoHatch ()
 {
     // System.out.println(
     // "depositCargoHatchState:" + depositCargoHatchState);
-    // TODO C.R. trace order of the states
+
     switch (jankyDepositCargoHatchState)
         {
         case INIT:
@@ -1376,20 +1378,7 @@ private static boolean jankyDepositCargoHatch ()
                         }
                 }
             break;
-        // TODO this code is not currently being reached
-        case DRIVE_2_CENTER:
-            // TODO C.R. is the static variable used by this
-            // function being called elsewhere
-            Hardware.depositGamePiece.prepToDepositHatch();
-            if (Hardware.drive.driveStraightInches(
-                    DISTANCE_TO_SHIP_CENTER, DRIVE_SPEED,
-                    ACCELERATION_TIME, USING_GYRO))
-                {
-                // Hardware.manipulator
-                // .moveArmToPosition(105);
-                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
-                }
-            break;
+
         case STRAIGHT_DEPOSIT_TURN_1_RIGHT_SIDE: // first turn, when
                                                  // autoPosition is set to RIGHT
             if (Hardware.drive.turnDegrees(-30,
@@ -1418,13 +1407,8 @@ private static boolean jankyDepositCargoHatch ()
             // System.out.println(
             // "Ultrasosnic" + Hardware.frontUltraSonic
             // .getDistanceFromNearestBumper());
-            // TODO C.R. I'm worried that this will keep setting
-            // manipulator even after it reaches 105
-            // consider moving this function call to inside
-            // the { } of previous state's if statement so it is
-            // only called once
-            Hardware.manipulator
-                    .moveArmToPosition(105);
+
+            Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
             if (Hardware.driveWithCamera
@@ -1432,9 +1416,6 @@ private static boolean jankyDepositCargoHatch ()
                 {
                 jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
-
-
-
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_HATCH:
             // System.out.println("Deposit");
@@ -1562,7 +1543,7 @@ public static final double CAMERA_ACCELERATION = .2;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .3;
 
-public static final int TURN_FOR_CAMERA_DEGREES = 60;
+public static final int TURN_FOR_CAMERA_DEGREES = 67;
 
 
 // changed to correct-ish number 2 February 2019

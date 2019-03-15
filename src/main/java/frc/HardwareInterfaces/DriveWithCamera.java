@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
  * Contains all game specific vision code, including code to drive to the switch
  * using vision
  *
- * @author: Becky Button
+ * @author: Becky Button and Conner McKevitt
  */
 public class DriveWithCamera extends Drive
 {
@@ -220,7 +220,7 @@ public boolean driveToTarget (double speed)
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
                     && Hardware.rightFrontDriveEncoder
-                            .getDistance() > MIN_INCHES)
+                            .getDistance() >= MIN_INCHES)
                 {
                 state = DriveWithCameraState.STOP;
                 }
@@ -228,7 +228,7 @@ public boolean driveToTarget (double speed)
             if (this.frontUltrasonic
                     .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
                     && this.frontUltrasonic
-                            .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
+                            .getDistanceFromNearestBumper() >= DISTANCE_FROM_WALL_TO_SLOW2)
                 {
                 slowAmount = SLOW_MODIFIER;
                 correctionValue = DRIVE_CORRECTION * SLOW_MODIFIER;
@@ -358,17 +358,27 @@ public boolean driveToTarget (double speed)
  */
 public boolean driveToTargetClose (double speed)
 {
+
+    // TODO make this not use the ultrasonic. I am thinking that we lower the
+    // adjustment value each time we change directions. This ways we can retrun
+    // true when we align and not rely on the ultrasonic. Also need to make it
+    // override by a button.
     System.out.println("vision state: " + state);
     switch (state)
         {
         case INIT:
-            Hardware.axisCamera.processImage();
+
             Hardware.drive.resetEncoders();
             double correctionValue = DRIVE_CORRECTION_CLOSE;
             double motorspeed = speed;
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
+
+            if (visionProcessor.getNthSizeBlob(0).area >= MAX_BLOB_AREA)
+                {
+                state = DriveWithCameraState.STOP;
+                }
             correctionValue = DRIVE_CORRECTION;
 
             motorspeed = speed;
@@ -377,28 +387,6 @@ public boolean driveToTargetClose (double speed)
             // adjust speed based on distance
 
             // if we get close enought to the target and have to stop
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && (Hardware.leftFrontDriveEncoder
-                            .getDistance() >= MIN_INCHES_CLOSE
-                            || Hardware.rightFrontDriveEncoder
-                                    .getDistance() >= MIN_INCHES_CLOSE))
-
-                {
-
-                state = DriveWithCameraState.STOP;
-                }
-
-            /*
-             * if (this.frontUltrasonic
-             * .getDistanceFromNearestBumper() <=
-             * DISTANCE_FROM_WALL_TO_SLOW_CLOSE)
-             *
-             * {
-             * motorspeed = motorspeed * SLOW_MODIFIER;
-             * correctionValue = correctionValue * SLOW_MODIFIER;
-             * }
-             */
             // gets the position of the center
             double centerX = this.getCameraCenterValue();
             // turns on the ring light
@@ -416,7 +404,6 @@ public boolean driveToTargetClose (double speed)
                 }
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
-
             else
                 if (centerX <= SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
                     {
@@ -426,16 +413,12 @@ public boolean driveToTargetClose (double speed)
                     this.getTransmission().driveRaw(
                             motorspeed/* - correctionValue */,
                             motorspeed + correctionValue);
-
                     }
                 else
                     {
-
-                    driveStraight(motorspeed - correctionValue, 2,
-                            true);
+                    state = DriveWithCameraState.STOP;
                     }
             break;
-
         default:
         case STOP:
             // Hardware.axisCamera.setRelayValue(Value.kOff);
@@ -690,6 +673,8 @@ public double getCameraCenterValue ()
     return center;
 }
 
+
+
 // ================VISION CONSTANTS================
 private final double DEFAULT_COMPENSTATE_TEST = 0;
 
@@ -714,7 +699,7 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 30;
+private final double DISTANCE_FROM_WALL_TO_STOP = 15;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 
@@ -722,21 +707,21 @@ private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
 // private final double DISTANCE_FROM_WALL_TO_SLOW_CLOSE = 30;
 
-private final double SLOW_MODIFIER = .7;
+private final double SLOW_MODIFIER = .75;// lower for slower
 
 
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
-private final double DRIVE_CORRECTION = .13;
+private final double DRIVE_CORRECTION = .15;
 
-private final double DRIVE_CORRECTION_CLOSE = .07;
+private final double DRIVE_CORRECTION_CLOSE = .08;
 
 
-
+private static double MAX_BLOB_AREA = 30;// TODO
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 8;
+private final double MIN_INCHES_CLOSE = 15;
 
 }

@@ -1,5 +1,6 @@
 package frc.Utils;
 
+import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.QuickSwitch;
 import edu.wpi.first.wpilibj.Joystick;
@@ -67,6 +68,7 @@ public void initiliazeConstantsFor2018 ()
 
     DEFAULT_SPEED_DOWN = DOWN_JOYSTICK_SCALAR;
 
+    UPWARD_SLOWED_SPEED = UPWARD_SLOWED_SPEED_2018;
 }
 
 
@@ -341,6 +343,42 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
 }
 
 
+public boolean setLiftPositionPrecise (double speed, double height)
+{
+    if (forkliftTargetHeight != height)
+        setPositionPreciseInit = true;
+
+    if (setPositionPreciseInit == true)
+        {
+        forkliftTargetHeight = height;
+        forkliftTargetSpeed = Math.abs(speed);
+        forkliftDirection = ForkliftDirectionState.NEUTRAL;
+        // if the forklift will move up
+        if (forkliftTargetHeight < this.getForkliftHeight())
+            {
+            forkliftTargetSpeed *= SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER;
+            }
+        else // if the forklift will move down
+            {
+            forkliftTargetSpeed *= SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER;
+            }
+
+        liftState = ForkliftState.MOVING_TO_POSITION_PRECISE;
+
+        setPositionPreciseInit = false;
+        }
+
+    // return true is we are done moving, false is we are still going
+    if (liftState == ForkliftState.STAY_AT_POSITION)
+        {
+        setPositionPreciseInit = true;
+        return true;
+        }
+
+    return false;
+}
+
+private boolean setPositionPreciseInit = true;
 
 /**
  * Sets the forklift to the next higher Cargo or Hatch height on the
@@ -574,17 +612,25 @@ public void update ()
 {
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
-    if (manipulator.isArmClearOfFrame() == false)
-        this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
-    else
-        this.currentLiftMaxHeight = MAX_HEIGHT;
 
-    if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
-        this.manipulator
-                .setMaxArmAngle(manipulator.MAX_ARM_POSITION_ADJUSTED);
-    else
-        this.manipulator
-                .setMaxArmAngle(manipulator.MAX_FORKLIFT_UP_ANGLE);
+    if (Hardware.whichRobot != Hardware.RobotYear.KILROY_2018)
+        {
+        if (manipulator.isArmClearOfFrame() == false)
+            this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
+        else
+            this.currentLiftMaxHeight = MAX_HEIGHT;
+
+        if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
+            this.manipulator
+                    .setMaxArmAngle(
+                            manipulator.MAX_ARM_POSITION_ADJUSTED);
+        else
+            this.manipulator
+                    .setMaxArmAngle(manipulator.MAX_FORKLIFT_UP_ANGLE);
+        }
+
+    if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
+        setPositionPreciseInit = true;
 
     // main switch statement for the forklift state machine
     switch (liftState)
@@ -637,6 +683,11 @@ public void update ()
                 }
 
             break;
+
+        case MOVING_TO_POSITION_PRECISE:
+            this.movingToPositionPreciseState();
+            break;
+
         case MOVE_JOY:
             setLiftPositionInit = true;
             this.forkliftMotor.set(forkliftTargetSpeed);
@@ -673,6 +724,81 @@ public void update ()
             break;
         }
 }
+
+
+private void movingToPositionPreciseState ()
+{
+    double currentHeight = this.getForkliftHeight();
+    double adjustedSpeed = this.forkliftTargetSpeed;
+    double distanceFromHeight = Math
+            .abs(currentHeight - this.forkliftTargetHeight);
+
+    // Begins by stating whether we are increasing or decreasing
+    if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
+        {
+        if (forkliftTargetHeight < currentHeight)
+            {
+            forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
+            }
+        else
+            forkliftDirection = ForkliftDirectionState.MOVING_UP;
+        }
+
+    // Differentiate moving up from down
+    if (forkliftDirection == ForkliftDirectionState.MOVING_UP)
+        {
+        // If we have passed the value we want to stop at, adjusted
+        // so the lift does not overshoot
+        if (distanceFromHeight < UPWARD_EARLIER_STOP_ADJUSTMENT)
+            {
+            liftState = ForkliftState.STAY_AT_POSITION;
+            return;
+            }
+        // When we are close enough to the target height, set the adjusted
+        // speed to a preset speed that will slow down the forklift so
+        // it will not overshoot/ will only overshoot by a predictable
+        // amount
+        if (distanceFromHeight < UPWARD_DECELLERATION_START_ADJUSTMENT)
+            adjustedSpeed = UPWARD_SLOWED_SPEED;
+
+        // we have NOT passed the value , keep going up.
+        this.forkliftMotor.set(adjustedSpeed);
+        }
+    else
+        {
+        // If we have passed the value we want to stop at, adjusted
+        // so the lift does not overshoot
+        if (distanceFromHeight < DOWNWARD_EARLIER_STOP_ADJUSTMENT)
+            {
+            liftState = ForkliftState.STAY_AT_POSITION;
+            return;
+            }
+        // When we are close enough to the target height, set the adjusted
+        // speed to a preset speed that will slow down the forklift so
+        // it will not overshoot/ will only overshoot by a predictable
+        // amount
+        if (distanceFromHeight < DOWNWARD_DECELLERATION_START_ADJUSTMENT)
+            adjustedSpeed = DOWNWARD_SLOWED_SPEED;
+
+        // we have NOT passed the value , keep going down.
+        this.forkliftMotor.set(-adjustedSpeed);
+        }
+}
+
+private double UPWARD_EARLIER_STOP_ADJUSTMENT = 1.0;
+
+private double UPWARD_SLOWED_SPEED = 0.5;
+
+private double UPWARD_DECELLERATION_START_ADJUSTMENT = 4.0;
+
+private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 0.4;
+
+private double DOWNWARD_SLOWED_SPEED = .2;
+
+private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 3.0;
+
+private final double UPWARD_SLOWED_SPEED_2018 = 0.7;
+
 
 /**
  * Resets the forklift encoder to 0, and therefore
@@ -731,7 +857,7 @@ private GamePieceManipulator manipulator;
 // enum for defining the overall states of the forklift
 public static enum ForkliftState
     {
-    MOVING_TO_POSITION, MOVE_JOY, STAY_AT_POSITION, STOP
+    MOVING_TO_POSITION, MOVING_TO_POSITION_PRECISE, MOVE_JOY, STAY_AT_POSITION, STOP
     }
 
 // enum for holding which way the forklift needs to move.
@@ -816,7 +942,8 @@ public final static double TOP_ROCKET_HATCH = 56;
 
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
-public final static double LOWER_ROCKET_HATCH = 9;
+public final static double LOWER_ROCKET_HATCH = 6;// TODO changed from 9 cole
+                                                  // pls recheck lower values
 
 public final static double TOP_ROCKET_HATCH_ANGLE = 33;
 
