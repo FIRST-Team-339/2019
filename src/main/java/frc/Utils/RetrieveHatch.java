@@ -40,11 +40,22 @@ public void retrievalUpdate ()
             // double checks that the forklift and the manipulator are in the
             // right positions and moves them to the right positions if theyre
             // not in the right positions
-            Hardware.lift
-                    .setLiftPosition(LIFT_HEIGHT_TO_RETRIEVE_HATCH);
-            Hardware.manipulator.moveArmToPosition(0);
-            delayInit();
-            retrievalState = RetrievalState.DELAY_ONE;
+            if (forkliftHeightReached == false && Hardware.lift
+                    .setLiftPosition(
+                            LIFT_HEIGHT_TO_RETRIEVE_HATCH) == true)
+                {
+                forkliftHeightReached = true;
+                }
+            if (forkliftHeightReached == true /*
+                                               * && Hardware.manipulator
+                                               * .moveArmToPosition(0) == true
+                                               */)
+                {
+                delayInit();
+                forkliftHeightReached = false;
+                retrievalState = RetrievalState.DELAY_ONE;
+                break;
+                }
             break;
 
         case DELAY_ONE:
@@ -159,5 +170,9 @@ public static double LIFT_HEIGHT_TO_PULL_BACK_HATCH = LIFT_HEIGHT_TO_RETRIEVE_HA
 public static double SPEED_TO_BACKUP_SLOWLY = -0.35;
 
 public static double SPEED_TO_DRIVE_FORWARD = 0.25;
+
+// BOOLEANS
+
+public static boolean forkliftHeightReached = false;
 
 }
