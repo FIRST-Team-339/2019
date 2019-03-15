@@ -293,14 +293,28 @@ public static void periodic ()
     // Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
-    // 8 and 9
+    // 8 and 9visionHeightDownButton
+    if (Hardware.visionHeightUpButton.get() == true
+            && visionHeight < 2 && Hardware.telopTimer.get() > .25)
+        {
+        Hardware.telopTimer.reset();
+        visionHeight++;
+        Hardware.telopTimer.start();
+        }
+    if (Hardware.visionHeightDownButton.get() == true
+            && visionHeight > 0 && Hardware.telopTimer.get() > .25)
+        {
+        Hardware.telopTimer.reset();
+        visionHeight--;
+        Hardware.telopTimer.start();
+        }
 
     if (Hardware.alignVisionButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
 
         if (Hardware.depositGamePiece
-                .startTeleopDeposit(0,
+                .startTeleopDeposit(visionHeight,
                         false))
             {
             Hardware.alignVisionButton.setValue(false);

@@ -375,7 +375,10 @@ public boolean driveToTargetClose (double speed)
             break;
         case DRIVE_WITH_CAMERA:
 
-
+            if (visionProcessor.getNthSizeBlob(0).area >= MAX_BLOB_AREA)
+                {
+                state = DriveWithCameraState.STOP;
+                }
             correctionValue = DRIVE_CORRECTION;
 
             motorspeed = speed;
@@ -715,7 +718,7 @@ private final double DRIVE_CORRECTION = .15;
 private final double DRIVE_CORRECTION_CLOSE = .08;
 
 
-
+private static double MAX_BLOB_AREA = 30;// TODO
 
 private final double MIN_INCHES = 50;
 

@@ -194,7 +194,7 @@ public boolean depositCargo ()
 
 private enum DepositTeleopState
     {
-    INIT, HOLD, DRIVE, PREP_FORKLIFT, PREP_MANIPULATOR, ALIGN_TO_TARGET, LOWER_FORK_1, DRIVE_STRAIGHT_FORWARD, DEPOSIT, FINISH
+    INIT, HOLD, PREP_FOR_ALIGN_FORKLIFT, PREP_FOR_ALIGN_MANIP, PREP_FORKLIFT, PREP_MANIPULATOR, ALIGN_TO_TARGET, LOWER_FORK_1, DRIVE_STRAIGHT_FORWARD, DEPOSIT, FINISH
     }
 
 public DepositTeleopState depositTeleopState = DepositTeleopState.INIT;
@@ -234,13 +234,7 @@ public boolean isAllowedToDrive = false;
 public boolean depositTeleopStateMachine ()
 {
     System.out.println("Teleop state: " + depositTeleopState);
-    System.out.println(
-            "drive forward: "
-                    + Hardware.driveForwardButton.isOnCheckNow());
-    if (Hardware.driveForwardButton.get() == true)
-        {
-        depositTeleopState = DepositTeleopState.DRIVE_STRAIGHT_FORWARD;
-        }
+
     switch (depositTeleopState)
         {
 
@@ -251,9 +245,7 @@ public boolean depositTeleopStateMachine ()
             break;
 
 
-        case DRIVE:
-            Hardware.drive.driveStraight(.2, 1, true);
-            break;
+
         case INIT:
 
             if (depositHeighthatch == 1
@@ -277,36 +269,72 @@ public boolean depositTeleopStateMachine ()
                 depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
                 }
             break;
+        case PREP_FOR_ALIGN_MANIP:
+            if (Hardware.manipulator
+                    .moveArmToPosition(
+                            SAFE_MAN_ANGLE))
+                {
+                depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
+                }
+            break;
+        case PREP_FOR_ALIGN_FORKLIFT:
+            if (Hardware.lift.setLiftPosition(SAFE_FORKLIFT_HEIGHT))
+                {
+
+                depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
+                }
+            break;
 
         case PREP_FORKLIFT:
 
             // if (hasCargo == false)
             // {
-            switch (/* depositHeighthatch */ 0)
+            switch (depositHeighthatch)
                 {
 
                 case 0:
-                    forkliftHeight = SAFE_FORKLIFT_HEIGHT;
-                    if (Hardware.lift.setLiftPosition(forkliftHeight))
+                    forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
+                    if (Hardware.lift
+                            .setLiftPosition(
+                                    Forklift.LOWER_ROCKET_HATCH))
                         {
 
-                        depositTeleopState = DepositTeleopState.PREP_MANIPULATOR;
+                        depositTeleopState = DepositTeleopState.DRIVE_STRAIGHT_FORWARD;
                         }
                     break;
 
                 case 1:
                     // System.out.print("1");
                     forkliftHeight = Forklift.MIDDLE_ROCKET_HATCH;
+                    if (Hardware.lift
+                            .setLiftPosition(
+                                    Forklift.MIDDLE_ROCKET_HATCH))
+                        {
+
+                        depositTeleopState = DepositTeleopState.DRIVE_STRAIGHT_FORWARD;
+                        }
                     break;
 
                 case 2:
 
                     forkliftHeight = Forklift.TOP_ROCKET_HATCH;
+                    if (Hardware.lift
+                            .setLiftPosition(Forklift.TOP_ROCKET_HATCH))
+                        {
+
+                        depositTeleopState = DepositTeleopState.DRIVE_STRAIGHT_FORWARD;
+                        }
                     break;
 
                 case 3:
                     // System.out.print("3");
                     // forkliftHeight = Forklift.CARGO_SHIP_HATCH;
+                    if (Hardware.lift
+                            .setLiftPosition(Forklift.CARGO_SHIP_HATCH))
+                        {
+
+                        depositTeleopState = DepositTeleopState.DRIVE_STRAIGHT_FORWARD;
+                        }
                     break;
                 }
 
@@ -321,7 +349,7 @@ public boolean depositTeleopStateMachine ()
 
             // if (hasCargo == false)
             // {
-            switch (/* depositHeighthatch */0)
+            switch (depositHeighthatch)
                 {
 
                 case 0:
@@ -329,7 +357,7 @@ public boolean depositTeleopStateMachine ()
 
                     if (Hardware.manipulator
                             .moveArmToPosition(
-                                    SAFE_MAN_ANGLE))
+                                    Forklift.LOWER_ROCKET_HATCH_ANGLE))
                         {
                         depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
                         }
@@ -379,7 +407,7 @@ public boolean depositTeleopStateMachine ()
                 {
                 Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
 
-                depositTeleopState = DepositTeleopState.DRIVE_STRAIGHT_FORWARD;
+                depositTeleopState = DepositTeleopState.DEPOSIT;
 
                 // if (depositHeighthatch == 0)
                 // {
@@ -393,26 +421,30 @@ public boolean depositTeleopStateMachine ()
             // once the drivers get in this state they can start raising the
             // forklift and other stuff
 
-            // Hardware.drive.driveStraight(.1, .5, usingGyro);
-            Hardware.drive.drive(1, 1);
+            if (Hardware.drive.driveStraightInches(4, .1, .5,
+                    usingGyro))
+                {
+
+                }
+
+
+            // if (Hardware.nextHigherLiftHeightButton
+            // .getCurrentValue() == true
+            // || Hardware.nextLowerLiftHeightButton
+            // .getCurrentValue() == true)
+            // {
+            // depositTeleopState = DepositTeleopState.FINISH;
+            // }
             break;
         case DEPOSIT:
-            if (hasCargo == false)
-                {
-                if (this.depositHatch(false))
-                    {
 
-                    depositTeleopState = DepositTeleopState.FINISH;
-                    }
-                }
-            else
+            if (this.depositHatch(false))
                 {
-                if (this.depositCargo())
-                    {
 
-                    depositTeleopState = DepositTeleopState.FINISH;
-                    }
+                depositTeleopState = DepositTeleopState.FINISH;
                 }
+
+
             break;
         default:
         case FINISH:
@@ -476,7 +508,6 @@ public boolean startTeleopDeposit (int heightLevel,
 public void resetDepositTeleop ()
 {
     Hardware.alignVisionButton.setValue(false);
-    Hardware.driveForwardButton.setValue(false);
     hasStartedDeposit = false;
     depositTeleopState = DepositTeleopState.HOLD;
 
@@ -526,8 +557,8 @@ public boolean overrideVision ()
             || Hardware.leftDriver.getY() < -JOYSTICK_DEADBAND
             || Hardware.rightDriver.getY() > JOYSTICK_DEADBAND
             || Hardware.rightDriver.getY() < -JOYSTICK_DEADBAND
-            || Hardware.nextHigherLiftHeightButton.getCurrentValue()
-            || Hardware.nextLowerLiftHeightButton.getCurrentValue())
+            || Hardware.rightOperator.getRawButton(6) ||
+            Hardware.rightOperator.getRawButton(7))
         {
         // System.out.println("Mission Failed. We'll get'em next time");
         depositTeleopState = DepositTeleopState.FINISH;
