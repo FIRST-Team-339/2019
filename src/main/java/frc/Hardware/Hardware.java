@@ -776,7 +776,8 @@ public static void commonInitialization ()
     manipulator = new GamePieceManipulator(
             armMotor, armPot/* armEncoder */,
             armRoller,
-            armBallDetector);
+            armBallDetector,
+            armIntakeSolenoid);
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
