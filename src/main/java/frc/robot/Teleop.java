@@ -290,7 +290,7 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
-    // Hardware.depositGamePiece.printDebugStatements();
+    Hardware.depositGamePiece.printDebugStatements();
 
     // vision=====================================
     // 8 and 9visionHeightDownButton
