@@ -619,10 +619,13 @@ public void printDebugStatements ()
     SmartDashboard.putBoolean("has cargo",
             hasCargo);
 
+
+
     SmartDashboard.putString("deposit hatch state",
             this.depositHatchState.toString());
-    SmartDashboard.putNumber("Blob area",
-            Hardware.axisCamera.getNthSizeBlob(0).area);
+    // TODO
+    // SmartDashboard.putNumber("Blob area",
+    // Hardware.axisCamera.getNthSizeBlob(0).area);
 }
 
 //

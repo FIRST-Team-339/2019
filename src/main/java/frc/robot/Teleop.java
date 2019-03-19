@@ -290,7 +290,11 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
+    // debug+++++++=============================
     Hardware.depositGamePiece.printDebugStatements();
+    Hardware.manipulator.printDeployDebugInfo();
+    System.out.println("delay potentiameter" + Hardware.delayPot.get());
+    // debug =====================================================
 
     // vision=====================================
     // 8 and 9visionHeightDownButton
