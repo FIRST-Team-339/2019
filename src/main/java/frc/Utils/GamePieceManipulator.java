@@ -7,6 +7,7 @@ import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
 import frc.HardwareInterfaces.LightSensor;
+import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.HardwareInterfaces.QuickSwitch;
 
@@ -33,7 +34,7 @@ private RollerIntakeMechanism intake = null;
  */
 public GamePieceManipulator (SpeedController armMotor,
         RobotPotentiometer armPot, SpeedController armRollers,
-        LightSensor photoSwitch)
+        LightSensor photoSwitch, DoubleSolenoid armSolenoid)
 {
     this.armMotor = armMotor;
     this.armPot = armPot;
