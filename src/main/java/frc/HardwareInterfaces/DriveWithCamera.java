@@ -358,8 +358,8 @@ public boolean driveToTarget (double speed)
  */
 public boolean driveToTargetClose (double speed)
 {
-
-    // TODO make this not use the ultrasonic. I am thinking that we lower the
+    // Deprecated comment until we can tesxt blob area
+    // make this not use the ultrasonic. I am thinking that we lower the
     // adjustment value each time we change directions. This ways we can retrun
     // true when we align and not rely on the ultrasonic. Also need to make it
     // override by a button.
