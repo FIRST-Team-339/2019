@@ -289,9 +289,9 @@ public static void periodic ()
 
     Hardware.climber.newClimbUpdate();
 
-    Hardware.depositGamePiece.depositTeleopStateMachine();// TODO
+    Hardware.depositGamePiece.depositTeleopStateMachine();
     // debug+++++++=============================
-    Hardware.depositGamePiece.printDebugStatements();
+    Hardware.depositGamePiece.printDebugStatements();//TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
     System.out.println("delay potentiameter" + Hardware.delayPot.get());
     // debug =====================================================
