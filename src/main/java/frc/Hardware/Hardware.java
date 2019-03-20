@@ -319,6 +319,8 @@ public static JoystickButton outtakeButtonLeft = null;
 
 public static JoystickButton outtakeButtonRight = null;
 
+public static QuickSwitch armSolenoidToggleButton = null;
+
 public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
@@ -646,6 +648,8 @@ public static void commonInitialization ()
 
     outtakeButtonLeft = new JoystickButton(leftOperator, 2);
 
+    armSolenoidToggleButton = new QuickSwitch(leftOperator, 3);
+
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
     cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
@@ -776,7 +780,8 @@ public static void commonInitialization ()
     manipulator = new GamePieceManipulator(
             armMotor, armPot/* armEncoder */,
             armRoller,
-            armBallDetector);
+            armBallDetector,
+            armIntakeSolenoid);
 
     lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
