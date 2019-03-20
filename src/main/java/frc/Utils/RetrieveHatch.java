@@ -153,7 +153,12 @@ public static double DELAY_TWO_TIME = 0.0;
 public static double DELAY_THREE_TIME = 0.0;
 
 // DISTANCES
-public static double DISTANCE_TO_DRIVE_FORWARD = 7.0;
+public static double DISTANCE_TO_DRIVE_FORWARD = 11.0;
+
+public static double LENGTH_OF_NESSIE_HEAD = 25.0;
+
+public static double DISTANCE_TO_RETRIEVE = DISTANCE_TO_DRIVE_FORWARD
+        + LENGTH_OF_NESSIE_HEAD;
 
 public static double DISTANCE_TO_BACKUP_SLOWLY = 4.0;
 

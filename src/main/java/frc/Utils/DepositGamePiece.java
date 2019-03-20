@@ -193,7 +193,7 @@ public boolean depositCargo ()
 
 private enum DepositTeleopState
     {
-    INIT, NOT_DOING_THE_THING, PREP_FOR_ALIGN_FORKLIFT, PREP_FOR_ALIGN_MANIP, PREP_FORKLIFT, PREP_MANIPULATOR, ALIGN_TO_TARGET, LOWER_FORK_1, DRIVE_STRAIGHT_FORWARD, DEPOSIT, FINISH
+    INIT, HOLD, PREP_FOR_ALIGN_FORKLIFT, PREP_FOR_ALIGN_MANIP, PREP_FORKLIFT, PREP_MANIPULATOR, ALIGN_TO_TARGET, LOWER_FORK_1, DRIVE_STRAIGHT_FORWARD, DEPOSIT, FINISH
     }
 
 public DepositTeleopState depositTeleopState = DepositTeleopState.INIT;
@@ -236,7 +236,7 @@ public boolean depositTeleopStateMachine ()
 
     switch (depositTeleopState)
         {
-        case NOT_DOING_THE_THING:
+        case HOLD:
             break;
         case INIT:
 
@@ -522,7 +522,7 @@ public void resetDepositTeleop ()
 {
     Hardware.alignVisionButton.setValue(false);
     hasStartedDeposit = false;
-    depositTeleopState = DepositTeleopState.NOT_DOING_THE_THING;
+    depositTeleopState = DepositTeleopState.HOLD;
 
 
 }
