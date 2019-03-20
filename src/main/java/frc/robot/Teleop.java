@@ -266,6 +266,9 @@ public static void periodic ()
     Hardware.manipulator.poweredDeployDownForClimb(
             Hardware.poweredManipulatorForClimbButton);
 
+    Hardware.manipulator
+            .toggleSolenoid(Hardware.armSolenoidToggleButton);
+
     // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
     // Hardware.intakeTriggerLeft.get(),
     // Hardware.outtakeButton.get(),
@@ -525,13 +528,13 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
+    // if (Hardware.rightOperator.getRawButton(6) == true
+    // || coleBool1 == false)
+    // coleBool1 = Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
 
-
-    // if (Hardware.rightOperator.getRawButton(6) == true)
-    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
-
-    // if (Hardware.rightOperator.getRawButton(7) == true)
-    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+    // if (Hardware.rightOperator.getRawButton(7) == true
+    // || coleBool2 == false)
+    // coleBool2 = Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
     // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
@@ -545,11 +548,13 @@ private static void coleTest ()
     // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
     // Hardware.manipulator.moveArmToPositionPrecise(15.0);
 
-    // if (Hardware.rightOperator.getRawButton(6) == true)
-    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+    // if (Hardware.rightOperator.getRawButton(6) == true
+    // || coleBool1 == false)
+    // coleBool1 = Hardware.manipulator.moveArmToPositionPrecise(70.0);
 
-    // if (Hardware.rightOperator.getRawButton(7) == true)
-    // Hardware.manipulator.moveArmToPositionPrecise(15.0);
+    // if (Hardware.rightOperator.getRawButton(7) == true
+    // || coleBool2 == false)
+    // coleBool2 = Hardware.manipulator.moveArmToPositionPrecise(15.0);
 
 
     // Manipulator
@@ -558,6 +563,10 @@ private static void coleTest ()
     Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
+
+private static boolean coleBool1 = false;
+
+private static boolean coleBool2 = false;
 
 
 private static void guidoTest ()

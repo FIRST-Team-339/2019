@@ -38,7 +38,8 @@ public GamePieceManipulator (SpeedController armMotor,
 {
     this.armMotor = armMotor;
     this.armPot = armPot;
-    this.intake = new RollerIntakeMechanism(armRollers, photoSwitch);
+    this.intake = new RollerIntakeMechanism(armRollers, photoSwitch,
+            armSolenoid);
 }
 
 /**
@@ -46,11 +47,12 @@ public GamePieceManipulator (SpeedController armMotor,
  */
 public GamePieceManipulator (SpeedController armMotor,
         KilroyEncoder armEncoder, SpeedController armRollers,
-        LightSensor photoSwitch)
+        LightSensor photoSwitch, DoubleSolenoid armSolenoid)
 {
     this.armMotor = armMotor;
     this.armEncoder = armEncoder;
-    this.intake = new RollerIntakeMechanism(armRollers, photoSwitch);
+    this.intake = new RollerIntakeMechanism(armRollers, photoSwitch,
+            armSolenoid);
 }
 
 public static enum GamePiece
@@ -1039,6 +1041,8 @@ public void printDeployDebugInfo ()
     // currentDeployMinAngle);
     // SmartDashboard.putString("isSetDeployPositionInitReady",
     // "" + isSetDeployPositionInitReady);
+    SmartDashboard.putString("armSolenoid setForward",
+            "" + this.intake.armSolenoid.getForward());
 }
 
 // =========================================================================
@@ -1119,6 +1123,11 @@ public boolean spinOutCargoByTimer ()
     return this.intake.spinOutCargoByTimer();
 }
 
+
+public void toggleSolenoid (QuickSwitch button)
+{
+    this.intake.toggleSolenoid(button);
+}
 
 /**
  * Resets the state machine so the manipulator does not keep trying to run

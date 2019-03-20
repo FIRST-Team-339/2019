@@ -3,6 +3,8 @@ package frc.Utils;
 import edu.wpi.first.wpilibj.SpeedController;
 import frc.HardwareInterfaces.LightSensor;
 import edu.wpi.first.wpilibj.Timer;
+import frc.HardwareInterfaces.DoubleSolenoid;
+import frc.HardwareInterfaces.QuickSwitch;
 
 /**
  * Class for all the methods for taking in and spitting out the cargo for
@@ -27,14 +29,16 @@ private SpeedController armRollers = null;
 
 private LightSensor photoSwitch = null;
 
+public DoubleSolenoid armSolenoid = null;
 
 private Timer outakeTimer = new Timer();
 
 public RollerIntakeMechanism (SpeedController armRollers,
-        LightSensor photoSwitch)
+        LightSensor photoSwitch, DoubleSolenoid armSolenoid)
 {
     this.armRollers = armRollers;
     this.photoSwitch = photoSwitch;
+    this.armSolenoid = armSolenoid;
 }
 
 
@@ -76,7 +80,20 @@ public void intakeOuttakeByButtons (boolean intakeButtonValue,
         }
 }
 
-
+public void toggleSolenoid (QuickSwitch button)
+{
+    if (button.getCurrentValue() == true)
+        {
+        if (this.armSolenoid.getForward() == false)
+            {
+            this.armSolenoid.setForward(true);
+            }
+        else
+            {
+            this.armSolenoid.setForward(false);
+            }
+        }
+}
 
 
 /**
@@ -96,15 +113,21 @@ public void intakeOuttakeByButtons (boolean intakeButtonValue,
 public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
         boolean outtakeButtonValue, boolean intakeOverrideButtonValue)
 {
-    if (intakeButtonValue == true && (this.hasCargo() == false
-            || intakeOverrideButtonValue == true))
+    if (intakeButtonValue == true)
         {
-        intakeState = IntakeState.INTAKE;
+        if (this.hasCargo() == false
+                || intakeOverrideButtonValue == true)
+            intakeState = IntakeState.INTAKE;
+
+        if (this.hasCargo() == true)
+            this.armSolenoid.setForward(false);
         }
     else
         if (outtakeButtonValue == true)
             {
             intakeState = IntakeState.OUTTAKE;
+            // if (this.hasCargo() == false)
+            //     this.armSolenoid.setForward(true);
             }
 }
 
@@ -184,12 +207,15 @@ public void update ()
             // However, if the intake button is being held, the
             // state will go back to INTAKE before intakeUpdate is
             // called again
+
             intakeState = IntakeState.HOLD;
             break;
 
         // sets the motors to bring in a cargo
         case OUTTAKE:
             armRollers.set(OUTTAKE_ROLLER_SPEED);
+            if (this.hasCargo() == false)
+                this.armSolenoid.setForward(false);
             intakeState = IntakeState.HOLD;
             break;
 

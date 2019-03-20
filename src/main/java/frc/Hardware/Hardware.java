@@ -319,6 +319,8 @@ public static JoystickButton outtakeButtonLeft = null;
 
 public static JoystickButton outtakeButtonRight = null;
 
+public static QuickSwitch armSolenoidToggleButton = null;
+
 public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
@@ -645,6 +647,8 @@ public static void commonInitialization ()
     intakeTriggerLeft = new JoystickButton(leftOperator, 1);
 
     outtakeButtonLeft = new JoystickButton(leftOperator, 2);
+
+    armSolenoidToggleButton = new QuickSwitch(leftOperator, 3);
 
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
