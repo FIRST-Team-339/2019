@@ -340,7 +340,10 @@ public static void periodic ()
     if (Hardware.alignAndStopButton.isOnCheckNow() == true
             && Hardware.depositGamePiece.overrideVision() == false)
         {
-            if()
+        if (Hardware.retriever.alignWithVision(.1))
+            {
+            Hardware.alignAndStopButton.setValue(false);
+            }
         }
 
     // end vision==============================================
