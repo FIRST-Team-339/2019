@@ -361,8 +361,6 @@ public static void periodic ()
 
     takePicture();
 
-
-
     // Hardware.telemetry.printToShuffleboard();
 
     // Hardware.telemetry.printToConsole();
@@ -419,7 +417,7 @@ private static void individualTest ()
     // patrickTest();
     // annaTest();
     // meghanTest();
-    // dionTest();
+    dionTest();
     // nithyaTest();
 } // end individualTest()
 
@@ -665,47 +663,49 @@ private static void meghanTest ()
 
 private static void dionTest ()
 {
-    if (Hardware.leftDriver.getRawButton(4))
+    if (Hardware.leftDriver.getRawButton(4) == true)
         {
-        ringLightFlash = true;
-        initialStart = true;
+        ringLightFlash(true, .5);
         }
-    if (Hardware.rightDriver.getRawButton(4))
-        {
-        ringLightFlash = false;
-        }
-    if (ringLightFlash == true)
-        {
-        if (initialStart == true)
-            {
-            Hardware.ringLightTimer.reset();
-            Hardware.ringLightTimer.start();
-            Hardware.ringLightRelay.set(Value.kOff);
-            System.out.println("Light off");
-            }
-        if (Hardware.ringLightTimer.get() >= ringLightDelay)
-            {
-            System.out.println("Light on");
-            Hardware.ringLightRelay.set(Value.kOn);
-            }
-        if (Hardware.ringLightTimer.get() >= 2 * ringLightDelay)
-            {
-            Hardware.ringLightRelay.set(Value.kOff);
-            Hardware.ringLightTimer.stop();
-            Hardware.ringLightTimer.reset();
-            System.out.println("Light off");
-            }
-
-        }
-
-
-
-
     else
         {
-        System.out.println("Cancelled");
-        Hardware.ringLightRelay.set(Value.kOn);
+        ringLightFlash(false, .5);
         }
+
+    // if (ringLightFlashing == true)
+    // {
+    // if (initialStart == true)
+    // {
+    // Hardware.ringLightTimer.reset();
+    // Hardware.ringLightTimer.start();
+    // Hardware.ringLightRelay.set(Value.kOff);
+    // System.out.println("Light off 1");
+    // initialStart = false;
+    // }
+    // if (Hardware.ringLightTimer.get() >= ringLightDelay)
+    // {
+    // System.out.println("Light on");
+    // Hardware.ringLightRelay.set(Value.kOn);
+    // }
+    // if (Hardware.ringLightTimer.get() >= 2 * ringLightDelay)
+    // {
+    // Hardware.ringLightRelay.set(Value.kOff);
+    // Hardware.ringLightTimer.stop();
+    // Hardware.ringLightTimer.reset();
+    // System.out.println("Light off 2");
+    // initialStart = true;
+    // }
+
+    // }
+
+
+
+
+    // else
+    // {
+    // System.out.println("Cancelled");
+    // Hardware.ringLightRelay.set(Value.kOn);
+    // }
 }
 
 // end dionTest()
@@ -1150,6 +1150,38 @@ public static void takePicture ()
 
 }
 
+
+public static void ringLightFlash (boolean ringLightFlashOn,
+        double ringLightFlashDelay)
+{
+    if (ringLightFlashOn == true)
+        {
+        if (startOfCycle == true)
+            {
+            Hardware.ringLightTimer.reset();
+            Hardware.ringLightTimer.start();
+            Hardware.ringLightRelay.set(Value.kOff);
+            startOfCycle = false;
+            }
+        if (Hardware.ringLightTimer.get() >= ringLightFlashDelay)
+            {
+            Hardware.ringLightRelay.set(Value.kOn);
+            }
+        if (Hardware.ringLightTimer.get() >= 2 * ringLightFlashDelay)
+            {
+            Hardware.ringLightRelay.set(Value.kOff);
+            Hardware.ringLightTimer.stop();
+            Hardware.ringLightTimer.reset();
+            startOfCycle = true;
+            }
+
+        }
+    else
+        {
+        Hardware.ringLightRelay.set(Value.kOn);
+        }
+}
+
 /**
  * Calls drive's main drive function so the robot can drive using joysticks
  *
@@ -1241,11 +1273,7 @@ public static boolean hasFinishedDeposit = false;
 
 public static boolean solenoidInit = false;
 
-private static boolean ringLightFlash = false;
-
-private static double ringLightDelay = .5;
-
-private static boolean initialStart = false;
+private static boolean startOfCycle = true;
 
 
 // public static boolean runIntake = false;

@@ -233,7 +233,7 @@ public boolean isAllowedToDrive = false;
  */
 public boolean depositTeleopStateMachine ()
 {
-    System.out.println("Teleop state: " + depositTeleopState);
+    // System.out.println("Teleop state: " + depositTeleopState);
 
     switch (depositTeleopState)
         {
