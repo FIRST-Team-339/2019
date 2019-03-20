@@ -405,6 +405,15 @@ public static void periodic ()
             }
         }
 
+    // if (Hardware.frontUltraSonic.getDistanceFromNearestBumper() >= &&
+    // Hardware.frontUltraSonic.getDistanceFromNearestBumper() <= +12)
+    // {
+    // ringLightFlash(true, .5);
+    // }
+    // else
+    // {
+    // ringLightFlash(false, .5);
+    // }
     // printStatements();
 
 
