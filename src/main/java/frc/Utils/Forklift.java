@@ -233,7 +233,7 @@ public void setLiftPositionByButton (double position,
         // tell the forklift state machine we want to move to a particular
         // position
         setLiftPositionInit = true;
-        this.setLiftPosition(position, forkliftSpeed);
+        this.defaultSetPosition(position, forkliftSpeed);
         }
 }
 
@@ -253,8 +253,8 @@ public void setLiftPositionByButton (double position, double angle,
         else
             position += NEXT_LOWER_HEIGHT_ADJUSTMENT;
 
-        this.setLiftPosition(position, forkliftSpeed);
-        this.manipulator.setAngleForForkliftNextPostion(angle);
+        this.defaultSetPosition(position, forkliftSpeed);
+        this.manipulator.defaultSetAngle(angle);
         }
 }
 
@@ -343,7 +343,7 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
 }
 
 
-public boolean setLiftPositionPrecise (double speed, double height)
+public boolean setLiftPositionPrecise (double height, double speed)
 {
     if (forkliftTargetHeight != height)
         setPositionPreciseInit = true;
@@ -379,6 +379,17 @@ public boolean setLiftPositionPrecise (double speed, double height)
 }
 
 private boolean setPositionPreciseInit = true;
+
+
+public boolean defaultSetPosition (double position,
+        double forkliftSpeed)
+{
+    return this.setLiftPosition(position, forkliftSpeed);
+    // return this.setLiftPositionPrecise(position, forkliftSpeed);
+}
+
+
+
 
 /**
  * Sets the forklift to the next higher Cargo or Hatch height on the
@@ -471,12 +482,12 @@ public void setToNextHigherPreset (double forkliftSpeed,
             // tell the forklift state machine we want to move to said
             // position
             setLiftPositionInit = true;
-            this.setLiftPosition(
+            this.defaultSetPosition(
                     position - NEXT_HIGHER_HEIGHT_ADJUSTMENT,
                     forkliftSpeed);
             // SmartDashboard.putNumber("Set Higher Angle", angle);
             if (angle >= 0.0)
-                this.manipulator.setAngleForForkliftNextPostion(angle);
+                this.manipulator.defaultSetAngle(angle);
             }
         }
 }
@@ -581,12 +592,12 @@ public void setToNextLowerPreset (double forkliftSpeed,
             // tell the forklift state machine we want to move to said
             // position
             setLiftPositionInit = true;
-            this.setLiftPosition(
+            this.defaultSetPosition(
                     position + NEXT_LOWER_HEIGHT_ADJUSTMENT,
                     forkliftSpeed);
             // SmartDashboard.putNumber("Set Lower Angle", angle);
             if (angle >= 0.0)
-                this.manipulator.setAngleForForkliftNextPostion(angle);
+                this.manipulator.defaultSetAngle(angle);
             }
         }
 }

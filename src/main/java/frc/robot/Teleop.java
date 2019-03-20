@@ -544,19 +544,39 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
+
+    // Testing checklist
+    // tune arm pot
+    // intake/ outtake/ solenoid
+    // check holding voltages/ deadbands/ not slamming head into forklift
+    // scale up move down forklift speed?
+    // precise positions
+    // teleop buttons
+    // next higher / next lower
+    // deploy / retract, and make sure they are using move precise
+
+
+
+
+    // Test 1 - setLiftPositionPrecise
+
+
     // if (Hardware.rightOperator.getRawButton(6) == true
     // || coleBool1 == false)
-    // coleBool1 = Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+    // coleBool1 = Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
 
     // if (Hardware.rightOperator.getRawButton(7) == true
     // || coleBool2 == false)
-    // coleBool2 = Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+    // coleBool2 = Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
-    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+    // Hardware.lift.setLiftPositionPrecise(30.0, 1.0));
 
     // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
-    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+    // Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+
+
+    // Test 2 - move Arm Precise
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
     // Hardware.manipulator.moveArmToPositionPrecise(70.0);
