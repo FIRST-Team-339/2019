@@ -471,6 +471,13 @@ public boolean moveArmToPositionPrecise (double angle)
 private boolean moveArmToPositionPreciseInit = true;
 
 
+public boolean defaultSetAngle (double angle)
+{
+    return this.moveArmToPosition(angle);
+    // return this.moveArmToPositionPrecise(angle);
+}
+
+
 /**
  * Tells the state machine to deploy the arm, if it is not
  * already retracted
