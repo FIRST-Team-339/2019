@@ -337,6 +337,12 @@ public static void periodic ()
         Hardware.depositGamePiece.resetDepositTeleop();
         }
 
+    if (Hardware.alignAndStopButton.isOnCheckNow() == true
+            && Hardware.depositGamePiece.overrideVision() == false)
+        {
+            if()
+        }
+
     // end vision==============================================
 
     // buttons

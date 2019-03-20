@@ -69,6 +69,7 @@ public boolean depositHatch (boolean inAuto)
         // to the velcro
         case DEPOSIT_HATCH:
             // TODO magic number for drive speed
+            // drives forward to put the hatch on the velcro
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
                     .2, BACKUP_ACCELERATION, usingGyro))
                 {
@@ -81,6 +82,7 @@ public boolean depositHatch (boolean inAuto)
         case PREP_TO_BACKUP:
             if (inAuto)
                 {
+                // lower the arm in auto in order to deposit
                 if (Hardware.manipulator
                         .moveArmToPosition(DEPOSIT_ARM_ANGLE_AUTO))
                     {
@@ -92,7 +94,7 @@ public boolean depositHatch (boolean inAuto)
                 if (depositHeighthatch == 2)
 
                     {
-
+                    // lower angle to deposit for level 3
                     if (Hardware.manipulator.moveArmToPosition(
                             manipulatorAngle
                                     - 10))
@@ -104,6 +106,7 @@ public boolean depositHatch (boolean inAuto)
                     }
                 else
                     {
+                    // lower the forklift for levels 1 and 2
                     if (Hardware.lift.setLiftPosition(
                             forkliftHeight - 3))
                         {
@@ -113,7 +116,7 @@ public boolean depositHatch (boolean inAuto)
             break;
         case BACKUP_HATCH:
 
-
+            // back up after the hook is clear of the hatch
             if (this.drive.driveStraightInches(BACKUP_INCHES,
                     -BACKUP_SPEED, BACKUP_ACCELERATION,
                     usingGyro))
@@ -124,6 +127,7 @@ public boolean depositHatch (boolean inAuto)
             break;
 
         case BACKUP_HATCH_AFTER_FORK:
+            // back up after the hook is clear of the hatch
             if (this.drive.driveStraightInches(BACKUP_INCHES_3,
                     -BACKUP_SPEED_3, BACKUP_ACCELERATION, usingGyro))
                 {
@@ -131,6 +135,7 @@ public boolean depositHatch (boolean inAuto)
                 }
             break;
         case STOP:
+            // stop
             this.drive.drive(0, 0);
 
             depositHatchState = DepositHatchState.INIT;
@@ -151,8 +156,11 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
  * The forklift and manipulator must already be set to the
  * proper height and angle.
  *
+ * this is not used by the code
+ *
  * @return true if the function finished, false if it
  *         still needs to be called
+ *
  */
 public boolean depositCargo ()
 {
@@ -264,7 +272,8 @@ public boolean depositTeleopStateMachine ()
         case PREP_FOR_ALIGN_MANIP:
 
 
-
+            // raises the arm to an angle where it does not interfere with US or
+            // vision
             if (moveManipulator(SAFE_MAN_ANGLE))
                 depositTeleopState = DepositTeleopState.PREP_FOR_ALIGN_FORKLIFT;
             // if (Hardware.manipulator
@@ -274,8 +283,12 @@ public boolean depositTeleopStateMachine ()
             // depositTeleopState = DepositTeleopState.PREP_FOR_ALIGN_FORKLIFT;
             // }
             break;
-        case PREP_FOR_ALIGN_FORKLIFT:
 
+        case PREP_FOR_ALIGN_FORKLIFT:
+            // raises the forklift to an angle where it does not interfere with
+            // US
+            // or
+            // vision
             if (moveForklift(SAFE_FORKLIFT_HEIGHT))
                 depositTeleopState = DepositTeleopState.ALIGN_TO_TARGET;
             // if (Hardware.lift.setLiftPosition(SAFE_FORKLIFT_HEIGHT))
