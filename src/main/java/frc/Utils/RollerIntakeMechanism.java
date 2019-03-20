@@ -117,17 +117,20 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
         {
         if (this.hasCargo() == false
                 || intakeOverrideButtonValue == true)
+            {
+            this.armSolenoid.setForward(true);
             intakeState = IntakeState.INTAKE;
-
-        if (this.hasCargo() == true)
+            }
+        else
             this.armSolenoid.setForward(false);
+
         }
     else
         if (outtakeButtonValue == true)
             {
             intakeState = IntakeState.OUTTAKE;
             // if (this.hasCargo() == false)
-            //     this.armSolenoid.setForward(true);
+            // this.armSolenoid.setForward(true);
             }
 }
 
@@ -146,7 +149,6 @@ public boolean spinOutCargoByTimer ()
     // System.out.println(depositInit);
     if (depositInit == false)
         {
-
         intakeState = IntakeState.OUTTAKE_BY_TIMER;
         return false;
         }

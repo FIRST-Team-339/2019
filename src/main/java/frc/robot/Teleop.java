@@ -337,6 +337,15 @@ public static void periodic ()
         Hardware.depositGamePiece.resetDepositTeleop();
         }
 
+    if (Hardware.alignAndStopButton.isOnCheckNow() == true
+            && Hardware.depositGamePiece.overrideVision() == false)
+        {
+        if (Hardware.retriever.alignWithVision(.1))
+            {
+            Hardware.alignAndStopButton.setValue(false);
+            }
+        }
+
     // end vision==============================================
 
     // buttons
@@ -408,6 +417,7 @@ public static void periodic ()
                 }
             }
         }
+
 
     // printStatements();
 
@@ -534,19 +544,39 @@ private static void coleTest ()
     // if (Hardware.leftDriver.getRawButton(5))
     // Hardware.manipulator.moveArmToPosition(45);
 
+
+    // Testing checklist
+    // tune arm pot
+    // intake/ outtake/ solenoid
+    // check holding voltages/ deadbands/ not slamming head into forklift
+    // scale up move down forklift speed?
+    // precise positions
+    // teleop buttons
+    // next higher / next lower
+    // deploy / retract, and make sure they are using move precise
+
+
+
+
+    // Test 1 - setLiftPositionPrecise
+
+
     // if (Hardware.rightOperator.getRawButton(6) == true
     // || coleBool1 == false)
-    // coleBool1 = Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+    // coleBool1 = Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
 
     // if (Hardware.rightOperator.getRawButton(7) == true
     // || coleBool2 == false)
-    // coleBool2 = Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+    // coleBool2 = Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
-    // Hardware.lift.setLiftPositionPrecise(1.0, 30.0);
+    // Hardware.lift.setLiftPositionPrecise(30.0, 1.0));
 
     // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
-    // Hardware.lift.setLiftPositionPrecise(1.0, 5.0);
+    // Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+
+
+    // Test 2 - move Arm Precise
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
     // Hardware.manipulator.moveArmToPositionPrecise(70.0);
@@ -688,7 +718,19 @@ private static void dionTest ()
         {
         ringLightFlash(false, .5);
         }
-
+    if (Hardware.frontUltraSonic
+            .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+            &&
+            Hardware.frontUltraSonic
+                    .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                            + 12.0)
+        {
+        ringLightFlash(true, .5);
+        }
+    else
+        {
+        ringLightFlash(false, .5);
+        }
     // if (ringLightFlashing == true)
     // {
     // if (initialStart == true)
@@ -1037,8 +1079,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());

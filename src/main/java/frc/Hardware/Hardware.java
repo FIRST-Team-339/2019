@@ -311,6 +311,9 @@ public static Joystick rightOperator = null;
 // ------------------------------------
 // ----- Left Operator -----
 
+
+public static MomentarySwitch alignAndStopButton = null;
+
 public static JoystickButton intakeTriggerLeft = null;
 
 public static JoystickButton intakeTriggerRight = null;
@@ -649,6 +652,8 @@ public static void commonInitialization ()
     outtakeButtonLeft = new JoystickButton(leftOperator, 2);
 
     armSolenoidToggleButton = new QuickSwitch(leftOperator, 3);
+
+    alignAndStopButton = new MomentarySwitch(leftOperator, 4, false);
 
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
