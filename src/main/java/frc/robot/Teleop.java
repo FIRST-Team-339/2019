@@ -294,7 +294,7 @@ public static void periodic ()
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
     // debug+++++++=============================
-    Hardware.depositGamePiece.printDebugStatements();//TODO comment out
+    Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
     System.out.println("delay potentiameter" + Hardware.delayPot.get());
     // debug =====================================================
@@ -424,7 +424,7 @@ private static void individualTest ()
     // patrickTest();
     // annaTest();
     // meghanTest();
-    dionTest();
+    // dionTest();
     // nithyaTest();
 } // end individualTest()
 
