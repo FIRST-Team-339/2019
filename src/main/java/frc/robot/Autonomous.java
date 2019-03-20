@@ -247,7 +247,7 @@ public static void periodic ()
                 {
                 autoState = State.FINISH;
                 }
-            // TODO C.R. added a break
+
             break;
         case JANKY_DEPOSIT_STRAIGHT:
             usingVision = true;
@@ -1442,7 +1442,7 @@ public static void endAutoPath ()
     rocketHatchState = RocketHatchState.FINISH;
     descentState = DescentState.FINISH;
     cross = CrossAutoState.FINISH;
-    // TODO C.R. add something for jankety and blind rocket
+
 } // end endAutoPath()
 
 
