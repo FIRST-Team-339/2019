@@ -337,6 +337,12 @@ public static void periodic ()
         Hardware.depositGamePiece.resetDepositTeleop();
         }
 
+    if (Hardware.alignAndStopButton.isOnCheckNow() == true
+            && Hardware.depositGamePiece.overrideVision() == false)
+        {
+            if()
+        }
+
     // end vision==============================================
 
     // buttons
@@ -408,6 +414,7 @@ public static void periodic ()
                 }
             }
         }
+
 
     // printStatements();
 
@@ -708,7 +715,19 @@ private static void dionTest ()
         {
         ringLightFlash(false, .5);
         }
-
+    if (Hardware.frontUltraSonic
+            .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+            &&
+            Hardware.frontUltraSonic
+                    .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                            + 12.0)
+        {
+        ringLightFlash(true, .5);
+        }
+    else
+        {
+        ringLightFlash(false, .5);
+        }
     // if (ringLightFlashing == true)
     // {
     // if (initialStart == true)
@@ -1057,8 +1076,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        System.out.println("ultrasonic " + Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());

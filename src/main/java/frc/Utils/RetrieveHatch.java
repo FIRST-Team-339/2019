@@ -143,6 +143,15 @@ public void stop ()
 
 }
 
+public boolean alignWithVision (double speed)
+{
+    if (Hardware.frontUltraSonic.getDistanceFromNearestBumper() == 1)
+        {
+        }
+
+    return false;
+}
+
 
 // CONSTANTS AND MISC
 
