@@ -29,8 +29,6 @@ public DepositGamePiece (Drive drive, Forklift forklift,
     this.drive = drive;
     this.forklift = forklift;
     this.gamePieceManipulator = gamePieceManipulator;
-
-
 }
 
 
@@ -70,6 +68,7 @@ public boolean depositHatch (boolean inAuto)
         // Drives the robot forward so the hatch becomes attached
         // to the velcro
         case DEPOSIT_HATCH:
+            // TODO magic number for drive speed
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
                     .2, BACKUP_ACCELERATION, usingGyro))
                 {
@@ -95,8 +94,8 @@ public boolean depositHatch (boolean inAuto)
                     {
 
                     if (Hardware.manipulator.moveArmToPosition(
-                            Hardware.manipulator.getCurrentArmPosition()
-                                    - 15))
+                            manipulatorAngle
+                                    - 10))
                         {
 
                         depositHatchState = DepositHatchState.BACKUP_HATCH;
@@ -106,7 +105,7 @@ public boolean depositHatch (boolean inAuto)
                 else
                     {
                     if (Hardware.lift.setLiftPosition(
-                            Hardware.lift.getForkliftHeight() - 3))
+                            forkliftHeight - 3))
                         {
                         depositHatchState = DepositHatchState.BACKUP_HATCH_AFTER_FORK;
                         }
@@ -292,7 +291,7 @@ public boolean depositTeleopStateMachine ()
             // {
             switch (depositHeighthatch)
                 {
-
+                default:
                 case 0:
                     forkliftHeight = Forklift.LOWER_ROCKET_HATCH;
 
@@ -347,11 +346,7 @@ public boolean depositTeleopStateMachine ()
                     break;
                 }
 
-            if (Hardware.lift.setLiftPosition(forkliftHeight))
-                {
 
-                depositTeleopState = DepositTeleopState.PREP_MANIPULATOR;
-                }
             break;
 
         case PREP_MANIPULATOR:
@@ -360,11 +355,11 @@ public boolean depositTeleopStateMachine ()
             // {
             switch (depositHeighthatch)
                 {
-
+                default:
                 case 0:
-
+                    manipulatorAngle = Forklift.LOWER_ROCKET_HATCH_ANGLE;
                     if (moveManipulator(
-                            Forklift.LOWER_ROCKET_HATCH_ANGLE))
+                            manipulatorAngle))
                         depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
                     // if (Hardware.manipulator
                     // .moveArmToPosition(
@@ -376,8 +371,9 @@ public boolean depositTeleopStateMachine ()
                     break;
 
                 case 1:
+                    manipulatorAngle = Forklift.MIDDLE_ROCKET_HATCH_ANGLE;
                     if (moveManipulator(
-                            Forklift.MIDDLE_ROCKET_HATCH_ANGLE))
+                            manipulatorAngle))
                         depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
                     // if (Hardware.manipulator
                     // .moveArmToPosition(
@@ -388,9 +384,9 @@ public boolean depositTeleopStateMachine ()
                     break;
 
                 case 2:
-
+                    manipulatorAngle = Forklift.TOP_ROCKET_HATCH_ANGLE;
                     if (moveManipulator(
-                            Forklift.TOP_ROCKET_HATCH_ANGLE))
+                            manipulatorAngle))
                         depositTeleopState = DepositTeleopState.PREP_FORKLIFT;
                     // if (Hardware.manipulator
                     // .moveArmToPosition(
@@ -630,6 +626,8 @@ public void printDebugStatements ()
 
 //
 public double forkliftHeight = 0;
+
+public double manipulatorAngle = 0;
 
 // constants for prep
 

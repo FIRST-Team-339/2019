@@ -301,6 +301,10 @@ public static void periodic ()
 
     // vision=====================================
     // 8 and 9visionHeightDownButton
+
+    // TODO find a better way to set visionHeight than using timer
+    // and also find some way of telling the driver's what
+    // height they are at
     if (Hardware.visionHeightUpButton.get() == true
             && visionHeight < 2 && Hardware.telopTimer.get() > .25)
         {
