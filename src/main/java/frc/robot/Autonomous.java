@@ -134,7 +134,7 @@ public static void init ()
  */
 public static enum State
     {
-    INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_HATCH, BLIND_ROCKET_HATCH, JANKY_DEPOSIT_STRAIGHT, FINISH
+    INIT, DELAY, CHOOSE_PATH, CROSS_AUTOLINE, DEPOSIT_STRAIGHT_CARGO_HATCH, DEPOSIT_ROCKET_HATCH, DEPOSIT_SIDE_CARGO_BALL, BLIND_ROCKET_HATCH, JANKY_DEPOSIT_STRAIGHT, FINISH
     }
 
 /**
@@ -234,8 +234,8 @@ public static void periodic ()
                 }
             break;
 
-        case DEPOSIT_SIDE_CARGO_HATCH:
-            if (depositSideCargoHatch() == true)
+        case DEPOSIT_SIDE_CARGO_BALL:
+            if (depositSideCargoBall() == true)
                 {
                 autoState = State.FINISH;
                 }
@@ -296,7 +296,7 @@ private static void choosePath ()
             break;
 
         case 3:
-            autoState = State.DEPOSIT_SIDE_CARGO_HATCH;
+            autoState = State.DEPOSIT_SIDE_CARGO_BALL;
             break;
 
         case 4:
@@ -1015,62 +1015,98 @@ private static boolean depositRocketHatch ()
 /**
  * Enum for representing the states used in the depositSideCargoHatch path
  */
-private static enum SideCargoHatchState
+private static enum SideCargoBallState
     {
-    INIT, LEAVE_LEVEL_2, TURN_AFTER_LEVEL_2_DROP, LEAVE_LEVEL_1_ONLY, DRIVE_1, TURN_1, DRIVE_2, TURN_2, DRIVE_TO_TAPE, DRIVE_AFTER_TAPE, TURN_AFTER_TAPE, DRIVE_TO_CARGO_SHIP, SCORE, FINISHED
+    INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, TURN_TOWARDS_ROCKET, DRIVE_TOWARDS_ROCKET, TURN_PARALLEL_TO_ROCKET, DRIVE_PARALLEL_TO_ROCKET, TURN_TOWARDS_CARGO_SHIP, VISION_DRIVE_TOWARDS_CARGO_SHIP, DEPOSIT_BALL, BACK_UP, FINISHED
     } // and we need to deploy the manipulator somewhere in here
 
 /**
- * Variable for keeping track of the state used in the depositSideCargoHatch
+ * Variable for keeping track of the state used in the depositSideCargoBall
  * path
  */
-private static SideCargoHatchState sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
+private static SideCargoBallState sideCargoBallState = SideCargoBallState.LEAVE_LEVEL_2;
 
-private static boolean depositSideCargoHatch ()
+private static boolean depositSideCargoBall ()
 // welcome to the Gates of Hell
 {
-    switch (sideCargoHatchState)
+    switch (sideCargoBallState)
         {
         case INIT:
             if (autoLevel == Level.LEVEL_TWO)
-                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_2;
+                sideCargoBallState = SideCargoBallState.LEAVE_LEVEL_2;
             else
-                sideCargoHatchState = SideCargoHatchState.LEAVE_LEVEL_1_ONLY;
+                sideCargoBallState = SideCargoBallState.LEAVE_LEVEL_1;
             break;
         case LEAVE_LEVEL_2:
             if (descendFromLevelTwo(usingAlignByWall,
                     goingBackwards, turningAroundAfter) == true)
                 {
-                sideCargoHatchState = SideCargoHatchState.TURN_AFTER_LEVEL_2_DROP;
+                sideCargoBallState = SideCargoBallState.LEAVE_LEVEL_1;
                 }
             break;
-        case TURN_AFTER_LEVEL_2_DROP:
-
-            break;
-        case LEAVE_LEVEL_1_ONLY:
-            if (driveOffStraightLevel1() == true)
+        case LEAVE_LEVEL_1:
+            if (crossAutoline() == true)
                 {
-                sideCargoHatchState = SideCargoHatchState.DRIVE_1;
+                sideCargoBallState = SideCargoBallState.TURN_TOWARDS_ROCKET;
                 }
             break;
-        case DRIVE_1:
+
+        case TURN_TOWARDS_ROCKET:
+            if (autoPosition == Position.LEFT)
+                {
+                if (Hardware.drive.turnDegrees(TURN_LEFT90,
+                        TURN_SPEED,
+                        ACCELERATION_TIME, USING_GYRO) == true)
+                    {
+                    sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                    break;
+                    }
+                }
+            else
+                if (autoPosition == Position.RIGHT)
+                    {
+                    if (Hardware.drive.turnDegrees(TURN_RIGHT90,
+                            TURN_SPEED,
+                            ACCELERATION_TIME, USING_GYRO) == true)
+                        {
+                        sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                        break;
+                        }
+                    }
+        case DRIVE_TOWARDS_ROCKET:
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL,
+                    DRIVE_SPEED, ACCELERATION_TIME, USING_GYRO))
+                {
+                sideCargoBallState = SideCargoBallState.TURN_PARALLEL_TO_ROCKET;
+                }
             break;
-        case TURN_1:
-            break;
-        case DRIVE_2:
-            break;
-        case TURN_2:
-            break;
-        case DRIVE_TO_TAPE:
-            break;
-        case DRIVE_AFTER_TAPE:
-            break;
-        case TURN_AFTER_TAPE:
-            break;
-        case DRIVE_TO_CARGO_SHIP:
-            break;
-        case SCORE:
-            break;
+
+        case TURN_PARALLEL_TO_ROCKET:
+            if (autoPosition == Position.LEFT)
+                {
+                if (Hardware.drive.turnDegrees(-TURN_FOR_CAMERA_DEGREES,
+                        TURN_SPEED,
+                        ACCELERATION_TIME, USING_GYRO) == true)
+                    {
+                    sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                    break;
+                    }
+                }
+            else
+                if (autoPosition == Position.RIGHT)
+                    {
+                    if (Hardware.drive.turnDegrees(
+                            TURN_FOR_CAMERA_DEGREES,
+                            TURN_SPEED,
+                            ACCELERATION_TIME, USING_GYRO) == true)
+                        {
+                        sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                        break;
+                        }
+                    }
+
+
         default:
         case FINISHED:
 
@@ -1437,7 +1473,7 @@ private static boolean jankyDepositCargoHatch ()
 public static void endAutoPath ()
 {
     Hardware.driveWithCamera.state = DriveWithCamera.DriveWithCameraState.INIT;
-    sideCargoHatchState = SideCargoHatchState.FINISHED;
+    sideCargoBallState = SideCargoBallState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
     descentState = DescentState.FINISH;
@@ -1492,6 +1528,8 @@ public static final double TURN_BY_GYRO_SPEED = .5;
 public static final int TURN_RIGHT90 = 90;
 
 public static final int TURN_LEFT90 = -90;
+
+public static final int TURN_180 = 180;
 
 // whether or not, by default, we are using the gyro for driveStraight
 // in our autonomous code
@@ -1561,6 +1599,9 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
+public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 0.0;
+
+
 // descent Stuff
 
 public static final double TIME_TO_DELAY_AFTER_DRIVE_FAST = 1;
@@ -1577,7 +1618,6 @@ public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .4;
 
 // reverse descent Stuff
 
-public static int TURN_180 = 180;
 
 public static final double TIME_TO_DRIVE_OFF_PLATFORM_BACKWARDS = .5;
 
