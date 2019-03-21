@@ -230,10 +230,14 @@ public static void periodic ()
     // }
 
 
-    // // Forklift
+    // Forklift
+
+    // Function for joystick control of forklift
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
 
+
+    // Button for Cargo Ship Cargo Preset Height
     Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
             Hardware.cargoShipCargoButton);
@@ -242,24 +246,28 @@ public static void periodic ()
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
     // Hardware.cargoShipHatchButton);
 
+
+    // Button for Player Station Preset Height
     Hardware.lift.setLiftPositionByButton(
             Forklift.PLAYER_STATION_HEIGHT,
             Forklift.PLAYER_STATION_ANGLE,
             Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.cargoShipHatchButton);
+            Hardware.playerStationButton);
 
-    Hardware.lift.setToNextHigherPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.nextHigherLiftHeightButton,
-            Hardware.chooseCargoRocketHeights.get());
 
-    Hardware.lift.setToNextLowerPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.nextLowerLiftHeightButton,
-            Hardware.chooseCargoRocketHeights.get());
+    // Hardware.lift.setToNextHigherPreset(
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.nextHigherLiftHeightButton,
+    // Hardware.chooseCargoRocketHeights.get());
+
+    // Hardware.lift.setToNextLowerPreset(
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.nextLowerLiftHeightButton,
+    // Hardware.chooseCargoRocketHeights.get());
 
     // Game Piece Manipulator
 
+    // Function for joystick control of manipulator
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
@@ -284,7 +292,7 @@ public static void periodic ()
     // // =================================================================
     Hardware.lift.update();
 
-    Hardware.manipulator.masterUpdate();
+    // Hardware.manipulator.masterUpdate();
 
     // Hardware.climber.climbUpdate();
 
@@ -551,6 +559,7 @@ private static void coleTest ()
     // check holding voltages/ deadbands/ not slamming head into forklift
     // scale up move down forklift speed?
     // precise positions
+    // preset heights
     // teleop buttons
     // next higher / next lower
     // deploy / retract, and make sure they are using move precise
@@ -569,11 +578,11 @@ private static void coleTest ()
     // || coleBool2 == false)
     // coleBool2 = Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
 
-    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
-    // Hardware.lift.setLiftPositionPrecise(30.0, 1.0));
+    if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+        Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
 
-    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
-    // Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+    if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+        Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
 
 
     // Test 2 - move Arm Precise

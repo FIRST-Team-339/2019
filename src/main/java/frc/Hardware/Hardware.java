@@ -70,7 +70,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 
 // -------------------------------------
 // Private Constants
@@ -330,7 +330,7 @@ public static JoystickButton deployOverride = null;
 
 public static QuickSwitch cargoShipCargoButton = null;
 
-public static QuickSwitch cargoShipHatchButton = null;
+public static QuickSwitch playerStationButton = null;
 
 public static JoystickButton visionHeightDownButton = null;
 
@@ -657,7 +657,7 @@ public static void commonInitialization ()
 
     cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
 
-    cargoShipHatchButton = new QuickSwitch(leftOperator, 7);
+    playerStationButton = new QuickSwitch(leftOperator, 7);
 
     visionHeightUpButton = new JoystickButton(leftOperator, 9);//
 
