@@ -426,10 +426,7 @@ public boolean depositTeleopStateMachine ()
             // else
 
             // TODO uncomment
-            if (/*
-                 * Hardware.driveWithCamera
-                 * .driveToTargetClose(.1)
-                 */true)
+            if (Hardware.driveWithCamera.driveToTargetClose(.1))
                 {
                 Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
 
@@ -613,7 +610,7 @@ public boolean overrideVision ()
 
 public void printDebugStatements ()
 {
-
+    Hardware.axisCamera.processImage();
     SmartDashboard.putString("deposit teleop",
             this.depositTeleopState.toString());
 
@@ -627,6 +624,15 @@ public void printDebugStatements ()
 
     SmartDashboard.putBoolean("has cargo",
             hasCargo);
+
+    SmartDashboard.putNumber("front ultrasonic",
+            Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+    if (Hardware.axisCamera.getParticleReports().length > 0)
+        {
+        SmartDashboard.putNumber("largest blob area",
+                Hardware.axisCamera.getNthSizeBlob(0).area);
+        }
+
 
 
 
@@ -644,9 +650,11 @@ public double manipulatorAngle = 0;
 
 // constants for prep
 
-private final double SAFE_FORKLIFT_HEIGHT = 8;// TODO
+private final double SAFE_FORKLIFT_HEIGHT = Hardware.lift.LOWER_ROCKET_HATCH
+        + 3;// TODO
 
-private final double SAFE_MAN_ANGLE = 20;// TODO
+private final double SAFE_MAN_ANGLE = Hardware.lift.LOWER_ROCKET_HATCH_ANGLE
+        + 5;// TODO
 
 // Hatch constants======================
 

@@ -61,8 +61,8 @@ public static void init ()
 {
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
-    // Hardware.axisCamera.setRelayValue(Value.kOn);
-    // Hardware.axisCamera.processImage();
+    Hardware.axisCamera.setRelayValue(Value.kOn);
+    Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
     switch (Hardware.whichRobot)
         {
@@ -296,7 +296,8 @@ public static void periodic ()
     // debug+++++++=============================
     Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
-    System.out.println("delay potentiameter" + Hardware.delayPot.get());
+    Hardware.lift.printDebugInfo();
+    // System.out.println("delay potentiameter" + Hardware.delayPot.get());
     // debug =====================================================
 
     // vision=====================================
