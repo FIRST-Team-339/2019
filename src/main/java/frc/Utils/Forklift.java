@@ -980,7 +980,7 @@ private static final double MAX_HEIGHT = 56;
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double LIMIT_ARM_ANGLE_HEIGHT = .4;
+private double LIMIT_ARM_ANGLE_HEIGHT = .2;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 
