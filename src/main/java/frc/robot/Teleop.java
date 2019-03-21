@@ -426,8 +426,20 @@ public static void periodic ()
             }
         }
 
-
-    // printStatements();
+    if (Hardware.frontUltraSonic
+            .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+            &&
+            Hardware.frontUltraSonic
+                    .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                            + 12.0)
+        {
+        ringLightFlash(true, .5);
+        }
+    else
+        {
+        ringLightFlash(false, .5);
+        }
+    printStatements();
 
 
 } // end Periodic()
@@ -1088,8 +1100,8 @@ public static void printStatements ()
         // Sonar/UltraSonic
         // ---------------------------------
 
-        System.out.println("ultrasonic " + Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper());
+        // System.out.println("ultrasonic " + Hardware.frontUltraSonic
+        // .getDistanceFromNearestBumper());
         // SmartDashboard.putNumber("F ultrasonic: ",
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
