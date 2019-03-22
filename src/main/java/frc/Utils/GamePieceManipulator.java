@@ -1041,7 +1041,7 @@ public void printDeployDebugInfo ()
     // deployTargetSpeed);
     // SmartDashboard.putString("stayAtPositionInitIsReady",
     // "" + this.stayAtPositionInitIsReady);
-    // SmartDashboard.putString("Has Cargo:", "" + this.hasCargo());
+    SmartDashboard.putString("Has Cargo:", "" + this.hasCargo());
     // SmartDashboard.putNumber("currentDeployMaxAngle",
     // currentDeployMaxAngle);
     // SmartDashboard.putNumber("currentDeployMinAngle",
@@ -1130,7 +1130,14 @@ public boolean spinOutCargoByTimer ()
     return this.intake.spinOutCargoByTimer();
 }
 
-
+/**
+ * Allows the operator to press a button to manually
+ * toggle the manipulator solenoid
+ *
+ * @param button
+ *                   - QuickSwitch that toggles the solenoid
+ *                   when pressed
+ */
 public void toggleSolenoid (QuickSwitch button)
 {
     this.intake.toggleSolenoid(button);
@@ -1196,9 +1203,9 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 286;
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 235;
 
-// vertical angle: 154
+// vertical angle: 106
 
 private static final double ACCEPTABLE_ERROR = 0.0;
 
@@ -1206,7 +1213,7 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static double ARM_POT_SCALE_TO_DEGREES = -.681818; // placeholder
+private static double ARM_POT_SCALE_TO_DEGREES = -.69767; // 90/129
 
 // // value that is multiplied by the number of ticks to convert it to degrees
 // private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //
