@@ -377,10 +377,11 @@ public boolean driveToTargetClose (double speed)
 
 
             if (visionProcessor.getNthSizeBlob(0).area >= MIN_BLOB_AREA
-                    && (Hardware.leftFrontDriveEncoder
-                            .getDistance() > MIN_INCHES_CLOSE
-                            || Hardware.rightFrontDriveEncoder
-                                    .getDistance() > MIN_INCHES_CLOSE))
+            // && (Hardware.leftFrontDriveEncoder
+            // .getDistance() > MIN_INCHES_CLOSE
+            // || Hardware.rightFrontDriveEncoder
+            // .getDistance() > MIN_INCHES_CLOSE)
+            )
                 {
                 state = DriveWithCameraState.STOP;
                 }
