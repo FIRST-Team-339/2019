@@ -299,7 +299,8 @@ public boolean depositTeleopStateMachine ()
             break;
 
         case PREP_FORKLIFT:
-
+            // moves the forklift to the correct height based off of the
+            // button
             // if (hasCargo == false)
             // {
             switch (depositHeighthatch)
@@ -363,7 +364,8 @@ public boolean depositTeleopStateMachine ()
             break;
 
         case PREP_MANIPULATOR:
-
+            // moves the manipulator to the correct height based off of the
+            // button
             // if (hasCargo == false)
             // {
             switch (depositHeighthatch)
@@ -426,6 +428,7 @@ public boolean depositTeleopStateMachine ()
             // else
 
             // TODO uncomment
+            // calls vision which the sets up the forklift and manipulator
             if (Hardware.driveWithCamera.driveToTargetClose(.1))
                 {
                 Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
@@ -443,6 +446,7 @@ public boolean depositTeleopStateMachine ()
 
             // once the drivers get in this state they can start raising the
             // forklift and other stuff
+            // this is currently no being used
 
             if (Hardware.drive.driveStraightInches(4, .1, .5,
                     usingGyro))
@@ -450,17 +454,9 @@ public boolean depositTeleopStateMachine ()
 
                 }
 
-
-            // if (Hardware.nextHigherLiftHeightButton
-            // .getCurrentValue() == true
-            // || Hardware.nextLowerLiftHeightButton
-            // .getCurrentValue() == true)
-            // {
-            // depositTeleopState = DepositTeleopState.FINISH;
-            // }
             break;
         case DEPOSIT:
-
+            // passes in false due to not using auto
             if (this.depositHatch(false))
                 {
 
@@ -471,6 +467,7 @@ public boolean depositTeleopStateMachine ()
             break;
         default:
         case FINISH:
+            // resets most thing that this class calls
             this.resetDepositTeleop();
             Hardware.drive.resetEncoders();
             return true;
@@ -496,7 +493,7 @@ boolean hasStartedDeposit = false;
 public boolean startTeleopDeposit (int heightLevel,
         boolean hasCargo)
 {
-
+    // we currently pass in false as we do not plan to use this to deposit cargo
     if (hasCargo == false)
         {
         depositHeighthatch = heightLevel;
@@ -509,10 +506,12 @@ public boolean startTeleopDeposit (int heightLevel,
         {
         // System.out
         // .println("Stop. It's Conner Time");
+
+        // calls the state machine to start
         hasStartedDeposit = true;
         depositTeleopState = DepositTeleopState.INIT;
         }
-
+    // stop the state machine
     if (depositTeleopState == DepositTeleopState.FINISH)
         {
         hasStartedDeposit = false;
@@ -537,7 +536,14 @@ public void resetDepositTeleop ()
 
 }
 
-
+/**
+ * Calls Hardware.maipulator.moveArmToPosition to allow for easier update as the
+ * manipulator code changes and improves
+ *
+ * @param angle
+ *                  the angle that the arm should go to
+ * @return if the arm has been moved
+ */
 private boolean moveManipulator (double angle)
 {
     if (Hardware.manipulator.moveArmToPosition(angle))
@@ -547,6 +553,14 @@ private boolean moveManipulator (double angle)
     return false;
 }
 
+/**
+ * Calls Hardware.lift.setLiftPosition to allow for easier update as the
+ * forklift code changes and improves
+ *
+ * @param height
+ *                   the height that the forklift should go to
+ * @return if the forklift has been moved
+ */
 private boolean moveForklift (double height)
 {
     if (Hardware.lift.setLiftPosition(height))
@@ -563,6 +577,7 @@ public static boolean hasDoneThePrep = false;
  * only
  * work with the hatch panel
  */
+
 public void prepToDepositHatch ()
 {
     if (hasDoneThePrep == false)
@@ -588,6 +603,8 @@ public void prepToDepositHatch ()
 public boolean overrideVision ()
 
 {
+
+    // Take input to mosdt controller and if detected stops the state machine
     if (Hardware.leftOperator.getY() > JOYSTICK_DEADBAND
             || Hardware.leftOperator.getY() < -JOYSTICK_DEADBAND
             || Hardware.rightOperator.getY() > JOYSTICK_DEADBAND
