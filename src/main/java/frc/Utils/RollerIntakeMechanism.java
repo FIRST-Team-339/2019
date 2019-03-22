@@ -115,17 +115,32 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
 {
     if (intakeButtonValue == true)
         {
-        if (this.hasCargo() == false
-                || intakeOverrideButtonValue == true)
-            {
-            this.armSolenoid.setForward(true);
+        // if we are holding the override button, assume
+        // that we do not want the automated solenoid code
+        // and only set the intake state
+        if (intakeOverrideButtonValue == true)
             intakeState = IntakeState.INTAKE;
-            }
         else
-            this.armSolenoid.setForward(false);
+            // if we do not have cargo, assume solenoid
+            // needs to be open because we are still
+            // trying to pick up a ball
+            if (this.hasCargo() == false)
+                {
+                this.armSolenoid.setForward(true);
+                intakeState = IntakeState.INTAKE;
+                }
+            // If we have cargo, assume we need to close
+            // the solenoid/ piston to keep the ball in.
+            // Also assumes we do not need to keep intaking
+            // since we already have the ball
+            else
+                this.armSolenoid.setForward(false);
 
         }
     else
+        // Outtake does not need to manipulate the solenoid
+        // because if we open the solenoid while outtaking,
+        // we risk dropping the ball
         if (outtakeButtonValue == true)
             {
             intakeState = IntakeState.OUTTAKE;
