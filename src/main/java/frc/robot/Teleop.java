@@ -255,15 +255,15 @@ public static void periodic ()
             Hardware.playerStationButton);
 
 
-    // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-    // Hardware.nextHigherLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
+    Hardware.lift.setToNextHigherPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+            Hardware.nextHigherLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
 
-    // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-    // Hardware.nextLowerLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
+    Hardware.lift.setToNextLowerPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+            Hardware.nextLowerLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
 
     // Game Piece Manipulator
 
@@ -292,7 +292,7 @@ public static void periodic ()
     // // =================================================================
     Hardware.lift.update();
 
-    // Hardware.manipulator.masterUpdate();
+    Hardware.manipulator.masterUpdate();
 
     // Hardware.climber.climbUpdate();
 
@@ -301,10 +301,10 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
-    // debug+++++++=============================
-    Hardware.depositGamePiece.printDebugStatements();// TODO comment out
-    Hardware.manipulator.printDeployDebugInfo();
-    Hardware.lift.printDebugInfo();
+    // debug =============================
+    // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
+    // Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
     // System.out.println("delay potentiameter" + Hardware.delayPot.get());
     // debug =====================================================
 
@@ -585,17 +585,17 @@ private static void coleTest ()
 
     // if (Hardware.rightOperator.getRawButton(6) == true
     // || coleBool1 == false)
-    // coleBool1 = Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
+    // coleBool1 = Hardware.lift.setLiftPositionPrecise(45.0, 1.0);
 
     // if (Hardware.rightOperator.getRawButton(7) == true
     // || coleBool2 == false)
-    // coleBool2 = Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+    // coleBool2 = Hardware.lift.setLiftPositionPrecise(10.0, 1.0);
 
-    if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
-        Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
 
-    if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
-        Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
 
 
     // Test 2 - move Arm Precise
