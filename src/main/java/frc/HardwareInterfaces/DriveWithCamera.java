@@ -375,7 +375,12 @@ public boolean driveToTargetClose (double speed)
             break;
         case DRIVE_WITH_CAMERA:
 
-            if (visionProcessor.getNthSizeBlob(0).area >= MAX_BLOB_AREA)
+
+            if (visionProcessor.getNthSizeBlob(0).area >= MIN_BLOB_AREA
+                    && (Hardware.leftFrontDriveEncoder
+                            .getDistance() > MIN_INCHES_CLOSE
+                            || Hardware.rightFrontDriveEncoder
+                                    .getDistance() > MIN_INCHES_CLOSE))
                 {
                 state = DriveWithCameraState.STOP;
                 }
@@ -718,7 +723,7 @@ private final double DRIVE_CORRECTION = .15;
 private final double DRIVE_CORRECTION_CLOSE = .08;
 
 
-private static double MAX_BLOB_AREA = 30;// TODO
+private static double MIN_BLOB_AREA = 600;// TODO
 
 private final double MIN_INCHES = 50;
 
