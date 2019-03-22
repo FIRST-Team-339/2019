@@ -47,10 +47,8 @@ public void retrievalUpdate ()
                 {
                 forkliftHeightReached = true;
                 }
-            if (forkliftHeightReached == true /*
-                                               * && Hardware.manipulator
-                                               * .moveArmToPosition(0) == true
-                                               */)
+            if (forkliftHeightReached == true && Hardware.manipulator
+                    .moveArmToPosition(0) == true)
                 {
                 delayInit();
                 forkliftHeightReached = false;
@@ -191,9 +189,9 @@ public static double LIFT_HEIGHT_TO_PULL_BACK_HATCH = LIFT_HEIGHT_TO_RETRIEVE_HA
               // move up the lift to actually have the hatch resting on the hook
 
 // SPEEDS
-public static double SPEED_TO_BACKUP_SLOWLY = -0.35;
+public static double SPEED_TO_BACKUP_SLOWLY = -0.25;
 
-public static double SPEED_TO_DRIVE_FORWARD = 0.25;
+public static double SPEED_TO_DRIVE_FORWARD = 0.15;
 
 // BOOLEANS
 

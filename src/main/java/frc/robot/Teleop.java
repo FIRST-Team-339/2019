@@ -255,15 +255,15 @@ public static void periodic ()
             Hardware.playerStationButton);
 
 
-    // Hardware.lift.setToNextHigherPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-    // Hardware.nextHigherLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
+    Hardware.lift.setToNextHigherPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+            Hardware.nextHigherLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
 
-    // Hardware.lift.setToNextLowerPreset(
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-    // Hardware.nextLowerLiftHeightButton,
-    // Hardware.chooseCargoRocketHeights.get());
+    Hardware.lift.setToNextLowerPreset(
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+            Hardware.nextLowerLiftHeightButton,
+            Hardware.chooseCargoRocketHeights.get());
 
     // Game Piece Manipulator
 
@@ -292,7 +292,7 @@ public static void periodic ()
     // // =================================================================
     Hardware.lift.update();
 
-    // Hardware.manipulator.masterUpdate();
+    Hardware.manipulator.masterUpdate();
 
     // Hardware.climber.climbUpdate();
 
@@ -301,10 +301,10 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
-    // debug+++++++=============================
-    Hardware.depositGamePiece.printDebugStatements();// TODO comment out
-    Hardware.manipulator.printDeployDebugInfo();
-    Hardware.lift.printDebugInfo();
+    // debug =============================
+    // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
+    // Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
     // System.out.println("delay potentiameter" + Hardware.delayPot.get());
     // debug =====================================================
 
@@ -585,17 +585,17 @@ private static void coleTest ()
 
     // if (Hardware.rightOperator.getRawButton(6) == true
     // || coleBool1 == false)
-    // coleBool1 = Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
+    // coleBool1 = Hardware.lift.setLiftPositionPrecise(45.0, 1.0);
 
     // if (Hardware.rightOperator.getRawButton(7) == true
     // || coleBool2 == false)
-    // coleBool2 = Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+    // coleBool2 = Hardware.lift.setLiftPositionPrecise(10.0, 1.0);
 
-    if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
-        Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
+    // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(30.0, 1.0);
 
-    if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
-        Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
+    // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
+    // Hardware.lift.setLiftPositionPrecise(5.0, 1.0);
 
 
     // Test 2 - move Arm Precise
@@ -732,61 +732,7 @@ private static void meghanTest ()
 
 private static void dionTest ()
 {
-    if (Hardware.leftDriver.getRawButton(4) == true)
-        {
-        ringLightFlash(true, .5);
-        }
-    else
-        {
-        ringLightFlash(false, .5);
-        }
-    if (Hardware.frontUltraSonic
-            .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-            &&
-            Hardware.frontUltraSonic
-                    .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                            + 12.0)
-        {
-        ringLightFlash(true, .5);
-        }
-    else
-        {
-        ringLightFlash(false, .5);
-        }
-    // if (ringLightFlashing == true)
-    // {
-    // if (initialStart == true)
-    // {
-    // Hardware.ringLightTimer.reset();
-    // Hardware.ringLightTimer.start();
-    // Hardware.ringLightRelay.set(Value.kOff);
-    // System.out.println("Light off 1");
-    // initialStart = false;
-    // }
-    // if (Hardware.ringLightTimer.get() >= ringLightDelay)
-    // {
-    // System.out.println("Light on");
-    // Hardware.ringLightRelay.set(Value.kOn);
-    // }
-    // if (Hardware.ringLightTimer.get() >= 2 * ringLightDelay)
-    // {
-    // Hardware.ringLightRelay.set(Value.kOff);
-    // Hardware.ringLightTimer.stop();
-    // Hardware.ringLightTimer.reset();
-    // System.out.println("Light off 2");
-    // initialStart = true;
-    // }
 
-    // }
-
-
-
-
-    // else
-    // {
-    // System.out.println("Cancelled");
-    // Hardware.ringLightRelay.set(Value.kOn);
-    // }
 }
 
 // end dionTest()
@@ -1187,6 +1133,13 @@ public static void printStatements ()
         }
 } // end printStatements()
 
+/**
+ * When activated, this function turns on the ring light relay and takes a
+ * picture after 1 second of the ring light being on. Then it turns off the
+ * ring light relay
+ *
+ * @author Dion
+ */
 public static void takePicture ()
 {
     // Takes a picture if buttons 8 and 9 are pressed on the right operator at
@@ -1231,7 +1184,18 @@ public static void takePicture ()
 
 }
 
-
+/**
+ * When called, this function flashes the ring light on a set interval.
+ *
+ * @param ringLightFlashOn
+ *                                - set to true to turn the ring light
+ *                                flashing on
+ * @param ringLightFlashDelay
+ *                                - sets the interval that that the ring
+ *                                light flashes on a off in seconds
+ *
+ * @author Dion
+ */
 public static void ringLightFlash (boolean ringLightFlashOn,
         double ringLightFlashDelay)
 {

@@ -798,13 +798,13 @@ private void movingToPositionPreciseState ()
 
 private double UPWARD_EARLIER_STOP_ADJUSTMENT = 1.0;
 
-private double UPWARD_SLOWED_SPEED = 0.5;
+private double UPWARD_SLOWED_SPEED = 0.4;
 
-private double UPWARD_DECELLERATION_START_ADJUSTMENT = 4.0;
+private double UPWARD_DECELLERATION_START_ADJUSTMENT = 5.5;
 
-private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 0.4;
+private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 0.5;
 
-private double DOWNWARD_SLOWED_SPEED = .2;
+private double DOWNWARD_SLOWED_SPEED = .1;
 
 private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 3.0;
 
@@ -912,7 +912,7 @@ private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.75;
 // the speed is multipled by a negative value
 private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.25;
 
-private double UP_JOYSTICK_SCALAR = 0.75;
+private double UP_JOYSTICK_SCALAR = 1.0;
 
 private double DOWN_JOYSTICK_SCALAR = 0.25;
 
