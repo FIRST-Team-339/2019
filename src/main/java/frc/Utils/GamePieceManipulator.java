@@ -139,11 +139,14 @@ public boolean isDeployed ()
  */
 public boolean isArmClearOfFrame ()
 {
-    // TODO uncomment the below code instead when
-    // the manipulator is working on 2019
-    return this.getCurrentArmPosition() < IS_CLEAR_OF_FRAME_ANGLE;
+    return this.getCurrentArmPosition() < IS_FULLY_CLEAR_OF_FRAME_ANGLE;
 }
 
+public boolean isArmPartiallyClearOfFrame ()
+{
+    return this
+            .getCurrentArmPosition() < IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE;
+}
 
 
 
@@ -473,8 +476,8 @@ private boolean moveArmToPositionPreciseInit = true;
 
 public boolean defaultSetAngle (double angle)
 {
-    return this.moveArmToPosition(angle);
-    // return this.moveArmToPositionPrecise(angle);
+    // return this.moveArmToPosition(angle);
+    return this.moveArmToPositionPrecise(angle);
 }
 
 
@@ -739,6 +742,7 @@ private void movingToPositionPreciseState ()
 {
     double currentAngle = this.getCurrentArmPosition();
     double adjustedSpeed = this.deployTargetSpeed;
+    // positive if we are above target
     double distanceFromHeight = Math
             .abs(currentAngle - this.deployTargetAngle);
 
@@ -758,7 +762,8 @@ private void movingToPositionPreciseState ()
         {
         // If we have passed the value we want to stop at, adjusted
         // so the manipulator does not overshoot
-        if (distanceFromHeight < UPWARD_EARLIER_STOP_ADJUSTMENT)
+        if (distanceFromHeight < UPWARD_EARLIER_STOP_ADJUSTMENT
+                || deployTargetAngle < currentAngle)
             {
             deployMovementState = DeployMovementState.STAY_AT_POSITION;
             return;
@@ -783,7 +788,8 @@ private void movingToPositionPreciseState ()
         {
         // If we have passed the value we want to stop at, adjusted
         // so the manipulator does not overshoot
-        if (distanceFromHeight < DOWNWARD_EARLIER_STOP_ADJUSTMENT)
+        if (distanceFromHeight < DOWNWARD_EARLIER_STOP_ADJUSTMENT
+                || deployTargetAngle > currentAngle)
             {
             deployMovementState = DeployMovementState.STAY_AT_POSITION;
             return;
@@ -808,17 +814,19 @@ private void movingToPositionPreciseState ()
 
 }
 
-private double UPWARD_EARLIER_STOP_ADJUSTMENT = 1.0;
+private double UPWARD_EARLIER_STOP_ADJUSTMENT = 6.0;
 
 // private double UPWARD_SLOWED_PRECISE_SCALER = 0.5;
 
-private double UPWARD_DECELLERATION_START_ADJUSTMENT = 10.0;
+// probably does not need to be this high; can be scaled down to 30 or 20ish
+// which would make it faster
+private double UPWARD_DECELLERATION_START_ADJUSTMENT = 50.0;
 
-private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 1.0;
+private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 4.0;
 
 // private double DOWNWARD_SLOWED_PRECISE_SCALER = .2;
 
-private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 10.0;
+private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 50.0;
 
 // private final double UPWARD_SLOWED_SPEED_2018 = 0.7;
 
@@ -950,7 +958,7 @@ private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.1;
 private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE = .15; // .3
+private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE = .10; // .3
 
 private double GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .75
         * MAX_DEPLOY_SPEED_2019;
@@ -958,12 +966,12 @@ private double GO_UP_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = .75
 private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 1.0
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE = 0.3; // .6
+private double GO_UP_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE = 0.2; // .6
 
 private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED = -.7
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE = -.21; // -.42
+private double GO_DOWN_HOLD_ARM_NO_GRAVITY_SPEED_PRECISE = -.15; // -.42
 
 private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.6
         * MAX_DEPLOY_SPEED_2019;
@@ -971,7 +979,7 @@ private double GO_DOWN_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = -.6
 private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED = -.5
         * MAX_DEPLOY_SPEED_2019;
 
-private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE = -.15; // -.3
+private double GO_DOWN_GRAVITY_OUT_OF_FRAME_LOW_SPEED_PRECISE = -.10; // -.3
 
 private double SET_POSITION_SPEED_SCALE_FACTOR = 1.0;
 
@@ -1186,7 +1194,7 @@ private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 public int MAX_ARM_POSITION_ADJUSTED = 120;
 
-private static int MIN_ARM_POSITION_ADJUSTED = 5;
+private static int MIN_ARM_POSITION_ADJUSTED = 0;
 
 private static int DEPLOYED_ARM_POSITION_ADJUSTED = 15;
 
@@ -1194,16 +1202,20 @@ private static int RETRACTED_ARM_POSITION_ADJUSTED = 90;
 
 private double ARM_LEANING_BACK_ANGLE = 90;
 
-private double IS_CLEAR_OF_FRAME_ANGLE = 75;
+private double IS_FULLY_CLEAR_OF_FRAME_ANGLE = 65;
+
+private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 95;
 
 // the maximum angle for the deploy so
-public double MAX_FORKLIFT_UP_ANGLE = 65;
+public double MAX_FORKLIFT_UP_ANGLE = 60;
+
+public double FORKLIFT_PARTIALLY_UP_MAX_ANGLE = 90;
 
 private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 235;
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 218;
 
 // vertical angle: 106
 
@@ -1213,7 +1225,7 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static double ARM_POT_SCALE_TO_DEGREES = -.69767; // 90/129
+private static double ARM_POT_SCALE_TO_DEGREES = -.743802; // 90/121
 
 // // value that is multiplied by the number of ticks to convert it to degrees
 // private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //

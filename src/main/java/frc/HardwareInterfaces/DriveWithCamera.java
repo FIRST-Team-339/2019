@@ -172,7 +172,7 @@ public DriveWithCamera (TransmissionBase transmission,
  * @return true if the robot has driven all the way to the front of the target,
  *         and false if it hasn't
  */
-public boolean driveToTarget (double speed)
+public boolean driveToTarget (double speed, boolean cargoAuto)
 {
     // System.out.println("vision state: " + state);
     switch (state)
@@ -193,6 +193,7 @@ public boolean driveToTarget (double speed)
 
             break;
         case DRIVE_WITH_CAMERA:
+            Hardware.axisCamera.processImage();// TODO
             correctionValue = DRIVE_CORRECTION;
 
             // visionProcessor.saveImage(ImageType.RAW);
@@ -217,12 +218,23 @@ public boolean driveToTarget (double speed)
              */
 
             // if we get close enought to the target and have to stop
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
-                    && Hardware.rightFrontDriveEncoder
-                            .getDistance() >= MIN_INCHES)
+            if (!cargoAuto)
                 {
-                state = DriveWithCameraState.STOP;
+                if (this.frontUltrasonic
+                        .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP
+                        && Hardware.rightFrontDriveEncoder
+                                .getDistance() >= MIN_INCHES)
+                    {
+                    state = DriveWithCameraState.STOP;
+                    }
+                }
+            else
+                {
+                if (this.frontUltrasonic
+                        .getDistanceFromNearestBumper() <= DISTANCE_FROM_WALL_TO_STOP_CARGO)
+                    {
+                    state = DriveWithCameraState.STOP;
+                    }
                 }
 
             if (this.frontUltrasonic
@@ -280,7 +292,7 @@ public boolean driveToTarget (double speed)
                 // the switch's center is too far right, drive faster on the
                 // left
 
-                System.out.println("WE ARE TOO LEFT");
+                // System.out.println("WE ARE TOO LEFT");
                 this.getTransmission().driveRaw(
                         motorspeed + correctionValue,
                         slowestSpeed);
@@ -363,7 +375,7 @@ public boolean driveToTargetClose (double speed)
     // adjustment value each time we change directions. This ways we can retrun
     // true when we align and not rely on the ultrasonic. Also need to make it
     // override by a button.
-    System.out.println("vision state: " + state);
+    // System.out.println("vision state: " + state);
     switch (state)
         {
         case INIT:
@@ -374,16 +386,14 @@ public boolean driveToTargetClose (double speed)
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
-
-
-            if (visionProcessor.getNthSizeBlob(0).area >= MIN_BLOB_AREA
-            // && (Hardware.leftFrontDriveEncoder
-            // .getDistance() > MIN_INCHES_CLOSE
-            // || Hardware.rightFrontDriveEncoder
-            // .getDistance() > MIN_INCHES_CLOSE)
-            )
+            Hardware.axisCamera.processImage();// TODO
+            if (Hardware.axisCamera.hasBlobs() == true)
                 {
-                state = DriveWithCameraState.STOP;
+                if (Hardware.axisCamera
+                        .getNthSizeBlob(0).area >= MIN_BLOB_AREA)
+                    {
+                    state = DriveWithCameraState.STOP;
+                    }
                 }
             correctionValue = DRIVE_CORRECTION;
 
@@ -706,6 +716,9 @@ private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
 private final double DISTANCE_FROM_WALL_TO_STOP = 15;
+
+// length of nessie head + drive forward distance
+private final double DISTANCE_FROM_WALL_TO_STOP_CARGO = 29;
 
 private final double DISTANCE_FROM_WALL_TO_SLOW1 = 100;
 

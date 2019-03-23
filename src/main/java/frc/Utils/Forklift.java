@@ -248,10 +248,12 @@ public void setLiftPositionByButton (double position, double angle,
         setLiftPositionInit = true;
 
         // forklift is going up
-        if (position > this.getForkliftHeight())
-            position -= NEXT_HIGHER_HEIGHT_ADJUSTMENT;
-        else
-            position += NEXT_LOWER_HEIGHT_ADJUSTMENT;
+        // Commented out because we do not need adjustment
+        // since move forklift precise is working
+        // if (position > this.getForkliftHeight())
+        // position -= NEXT_HIGHER_HEIGHT_ADJUSTMENT;
+        // else
+        // position += NEXT_LOWER_HEIGHT_ADJUSTMENT;
 
         this.defaultSetPosition(position, forkliftSpeed);
         this.manipulator.defaultSetAngle(angle);
@@ -384,8 +386,8 @@ private boolean setPositionPreciseInit = true;
 public boolean defaultSetPosition (double position,
         double forkliftSpeed)
 {
-    return this.setLiftPosition(position, forkliftSpeed);
-    // return this.setLiftPositionPrecise(position, forkliftSpeed);
+    // return this.setLiftPosition(position, forkliftSpeed);
+    return this.setLiftPositionPrecise(position, forkliftSpeed);
 }
 
 
@@ -496,9 +498,9 @@ private final double SET_ANGLE_DEADBAND = 3.0;
 
 // # of feet that the forklift can be off of the next highest position to
 // count as already being there
-private final double NEXT_HIGHER_POSITION_DEADBAND = 1;
+private final double NEXT_HIGHER_POSITION_DEADBAND = 0.0; // 1; // 0
 
-private final double NEXT_HIGHER_HEIGHT_ADJUSTMENT = 1.3;
+private final double NEXT_HIGHER_HEIGHT_ADJUSTMENT = 0.0; // 1.3; // 0
 
 /**
  * Sets the forklift to the next lower Cargo or Hatch height on the
@@ -604,9 +606,9 @@ public void setToNextLowerPreset (double forkliftSpeed,
 
 // # of feet that the forklift can be off of the next lowest position to
 // count as already being there
-private final double NEXT_LOWER_POSITION_DEADBAND = 1;
+private final double NEXT_LOWER_POSITION_DEADBAND = 0.0; // 1;
 
-private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 10;
+// private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 10;
 
 private final double NEXT_LOWER_HEIGHT_ADJUSTMENT = 0.0;
 
@@ -629,15 +631,23 @@ public void update ()
         if (manipulator.isArmClearOfFrame() == false)
             this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
         else
-            this.currentLiftMaxHeight = MAX_HEIGHT;
+            if (manipulator.isArmPartiallyClearOfFrame() == false)
+                this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
+            else
+                this.currentLiftMaxHeight = MAX_HEIGHT;
 
         if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
             this.manipulator
                     .setMaxArmAngle(
                             manipulator.MAX_ARM_POSITION_ADJUSTED);
         else
-            this.manipulator
-                    .setMaxArmAngle(manipulator.MAX_FORKLIFT_UP_ANGLE);
+            if (this.getForkliftHeight() < PARTALLY_LIMIT_ARM_ANGLE_HEIGHT)
+                this.manipulator.setMaxArmAngle(
+                        manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
+            else
+                this.manipulator
+                        .setMaxArmAngle(
+                                manipulator.MAX_FORKLIFT_UP_ANGLE);
         }
 
     if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
@@ -760,7 +770,8 @@ private void movingToPositionPreciseState ()
         {
         // If we have passed the value we want to stop at, adjusted
         // so the lift does not overshoot
-        if (distanceFromHeight < UPWARD_EARLIER_STOP_ADJUSTMENT)
+        if (distanceFromHeight < UPWARD_EARLIER_STOP_ADJUSTMENT
+                || currentHeight > forkliftTargetHeight)
             {
             liftState = ForkliftState.STAY_AT_POSITION;
             return;
@@ -779,7 +790,8 @@ private void movingToPositionPreciseState ()
         {
         // If we have passed the value we want to stop at, adjusted
         // so the lift does not overshoot
-        if (distanceFromHeight < DOWNWARD_EARLIER_STOP_ADJUSTMENT)
+        if (distanceFromHeight < DOWNWARD_EARLIER_STOP_ADJUSTMENT
+                || currentHeight < forkliftTargetHeight)
             {
             liftState = ForkliftState.STAY_AT_POSITION;
             return;
@@ -802,7 +814,7 @@ private double UPWARD_SLOWED_SPEED = 0.4;
 
 private double UPWARD_DECELLERATION_START_ADJUSTMENT = 5.5;
 
-private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 0.5;
+private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 0.6; // DO NOT MAKE 0
 
 private double DOWNWARD_SLOWED_SPEED = .1;
 
@@ -906,15 +918,15 @@ private double currentLiftMinHeight = 0.0;
 
 private static final double JOYSTICK_DEADBAND = .2;
 
-private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 0.75;
+private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 1.0;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.25;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.4;
 
 private double UP_JOYSTICK_SCALAR = 1.0;
 
-private double DOWN_JOYSTICK_SCALAR = 0.25;
+private double DOWN_JOYSTICK_SCALAR = 0.4;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -967,9 +979,9 @@ public final static double CARGO_SHIP_CARGO = 30;
 
 public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 
-public final static double PLAYER_STATION_HEIGHT = 5;
+public final static double PLAYER_STATION_HEIGHT = 4;
 
-public final static double PLAYER_STATION_ANGLE = 15;
+public final static double PLAYER_STATION_ANGLE = 5;
 
 // private final static double CARGO_SHIP_CARGO_ANGLE = 45;
 
@@ -981,6 +993,8 @@ private static final double MAX_HEIGHT = 56;
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
 private double LIMIT_ARM_ANGLE_HEIGHT = .2;
+
+private double PARTALLY_LIMIT_ARM_ANGLE_HEIGHT = 30.0;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

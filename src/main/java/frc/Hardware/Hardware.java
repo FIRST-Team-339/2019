@@ -545,6 +545,7 @@ public static void commonInitialization ()
 
     leftBackIR = new LightSensor(8);
 
+
     rightBackIR = new LightSensor(9);
 
     // ====================================
@@ -1230,6 +1231,7 @@ public static void setHardwareSettings2019 ()
     Hardware.leftRearCANMotor.setInverted(false);
     Hardware.armMotor.setInverted(true);
 
+
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
@@ -1267,6 +1269,10 @@ public static void setHardwareSettings2019 ()
             .setMaxBrakeIterations(KILROY_XX_MAX_BRAKE_ITERATIONS);
 
     Hardware.drive.setBrakePower(.5, BrakeType.AFTER_DRIVE);
+
+    // Solenoid stuff
+
+    armIntakeSolenoid.setForward(false);
 } // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;

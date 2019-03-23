@@ -48,7 +48,8 @@ public void retrievalUpdate ()
                 forkliftHeightReached = true;
                 }
             if (forkliftHeightReached == true && Hardware.manipulator
-                    .moveArmToPosition(0) == true)
+                    .moveArmToPosition(
+                            Forklift.PLAYER_STATION_ANGLE) == true)
                 {
                 delayInit();
                 forkliftHeightReached = false;
@@ -148,7 +149,6 @@ public boolean alignWithVision (double speed)
             .getDistanceFromNearestBumper() <= DISTANCE_TO_STOP_ALIGN
             || Hardware.driveWithCamera.driveToTargetClose(.1))
         {
-
         Hardware.alignAndStopButton.setValue(false);
         Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
         return true;

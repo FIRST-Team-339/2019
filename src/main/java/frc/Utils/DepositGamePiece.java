@@ -146,7 +146,7 @@ public boolean depositHatch (boolean inAuto)
 
 public enum DepositCargoState
     {
-    INIT, RAISE_MANIPULATOR, DEPOSIT_CARGO, BACKUP_CARGO, STOP
+    INIT, RAISE_MANIPULATOR, RAISE_FORK, DRIVE_FORWARD_CARGO, DEPOSIT_CARGO, BACKUP_CARGO, STOP
     }
 
 public static DepositCargoState depositCargoState = DepositCargoState.INIT;
@@ -164,17 +164,27 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
  */
 public boolean depositCargo ()
 {
+//    System.out.println("cargo deposit state: " + depositCargoState);// TODO
     switch (depositCargoState)
         {
         case INIT:
             depositCargoState = DepositCargoState.RAISE_MANIPULATOR;
             break;
         case RAISE_MANIPULATOR:
-            // if (this.gamePieceManipulator
-            // .moveArmToPosition(CARGO_ARM_POSITION))
-            // {
-            depositCargoState = DepositCargoState.DEPOSIT_CARGO;
-            // }
+            if (moveManipulator(DEPOSIT_CARGO_SHIP_ANGLE))
+                depositCargoState = DepositCargoState.RAISE_FORK;
+
+            break;
+        case RAISE_FORK:
+            if (moveForklift(DEPOSIT_CARGO_SHIP_HEIGHT))
+                depositCargoState = DepositCargoState.DRIVE_FORWARD_CARGO;
+            break;
+        case DRIVE_FORWARD_CARGO:
+            if (Hardware.drive.driveStraightInches(4, BACKUP_SPEED,
+                    BACKUP_ACCELERATION, usingGyro))
+                {
+                depositCargoState = DepositCargoState.DEPOSIT_CARGO;
+                }
             break;
         case DEPOSIT_CARGO:
             if (this.gamePieceManipulator.spinOutCargoByTimer())
@@ -183,7 +193,7 @@ public boolean depositCargo ()
                 }
             break;
         case BACKUP_CARGO:
-            if (this.drive.driveStraightInches(BACKUP_INCHES,
+            if (this.drive.driveStraightInches(5,
                     -BACKUP_SPEED, BACKUP_ACCELERATION,
                     usingGyro))
                 {
@@ -266,6 +276,7 @@ public boolean depositTeleopStateMachine ()
             // }
             // else
             // {
+            // Hardware.axisCamera.processImage();
             depositTeleopState = DepositTeleopState.PREP_FOR_ALIGN_MANIP;
             // }
             break;
@@ -546,7 +557,7 @@ public void resetDepositTeleop ()
  */
 private boolean moveManipulator (double angle)
 {
-    if (Hardware.manipulator.moveArmToPosition(angle))
+    if (Hardware.manipulator.defaultSetAngle(angle))
         {
         return true;
         }
@@ -563,7 +574,7 @@ private boolean moveManipulator (double angle)
  */
 private boolean moveForklift (double height)
 {
-    if (Hardware.lift.setLiftPosition(height))
+    if (Hardware.lift.defaultSetPosition(height, 1))
         {
         return true;
         }
@@ -644,11 +655,11 @@ public void printDebugStatements ()
 
     SmartDashboard.putNumber("front ultrasonic",
             Hardware.frontUltraSonic.getDistanceFromNearestBumper());
-    if (Hardware.axisCamera.getParticleReports().length > 0)
-        {
-        SmartDashboard.putNumber("largest blob area",
-                Hardware.axisCamera.getNthSizeBlob(0).area);
-        }
+    // if (Hardware.axisCamera.getParticleReports().length > 0)
+    // {
+    // SmartDashboard.putNumber("largest blob area",
+    // Hardware.axisCamera.getNthSizeBlob(0).area);
+    // }
 
 
 
@@ -667,19 +678,23 @@ public double manipulatorAngle = 0;
 
 // constants for prep
 
-private final double SAFE_FORKLIFT_HEIGHT = Hardware.lift.LOWER_ROCKET_HATCH
-        + 3;// TODO
+public final double SAFE_FORKLIFT_HEIGHT = Hardware.lift.LOWER_ROCKET_HATCH
+        + 4;// TODO
 
-private final double SAFE_MAN_ANGLE = Hardware.lift.LOWER_ROCKET_HATCH_ANGLE
+public final double SAFE_MAN_ANGLE = Hardware.lift.LOWER_ROCKET_HATCH_ANGLE
         + 5;// TODO
 
 // Hatch constants======================
 
 private static final int FORWARD_TO_DEPOSIT = 4;
 
-private static final double DEPOSIT_ARM_ANGLE_AUTO = 70;
+private static final double DEPOSIT_ARM_ANGLE_AUTO = 76;
 
 // otro constants===========================
+
+private static final double DEPOSIT_CARGO_SHIP_ANGLE = 59;// TODO
+
+private static final double DEPOSIT_CARGO_SHIP_HEIGHT = 23; // TODO
 
 private static final double JOYSTICK_DEADBAND = .2;
 

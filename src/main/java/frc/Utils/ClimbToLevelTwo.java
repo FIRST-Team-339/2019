@@ -218,11 +218,15 @@ public void newClimbUpdate ()
                     1.0);
             Hardware.drive.setGearPercentage(Teleop.SECOND_GEAR_NUMBER,
                     1.0);
-            driveTimerInit();
-            this.lift.setLiftPosition(0.5);
-            newClimbState = NewClimberState.PREP_ARM;
-            break;
 
+            // TODO @CR @ANE change to 0?
+            if (this.lift.setLiftPositionPrecise(0.5, 1.0) == true)
+                {
+                newClimbState = NewClimberState.PREP_ARM;
+                driveTimerInit();
+                break;
+                }
+            break;
         case PREP_ARM:
             if (this.lowerArm() == true)
                 {
@@ -404,6 +408,7 @@ public void newClimbUpdate ()
 public void climbUpdate ()
 {
     // System.out.println(climbState);
+
 
     switch (climbState)
         {
@@ -1237,9 +1242,12 @@ public boolean backUpTilMidWheelsOnPlatform ()
 public boolean poweredArmDown ()
 {
 
-    if (driveTimer.get() >= TIME_TO_POWER_ARM_DOWN)
+    if ((Hardware.leftBackIR.isOn() == true)
+            || (Hardware.rightBackIR.isOn() == true)
+            || (driveTimer.get() >= TIME_TO_POWER_ARM_DOWN))
         {
         Hardware.manipulator.setArmMotorSpeedManuallyForClimb(0.0);
+
         return true;
         }
     else
