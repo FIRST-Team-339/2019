@@ -1164,7 +1164,7 @@ private static boolean depositSideCargoBall ()
 
         case VISION_DRIVE_TOWARDS_CARGO_SHIP:
             if (Hardware.driveWithCamera
-                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED, true))
+                    .driveToTarget(.3, true))// TODO constant
                 {
                 sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
 
@@ -1677,7 +1677,7 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
-public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 0.0;
+public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 0.0;// TODO
 
 public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 0.0;
 

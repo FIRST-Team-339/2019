@@ -467,6 +467,8 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    // System.out.println("level switch state = "
+    // + Hardware.autoDisableSwitch.isOn());
     // if (Hardware.armHackButton.isOnCheckNow() == true)
     // {
     // // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);

@@ -164,7 +164,7 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
  */
 public boolean depositCargo ()
 {
-//    System.out.println("cargo deposit state: " + depositCargoState);// TODO
+    // System.out.println("cargo deposit state: " + depositCargoState);// TODO
     switch (depositCargoState)
         {
         case INIT:
@@ -173,7 +173,6 @@ public boolean depositCargo ()
         case RAISE_MANIPULATOR:
             if (moveManipulator(DEPOSIT_CARGO_SHIP_ANGLE))
                 depositCargoState = DepositCargoState.RAISE_FORK;
-
             break;
         case RAISE_FORK:
             if (moveForklift(DEPOSIT_CARGO_SHIP_HEIGHT))
