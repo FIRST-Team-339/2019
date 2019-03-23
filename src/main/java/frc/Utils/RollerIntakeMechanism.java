@@ -80,6 +80,8 @@ public void intakeOuttakeByButtons (boolean intakeButtonValue,
         }
 }
 
+// Becuase solenoid auto closes whenever we are not intaking,
+// this toggle code is currently useless
 public void toggleSolenoid (QuickSwitch button)
 {
     if (button.getCurrentValue() == true)
@@ -146,6 +148,10 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
             intakeState = IntakeState.OUTTAKE;
             // if (this.hasCargo() == false)
             // this.armSolenoid.setForward(true);
+            }
+        else
+            {
+            this.armSolenoid.setForward(false);// @ANE
             }
 }
 

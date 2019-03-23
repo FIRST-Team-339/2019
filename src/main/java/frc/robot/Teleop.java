@@ -274,8 +274,10 @@ public static void periodic ()
     Hardware.manipulator.poweredDeployDownForClimb(
             Hardware.poweredManipulatorForClimbButton);
 
-    Hardware.manipulator
-            .toggleSolenoid(Hardware.armSolenoidToggleButton);
+    // Becuase solenoid auto closes whenever we are not intaking,
+    // this toggle code is currently useless
+    // Hardware.manipulator
+    // .toggleSolenoid(Hardware.armSolenoidToggleButton);
 
     // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
     // Hardware.intakeTriggerLeft.get(),
@@ -465,6 +467,8 @@ private static void individualTest ()
 
 private static void ashleyTest ()
 {
+    // System.out.println("level switch state = "
+    // + Hardware.autoDisableSwitch.isOn());
     // if (Hardware.armHackButton.isOnCheckNow() == true)
     // {
     // // Hardware.manipulator.setArmMotorSpeedManuallyForClimb(-.0);
@@ -601,7 +605,7 @@ private static void coleTest ()
     // Test 2 - move Arm Precise
 
     // if (Hardware.nextHigherLiftHeightButton.getCurrentValue())
-    // Hardware.manipulator.moveArmToPositionPrecise(70.0);
+    // Hardware.manipulator.moveArmToPositionPrecise(45.0);
 
     // if (Hardware.nextLowerLiftHeightButton.getCurrentValue())
     // Hardware.manipulator.moveArmToPositionPrecise(15.0);
@@ -1270,7 +1274,7 @@ private static final double SECOND_GEAR_RATIO_KILROY_XIX = .7;
 
 public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 
-public static final double SECOND_GEAR_RATIO_KILROY_XX = .5;
+public static final double SECOND_GEAR_RATIO_KILROY_XX = .6;
 
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;

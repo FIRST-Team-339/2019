@@ -622,7 +622,7 @@ private static boolean depositCargoHatch ()
             Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
             if (Hardware.driveWithCamera
-                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
+                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
                 {
                 depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
@@ -962,7 +962,8 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
                     if (Hardware.driveWithCamera
-                            .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
+                            .driveToTarget(DRIVE_WITH_CAMERA_SPEED,
+                                    false))
                         {
 
 
@@ -1017,7 +1018,7 @@ private static boolean depositRocketHatch ()
  */
 private static enum SideCargoBallState
     {
-    INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, TURN_TOWARDS_ROCKET, DRIVE_TOWARDS_ROCKET, TURN_PARALLEL_TO_ROCKET, DRIVE_PARALLEL_TO_ROCKET, TURN_TOWARDS_CARGO_SHIP, VISION_DRIVE_TOWARDS_CARGO_SHIP, DEPOSIT_BALL, BACK_UP, FINISHED
+    INIT, LEAVE_LEVEL_2, LEAVE_LEVEL_1, TURN_TOWARDS_ROCKET, DRIVE_TOWARDS_ROCKET, TURN_PARALLEL_TO_ROCKET, DRIVE_PARALLEL_TO_ROCKET, TURN_TOWARDS_CARGO_SHIP, PREP_MANIPULATOR_AND_LIFT, VISION_DRIVE_TOWARDS_CARGO_SHIP, DEPOSIT_BALL, BACK_UP, FINISHED
     } // and we need to deploy the manipulator somewhere in here
 
 /**
@@ -1028,7 +1029,9 @@ private static SideCargoBallState sideCargoBallState = SideCargoBallState.LEAVE_
 
 private static boolean depositSideCargoBall ()
 // welcome to the Gates of Hell
+
 {
+    // System.out.println("autostate" + sideCargoBallState);// TODO
     switch (sideCargoBallState)
         {
         case INIT:
@@ -1054,37 +1057,6 @@ private static boolean depositSideCargoBall ()
         case TURN_TOWARDS_ROCKET:
             if (autoPosition == Position.LEFT)
                 {
-                if (Hardware.drive.turnDegrees(TURN_LEFT90,
-                        TURN_SPEED,
-                        ACCELERATION_TIME, USING_GYRO) == true)
-                    {
-                    sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
-                    break;
-                    }
-                }
-            else
-                if (autoPosition == Position.RIGHT)
-                    {
-                    if (Hardware.drive.turnDegrees(TURN_RIGHT90,
-                            TURN_SPEED,
-                            ACCELERATION_TIME, USING_GYRO) == true)
-                        {
-                        sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
-                        break;
-                        }
-                    }
-        case DRIVE_TOWARDS_ROCKET:
-            if (Hardware.drive.driveStraightInches(
-                    DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL,
-                    DRIVE_SPEED, ACCELERATION_TIME, USING_GYRO))
-                {
-                sideCargoBallState = SideCargoBallState.TURN_PARALLEL_TO_ROCKET;
-                }
-            break;
-
-        case TURN_PARALLEL_TO_ROCKET:
-            if (autoPosition == Position.LEFT)
-                {
                 if (Hardware.drive.turnDegrees(-TURN_FOR_CAMERA_DEGREES,
                         TURN_SPEED,
                         ACCELERATION_TIME, USING_GYRO) == true)
@@ -1105,8 +1077,114 @@ private static boolean depositSideCargoBall ()
                         break;
                         }
                     }
+        case DRIVE_TOWARDS_ROCKET:
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL,
+                    DRIVE_SPEED, ACCELERATION_TIME, USING_GYRO))
+                {
+                sideCargoBallState = SideCargoBallState.TURN_PARALLEL_TO_ROCKET;
+                }
+            break;
 
+        case TURN_PARALLEL_TO_ROCKET:
+            if (autoPosition == Position.LEFT)
+                {
+                if (Hardware.drive.turnDegrees(
+                        TURN_FOR_CAMERA_DEGREES,
+                        TURN_SPEED,
+                        ACCELERATION_TIME, USING_GYRO) == true)
+                    {
+                    sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                    break;
+                    }
+                }
+            else
+                if (autoPosition == Position.RIGHT)
+                    {
+                    if (Hardware.drive.turnDegrees(
+                            -TURN_FOR_CAMERA_DEGREES,
+                            TURN_SPEED,
+                            ACCELERATION_TIME, USING_GYRO) == true)
+                        {
+                        sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                        break;
+                        }
+                    }
+            break;
+        case DRIVE_PARALLEL_TO_ROCKET:
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET, DRIVE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO) == true)
+                {
+                sideCargoBallState = SideCargoBallState.TURN_TOWARDS_CARGO_SHIP;
+                }
+            break;
 
+        case TURN_TOWARDS_CARGO_SHIP:
+            if (autoPosition == Position.LEFT)
+                {
+                if (Hardware.drive.turnDegrees(TURN_FOR_CAMERA_DEGREES,
+                        TURN_SPEED,
+                        ACCELERATION_TIME, USING_GYRO) == true)
+                    {
+                    sideCargoBallState = SideCargoBallState.PREP_MANIPULATOR_AND_LIFT;
+                    break;
+                    }
+                }
+            else
+                if (autoPosition == Position.RIGHT)
+                    {
+                    if (Hardware.drive.turnDegrees(
+                            -TURN_FOR_CAMERA_DEGREES,
+                            TURN_SPEED,
+                            ACCELERATION_TIME, USING_GYRO) == true)
+                        {
+                        sideCargoBallState = SideCargoBallState.PREP_MANIPULATOR_AND_LIFT;
+                        break;
+                        }
+                    }
+
+            break;
+
+        case PREP_MANIPULATOR_AND_LIFT:
+
+            // if (Hardware.lift.setLiftPosition(CARGO_HEIGHT_FOR_CARGO_SHIP) ==
+            // true)
+            // {
+            // prepBoolean = true;
+            // }
+            // if (prepBoolean == true &&
+            // Hardware.manipulator.moveArmToPositionPrecise(25.0) == true)
+            // {
+            // sideCargoBallState =
+            // SideCargoBallState.VISION_DRIVE_TOWARDS_CARGO_SHIP;
+            // }
+            sideCargoBallState = SideCargoBallState.VISION_DRIVE_TOWARDS_CARGO_SHIP;
+            break;
+
+        case VISION_DRIVE_TOWARDS_CARGO_SHIP:
+            if (Hardware.driveWithCamera
+                    .driveToTarget(.3, true))// TODO constant
+                {
+                sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
+
+                }
+            break;
+        case DEPOSIT_BALL:
+            if (Hardware.depositGamePiece.depositCargo())
+                {
+                sideCargoBallState = SideCargoBallState.FINISHED;
+                }
+            break;
+
+        case BACK_UP:
+            if (Hardware.drive.driveStraightInches(DISTANCE_TO_BACK_UP,
+                    -DRIVE_SPEED, ACCELERATION_TIME,
+                    USING_GYRO) == true)
+                {
+                sideCargoBallState = SideCargoBallState.FINISHED;
+                }
+            break;
         default:
         case FINISHED:
 
@@ -1448,7 +1526,7 @@ private static boolean jankyDepositCargoHatch ()
             // Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
             if (Hardware.driveWithCamera
-                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED))
+                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
                 {
                 jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                 }
@@ -1599,8 +1677,11 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
-public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 0.0;
+public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 0.0;// TODO
 
+public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 0.0;
+
+public static final double DISTANCE_TO_BACK_UP = 0.0;
 
 // descent Stuff
 
@@ -1612,7 +1693,8 @@ public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .4; // @ANE
+// TODO @CR .5?
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .5; // @ANE
 
 public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .4;
 

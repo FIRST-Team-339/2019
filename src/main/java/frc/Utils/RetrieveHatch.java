@@ -48,7 +48,7 @@ public void retrievalUpdate ()
                 forkliftHeightReached = true;
                 }
             if (forkliftHeightReached == true && Hardware.manipulator
-                    .moveArmToPosition(0) == true)
+                    .moveArmToPosition(Forklift.PLAYER_STATION_ANGLE) == true)
                 {
                 delayInit();
                 forkliftHeightReached = false;
