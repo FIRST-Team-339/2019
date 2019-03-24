@@ -963,6 +963,8 @@ public final static double LOWER_ROCKET_CARGO_ANGLE = 48;
 // rocket ship
 public final static double TOP_ROCKET_HATCH = 56;
 
+
+
 public final static double MIDDLE_ROCKET_HATCH = 30;
 
 public final static double LOWER_ROCKET_HATCH = 6;// TODO changed from 9 cole
@@ -987,7 +989,7 @@ public final static double PLAYER_STATION_HEIGHT = 4;
 
 public final static double PLAYER_STATION_ANGLE = 5;
 
-// private final static double CARGO_SHIP_CARGO_ANGLE = 45;
+public final static double CARGO_SHIP_CARGO_ANGLE = 45;
 
 // private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 

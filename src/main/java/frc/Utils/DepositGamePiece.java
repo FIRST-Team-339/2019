@@ -164,7 +164,7 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
  */
 public boolean depositCargo ()
 {
-    // System.out.println("cargo deposit state: " + depositCargoState);// TODO
+    System.out.println("cargo deposit state: " + depositCargoState);// TODO
     switch (depositCargoState)
         {
         case INIT:
