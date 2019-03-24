@@ -632,7 +632,7 @@ public void update ()
             this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
         else
             if (manipulator.isArmPartiallyClearOfFrame() == false)
-                this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
+                this.currentLiftMaxHeight = PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT;
             else
                 this.currentLiftMaxHeight = MAX_HEIGHT;
 
@@ -641,7 +641,7 @@ public void update ()
                     .setMaxArmAngle(
                             manipulator.MAX_ARM_POSITION_ADJUSTED);
         else
-            if (this.getForkliftHeight() < PARTALLY_LIMIT_ARM_ANGLE_HEIGHT)
+            if (this.getForkliftHeight() < PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
                 this.manipulator.setMaxArmAngle(
                         manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
             else
@@ -979,6 +979,10 @@ public final static double CARGO_SHIP_CARGO = 30;
 
 public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 
+public final static double PLAYER_STATION_CARGO_HEIGHT = 21;
+
+public final static double PLAYER_STATION_CARGO_ANGLE = 85;
+
 public final static double PLAYER_STATION_HEIGHT = 4;
 
 public final static double PLAYER_STATION_ANGLE = 5;
@@ -994,7 +998,7 @@ private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
 private double LIMIT_ARM_ANGLE_HEIGHT = .2;
 
-private double PARTALLY_LIMIT_ARM_ANGLE_HEIGHT = 30.0;
+private double PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT = 21.5;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 

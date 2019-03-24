@@ -238,16 +238,23 @@ public static void periodic ()
 
 
     // Button for Cargo Ship Cargo Preset Height
-    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.cargoShipCargoButton);
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.cargoShipCargoButton);
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
     // Hardware.cargoShipHatchButton);
 
 
-    // Button for Player Station Preset Height
+    // Button for Player Station Cargo Preset Height
+    Hardware.lift.setLiftPositionByButton(
+            Forklift.PLAYER_STATION_CARGO_HEIGHT,
+            Forklift.PLAYER_STATION_CARGO_ANGLE,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+            Hardware.playerStationCargoButton);
+
+    // Button for Player Station Hatch Preset Height
     Hardware.lift.setLiftPositionByButton(
             Forklift.PLAYER_STATION_HEIGHT,
             Forklift.PLAYER_STATION_ANGLE,

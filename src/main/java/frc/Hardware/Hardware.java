@@ -328,7 +328,7 @@ public static JoystickButton intakeOverride = null;
 
 public static JoystickButton deployOverride = null;
 
-public static QuickSwitch cargoShipCargoButton = null;
+public static QuickSwitch playerStationCargoButton = null;
 
 public static QuickSwitch playerStationButton = null;
 
@@ -656,7 +656,7 @@ public static void commonInitialization ()
 
     alignAndStopButton = new MomentarySwitch(leftOperator, 4, false);
 
-    cargoShipCargoButton = new QuickSwitch(leftOperator, 6);
+    playerStationCargoButton = new QuickSwitch(leftOperator, 6);
 
     playerStationButton = new QuickSwitch(leftOperator, 7);
 

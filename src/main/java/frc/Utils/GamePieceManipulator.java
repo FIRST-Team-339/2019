@@ -1204,12 +1204,12 @@ private double ARM_LEANING_BACK_ANGLE = 90;
 
 private double IS_FULLY_CLEAR_OF_FRAME_ANGLE = 65;
 
-private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 95;
+private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 91;
 
 // the maximum angle for the deploy so
 public double MAX_FORKLIFT_UP_ANGLE = 60;
 
-public double FORKLIFT_PARTIALLY_UP_MAX_ANGLE = 90;
+public double FORKLIFT_PARTIALLY_UP_MAX_ANGLE = 86;
 
 private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 

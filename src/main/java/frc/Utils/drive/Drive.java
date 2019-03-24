@@ -2068,6 +2068,7 @@ public boolean turnDegrees (int degrees, double speed,
         {
         if (usingGyro)
             {
+            System.out.println("using the gryo");
             this.gyro.reset();
             turnDegreesInit = false;
             }
@@ -2083,7 +2084,7 @@ public boolean turnDegrees (int degrees, double speed,
     // If either sensor has reached the target position, then stop motors
     // and return true.
     // using Gyro code
-    System.out.println("gyro: " + this.gyro.getAngle());
+    // System.out.println("gyro: " + this.gyro.getAngle());
     if (usingGyro && Math.abs(this.gyro.getAngle()) > Math.abs(degrees)
             - turnDegreesFudgeFactor)
         {
