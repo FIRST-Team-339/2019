@@ -38,6 +38,7 @@ import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
 
@@ -87,7 +88,7 @@ public static void init ()
         default:
         case KILROY_2019:
             Hardware.ringLightRelay.set(Value.kOn);
-            Hardware.axisCamera.processImage();
+            // Hardware.axisCamera.processImage();
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -188,6 +189,9 @@ public static void periodic ()
     // Teleop.printStatements();
     // Hardware.lift.update();
     // System.out.println(autoState + "yeeeeeeeee");
+    SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
+
+
     switch (autoState)
         {
         case INIT:
@@ -1025,13 +1029,17 @@ private static enum SideCargoBallState
  * Variable for keeping track of the state used in the depositSideCargoBall
  * path
  */
-private static SideCargoBallState sideCargoBallState = SideCargoBallState.LEAVE_LEVEL_2;
+private static SideCargoBallState sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;// INIT;//TODO
 
 private static boolean depositSideCargoBall ()
 // welcome to the Gates of Hell
 
 {
-    // System.out.println("autostate" + sideCargoBallState);// TODO
+    System.out.println("sideState" + sideCargoBallState);
+    // System.out.println("level one?" + Hardware.levelOneSwitch.isOn());
+    // System.out
+    // .println("side" + Hardware.autoCenterSwitch.getPosition());
+    // TODO
     switch (sideCargoBallState)
         {
         case INIT:
@@ -1048,7 +1056,10 @@ private static boolean depositSideCargoBall ()
                 }
             break;
         case LEAVE_LEVEL_1:
-            if (crossAutoline() == true)
+            if (Hardware.drive.driveStraightInches(
+                    DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
+                    LEAVE_LEVEL_ONE_SPEED,
+                    ACCELERATION_TIME, USING_GYRO) == true)
                 {
                 sideCargoBallState = SideCargoBallState.TURN_TOWARDS_ROCKET;
                 }
@@ -1057,6 +1068,7 @@ private static boolean depositSideCargoBall ()
         case TURN_TOWARDS_ROCKET:
             if (autoPosition == Position.LEFT)
                 {
+                System.out.println("left turn towards rocket");
                 if (Hardware.drive.turnDegrees(-TURN_FOR_CAMERA_DEGREES,
                         TURN_SPEED,
                         ACCELERATION_TIME, USING_GYRO) == true)
@@ -1068,6 +1080,7 @@ private static boolean depositSideCargoBall ()
             else
                 if (autoPosition == Position.RIGHT)
                     {
+                    System.out.println("right turn towards rocket");
                     if (Hardware.drive.turnDegrees(
                             TURN_FOR_CAMERA_DEGREES,
                             TURN_SPEED,
@@ -1077,6 +1090,7 @@ private static boolean depositSideCargoBall ()
                         break;
                         }
                     }
+            break;
         case DRIVE_TOWARDS_ROCKET:
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL,
@@ -1089,24 +1103,26 @@ private static boolean depositSideCargoBall ()
         case TURN_PARALLEL_TO_ROCKET:
             if (autoPosition == Position.LEFT)
                 {
+                System.out
+                        .println("right turn towards parallel rocket");
                 if (Hardware.drive.turnDegrees(
-                        TURN_FOR_CAMERA_DEGREES,
-                        TURN_SPEED,
-                        ACCELERATION_TIME, USING_GYRO) == true)
+                        TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
+                        CAMERA_ACCELERATION, USING_GYRO) == true)
                     {
-                    sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                    sideCargoBallState = SideCargoBallState.DRIVE_PARALLEL_TO_ROCKET;
                     break;
                     }
                 }
             else
                 if (autoPosition == Position.RIGHT)
                     {
+                    System.out.println(
+                            "left turn parallel towards rocket");
                     if (Hardware.drive.turnDegrees(
-                            -TURN_FOR_CAMERA_DEGREES,
-                            TURN_SPEED,
-                            ACCELERATION_TIME, USING_GYRO) == true)
+                            -TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
+                            CAMERA_ACCELERATION, USING_GYRO) == true)
                         {
-                        sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
+                        sideCargoBallState = SideCargoBallState.DRIVE_PARALLEL_TO_ROCKET;
                         break;
                         }
                     }
@@ -1123,6 +1139,7 @@ private static boolean depositSideCargoBall ()
         case TURN_TOWARDS_CARGO_SHIP:
             if (autoPosition == Position.LEFT)
                 {
+
                 if (Hardware.drive.turnDegrees(TURN_FOR_CAMERA_DEGREES,
                         TURN_SPEED,
                         ACCELERATION_TIME, USING_GYRO) == true)
@@ -1164,13 +1181,14 @@ private static boolean depositSideCargoBall ()
 
         case VISION_DRIVE_TOWARDS_CARGO_SHIP:
             if (Hardware.driveWithCamera
-                    .driveToTarget(.3, true))// TODO constant
+                    .driveToTargetClose(.2))// TODO constant nad vision function
                 {
                 sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
 
                 }
             break;
         case DEPOSIT_BALL:
+
             if (Hardware.depositGamePiece.depositCargo())
                 {
                 sideCargoBallState = SideCargoBallState.FINISHED;
@@ -1677,9 +1695,9 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
-public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 0.0;// TODO
+public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 60.0;// TODO
 
-public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 0.0;
+public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 60.0;
 
 public static final double DISTANCE_TO_BACK_UP = 0.0;
 

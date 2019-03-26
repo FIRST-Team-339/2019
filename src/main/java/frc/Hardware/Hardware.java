@@ -332,6 +332,8 @@ public static QuickSwitch playerStationCargoButton = null;
 
 public static QuickSwitch playerStationButton = null;
 
+public static QuickSwitch cargoShipCargoButton = null;
+
 public static JoystickButton visionHeightDownButton = null;
 
 public static JoystickButton visionHeightUpButton = null;
@@ -660,6 +662,8 @@ public static void commonInitialization ()
 
     playerStationButton = new QuickSwitch(leftOperator, 7);
 
+    cargoShipCargoButton = new QuickSwitch(leftOperator, 11);
+
     visionHeightUpButton = new JoystickButton(leftOperator, 9);//
 
     visionHeightDownButton = new JoystickButton(leftOperator, 8);
@@ -697,7 +701,7 @@ public static void commonInitialization ()
 
     // Momentary Switches
 
-    upshiftButton = new JoystickButton(leftDriver, 3);
+    upshiftButton = new JoystickButton(leftDriver, 1);
 
     // ----------Right Driver--------------
 
@@ -716,7 +720,7 @@ public static void commonInitialization ()
 
     cancelAutoLeftDriver = new JoystickButton(leftDriver, 10);
 
-    downshiftButton = new JoystickButton(rightDriver, 3);
+    downshiftButton = new JoystickButton(rightDriver, 1);
 
     // Momentary Switches
 

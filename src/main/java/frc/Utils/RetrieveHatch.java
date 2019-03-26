@@ -145,9 +145,7 @@ public void stop ()
 
 public boolean alignWithVision (double speed)
 {
-    if (Hardware.frontUltraSonic
-            .getDistanceFromNearestBumper() <= DISTANCE_TO_STOP_ALIGN
-            || Hardware.driveWithCamera.driveToTargetClose(.1))
+    if ( Hardware.driveWithCamera.driveToTargetClose(.1))
         {
         Hardware.alignAndStopButton.setValue(false);
         Hardware.driveWithCamera.state = DriveWithCameraState.INIT;

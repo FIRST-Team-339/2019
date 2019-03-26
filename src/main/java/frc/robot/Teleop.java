@@ -215,7 +215,8 @@ public static void initTeleop2019 ()
 public static void periodic ()
 {
 
-
+    SmartDashboard.putNumber("Delay raw", Hardware.delayPot.get());
+    SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -238,9 +239,10 @@ public static void periodic ()
 
 
     // Button for Cargo Ship Cargo Preset Height
-    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-    // Hardware.cargoShipCargoButton);
+    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+            Forklift.CARGO_SHIP_CARGO_ANGLE,
+            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+            Hardware.cargoShipCargoButton);
 
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
@@ -310,6 +312,7 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
+
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     // Hardware.manipulator.printDeployDebugInfo();
@@ -462,7 +465,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -543,17 +546,23 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-public static boolean aligned = false;
+public static boolean hasDoneTheThing = false;
 
 private static void connerTest ()
 {
 
-    if (aligned == false
-            && Hardware.depositGamePiece.depositHatch(true))
+    System.out.println("calling move");
+    System.out.println(
+            "angle: " + Hardware.manipulator.getCurrentArmPosition());
+    System.out
+            .println("power to arm motor: " + Hardware.armMotor.get());
+    if (hasDoneTheThing == false)
         {
-        aligned = true;
+        if (Hardware.depositGamePiece.depositCargo())
+            {
+            hasDoneTheThing = true;
+            }
         }
-
 } // end connerTest()
 
 private static void coleTest ()
@@ -761,6 +770,10 @@ public static void printStatements ()
         // ==================================
         // Scale Alignment
         // ==================================
+        // System.out.println("Solenoid momentary switches "
+        // + Hardware.solenoidButtonOne.isOnCheckNow() + " "
+        // + Hardware.solenoidButtonTwo.isOnCheckNow());
+
 
         // =================================
         // Motors
@@ -836,55 +849,55 @@ public static void printStatements ()
 
         // System.out.println(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
-        // SmartDashboard.putBoolean(
-        // "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
+        SmartDashboard.putBoolean(
+                "Left auto switch: ", Hardware.leftAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Left auto switch: " + Hardware.leftAutoSwitch.isOn());
 
         // System.out.println(
         // "Right auto switch: "
         // + Hardware.rightAutoSwitch.isOn());
-        // SmartDashboard.putString(
-        // "Right auto switch: ",
-        // "" + Hardware.rightAutoSwitch.isOn());
+        SmartDashboard.putString(
+                "Right auto switch: ",
+                "" + Hardware.rightAutoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Right auto switch: "
         // + Hardware.rightAutoSwitch.isOn());
 
         // System.out.println("Center auto switch: "
         // + Hardware.autoCenterSwitch.isOn());
-        // SmartDashboard.putString("Center auto switch: ",
-        // "" + Hardware.autoCenterSwitch.isOn());
+        SmartDashboard.putString("Center auto switch: ",
+                "" + Hardware.autoCenterSwitch.isOn());
         // Hardware.telemetry.printToConsole("Center auto switch: "
         // + Hardware.autoCenterSwitch.isOn());
 
         // System.out.println(
         // "Level one switch: " + Hardware.levelOneSwitch.isOn());
-        // SmartDashboard.putString(
-        // "Level one switch: ",
-        // "" + Hardware.levelOneSwitch.isOn());
+        SmartDashboard.putString(
+                "Level one switch: ",
+                "" + Hardware.levelOneSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Level one switch: " + Hardware.levelOneSwitch.isOn());
 
         // System.out.println(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
-        // // SmartDashboard.putString(
-        // "Level two switch: ",
-        // "" + Hardware.levelTwoSwitch.isOn());
+        SmartDashboard.putString(
+                "Level two switch: ",
+                "" + Hardware.levelTwoSwitch.isOn());
         // Hardware.telemetry.printToConsole(
         // "Level two switch: " + Hardware.levelTwoSwitch.isOn());
 
         // System.out.println("Auto disable switch: "
         // + Hardware.autoDisableSwitch.isOn());
-        // SmartDashboard.putString("Auto disable switch: ",
-        // "" + Hardware.autoDisableSwitch.isOn());
+        SmartDashboard.putString("Auto disable switch: ",
+                "" + Hardware.autoDisableSwitch.isOn());
         // Hardware.telemetry.printToConsole("Auto disable switch: "
         // + Hardware.autoDisableSwitch.isOn());
 
         // System.out.println("Auto 6 position switch: "
         // + Hardware.autoSixPosSwitch.getPosition());
-        // SmartDashboard.putNumber("Auto 6 position switch: ",
-        // Hardware.autoSixPosSwitch.getPosition());
+        SmartDashboard.putNumber("Auto 6 position switch: ",
+                Hardware.autoSixPosSwitch.getPosition());
         // Hardware.telemetry.printToConsole("Auto 6 position switch: "
         // + Hardware.autoSixPosSwitch.getPosition());
 
@@ -1005,8 +1018,8 @@ public static void printStatements ()
         // Solenoids
         // ---------------------------------
 
-        // System.out.println("Arm intake solenoid forward: "
-        // + Hardware.armIntakeSolenoid.getForward());
+        System.out.println("Arm intake solenoid forward: "
+                + Hardware.armIntakeSolenoid.getForward());
         // SmartDashboard.putBoolean("Arm intake solenoid forward: ",
         // Hardware.armIntakeSolenoid.getForward());
         // Hardware.telemetry
@@ -1047,8 +1060,8 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("delay pot: " +
         // Hardware.delayPot.get(0, 5));
 
-        // System.out.println("Intake deploy sensor: "
-        // + Hardware.intakeDeploySensor.get());
+        System.out.println("Intake deploy sensor: "
+                + Hardware.armPot.get());
         // SmartDashboard.putNumber("Arm Pot sensor: ",
         // Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "

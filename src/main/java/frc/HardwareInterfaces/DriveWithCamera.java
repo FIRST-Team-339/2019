@@ -194,6 +194,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
             break;
         case DRIVE_WITH_CAMERA:
             Hardware.axisCamera.processImage();// TODO
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
             correctionValue = DRIVE_CORRECTION;
 
             // visionProcessor.saveImage(ImageType.RAW);
@@ -387,6 +389,8 @@ public boolean driveToTargetClose (double speed)
             break;
         case DRIVE_WITH_CAMERA:
             Hardware.axisCamera.processImage();// TODO
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
             if (Hardware.axisCamera.hasBlobs() == true)
                 {
                 if (Hardware.axisCamera
@@ -398,8 +402,7 @@ public boolean driveToTargetClose (double speed)
             correctionValue = DRIVE_CORRECTION;
 
             motorspeed = speed;
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
+
             // adjust speed based on distance
 
             // if we get close enought to the target and have to stop
