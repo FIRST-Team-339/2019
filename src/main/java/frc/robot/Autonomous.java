@@ -1037,8 +1037,8 @@ private static boolean depositSideCargoBall ()
 {
     System.out.println("sideState" + sideCargoBallState);
     // System.out.println("level one?" + Hardware.levelOneSwitch.isOn());
-    // System.out
-    // .println("side" + Hardware.autoCenterSwitch.getPosition());
+    System.out
+            .println("side" + Hardware.autoCenterSwitch.getPosition());
     // TODO
     switch (sideCargoBallState)
         {
