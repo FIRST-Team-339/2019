@@ -249,12 +249,21 @@ public static void periodic ()
     // Hardware.cargoShipHatchButton);
 
 
+    // Player Station Cargo Preset Height is commented out at
+    // the moment at the request of Mr. Brown.
+    // If this is uncommented, will not work unless the forklift
+    // state machine is changed to allow manipulator to move to
+    // an angle of about 85 degrees. There is some code
+    // written and commented out already to do this, and it is somewhat
+    // safe, but not what Mr. Brown wants. Consult MR. Brown or Cole
+    // (preferably both) before uncommented this.
+
     // Button for Player Station Cargo Preset Height
-    Hardware.lift.setLiftPositionByButton(
-            Forklift.PLAYER_STATION_CARGO_HEIGHT,
-            Forklift.PLAYER_STATION_CARGO_ANGLE,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.playerStationCargoButton);
+    // Hardware.lift.setLiftPositionByButton(
+    // Forklift.PLAYER_STATION_CARGO_HEIGHT,
+    // Forklift.PLAYER_STATION_CARGO_ANGLE,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.playerStationCargoButton);
 
     // Button for Player Station Hatch Preset Height
     Hardware.lift.setLiftPositionByButton(

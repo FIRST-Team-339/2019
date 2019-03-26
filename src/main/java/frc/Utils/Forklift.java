@@ -630,24 +630,24 @@ public void update ()
         {
         if (manipulator.isArmClearOfFrame() == false)
             this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
+        // else
+        // if (manipulator.isArmPartiallyClearOfFrame() == false)
+        // this.currentLiftMaxHeight = PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT;
         else
-            if (manipulator.isArmPartiallyClearOfFrame() == false)
-                this.currentLiftMaxHeight = PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT;
-            else
-                this.currentLiftMaxHeight = MAX_HEIGHT;
+            this.currentLiftMaxHeight = MAX_HEIGHT;
 
         if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
             this.manipulator
                     .setMaxArmAngle(
                             manipulator.MAX_ARM_POSITION_ADJUSTED);
+        // else
+        // if (this.getForkliftHeight() < PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
+        // this.manipulator.setMaxArmAngle(
+        // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
         else
-            if (this.getForkliftHeight() < PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
-                this.manipulator.setMaxArmAngle(
-                        manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
-            else
-                this.manipulator
-                        .setMaxArmAngle(
-                                manipulator.MAX_FORKLIFT_UP_ANGLE);
+            this.manipulator
+                    .setMaxArmAngle(
+                            manipulator.MAX_FORKLIFT_UP_ANGLE);
         }
 
     if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
