@@ -431,8 +431,9 @@ public boolean moveArmToPosition (double angle)
 public boolean moveArmToPositionPrecise (double angle)
 {
     if (deployTargetAngle != angle)
+        {
         moveArmToPositionPreciseInit = true;
-
+        }
     // Sets the target position and speed, enables "moving-to-position"
     // state.
     if (moveArmToPositionPreciseInit == true)

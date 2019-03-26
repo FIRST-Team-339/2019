@@ -312,6 +312,7 @@ public static void periodic ()
     Hardware.climber.newClimbUpdate();
 
     Hardware.depositGamePiece.depositTeleopStateMachine();
+
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     // Hardware.manipulator.printDeployDebugInfo();
@@ -451,7 +452,7 @@ public static void periodic ()
         {
         ringLightFlash(false, .5);
         }
-    // printStatements();
+    printStatements();
 
 
 } // end Periodic()
@@ -464,7 +465,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -545,17 +546,23 @@ private static void ashleyTest ()
     // }
 } // end ashleyTest()
 
-public static boolean aligned = false;
+public static boolean hasDoneTheThing = false;
 
 private static void connerTest ()
 {
 
-    if (aligned == false
-            && Hardware.depositGamePiece.depositHatch(true))
+    System.out.println("calling move");
+    System.out.println(
+            "angle: " + Hardware.manipulator.getCurrentArmPosition());
+    System.out
+            .println("power to arm motor: " + Hardware.armMotor.get());
+    if (hasDoneTheThing == false)
         {
-        aligned = true;
+        if (Hardware.depositGamePiece.depositCargo())
+            {
+            hasDoneTheThing = true;
+            }
         }
-
 } // end connerTest()
 
 private static void coleTest ()
@@ -763,6 +770,10 @@ public static void printStatements ()
         // ==================================
         // Scale Alignment
         // ==================================
+        // System.out.println("Solenoid momentary switches "
+        // + Hardware.solenoidButtonOne.isOnCheckNow() + " "
+        // + Hardware.solenoidButtonTwo.isOnCheckNow());
+
 
         // =================================
         // Motors
@@ -1007,8 +1018,8 @@ public static void printStatements ()
         // Solenoids
         // ---------------------------------
 
-        // System.out.println("Arm intake solenoid forward: "
-        // + Hardware.armIntakeSolenoid.getForward());
+        System.out.println("Arm intake solenoid forward: "
+                + Hardware.armIntakeSolenoid.getForward());
         // SmartDashboard.putBoolean("Arm intake solenoid forward: ",
         // Hardware.armIntakeSolenoid.getForward());
         // Hardware.telemetry

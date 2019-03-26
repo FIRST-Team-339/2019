@@ -188,7 +188,7 @@ public static void periodic ()
         }
     // Teleop.printStatements();
     // Hardware.lift.update();
-    System.out.println(autoState + "yeeeeeeeee");
+    // System.out.println(autoState + "yeeeeeeeee");
     SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
 
 
@@ -1029,7 +1029,7 @@ private static enum SideCargoBallState
  * Variable for keeping track of the state used in the depositSideCargoBall
  * path
  */
-private static SideCargoBallState sideCargoBallState = SideCargoBallState.INIT;
+private static SideCargoBallState sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;// INIT;//TODO
 
 private static boolean depositSideCargoBall ()
 // welcome to the Gates of Hell
@@ -1073,7 +1073,7 @@ private static boolean depositSideCargoBall ()
                         TURN_SPEED,
                         ACCELERATION_TIME, USING_GYRO) == true)
                     {
-                    sideCargoBallState = SideCargoBallState.FINISHED;// DRIVE_TOWARDS_ROCKET;
+                    sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
                     break;
                     }
                 }
@@ -1086,7 +1086,7 @@ private static boolean depositSideCargoBall ()
                             TURN_SPEED,
                             ACCELERATION_TIME, USING_GYRO) == true)
                         {
-                        sideCargoBallState = SideCargoBallState.FINISHED;// DRIVE_TOWARDS_ROCKET;
+                        sideCargoBallState = SideCargoBallState.DRIVE_TOWARDS_ROCKET;
                         break;
                         }
                     }
@@ -1103,6 +1103,8 @@ private static boolean depositSideCargoBall ()
         case TURN_PARALLEL_TO_ROCKET:
             if (autoPosition == Position.LEFT)
                 {
+                System.out
+                        .println("right turn towards parallel rocket");
                 if (Hardware.drive.turnDegrees(
                         TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
                         CAMERA_ACCELERATION, USING_GYRO) == true)
@@ -1114,6 +1116,8 @@ private static boolean depositSideCargoBall ()
             else
                 if (autoPosition == Position.RIGHT)
                     {
+                    System.out.println(
+                            "left turn parallel towards rocket");
                     if (Hardware.drive.turnDegrees(
                             -TURN_FOR_CAMERA_DEGREES, CAMERA_TURN_SPEED,
                             CAMERA_ACCELERATION, USING_GYRO) == true)
@@ -1135,6 +1139,7 @@ private static boolean depositSideCargoBall ()
         case TURN_TOWARDS_CARGO_SHIP:
             if (autoPosition == Position.LEFT)
                 {
+
                 if (Hardware.drive.turnDegrees(TURN_FOR_CAMERA_DEGREES,
                         TURN_SPEED,
                         ACCELERATION_TIME, USING_GYRO) == true)
@@ -1176,13 +1181,14 @@ private static boolean depositSideCargoBall ()
 
         case VISION_DRIVE_TOWARDS_CARGO_SHIP:
             if (Hardware.driveWithCamera
-                    .driveToTargetClose(.5))// TODO constant nad vision function
+                    .driveToTargetClose(.2))// TODO constant nad vision function
                 {
                 sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
 
                 }
             break;
         case DEPOSIT_BALL:
+
             if (Hardware.depositGamePiece.depositCargo())
                 {
                 sideCargoBallState = SideCargoBallState.FINISHED;

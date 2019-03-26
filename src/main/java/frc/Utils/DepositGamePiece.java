@@ -171,10 +171,12 @@ public boolean depositCargo ()
             depositCargoState = DepositCargoState.RAISE_MANIPULATOR;
             break;
         case RAISE_MANIPULATOR:
+            Hardware.manipulator.masterUpdate();
             if (moveManipulator(DEPOSIT_CARGO_SHIP_ANGLE))
                 depositCargoState = DepositCargoState.RAISE_FORK;
             break;
         case RAISE_FORK:
+            Hardware.lift.update();
             if (moveForklift(DEPOSIT_CARGO_SHIP_HEIGHT))
                 depositCargoState = DepositCargoState.DRIVE_FORWARD_CARGO;
             break;
@@ -556,6 +558,7 @@ public void resetDepositTeleop ()
  */
 private boolean moveManipulator (double angle)
 {
+
     if (Hardware.manipulator.defaultSetAngle(angle))
         {
         return true;
