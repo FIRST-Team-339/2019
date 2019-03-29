@@ -193,7 +193,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
 
             break;
         case DRIVE_WITH_CAMERA:
-            Hardware.axisCamera.processImage();// TODO
+            Hardware.axisCamera.processImage();// TODO check and see if this
+                                               // cause lag or watchdog errors
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             correctionValue = DRIVE_CORRECTION;
@@ -383,7 +384,23 @@ public boolean driveToTargetClose (double speed)
         case INIT:
 
             Hardware.drive.resetEncoders();
-            double correctionValue = DRIVE_CORRECTION_CLOSE;
+            if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2019)
+                {
+                double correctionValue = (DRIVE_CORRECTION_CLOSE / .1)
+                        * speed;// porpotion based off of tested code at .1
+                                // speed
+                }
+            else
+                if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2018)
+                    {
+                    double correctionValue = (DRIVE_CORRECTION_CLOSE_2018
+                            / .1)
+                            * speed;// porpotion based off of tested code at .1
+                                    // speed
+                    }
+            double correctionValue = (DRIVE_CORRECTION_CLOSE / .1)
+                    * speed;// porpotion based off of tested code at .1 speed
+
             double motorspeed = speed;
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
@@ -393,9 +410,16 @@ public boolean driveToTargetClose (double speed)
             visionProcessor.saveImage(ImageType.PROCESSED);
             if (Hardware.axisCamera.hasBlobs() == true)
                 {
+                System.out.println("area of blob" + Hardware.axisCamera
+                        .getNthSizeBlob(0).area);
                 if (Hardware.axisCamera
-                        .getNthSizeBlob(0).area >= MIN_BLOB_AREA)
+                        .getNthSizeBlob(0).area > MIN_BLOB_AREA
+                        && (Hardware.leftFrontDriveEncoder
+                                .getDistance() > MIN_INCHES_CLOSE
+                                || Hardware.rightFrontDriveEncoder
+                                        .getDistance() > MIN_INCHES_CLOSE))
                     {
+                    System.out.println("stopped by blobs");
                     state = DriveWithCameraState.STOP;
                     }
                 }
@@ -418,7 +442,7 @@ public boolean driveToTargetClose (double speed)
                 // left
                 // System.out.println("too right");
                 this.getTransmission().driveRaw(
-                        motorspeed + correctionValue,
+                        motorspeed + .5/* correctionValue */,// TODO
                         motorspeed/* - correctionValue */);
                 }
             // if the switch center is to the left of our center set by the
@@ -431,11 +455,11 @@ public boolean driveToTargetClose (double speed)
                     // System.out.println("too left");
                     this.getTransmission().driveRaw(
                             motorspeed/* - correctionValue */,
-                            motorspeed + correctionValue);
+                            motorspeed + .5/* correctionValue */);// TODO
                     }
                 else
                     {
-                    state = DriveWithCameraState.STOP;
+                    this.getTransmission().driveRaw(.3, .3);
                     }
             break;
         default:
@@ -461,6 +485,7 @@ public boolean driveToTargetClose (double speed)
  */
 public Side getTargetSide ()
 {
+    Hardware.axisCamera.processImage();
     if (this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
             - CAMERA_DEADBAND)
         {
@@ -528,124 +553,10 @@ public enum DriveWithCameraState
  * @param speed
  * @param compensationFactor
  */
-public boolean visionTest (double speed)
-{
-    switch (testState)
-        {
-        case INIT_TEST:
-            this.visionProcessor.setRelayValue(Value.kOn);
-
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
-            testState = TestState.ALIGN_TEST;
-            break;
-        case ALIGN_TEST:
-            System.out.println(
-                    "Angle from the target" + Hardware.axisCamera
-                            .getYawAngleDegrees(Hardware.axisCamera
-                                    .getNthSizeBlob(0)));
-            double angle = Hardware.axisCamera
-                    .getYawAngleDegrees(Hardware.axisCamera
-                            .getNthSizeBlob(0));
-            double compensateFactor = 0;
-            double slowAmount = 1;
-            double motorspeed = speed;
-            double slowestSpeed;
-
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() >= DISTANCE_FROM_WALL_TO_STOP)
-                {
-                testState = TestState.ALIGN_TEST;
-                }
-
-            if (this.frontUltrasonic
-                    .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW1
-                    && this.frontUltrasonic
-                            .getDistanceFromNearestBumper() > DISTANCE_FROM_WALL_TO_SLOW2)
-                {
-                slowAmount = SLOW_MODIFIER;
-                }
-            else
-                if (this.frontUltrasonic
-                        .getDistanceFromNearestBumper() < DISTANCE_FROM_WALL_TO_SLOW2)
-                    {
-                    slowAmount = SLOW_MODIFIER * SLOW_MODIFIER;
-                    }
-                else
-                    {
-                    slowAmount = 1;
-                    }
-            System.out.println("slow amount: " + slowAmount);
-
-            motorspeed = speed * slowAmount;
-
-            // adjust speed so that motors never reverse
-            if (motorspeed - compensateFactor <= 0)
-                {
-                slowestSpeed = 0.05;
-                }
-            else
-                {
-                slowestSpeed = motorspeed - compensateFactor;
-                }
 
 
 
-            if (Math.abs(angle) > 70)
-                compensateFactor = TEST_COMPENSATE_1;
-            else
-                if (Math.abs(angle) > 45)
-                    compensateFactor = TEST_COMPENSATE_2;
-                else
-                    if (Math.abs(angle) > 20)
-                        compensateFactor = TEST_COMPENSATE_3;
-                    else
-                        compensateFactor = DEFAULT_COMPENSTATE_TEST;
 
-            if (this.getTargetSide() == Side.RIGHT)
-                {
-                this.getTransmission()
-                        .driveRaw(motorspeed + compensateFactor,
-                                slowAmount);
-                }
-            else
-                if (this.getTargetSide() == Side.RIGHT)
-                    {
-                    this.getTransmission()
-                            .driveRaw(slowestSpeed,
-                                    motorspeed + compensateFactor);
-                    }
-                else
-                    {
-                    this.getTransmission()
-                            .driveRaw(motorspeed, motorspeed);
-                    }
-
-
-
-        default:
-        case STOP_TEST:
-
-            // if we are too close to the wall, brake, then set all motors to
-            // zero, else drive by ultrasonic
-            System.out.println("We are stopping");
-            this.getTransmission().driveRaw(0, 0);
-            testState = TestState.INIT_TEST;
-            return true;
-        }
-    return false;
-
-
-}
-
-
-private enum TestState
-    {
-    INIT_TEST, ALIGN_TEST, STOP_TEST
-
-    }
-
-private TestState testState = TestState.INIT_TEST;
 // private int currentPictureIteration = 0;
 
 /**
@@ -695,15 +606,6 @@ public double getCameraCenterValue ()
 
 
 // ================VISION CONSTANTS================
-private final double DEFAULT_COMPENSTATE_TEST = 0;
-
-private final double TEST_COMPENSATE_1 = .3;
-
-private final double TEST_COMPENSATE_2 = .2;
-
-private final double TEST_COMPENSATE_3 = .1;
-
-
 
 
 // the distance in inches in which we drive the robot straight using the
@@ -738,6 +640,8 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 private final double DRIVE_CORRECTION = .15;
 
 private final double DRIVE_CORRECTION_CLOSE = .08;
+
+private final double DRIVE_CORRECTION_CLOSE_2018 = .5;
 
 
 private static double MIN_BLOB_AREA = 600;// TODO

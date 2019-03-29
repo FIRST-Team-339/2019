@@ -72,6 +72,7 @@ public static void init ()
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
+            Hardware.ringLightRelay.set(Value.kOn);
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XIX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -180,6 +181,8 @@ public static Level autoLevel = Level.NULL;
  */
 public static void periodic ()
 {
+
+
     if (Hardware.cancelAutoLeftDriver.get() == true
             && Hardware.cancelAutoRightDriver.get() == true)
         {
@@ -1029,7 +1032,7 @@ private static enum SideCargoBallState
  * Variable for keeping track of the state used in the depositSideCargoBall
  * path
  */
-private static SideCargoBallState sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;// INIT;//TODO
+private static SideCargoBallState sideCargoBallState = SideCargoBallState.INIT;// TODO
 
 private static boolean depositSideCargoBall ()
 // welcome to the Gates of Hell
@@ -1037,8 +1040,10 @@ private static boolean depositSideCargoBall ()
 {
     System.out.println("sideState" + sideCargoBallState);
     // System.out.println("level one?" + Hardware.levelOneSwitch.isOn());
-    System.out
-            .println("side" + Hardware.autoCenterSwitch.getPosition());
+    System.out.println(
+            "yay the robot is doing something orrect for once");
+    System.out.println("auto disable switch: "
+            + Hardware.autoDisableSwitch.isOn());
     // TODO
     switch (sideCargoBallState)
         {
@@ -1183,7 +1188,8 @@ private static boolean depositSideCargoBall ()
             if (Hardware.driveWithCamera
                     .driveToTargetClose(.2))// TODO constant nad vision function
                 {
-                sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
+                sideCargoBallState = SideCargoBallState.FINISHED;// DEPOSIT_BALL;
+                                                                 // //TODO
 
                 }
             break;
@@ -1743,11 +1749,11 @@ public static final double FIRST_AUTO_GEAR_RATIO_KILROY_XX = 1.0;
 
 public static final double SECOND_AUTO_GEAR_RATIO_KILROY_XX = 1.0;
 
-public static final double KILROY_XIX_DRIVE_SPEED = .4;
+public static final double KILROY_XIX_DRIVE_SPEED = .6;
 
 public static final double KILROY_XX_DRIVE_SPEED = .4;
 
-public static final double KILROY_XIX_TURN_SPEED = .4;
+public static final double KILROY_XIX_TURN_SPEED = .5;
 
 public static final double KILROY_XX_TURN_SPEED = .7;// .5;
 
