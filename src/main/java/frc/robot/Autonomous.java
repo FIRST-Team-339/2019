@@ -72,6 +72,7 @@ public static void init ()
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
+            Hardware.ringLightRelay.set(Value.kOff);
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XIX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -1712,7 +1713,8 @@ public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
 // TODO @CR .5?
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .5; // @ANE
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .4; // @ANE changed from
+                                                            // .5 @ 3/26/18
 
 public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .4;
 

@@ -231,58 +231,73 @@ public static void periodic ()
     // }
 
 
+
+
     // Forklift
 
     // Function for joystick control of forklift
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
 
-
-    // Button for Cargo Ship Cargo Preset Height
-    Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-            Forklift.CARGO_SHIP_CARGO_ANGLE,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.cargoShipCargoButton);
-
+    if (IN_DEMO_MODE == false)
+        {
+        // Button for Cargo Ship Cargo Preset Height
+        Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+                Forklift.CARGO_SHIP_CARGO_ANGLE,
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.cargoShipCargoButton);
+        }
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
     // Hardware.cargoShipHatchButton);
 
+    if (IN_DEMO_MODE == false)
+        {
+        // Button for Player Station Cargo Preset Height
+        Hardware.lift.setLiftPositionByButton(
+                Forklift.PLAYER_STATION_CARGO_HEIGHT,
+                Forklift.PLAYER_STATION_CARGO_ANGLE,
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.playerStationCargoButton);
+        }
 
-    // Button for Player Station Cargo Preset Height
-    Hardware.lift.setLiftPositionByButton(
-            Forklift.PLAYER_STATION_CARGO_HEIGHT,
-            Forklift.PLAYER_STATION_CARGO_ANGLE,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.playerStationCargoButton);
-
-    // Button for Player Station Hatch Preset Height
-    Hardware.lift.setLiftPositionByButton(
-            Forklift.PLAYER_STATION_HEIGHT,
-            Forklift.PLAYER_STATION_ANGLE,
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.playerStationButton);
+    if (IN_DEMO_MODE == false)
+        {
+        // Button for Player Station Hatch Preset Height
+        Hardware.lift.setLiftPositionByButton(
+                Forklift.PLAYER_STATION_HEIGHT,
+                Forklift.PLAYER_STATION_ANGLE,
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.playerStationButton);
+        }
 
 
-    Hardware.lift.setToNextHigherPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.nextHigherLiftHeightButton,
-            Hardware.chooseCargoRocketHeights.get());
+    if (IN_DEMO_MODE == false)
+        {
+        Hardware.lift.setToNextHigherPreset(
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.nextHigherLiftHeightButton,
+                Hardware.chooseCargoRocketHeights.get());
+        }
 
-    Hardware.lift.setToNextLowerPreset(
-            Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-            Hardware.nextLowerLiftHeightButton,
-            Hardware.chooseCargoRocketHeights.get());
-
+    if (IN_DEMO_MODE == false)
+        {
+        Hardware.lift.setToNextLowerPreset(
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.nextLowerLiftHeightButton,
+                Hardware.chooseCargoRocketHeights.get());
+        }
     // Game Piece Manipulator
 
     // Function for joystick control of manipulator
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    Hardware.manipulator.poweredDeployDownForClimb(
-            Hardware.poweredManipulatorForClimbButton);
-
+    if (IN_DEMO_MODE == false)
+        {
+        Hardware.manipulator.poweredDeployDownForClimb(
+                Hardware.poweredManipulatorForClimbButton);
+        }
     // Becuase solenoid auto closes whenever we are not intaking,
     // this toggle code is currently useless
     // Hardware.manipulator
@@ -306,13 +321,14 @@ public static void periodic ()
     Hardware.manipulator.masterUpdate();
 
     // Hardware.climber.climbUpdate();
+    if (IN_DEMO_MODE == false)
+        {
+        Hardware.retriever.retrievalUpdate();
 
-    Hardware.retriever.retrievalUpdate();
+        Hardware.climber.newClimbUpdate();
 
-    Hardware.climber.newClimbUpdate();
-
-    Hardware.depositGamePiece.depositTeleopStateMachine();
-
+        Hardware.depositGamePiece.depositTeleopStateMachine();
+        }
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     // Hardware.manipulator.printDeployDebugInfo();
@@ -320,53 +336,55 @@ public static void periodic ()
     // System.out.println("delay potentiameter" + Hardware.delayPot.get());
     // debug =====================================================
 
-    // vision=====================================
-    // 8 and 9visionHeightDownButton
-
-    // TODO find a better way to set visionHeight than using timer
-    // and also find some way of telling the driver's what
-    // height they are at
-    if (Hardware.visionHeightUpButton.get() == true
-            && visionHeight < 2 && Hardware.telopTimer.get() > .25)
+    if (IN_DEMO_MODE == false)
         {
-        Hardware.telopTimer.reset();
-        visionHeight++;
-        Hardware.telopTimer.start();
-        }
-    if (Hardware.visionHeightDownButton.get() == true
-            && visionHeight > 0 && Hardware.telopTimer.get() > .25)
-        {
-        Hardware.telopTimer.reset();
-        visionHeight--;
-        Hardware.telopTimer.start();
-        }
+        // vision=====================================
+        // 8 and 9visionHeightDownButton
 
-    if (Hardware.alignVisionButton.isOnCheckNow() == true
-            && Hardware.depositGamePiece.overrideVision() == false)
-        {
-
-        if (Hardware.depositGamePiece
-                .startTeleopDeposit(visionHeight,
-                        false))
+        // TODO find a better way to set visionHeight than using timer
+        // and also find some way of telling the driver's what
+        // height they are at
+        if (Hardware.visionHeightUpButton.get() == true
+                && visionHeight < 2 && Hardware.telopTimer.get() > .25)
             {
-            Hardware.alignVisionButton.setValue(false);
+            Hardware.telopTimer.reset();
+            visionHeight++;
+            Hardware.telopTimer.start();
+            }
+        if (Hardware.visionHeightDownButton.get() == true
+                && visionHeight > 0 && Hardware.telopTimer.get() > .25)
+            {
+            Hardware.telopTimer.reset();
+            visionHeight--;
+            Hardware.telopTimer.start();
+            }
 
+        if (Hardware.alignVisionButton.isOnCheckNow() == true
+                && Hardware.depositGamePiece.overrideVision() == false)
+            {
+
+            if (Hardware.depositGamePiece
+                    .startTeleopDeposit(visionHeight,
+                            false))
+                {
+                Hardware.alignVisionButton.setValue(false);
+
+                }
+            }
+        else
+            {
+            Hardware.depositGamePiece.resetDepositTeleop();
+            }
+
+        if (Hardware.alignAndStopButton.isOnCheckNow() == true
+                && Hardware.depositGamePiece.overrideVision() == false)
+            {
+            if (Hardware.retriever.alignWithVision(.1))
+                {
+                Hardware.alignAndStopButton.setValue(false);
+                }
             }
         }
-    else
-        {
-        Hardware.depositGamePiece.resetDepositTeleop();
-        }
-
-    if (Hardware.alignAndStopButton.isOnCheckNow() == true
-            && Hardware.depositGamePiece.overrideVision() == false)
-        {
-        if (Hardware.retriever.alignWithVision(.1))
-            {
-            Hardware.alignAndStopButton.setValue(false);
-            }
-        }
-
     // end vision==============================================
 
     // buttons
@@ -381,76 +399,101 @@ public static void periodic ()
         Hardware.manipulator.resetStateMachine();
         } // end if
 
-
-    if (Hardware.cancelAutoLeftDriver.get() == true
-            && Hardware.cancelAutoRightDriver.get() == true)
+    if (IN_DEMO_MODE == false)
         {
-        Hardware.climber.finishEarly();
+        if (Hardware.cancelAutoLeftDriver.get() == true
+                && Hardware.cancelAutoRightDriver.get() == true)
+            {
+            Hardware.climber.finishEarly();
+            }
         }
-
     // Buttons to reset the forklift encoder. Should never be called during
     // a match; only is in the final code for the purpsoe of speeding up
     // testing in the pits
 
-    if (Hardware.resetForkliftEncoderButton1.get() == true
-            && Hardware.resetForkliftEncoderButton2.get() == true)
+    if (IN_DEMO_MODE == false)
         {
-        Hardware.lift.resetEncoder();
+        if (Hardware.resetForkliftEncoderButton1.get() == true
+                && Hardware.resetForkliftEncoderButton2.get() == true)
+            {
+            Hardware.lift.resetEncoder();
+            }
+
+        individualTest();
+
+        takePicture();
         }
-
-    individualTest();
-
-    takePicture();
-
     // Hardware.telemetry.printToShuffleboard();
 
     // Hardware.telemetry.printToConsole();
 
-    if (Hardware.climbOneButton.get() == true
-            && Hardware.climbTwoButton.get() == true)
-    // if (Hardware.leftDriver.getRawButton(6) == true)
+    if (IN_DEMO_MODE == false)
         {
-        // Hardware.climber.climb();
-        Hardware.climber.newClimb();
-        }
-
-    if (Hardware.retrievalButton.get() == true)
-        {
-        Hardware.retriever.retrieveHatch();
-        }
-
-    if (Hardware.alignVisionButton.get() == false
-            || Hardware.depositGamePiece.overrideVision())
-        {
-        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
-                && RetrieveHatch.retrievalState == RetrieveHatch.RetrievalState.STANDBY)
+        if (Hardware.climbOneButton.get() == true
+                && Hardware.climbTwoButton.get() == true)
+        // if (Hardware.leftDriver.getRawButton(6) == true)
             {
-            teleopDrive();
-            if (Hardware.solenoidButtonOne.isOnCheckNow() == true
-                    && Hardware.solenoidButtonTwo
-                            .isOnCheckNow() == true)
-                {
-                Hardware.driveSolenoid.setForward(false);
-                }
-            else
-                {
-                Hardware.driveSolenoid.setForward(true);
-                }
+            // Hardware.climber.climb();
+            Hardware.climber.newClimb();
             }
         }
 
-    if (Hardware.frontUltraSonic
-            .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-            &&
-            Hardware.frontUltraSonic
-                    .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                            + 12.0)
+    if (IN_DEMO_MODE == false)
         {
-        ringLightFlash(true, .5);
+        if (Hardware.driveStraightButton.get() == true)
+            {
+            Hardware.drive.driveStraight(DRIVE_SPEED,
+                    Autonomous.ACCELERATION_TIME,
+                    Autonomous.USING_GYRO);
+
+            }
+        else
+            if (Hardware.retrievalButton.get() == true)
+                {
+                Hardware.retriever.retrieveHatch();
+                }
+            else
+                if (Hardware.alignVisionButton.get() == false
+                        || Hardware.depositGamePiece.overrideVision())
+                    {
+                    if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
+                            && RetrieveHatch.retrievalState == RetrieveHatch.RetrievalState.STANDBY)
+                        {
+                        teleopDrive();
+                        if (Hardware.solenoidButtonOne
+                                .isOnCheckNow() == true
+                                && Hardware.solenoidButtonTwo
+                                        .isOnCheckNow() == true)
+                            {
+                            Hardware.driveSolenoid.setForward(false);
+                            }
+                        else
+                            {
+                            Hardware.driveSolenoid.setForward(true);
+                            }
+                        }
+                    }
         }
     else
         {
-        ringLightFlash(false, .5);
+        teleopDrive();
+        }
+
+    if (IN_DEMO_MODE == false)
+        {
+        if (Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                &&
+                Hardware.frontUltraSonic
+                        .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                                + 12.0)
+            {
+            ringLightFlash(true, .5);
+            }
+        else
+            {
+            ringLightFlash(false, .5);
+            }
         }
     printStatements();
 
@@ -465,7 +508,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -637,8 +680,8 @@ private static void coleTest ()
 
     // Manipulator
 
-    Hardware.lift.printDebugInfo();
-    Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
+    // Hardware.manipulator.printDeployDebugInfo();
 
 } // end coleTest()
 
@@ -1015,11 +1058,17 @@ public static void printStatements ()
         // ---------------------------------
 
         // ---------------------------------
-        // Solenoids
+        // Solenoidsj
         // ---------------------------------
+        // System.out.println("drive solenoid momentary switches "
+        // + Hardware.solenoidButtonOne.isOnCheckNow() + " "
+        // + Hardware.solenoidButtonTwo.isOnCheckNow());
 
-        System.out.println("Arm intake solenoid forward: "
-                + Hardware.armIntakeSolenoid.getForward());
+
+        // System.out.println("Drive solenoid forward: "
+        // + Hardware.driveSolenoid.getForward());
+        // System.out.println("Arm intake solenoid forward: "
+        // + Hardware.armIntakeSolenoid.getForward());
         // SmartDashboard.putBoolean("Arm intake solenoid forward: ",
         // Hardware.armIntakeSolenoid.getForward());
         // Hardware.telemetry
@@ -1060,8 +1109,8 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("delay pot: " +
         // Hardware.delayPot.get(0, 5));
 
-        System.out.println("Intake deploy sensor: "
-                + Hardware.armPot.get());
+        // System.out.println("Intake deploy sensor: "
+        // + Hardware.armPot.get());
         // SmartDashboard.putNumber("Arm Pot sensor: ",
         // Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
@@ -1280,6 +1329,8 @@ public static void teleopDrive ()
 // Constants
 // ================================
 
+private static final boolean IN_DEMO_MODE = true;
+
 // The number of gears we want to not go over. There is no reason to make this
 // more than 3 unless the code is fixed. Thanks McGee.
 private static final int MAX_GEAR_NUMBERS = 2;
@@ -1288,9 +1339,9 @@ public static final int FIRST_GEAR_NUMBER = 0;
 
 public static final int SECOND_GEAR_NUMBER = 1;
 
-private static final double FIRST_GEAR_RATIO_KILROY_XIX = .4;
+private static final double FIRST_GEAR_RATIO_KILROY_XIX = .5;
 
-private static final double SECOND_GEAR_RATIO_KILROY_XIX = .7;
+private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 
 public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 

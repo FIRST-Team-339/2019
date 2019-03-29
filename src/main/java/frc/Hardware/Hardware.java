@@ -70,7 +70,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2019;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
@@ -363,6 +363,8 @@ public static JoystickButton downshiftButton = null;
 // ------------------------------------
 // Momentary Switches
 // ------------------------------------
+public static JoystickButton driveStraightButton = null;
+
 public static MomentarySwitch solenoidButtonOne = null;
 
 public static MomentarySwitch solenoidButtonTwo = null;
@@ -704,6 +706,8 @@ public static void commonInitialization ()
     upshiftButton = new JoystickButton(leftDriver, 1);
 
     // ----------Right Driver--------------
+
+    driveStraightButton = new JoystickButton(rightDriver, 2);
 
     solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
 
