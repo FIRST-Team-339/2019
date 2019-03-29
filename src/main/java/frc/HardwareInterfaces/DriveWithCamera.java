@@ -384,20 +384,7 @@ public boolean driveToTargetClose (double speed)
         case INIT:
 
             Hardware.drive.resetEncoders();
-            if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2019)
-                {
-                double correctionValue = (DRIVE_CORRECTION_CLOSE / .1)
-                        * speed;// porpotion based off of tested code at .1
-                                // speed
-                }
-            else
-                if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2018)
-                    {
-                    double correctionValue = (DRIVE_CORRECTION_CLOSE_2018
-                            / .1)
-                            * speed;// porpotion based off of tested code at .1
-                                    // speed
-                    }
+
             double correctionValue = (DRIVE_CORRECTION_CLOSE / .1)
                     * speed;// porpotion based off of tested code at .1 speed
 
@@ -405,6 +392,7 @@ public boolean driveToTargetClose (double speed)
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
+            correctionValue = DRIVE_CORRECTION_CLOSE;
             Hardware.axisCamera.processImage();// TODO
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
@@ -423,7 +411,20 @@ public boolean driveToTargetClose (double speed)
                     state = DriveWithCameraState.STOP;
                     }
                 }
-            correctionValue = DRIVE_CORRECTION;
+            if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2019)
+                {
+                correctionValue = (DRIVE_CORRECTION_CLOSE / .1)
+                        * speed;// porpotion based off of tested code at .1
+                                // speed
+                }
+            else
+                if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2018)
+                    {
+                    correctionValue = (DRIVE_CORRECTION_CLOSE_2018
+                            / .1)
+                            * speed;// porpotion based off of tested code at .1
+                                    // speed
+                    }
 
             motorspeed = speed;
 
@@ -442,7 +443,7 @@ public boolean driveToTargetClose (double speed)
                 // left
                 // System.out.println("too right");
                 this.getTransmission().driveRaw(
-                        motorspeed + .5/* correctionValue */,// TODO
+                        motorspeed + correctionValue,// TODO
                         motorspeed/* - correctionValue */);
                 }
             // if the switch center is to the left of our center set by the
@@ -455,7 +456,7 @@ public boolean driveToTargetClose (double speed)
                     // System.out.println("too left");
                     this.getTransmission().driveRaw(
                             motorspeed/* - correctionValue */,
-                            motorspeed + .5/* correctionValue */);// TODO
+                            motorspeed + correctionValue);// TODO
                     }
                 else
                     {
