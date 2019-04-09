@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.KilroyEncoder;
 import frc.HardwareInterfaces.RobotPotentiometer;
+import frc.robot.Teleop;
 import frc.HardwareInterfaces.LightSensor;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -281,10 +282,17 @@ public double getCurrentArmPosition ()
     // {
     // scales the value from the arm pot so parallel to the ground is
     // zero, and perpendicular to the ground and pointing up is 90
-    return (this.armPot.get()
-            - ARM_POT_RAW_HORIZONTAL_VALUE)
-            * ARM_POT_SCALE_TO_DEGREES;
 
+    if (Teleop.inDemoMode == false)
+        {
+        return (this.armPot.get()
+                - ARM_POT_RAW_HORIZONTAL_VALUE)
+                * ARM_POT_SCALE_TO_DEGREES;
+        }
+    else
+        {
+        return (6.0);
+        }
 
     // } else // if we are not using an armPot, we should be using an encoder
     // {

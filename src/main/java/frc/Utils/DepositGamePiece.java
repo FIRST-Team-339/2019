@@ -643,7 +643,7 @@ public boolean overrideVision ()
 
 public void printDebugStatements ()
 {
-    Hardware.axisCamera.processImage();
+    // Hardware.axisCamera.processImage();
     SmartDashboard.putString("deposit teleop",
             this.depositTeleopState.toString());
 
