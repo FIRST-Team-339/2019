@@ -29,6 +29,7 @@ import frc.HardwareInterfaces.SixPositionSwitch;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
 import frc.Utils.drive.Drive.BrakeType;
+import frc.robot.Teleop;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
@@ -70,7 +71,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 
 // -------------------------------------
 // Private Constants
@@ -79,7 +80,7 @@ public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 // ---------------------------------------
 // Hardware Tunables
 // ---------------------------------------
-public static boolean demoMode = false;
+public static boolean demoMode = Teleop.inDemoMode;
 
 // **********************************************************
 // DIGITAL I/O CLASSES
@@ -149,9 +150,12 @@ public static SingleThrowSwitch levelOneSwitch = null;
 
 public static SingleThrowSwitch levelTwoSwitch = null;
 
+public static SingleThrowSwitch demoModeSwitch = null;
+
 public static DoubleThrowSwitch autoDisableSwitch = null;
 
 public static SixPositionSwitch autoSixPosSwitch = null;
+
 
 // ------------------------------------
 // Gear Tooth Sensors
@@ -533,6 +537,8 @@ public static void commonInitialization ()
     levelOneSwitch = new SingleThrowSwitch(22);
 
     levelTwoSwitch = new SingleThrowSwitch(23);
+
+    demoModeSwitch = new SingleThrowSwitch(0);
 
     autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
             levelTwoSwitch);

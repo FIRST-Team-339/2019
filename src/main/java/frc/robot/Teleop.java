@@ -64,6 +64,7 @@ public static void init ()
     Hardware.axisCamera.setRelayValue(Value.kOn);
     Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
+
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
@@ -94,6 +95,18 @@ public static void init ()
             break;
 
         } // end switch
+
+
+    if (inDemoMode == true)
+        {
+        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                Hardware.delayPot.get(.01, 1.0));
+        Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+                Hardware.delayPot.get(.01, 1.0));
+        Hardware.manipulator.setMaxArmAngle(65);
+        }
+
+
 } // end Init
 
 
@@ -214,7 +227,11 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
-
+    if (inDemoMode == true)
+        {
+        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                .21);
+        }
     SmartDashboard.putNumber("Delay raw", Hardware.delayPot.get());
     SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
     // =================================================================
@@ -232,6 +249,32 @@ public static void periodic ()
 
 
 
+    if (inDemoMode == true)
+        {
+        // System.out.println("pot = " + Hardware.delayPot.get(0.0, 1.0));
+        // if (Hardware.leftDriver.getRawButton(7) == true
+        // /* && Hardware.leftDriver.getRawButton(8) == true */)
+        // {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, .4);
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, .4);
+        // }
+        // if (Hardware.leftDriver.getRawButton(9) == true
+        // /* && Hardware.leftDriver.getRawButton(10) == true */)
+        // {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, 1.0);
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, 1.0);
+        // }
+        // if (Hardware.leftDriver.getRawButton(11) == true
+        // /* && Hardware.leftDriver.getRawButton(12) == true */)
+        // {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+        // Hardware.delayPot.get(0.0, 1.0));
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+        // Hardware.delayPot.get(0.0, 1.0));
+        // }
+        }
+
+
 
     // Forklift
 
@@ -239,7 +282,7 @@ public static void periodic ()
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
             Hardware.forkliftOverride.get());
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         // Button for Cargo Ship Cargo Preset Height
         Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
@@ -251,7 +294,7 @@ public static void periodic ()
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
     // Hardware.cargoShipHatchButton);
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         // Button for Player Station Cargo Preset Height
         Hardware.lift.setLiftPositionByButton(
@@ -262,7 +305,7 @@ public static void periodic ()
         }
 
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
 
         // Player Station Cargo Preset Height is commented out at
@@ -291,7 +334,7 @@ public static void periodic ()
         }
 
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         Hardware.lift.setToNextHigherPreset(
                 Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
@@ -299,7 +342,7 @@ public static void periodic ()
                 Hardware.chooseCargoRocketHeights.get());
         }
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         Hardware.lift.setToNextLowerPreset(
                 Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
@@ -312,7 +355,7 @@ public static void periodic ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         Hardware.manipulator.poweredDeployDownForClimb(
                 Hardware.poweredManipulatorForClimbButton);
@@ -340,7 +383,7 @@ public static void periodic ()
     Hardware.manipulator.masterUpdate();
 
     // Hardware.climber.climbUpdate();
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         Hardware.retriever.retrievalUpdate();
 
@@ -352,10 +395,11 @@ public static void periodic ()
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     // Hardware.manipulator.printDeployDebugInfo();
     // Hardware.lift.printDebugInfo();
-    // System.out.println("delay potentiameter" + Hardware.delayPot.get());
+    // System.out.println(
+    // "delay potentiameter" + Hardware.delayPot.get(0, 1.0));
     // debug =====================================================
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         // vision=====================================
         // 8 and 9visionHeightDownButton
@@ -418,7 +462,7 @@ public static void periodic ()
         Hardware.manipulator.resetStateMachine();
         } // end if
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         if (Hardware.cancelAutoLeftDriver.get() == true
                 && Hardware.cancelAutoRightDriver.get() == true)
@@ -430,7 +474,7 @@ public static void periodic ()
     // a match; only is in the final code for the purpsoe of speeding up
     // testing in the pits
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         if (Hardware.resetForkliftEncoderButton1.get() == true
                 && Hardware.resetForkliftEncoderButton2.get() == true)
@@ -446,7 +490,7 @@ public static void periodic ()
 
     // Hardware.telemetry.printToConsole();
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         if (Hardware.climbOneButton.get() == true
                 && Hardware.climbTwoButton.get() == true)
@@ -457,7 +501,7 @@ public static void periodic ()
             }
         }
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         if (Hardware.driveStraightButton.get() == true)
             {
@@ -498,7 +542,7 @@ public static void periodic ()
         teleopDrive();
         }
 
-    if (IN_DEMO_MODE == false)
+    if (inDemoMode == false)
         {
         if (Hardware.frontUltraSonic
                 .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
@@ -1348,7 +1392,7 @@ public static void teleopDrive ()
 // Constants
 // ================================
 
-private static final boolean IN_DEMO_MODE = false;
+public static boolean inDemoMode = false;
 
 // The number of gears we want to not go over. There is no reason to make this
 // more than 3 unless the code is fixed. Thanks McGee.
@@ -1365,7 +1409,6 @@ private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 
 public static final double SECOND_GEAR_RATIO_KILROY_XX = .6;
-
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 

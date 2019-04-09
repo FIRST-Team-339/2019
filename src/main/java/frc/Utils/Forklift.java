@@ -625,6 +625,10 @@ public void update ()
 {
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
+    if (Hardware.demoMode == true)
+        {
+        this.currentLiftMaxHeight = DEMO_HEIGHT;
+        }
 
     if (Hardware.whichRobot != Hardware.RobotYear.KILROY_2018)
         {
@@ -997,6 +1001,8 @@ public final static double CARGO_SHIP_CARGO_ANGLE = 45;
 private static final double MAX_HEIGHT = 56;
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
+
+private double DEMO_HEIGHT = 45;
 
 private double LIMIT_ARM_ANGLE_HEIGHT = .2;
 
