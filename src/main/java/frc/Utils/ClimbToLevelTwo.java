@@ -1000,6 +1000,8 @@ private boolean lowerArm ()
     // armMotor.set(0.0);
     // return true;
     // }
+// TODO @ANE @CR moveArmToPsotion with only one parameter passes in an old,
+// slow value for the downward movements
     if (Hardware.manipulator.moveArmToPosition(
             GamePieceManipulator.MIN_ARM_POSITION_ADJUSTED_2018) == true)
         {
