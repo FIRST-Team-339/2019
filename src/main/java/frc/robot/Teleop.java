@@ -99,11 +99,11 @@ public static void init ()
 
     if (inDemoMode == true)
         {
-        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-                Hardware.delayPot.get(.01, 1.0));
-        Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-                Hardware.delayPot.get(.01, 1.0));
-        Hardware.manipulator.setMaxArmAngle(65);
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+        // Hardware.delayPot.get(.01, 1.0));
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+        // Hardware.delayPot.get(.01, 1.0));
+        // Hardware.manipulator.setMaxArmAngle(65);
         }
 
 
@@ -229,8 +229,8 @@ public static void periodic ()
 {
     if (inDemoMode == true)
         {
-        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-                .21);
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+        // .21);
         }
     SmartDashboard.putNumber("Delay raw", Hardware.delayPot.get());
     SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
@@ -285,10 +285,10 @@ public static void periodic ()
     if (inDemoMode == false)
         {
         // Button for Cargo Ship Cargo Preset Height
-        Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
-                Forklift.CARGO_SHIP_CARGO_ANGLE,
-                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-                Hardware.cargoShipCargoButton);
+        // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+        // Forklift.CARGO_SHIP_CARGO_ANGLE,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+        // Hardware.cargoShipCargoButton);
         }
     // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
@@ -297,11 +297,11 @@ public static void periodic ()
     if (inDemoMode == false)
         {
         // Button for Player Station Cargo Preset Height
-        Hardware.lift.setLiftPositionByButton(
-                Forklift.PLAYER_STATION_CARGO_HEIGHT,
-                Forklift.PLAYER_STATION_CARGO_ANGLE,
-                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-                Hardware.playerStationCargoButton);
+        // Hardware.lift.setLiftPositionByButton(
+        // Forklift.PLAYER_STATION_CARGO_HEIGHT,
+        // Forklift.PLAYER_STATION_CARGO_ANGLE,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+        // Hardware.playerStationCargoButton);
         }
 
 
@@ -355,6 +355,9 @@ public static void periodic ()
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
             Hardware.deployOverride.get());
 
+    if (Hardware.toggleIgnoreMakeBreakButton.getCurrentValue() == true)
+        Hardware.manipulator.toggleIgnoreMakeBreak();
+
     if (inDemoMode == false)
         {
         Hardware.manipulator.poweredDeployDownForClimb(
@@ -393,10 +396,10 @@ public static void periodic ()
         }
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
-    // Hardware.manipulator.printDeployDebugInfo();
-    // Hardware.lift.printDebugInfo();
+    Hardware.manipulator.printDeployDebugInfo();
+    Hardware.lift.printDebugInfo();
     // System.out.println(
-    // "delay potentiameter" + Hardware.delayPot.get(0, 1.0));
+    // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
 
     if (inDemoMode == false)
@@ -493,7 +496,7 @@ public static void periodic ()
     if (inDemoMode == false)
         {
         if (Hardware.climbOneButton.get() == true
-                && Hardware.climbTwoButton.get() == true)
+        /* && Hardware.climbTwoButton.get() == true */)
         // if (Hardware.leftDriver.getRawButton(6) == true)
             {
             // Hardware.climber.climb();
@@ -505,7 +508,7 @@ public static void periodic ()
         {
         if (Hardware.driveStraightButton.get() == true)
             {
-            Hardware.drive.driveStraight(DRIVE_SPEED,
+            Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
                     Autonomous.ACCELERATION_TIME,
                     Autonomous.USING_GYRO);
 

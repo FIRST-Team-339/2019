@@ -484,8 +484,8 @@ private static DepositCargoHatchState depositCargoHatchState = DepositCargoHatch
 
 private static boolean depositCargoHatch ()
 {
-    // System.out.println(
-    // "depositCargoHatchState:" + depositCargoHatchState);
+    System.out.println(
+            "depositCargoHatchState:" + depositCargoHatchState);
     switch (depositCargoHatchState)
         {
         case INIT:
@@ -1040,10 +1040,10 @@ private static boolean depositSideCargoBall ()
 {
     System.out.println("sideState" + sideCargoBallState);
     // System.out.println("level one?" + Hardware.levelOneSwitch.isOn());
-    System.out.println(
-            "yay the robot is doing something orrect for once");
-    System.out.println("auto disable switch: "
-            + Hardware.autoDisableSwitch.isOn());
+    // System.out.println(
+    // "yay the robot is doing something correct for once");
+    // System.out.println("auto disable switch: "
+    // + Hardware.autoDisableSwitch.isOn());
     // TODO
     switch (sideCargoBallState)
         {
@@ -1071,6 +1071,7 @@ private static boolean depositSideCargoBall ()
             break;
 
         case TURN_TOWARDS_ROCKET:
+            // System.out.println("gyro " + Hardware.gyro.getAngle());
             if (autoPosition == Position.LEFT)
                 {
                 System.out.println("left turn towards rocket");
@@ -1097,6 +1098,11 @@ private static boolean depositSideCargoBall ()
                     }
             break;
         case DRIVE_TOWARDS_ROCKET:
+            // System.out.println(
+            // "left enc " + Hardware.leftFrontDriveEncoder
+            // .getDistance());
+            // System.out.println("right enc "
+            // + Hardware.rightFrontDriveEncoder.getDistance());
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL,
                     DRIVE_SPEED, ACCELERATION_TIME, USING_GYRO))
@@ -1106,6 +1112,7 @@ private static boolean depositSideCargoBall ()
             break;
 
         case TURN_PARALLEL_TO_ROCKET:
+            // System.out.println("gyro " + Hardware.gyro.getAngle());
             if (autoPosition == Position.LEFT)
                 {
                 System.out
@@ -1133,6 +1140,11 @@ private static boolean depositSideCargoBall ()
                     }
             break;
         case DRIVE_PARALLEL_TO_ROCKET:
+            // System.out.println(
+            // "left enc " + Hardware.leftFrontDriveEncoder
+            // .getDistance());
+            // System.out.println("right enc "
+            // + Hardware.rightFrontDriveEncoder.getDistance());
             if (Hardware.drive.driveStraightInches(
                     DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET, DRIVE_SPEED,
                     ACCELERATION_TIME, USING_GYRO) == true)
@@ -1142,6 +1154,7 @@ private static boolean depositSideCargoBall ()
             break;
 
         case TURN_TOWARDS_CARGO_SHIP:
+            // System.out.println("gyro " + Hardware.gyro.getAngle());
             if (autoPosition == Position.LEFT)
                 {
 
@@ -1188,8 +1201,8 @@ private static boolean depositSideCargoBall ()
             if (Hardware.driveWithCamera
                     .driveToTargetClose(.2))// TODO constant nad vision function
                 {
-                sideCargoBallState = SideCargoBallState.FINISHED;// DEPOSIT_BALL;
-                                                                 // //TODO
+                sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
+                // //TODO
 
                 }
             break;
@@ -1703,7 +1716,7 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
 
 public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 60.0;// TODO
 
-public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 60.0;
+public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 120.0;
 
 public static final double DISTANCE_TO_BACK_UP = 0.0;
 
@@ -1718,8 +1731,9 @@ public static final double DRIVE_BACKWARDS_TO_ALIGN_SPEED = -.4;
 public static final double SPEED_TO_DRIVE_OFF_PLATFORM = .75; // @ANE
 
 // TODO @CR .5?
-public static final double TIME_TO_DRIVE_OFF_PLATFORM = .4; // @ANE changed from
-                                                            // .5 @ 3/26/18
+public static final double TIME_TO_DRIVE_OFF_PLATFORM = .5; // @ANE changed
+                                                            // from
+                                                            // .4 @ 4/11/18
 
 public static final double TIME_TO_DRIVE_BACKWARDS_TO_ALIGN = .4;
 

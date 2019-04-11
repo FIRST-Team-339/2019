@@ -559,6 +559,12 @@ public void setMaxArmAngle (double angle)
     this.currentDeployMaxAngle = angle;
 }
 
+public boolean toggleIgnoreMakeBreak ()
+{
+    return this.intake.toggleIgnoreMakeBreak();
+}
+
+
 /**
  *
  */
@@ -722,7 +728,8 @@ public void deployUpdate ()
                     }
 
                 this.armMotor.set(stayAtPositionTempSpeed);
-                }
+                // this.armMotor.set(0.0);
+            }
 
             // Reset the direction for next move-to-position.
             deployDirection = DeployMovementDirection.NEUTRAL;
@@ -960,9 +967,9 @@ private double HOLD_ARM_NO_GRAVITY_SPEED = .03;
 
 private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE = 45;
 
-private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = 0.07;
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED = 0.09;
 
-private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.1;
+private double HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED = 0.13;
 
 private double GO_UP_HOLD_ARM_NO_GRAVITY_SPEED = .5
         * MAX_DEPLOY_SPEED_2019;
@@ -1207,16 +1214,18 @@ private static int MIN_ARM_POSITION_ADJUSTED = 0;
 
 private static int DEPLOYED_ARM_POSITION_ADJUSTED = 15;
 
-private static int RETRACTED_ARM_POSITION_ADJUSTED = 90;
+private static int RETRACTED_ARM_POSITION_ADJUSTED = 59;
 
 private double ARM_LEANING_BACK_ANGLE = 90;
 
-private double IS_FULLY_CLEAR_OF_FRAME_ANGLE = 65;
+private double IS_FULLY_CLEAR_OF_FRAME_ANGLE = 60;
 
 private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 91;
 
 // the maximum angle for the deploy so
 public double MAX_FORKLIFT_UP_ANGLE = 60;
+
+public double HIGHER_MAX_FORKLIFT_UP_ANGLE = 50;
 
 public double FORKLIFT_PARTIALLY_UP_MAX_ANGLE = 86;
 
@@ -1224,7 +1233,7 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 218;
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 48;
 
 // vertical angle: 106
 
@@ -1234,7 +1243,10 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // value that is multipled to the value from the arm pot to convert
 // it to degrees
-private static double ARM_POT_SCALE_TO_DEGREES = -.743802; // 90/121
+
+// calculate by via the formula: 90/ (Raw Pot Value when arm is vertical -
+// Raw Pot Horizontal Value)
+private static double ARM_POT_SCALE_TO_DEGREES = 1.0714; // 90/84
 
 // // value that is multiplied by the number of ticks to convert it to degrees
 // private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //

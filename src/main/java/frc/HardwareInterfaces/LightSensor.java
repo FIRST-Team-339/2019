@@ -80,61 +80,72 @@ package frc.HardwareInterfaces;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 // -------------------------------------------------------
-/** This class Enhances the Digital Input class. It adds a member
+/**
+ * This class Enhances the Digital Input class. It adds a member
  * function isOn() which will return true if the light is reflected.
  * All other member functions from the base class are unchanged.
  *
  * @class LightSensor
  * @author S. V. Pakington
  * @written February 3, 2010
- *          ------------------------------------------------------- */
+ *          -------------------------------------------------------
+ */
 
 public class LightSensor extends DigitalInput
 {
 // -------------------------------------------------------
-/** Create an instance of a LightSensor class.
+/**
+ * Create an instance of a LightSensor class.
  * Creates a digital input given a channel and uses the default module.
  *
  * @method LightSensor()
  * @param channel
- *            - the port for the digital input
+ *                    - the port for the digital input
  * @author S. V. Pakington
  * @written Feb 3, 2010
- *          ------------------------------------------------------- */
+ *          -------------------------------------------------------
+ */
 public LightSensor (final int channel)
-    {
+{
     super(channel);
-    } // end LightSensor
+} // end LightSensor
 
 // -------------------------------------------------------
-/** Create an instance of a LightSensor class.
+/**
+ * Create an instance of a LightSensor class.
  * Creates a digital input given a channel and the module
  * passed in.
  *
  * @method LightSensor()
  * @param channel
- *            - the port for the digital input
+ *                    - the port for the digital input
  * @param slot
- *            - the slot where the digital board is located
+ *                    - the slot where the digital board is located
  * @author S. V. Pakington
  * @written Feb 3, 2010
- *          ------------------------------------------------------- */
-/* public LightSensor (final int slot,
-     * final int channel)
-     * {
-     * super(slot, channel);
-     * } // end LightSensor */
+ *          -------------------------------------------------------
+ */
+
+/*
+ * public LightSensor (final int slot,
+ * final int channel)
+ * {
+ * super(slot, channel);
+ * } // end LightSensor
+ */
 // -------------------------------------------------------
-/** This function tells us whether there is something
+/**
+ * This function tells us whether there is something
  * blocking the red light emitted by the sensor or not.
  *
  * @method isOn
  * @return Is on or not, true or false
  * @author S. V. Pakington
  * @written Feb 3, 2010
- *          ------------------------------------------------------- */
+ *          -------------------------------------------------------
+ */
 public boolean isOn ()
-    {
+{
     return (this.get());
-    } // end isOn
+} // end isOn
 } // end LightSensor

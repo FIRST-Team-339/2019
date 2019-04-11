@@ -336,7 +336,7 @@ public static QuickSwitch playerStationCargoButton = null;
 
 public static QuickSwitch playerStationButton = null;
 
-public static QuickSwitch cargoShipCargoButton = null;
+// public static QuickSwitch cargoShipCargoButton = null;
 
 public static JoystickButton visionHeightDownButton = null;
 
@@ -345,6 +345,9 @@ public static JoystickButton visionHeightUpButton = null;
 public static JoystickButton upshiftButton = null;
 
 public static JoystickButton poweredManipulatorForClimbButton = null;
+
+public static QuickSwitch toggleIgnoreMakeBreakButton = null;
+
 
 // ----- Right Operator -----
 
@@ -670,13 +673,16 @@ public static void commonInitialization ()
 
     playerStationButton = new QuickSwitch(leftOperator, 7);
 
-    cargoShipCargoButton = new QuickSwitch(leftOperator, 11);
+    // cargoShipCargoButton = new QuickSwitch(leftOperator, 11);
 
     visionHeightUpButton = new JoystickButton(leftOperator, 9);//
 
     visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
     alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
+
+    toggleIgnoreMakeBreakButton = new QuickSwitch(leftOperator, 11);
+
     // ----- Right Operator -----
 
     pictureButtonOne = new JoystickButton(rightOperator, 8);

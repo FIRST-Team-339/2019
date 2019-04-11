@@ -496,9 +496,9 @@ public void setToNextHigherPreset (double forkliftSpeed,
 
 private final double SET_ANGLE_DEADBAND = 3.0;
 
-// # of feet that the forklift can be off of the next highest position to
+// # of inches that the forklift can be off of the next highest position to
 // count as already being there
-private final double NEXT_HIGHER_POSITION_DEADBAND = 0.0; // 1; // 0
+private final double NEXT_HIGHER_POSITION_DEADBAND = 1.5; // 1; // 0
 
 private final double NEXT_HIGHER_HEIGHT_ADJUSTMENT = 0.0; // 1.3; // 0
 
@@ -604,9 +604,9 @@ public void setToNextLowerPreset (double forkliftSpeed,
         }
 }
 
-// # of feet that the forklift can be off of the next lowest position to
+// # of inches that the forklift can be off of the next lowest position to
 // count as already being there
-private final double NEXT_LOWER_POSITION_DEADBAND = 0.0; // 1;
+private final double NEXT_LOWER_POSITION_DEADBAND = 1.5; // 1;
 
 // private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 10;
 
@@ -649,9 +649,14 @@ public void update ()
         // this.manipulator.setMaxArmAngle(
         // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
         else
-            this.manipulator
-                    .setMaxArmAngle(
-                            manipulator.MAX_FORKLIFT_UP_ANGLE);
+            if (this.getForkliftHeight() < HIGHER_ARM_ANGLE_LIMIT_HEIGHT)
+                this.manipulator
+                        .setMaxArmAngle(
+                                manipulator.MAX_FORKLIFT_UP_ANGLE);
+            else
+                this.manipulator
+                        .setMaxArmAngle(
+                                manipulator.HIGHER_MAX_FORKLIFT_UP_ANGLE);
         }
 
     if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
@@ -925,7 +930,7 @@ private static final double JOYSTICK_DEADBAND = .2;
 private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 1.0;
 
 // leave this positive even though it is the downward scalar;
-// the speed is multipled by a negative value
+// the speed is multipled by a negative value later in the code
 private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.4;
 
 private double UP_JOYSTICK_SCALAR = 1.0;
@@ -953,32 +958,33 @@ private double STAY_UP_WITH_CARGO = 0.2;// TODO
 // rocket ship
 public final static double TOP_ROCKET_CARGO = 56;
 
-public final static double MIDDLE_ROCKET_CARGO = 35;
+public final static double MIDDLE_ROCKET_CARGO = 34;
 
-public final static double LOWER_ROCKET_CARGO = 11;
+public final static double LOWER_ROCKET_CARGO = 6;
 
-public final static double TOP_ROCKET_CARGO_ANGLE = 63;
+// this is not a high enough angle to reach the top, but is the
+// highest we can do due to the software stop when we are that high up
+public final static double TOP_ROCKET_CARGO_ANGLE = 50;
 
-public final static double MIDDLE_ROCKET_CARGO_ANGLE = 48;
+public final static double MIDDLE_ROCKET_CARGO_ANGLE = 59;
 
-public final static double LOWER_ROCKET_CARGO_ANGLE = 48;
+public final static double LOWER_ROCKET_CARGO_ANGLE = 59;
 
 // heights for the top, middle, and bottom openings for the hatch
 // rocket ship
-public final static double TOP_ROCKET_HATCH = 56;
+public final static double TOP_ROCKET_HATCH = 50;
 
 
 
-public final static double MIDDLE_ROCKET_HATCH = 30;
+public final static double MIDDLE_ROCKET_HATCH = 22;
 
-public final static double LOWER_ROCKET_HATCH = 6;// TODO changed from 9 cole
-                                                  // pls recheck lower values
+public final static double LOWER_ROCKET_HATCH = .2;
 
-public final static double TOP_ROCKET_HATCH_ANGLE = 33;
+public final static double TOP_ROCKET_HATCH_ANGLE = 51;
 
-public final static double MIDDLE_ROCKET_HATCH_ANGLE = 28;
+public final static double MIDDLE_ROCKET_HATCH_ANGLE = 51;
 
-public final static double LOWER_ROCKET_HATCH_ANGLE = 26;
+public final static double LOWER_ROCKET_HATCH_ANGLE = 33;
 
 // heights for the cargo and hatch openings on the cargo ship
 public final static double CARGO_SHIP_CARGO = 30;
@@ -989,9 +995,9 @@ public final static double PLAYER_STATION_CARGO_HEIGHT = 21;
 
 public final static double PLAYER_STATION_CARGO_ANGLE = 85;
 
-public final static double PLAYER_STATION_HEIGHT = 4;
+public final static double PLAYER_STATION_HEIGHT = .2;
 
-public final static double PLAYER_STATION_ANGLE = 5;
+public final static double PLAYER_STATION_ANGLE = 33;
 
 public final static double CARGO_SHIP_CARGO_ANGLE = 45;
 
@@ -1005,6 +1011,8 @@ private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 private double DEMO_HEIGHT = 45;
 
 private double LIMIT_ARM_ANGLE_HEIGHT = .2;
+
+private double HIGHER_ARM_ANGLE_LIMIT_HEIGHT = 43;
 
 private double PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT = 21.5;
 

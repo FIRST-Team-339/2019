@@ -139,10 +139,10 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
                 this.armSolenoid.setForward(false);
 
         }
+    // Outtake does not need to manipulate the solenoid
+    // because if we open the solenoid while outtaking,
+    // we risk dropping the ball
     else
-        // Outtake does not need to manipulate the solenoid
-        // because if we open the solenoid while outtaking,
-        // we risk dropping the ball
         if (outtakeButtonValue == true)
             {
             intakeState = IntakeState.OUTTAKE;
@@ -194,9 +194,21 @@ public boolean hasCargo ()
     // in a perfect world, we should return !photoSwith.isOn()
     // however, for some reason isOn is returning false when
     // the make break is not broken, so we do not need the !
+    if (isIgnoringMakeBreak == true)
+        return false;
     return this.photoSwitch.isOn();
 }
 
+
+public boolean toggleIgnoreMakeBreak ()
+{
+    // switches is IgnoringMakeBreak from true to false, or from
+    // false to true
+    isIgnoringMakeBreak = !isIgnoringMakeBreak;
+    return isIgnoringMakeBreak;
+}
+
+private boolean isIgnoringMakeBreak = false;
 
 /**
  * Resets the state machine so the intake does not keep trying to run
@@ -237,8 +249,8 @@ public void update ()
         // sets the motors to bring in a cargo
         case OUTTAKE:
             armRollers.set(OUTTAKE_ROLLER_SPEED);
-            if (this.hasCargo() == false)
-                this.armSolenoid.setForward(false);
+            // if (this.hasCargo() == false)
+            // this.armSolenoid.setForward(false);
             intakeState = IntakeState.HOLD;
             break;
 
