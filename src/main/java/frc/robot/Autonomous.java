@@ -1038,12 +1038,12 @@ private static boolean depositSideCargoBall ()
 // welcome to the Gates of Hell
 
 {
-    System.out.println("sideState" + sideCargoBallState);
-    // System.out.println("level one?" + Hardware.levelOneSwitch.isOn());
-    System.out.println(
-            "yay the robot is doing something orrect for once");
-    System.out.println("auto disable switch: "
-            + Hardware.autoDisableSwitch.isOn());
+    // System.out.println("sideState" + sideCargoBallState);
+    // // System.out.println("level one?" + Hardware.levelOneSwitch.isOn());
+    // System.out.println(
+    // "yay the robot is doing something orrect for once");
+    // System.out.println("auto disable switch: "
+    // + Hardware.autoDisableSwitch.isOn());
     // TODO
     switch (sideCargoBallState)
         {
