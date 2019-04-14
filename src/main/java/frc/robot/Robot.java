@@ -245,7 +245,7 @@ public void teleopPeriodic ()
     // =========================================================
     // User code goes below here
     // =========================================================
-    Teleop.periodic();
+   Teleop.periodic();
 
     // =========================================================
     // User code goes above here

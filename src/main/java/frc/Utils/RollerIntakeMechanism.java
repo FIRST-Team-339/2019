@@ -120,23 +120,24 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
         // if we are holding the override button, assume
         // that we do not want the automated solenoid code
         // and only set the intake state
-        if (intakeOverrideButtonValue == true)
+        if (intakeOverrideButtonValue == true
+                || this.hasCargo() == false)
             intakeState = IntakeState.INTAKE;
-        else
-            // if we do not have cargo, assume solenoid
-            // needs to be open because we are still
-            // trying to pick up a ball
-            if (this.hasCargo() == false)
-                {
-                this.armSolenoid.setForward(true);
-                intakeState = IntakeState.INTAKE;
-                }
-            // If we have cargo, assume we need to close
-            // the solenoid/ piston to keep the ball in.
-            // Also assumes we do not need to keep intaking
-            // since we already have the ball
-            else
-                this.armSolenoid.setForward(false);
+        // else
+        // // if we do not have cargo, assume solenoid
+        // // needs to be open because we are still
+        // // trying to pick up a ball
+        // if (this.hasCargo() == false)
+        // {
+
+        // intakeState = IntakeState.INTAKE;
+        // }
+        // If we have cargo, assume we need to close
+        // the solenoid/ piston to keep the ball in.
+        // Also assumes we do not need to keep intaking
+        // since we already have the ball
+        // else
+        // this.armSolenoid.setForward(false);
 
         }
     // Outtake does not need to manipulate the solenoid
@@ -149,10 +150,10 @@ public void intakeOuttakeByButtonsSeperated (boolean intakeButtonValue,
             // if (this.hasCargo() == false)
             // this.armSolenoid.setForward(true);
             }
-        else
-            {
-            this.armSolenoid.setForward(false);// @ANE
-            }
+    // else
+    // {
+    // this.armSolenoid.setForward(false);// @ANE
+    // }
 }
 
 /**
@@ -220,6 +221,12 @@ public void resetStateMachine ()
     intakeState = IntakeState.HOLD;
 }
 
+
+public void setIntakeState (IntakeState state)
+{
+    this.intakeState = state;
+}
+
 /**
  * Update method for the intake/ outtake device and state machine on the
  * manipulator used for picking up cargo
@@ -230,7 +237,23 @@ public void update ()
 {
 
     if (intakeState != IntakeState.HOLD)
+        {
         hasUsedIntake = true;
+        }
+
+    if (intakeState == IntakeState.INTAKE)
+        {
+        // closes the nessie head so we can keep a ball
+        // and brings apart the active hatch pickup so
+        // we can hold a hach
+        this.armSolenoid.setForward(false);
+        }
+    else
+        {
+        // opens up the nessie head and brings together the
+        // active hatch pickup mechanism
+        this.armSolenoid.setForward(true);
+        }
 
     switch (intakeState) // main state machine of intake
         {
@@ -242,9 +265,9 @@ public void update ()
             // However, if the intake button is being held, the
             // state will go back to INTAKE before intakeUpdate is
             // called again
-
             intakeState = IntakeState.HOLD;
             break;
+
 
         // sets the motors to bring in a cargo
         case OUTTAKE:

@@ -53,7 +53,11 @@ public static boolean hasLoweredAuto = false;
 public boolean depositHatch (boolean inAuto)
 {
 
-
+    if (inAuto)
+        {
+        Hardware.manipulator.masterUpdate();
+        Hardware.lift.update();
+        }
     switch (depositHatchState)
         {
 
@@ -70,11 +74,13 @@ public boolean depositHatch (boolean inAuto)
         case DEPOSIT_HATCH:
             // TODO magic number for drive speed
             // drives forward to put the hatch on the velcro
+
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
                     .2, BACKUP_ACCELERATION, usingGyro))
                 {
-
-                depositHatchState = DepositHatchState.PREP_TO_BACKUP;
+                Hardware.manipulator.setIntakeState(
+                        RollerIntakeMechanism.IntakeState.INTAKE);
+                depositHatchState = DepositHatchState.BACKUP_HATCH;
 
                 }
             break;
@@ -117,6 +123,8 @@ public boolean depositHatch (boolean inAuto)
         case BACKUP_HATCH:
 
             // back up after the hook is clear of the hatch
+            Hardware.manipulator.setIntakeState(
+                    RollerIntakeMechanism.IntakeState.INTAKE);
             if (this.drive.driveStraightInches(BACKUP_INCHES,
                     -BACKUP_SPEED, BACKUP_ACCELERATION,
                     usingGyro))
@@ -127,7 +135,9 @@ public boolean depositHatch (boolean inAuto)
             break;
 
         case BACKUP_HATCH_AFTER_FORK:
-            // back up after the hook is clear of the hatch
+            // back up after the hook is clear of the
+            Hardware.manipulator.setIntakeState(
+                    RollerIntakeMechanism.IntakeState.INTAKE);
             if (this.drive.driveStraightInches(BACKUP_INCHES_3,
                     -BACKUP_SPEED_3, BACKUP_ACCELERATION, usingGyro))
                 {
@@ -162,11 +172,13 @@ public static DepositCargoState depositCargoState = DepositCargoState.INIT;
  *         still needs to be called
  *
  */
-public boolean depositCargo ()
+public boolean depositCargo (boolean inAutoCargo)
 {
-    Hardware.manipulator.masterUpdate();
-    Hardware.lift.update();
-
+    if (inAutoCargo == true)
+        {
+        Hardware.manipulator.masterUpdate();
+        Hardware.lift.update();
+        }
     System.out.println("cargo deposit state: " + depositCargoState);// TODO
     switch (depositCargoState)
         {
@@ -247,7 +259,8 @@ public boolean isAllowedToDrive = false;
 /**
  * This is the main state machine for depositing the gamepieces in
  * Teleop. To
- * deposit you should call startTeleopDeposit while calling this
+ * deposit you should camnmjmn.m,jmjm.jmnnjm.,mjmll startTeleopDeposit while
+ * calling this
  * function in the
  * teleop loop
  *
@@ -444,7 +457,7 @@ public boolean depositTeleopStateMachine ()
 
             // TODO uncomment
             // calls vision which the sets up the forklift and manipulator
-            if (Hardware.driveWithCamera.driveToTargetClose(.1))
+            if (Hardware.driveWithCamera.driveToTargetClose(.1, true))
                 {
                 Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
 
@@ -579,7 +592,7 @@ private boolean moveManipulator (double angle)
  */
 private boolean moveForklift (double height)
 {
-    if (Hardware.lift.defaultSetPosition(height, 1))
+    if (Hardware.lift.defaultSetPosition(height, 1.0))
         {
         return true;
         }

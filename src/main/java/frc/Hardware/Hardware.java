@@ -607,7 +607,7 @@ public static void commonInitialization ()
 
     delayPot = new RobotPotentiometer(2, 300);
 
-    armPot = new RobotPotentiometer(0, 300);
+    armPot = new RobotPotentiometer(1, 300);
 
     // Sonar/Ultrasonic
     frontUltraSonic = new LVMaxSonarEZ(3);
@@ -635,6 +635,7 @@ public static void commonInitialization ()
     // TODO: put somewhere useful
     // Camera settings: 320-240, 20fps, 87 ????
     USBCam = CameraServer.getInstance().startAutomaticCapture(0);
+
 
     USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
 
@@ -1292,7 +1293,7 @@ public static void setHardwareSettings2019 ()
 
     // Solenoid stuff
 
-    armIntakeSolenoid.setForward(false);
+    armIntakeSolenoid.setForward(true);
 } // end setHardwareSettings2019()
 
 private static final double KILROY_XIX_DRIVE_ENCODER_DPP = 0.0346;

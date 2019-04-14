@@ -602,6 +602,12 @@ private final double NEXT_HIGHER_ANGLE_ADJUSTMENT = 3;
 private final double NEXT_LOWER_ANGLE_ADJUSTMENT = 3;
 
 
+public void setIntakeState (RollerIntakeMechanism.IntakeState state)
+{
+    this.intake.setIntakeState(state);
+}
+
+
 /**
  * Update method for the deploy state machine. Is what actually tells
  * the armMotor what to do based off the current deployMovementState.
@@ -729,7 +735,7 @@ public void deployUpdate ()
 
                 this.armMotor.set(stayAtPositionTempSpeed);
                 // this.armMotor.set(0.0);
-            }
+                }
 
             // Reset the direction for next move-to-position.
             deployDirection = DeployMovementDirection.NEUTRAL;
@@ -761,6 +767,17 @@ private void movingToPositionPreciseState ()
     // positive if we are above target
     double distanceFromHeight = Math
             .abs(currentAngle - this.deployTargetAngle);
+
+
+
+    if ((currentAngle > currentDeployMaxAngle)
+            || (currentAngle < currentDeployMinAngle)
+            || (this.deployTargetAngle > currentDeployMaxAngle)
+            || (this.deployTargetAngle < currentDeployMinAngle))
+        {
+        deployMovementState = DeployMovementState.STAY_AT_POSITION;
+        return;
+        }
 
     // Begins by stating whether we are increasing or decreasing
     if (deployDirection == DeployMovementDirection.NEUTRAL)
@@ -836,13 +853,13 @@ private double UPWARD_EARLIER_STOP_ADJUSTMENT = 6.0;
 
 // probably does not need to be this high; can be scaled down to 30 or 20ish
 // which would make it faster
-private double UPWARD_DECELLERATION_START_ADJUSTMENT = 50.0;
+private double UPWARD_DECELLERATION_START_ADJUSTMENT = 20.0;
 
 private double DOWNWARD_EARLIER_STOP_ADJUSTMENT = 4.0;
 
 // private double DOWNWARD_SLOWED_PRECISE_SCALER = .2;
 
-private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 50.0;
+private double DOWNWARD_DECELLERATION_START_ADJUSTMENT = 20.0;
 
 // private final double UPWARD_SLOWED_SPEED_2018 = 0.7;
 
@@ -938,16 +955,16 @@ private double calculateDesiredArmMotorVoltage (
             // }
             // else
             // {
-            // if (currentArmAngle > ARM_GRAVITY_IN_FRAME_ANGLE)
-            // speed = ARM_GRAVITY_IN_FRAME_SPEED;
-            // else
-            if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
-                speed = HOLD_ARM_NO_GRAVITY_SPEED;
+            if (currentArmAngle > ARM_GRAVITY_IN_FRAME_ANGLE)
+                speed = HOLD_ARM_GRAVITY_IN_FRAME_SPEED;
             else
-                if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
-                    speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                if (currentArmAngle > ARM_NO_GRAVITY_ANGLE)
+                    speed = HOLD_ARM_NO_GRAVITY_SPEED;
                 else
-                    speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
+                    if (currentArmAngle > ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE)
+                        speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_HIGH_SPEED;
+                    else
+                        speed = HOLD_ARM_GRAVITY_OUT_OF_FRAME_LOW_SPEED;
             // }
             break;
         }
@@ -957,13 +974,13 @@ private double calculateDesiredArmMotorVoltage (
 }
 
 // measured in degrees
-private double ARM_GRAVITY_IN_FRAME_ANGLE = 100;
+private double ARM_GRAVITY_IN_FRAME_ANGLE = 105;
 
-private double HOLD_ARM_GRAVITY_IN_FRAME_SPEED = -0.05;
+private double HOLD_ARM_GRAVITY_IN_FRAME_SPEED = -0.04;
 
 private double ARM_NO_GRAVITY_ANGLE = 80;
 
-private double HOLD_ARM_NO_GRAVITY_SPEED = .03;
+private double HOLD_ARM_NO_GRAVITY_SPEED = 0.02;
 
 private double ARM_GRAVITY_OUT_OF_FRAME_HIGH_ANGLE = 45;
 
@@ -1220,10 +1237,10 @@ private double ARM_LEANING_BACK_ANGLE = 90;
 
 private double IS_FULLY_CLEAR_OF_FRAME_ANGLE = 60;
 
-private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 91;
-
 // the maximum angle for the deploy so
-public double MAX_FORKLIFT_UP_ANGLE = 60;
+public double MAX_FORKLIFT_UP_ANGLE = 70;
+
+private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 70;
 
 public double HIGHER_MAX_FORKLIFT_UP_ANGLE = 50;
 

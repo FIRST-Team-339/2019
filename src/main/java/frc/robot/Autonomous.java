@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.drive.Drive;
 import frc.Utils.drive.Drive.BrakeType;
+import edu.wpi.first.cameraserver.CameraServer;
 
 
 /**
@@ -179,6 +180,8 @@ public static Level autoLevel = Level.NULL;
  *          Meghan Brown; 10 February 2019
  *
  */
+public static boolean canceledAuto = false;
+
 public static void periodic ()
 {
 
@@ -187,7 +190,12 @@ public static void periodic ()
             && Hardware.cancelAutoRightDriver.get() == true)
         {
         endAutoPath();
+        canceledAuto = true;
+
+        // Hardware.USBCam = CameraServer.getInstance()
+        // .startAutomaticCapture(0);
         autoState = State.FINISH;
+
         }
     // Teleop.printStatements();
     // Hardware.lift.update();
@@ -692,6 +700,8 @@ private static boolean depositRocketHatch ()
                     {
                     if (usingVision == true)
                         {
+                        System.out.println(
+                                "WERE ACTUALLY TRYING TO DRIVE BY CAMERA");
                         rocketHatchState = RocketHatchState.DRIVE_BY_CAMERA;
                         }
                     else
@@ -913,7 +923,7 @@ private static boolean depositRocketHatch ()
                             else
                                 {
                                 System.out.println(
-                                        "the code did not recieve the side switch value");
+                                        "the code did not receive the side switch value");
                                 driveWithCameraStates = DriveWithCameraStates.FIND_SIDE;
                                 }
 
@@ -1199,7 +1209,8 @@ private static boolean depositSideCargoBall ()
 
         case VISION_DRIVE_TOWARDS_CARGO_SHIP:
             if (Hardware.driveWithCamera
-                    .driveToTargetClose(.2))// TODO constant nad vision function
+                    .driveToTargetClose(.2, true))// TODO constant nad vision
+                                                  // function
                 {
                 sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
                 // //TODO
@@ -1208,7 +1219,7 @@ private static boolean depositSideCargoBall ()
             break;
         case DEPOSIT_BALL:
 
-            if (Hardware.depositGamePiece.depositCargo())
+            if (Hardware.depositGamePiece.depositCargo(true))
                 {
                 sideCargoBallState = SideCargoBallState.FINISHED;
                 }
@@ -1224,7 +1235,7 @@ private static boolean depositSideCargoBall ()
             break;
         default:
         case FINISHED:
-
+            Hardware.drive.stop();
             break;
         }
     return false;
@@ -1240,6 +1251,7 @@ private static void driverControl ()
     // Hardware.leftFrontCANMotor.set(0);
     // }
     Teleop.periodic();
+
 } // end driverControl()
 
 public static enum DescentState

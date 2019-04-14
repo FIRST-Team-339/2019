@@ -167,6 +167,8 @@ public static enum NewClimberState
 // initializes new climb state to standby
 public static NewClimberState newClimbState = NewClimberState.STANDBY;
 
+public static NewClimberState prevNewClimbState = NewClimberState.STANDBY;
+
 /**
  *
  * @author Ashley Espeland
@@ -177,7 +179,16 @@ public static NewClimberState newClimbState = NewClimberState.STANDBY;
 public void newClimb ()
 {
     newClimbState = NewClimberState.START_CLIMB;
+    driveTimerInit();
 }
+
+public void skipStepClimb ()
+{
+    newClimbState = NewClimberState.BACK_UP_TIL_BUMPERS_HIT;
+    driveTimerInit();
+}
+
+int counter = 0;
 
 /**
  * @author Ashley Espeland
@@ -202,6 +213,12 @@ public void newClimbUpdate ()
 {
     // good for debugging
     // System.out.println(newClimbState);
+    if (Hardware.climber.newClimbState != Hardware.climber.prevNewClimbState)
+        {
+        System.out.println(
+                "newClimbState " + Hardware.climber.newClimbState);
+        prevNewClimbState = Hardware.climber.newClimbState;
+        }
 
     switch (newClimbState)
         {
@@ -209,10 +226,16 @@ public void newClimbUpdate ()
             // state to wait in during the match until climb() or reverseClimb()
             // is called
             // testSolenoid.set(Value.kForward);
+
             break;
 
         case START_CLIMB:
             // state the climb() function sets the state to and is basically an
+            if (counter == 0)
+                {
+                Hardware.lift.resetStateMachine();
+                counter++;
+                }
             // init state
             Hardware.drive.setGearPercentage(Teleop.FIRST_GEAR_NUMBER,
                     1.0);
@@ -224,6 +247,7 @@ public void newClimbUpdate ()
                 {
                 newClimbState = NewClimberState.PREP_ARM;
                 driveTimerInit();
+                counter = 0;
                 break;
                 }
             break;
@@ -1000,8 +1024,8 @@ private boolean lowerArm ()
     // armMotor.set(0.0);
     // return true;
     // }
-// TODO @ANE @CR moveArmToPsotion with only one parameter passes in an old,
-// slow value for the downward movements
+    // TODO @ANE @CR moveArmToPsotion with only one parameter passes in an old,
+    // slow value for the downward movements
     if (Hardware.manipulator.moveArmToPosition(
             GamePieceManipulator.MIN_ARM_POSITION_ADJUSTED_2018) == true)
         {
@@ -1323,7 +1347,7 @@ private void stop ()
     drive.stop();
     Hardware.manipulator.setDeployMovementState(
             GamePieceManipulator.DeployMovementState.STAY_AT_POSITION);
-    lift.liftState = Forklift.ForkliftState.STOP;
+    lift.liftState = Forklift.ForkliftState.STAY_AT_POSITION;
     driveSolenoid.setForward(RETRACT_WHEELS_POSITION);
 }
 

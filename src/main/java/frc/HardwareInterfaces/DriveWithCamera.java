@@ -178,11 +178,11 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
     switch (state)
         {
         case INIT:
-            // Hardware.axisCamera.processImage();
+            Hardware.axisCamera.processImage();
             // Hardware.axisCamera.setRelayValue(Value.kOn);
             Hardware.drive.resetEncoders();
-            // visionProcessor.saveImage(ImageType.RAW);
-            // visionProcessor.saveImage(ImageType.PROCESSED);
+            visionProcessor.saveImage(ImageType.RAW);
+            visionProcessor.saveImage(ImageType.PROCESSED);
 
             double correctionValue = DRIVE_CORRECTION;
             double motorspeed = speed;
@@ -193,8 +193,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
 
             break;
         case DRIVE_WITH_CAMERA:
-            Hardware.axisCamera.processImage();// TODO check and see if this
-                                               // cause lag or watchdog errors
+            // Hardware.axisCamera.processImage();// TODO check and see if this
+            // cause lag or watchdog errors
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             correctionValue = DRIVE_CORRECTION;
@@ -369,9 +369,12 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
  *
  *
  * @param speed
+ * @param stopClose
+ *                      true if you want to stop close to the target, flase if
+ *                      not
  * @return true when completed
  */
-public boolean driveToTargetClose (double speed)
+public boolean driveToTargetClose (double speed, boolean stopClose)
 {
     // Deprecated comment until we can tesxt blob area
     // make this not use the ultrasonic. I am thinking that we lower the
@@ -382,7 +385,7 @@ public boolean driveToTargetClose (double speed)
     switch (state)
         {
         case INIT:
-
+            Hardware.axisCamera.processImage();
             Hardware.drive.resetEncoders();
 
             double correctionValue = (DRIVE_CORRECTION_CLOSE / .1)
@@ -393,22 +396,46 @@ public boolean driveToTargetClose (double speed)
             break;
         case DRIVE_WITH_CAMERA:
             correctionValue = DRIVE_CORRECTION_CLOSE;
-            Hardware.axisCamera.processImage();// TODO
+            // Hardware.axisCamera.processImage();// TODO
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             if (Hardware.axisCamera.hasBlobs() == true)
                 {
-                System.out.println("area of blob" + Hardware.axisCamera
-                        .getNthSizeBlob(0).area);
-                if (Hardware.axisCamera
-                        .getNthSizeBlob(0).area > MIN_BLOB_AREA
-                        && (Hardware.leftFrontDriveEncoder
-                                .getDistance() > MIN_INCHES_CLOSE
-                                || Hardware.rightFrontDriveEncoder
-                                        .getDistance() > MIN_INCHES_CLOSE))
+                // System.out.println("area of blob" + Hardware.axisCamera
+                // .getNthSizeBlob(0).area);
+                if (stopClose)
                     {
-                    System.out.println("stopped by blobs");
-                    state = DriveWithCameraState.STOP;
+                    if ((Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() > Hardware.retriever.LENGTH_OF_NESSIE_HEAD
+                                    + 3
+                            || Hardware.axisCamera
+                                    .getNthSizeBlob(
+                                            0).area > MIN_BLOB_AREA)
+                            && (Hardware.leftFrontDriveEncoder
+                                    .getDistance() > MIN_INCHES_CLOSE
+                                    || Hardware.rightFrontDriveEncoder
+                                            .getDistance() > MIN_INCHES_CLOSE))
+                        {
+                        System.out.println("stopped by blobs");
+                        state = DriveWithCameraState.STOP;
+                        }
+                    }
+                else
+                    {
+                    if ((Hardware.axisCamera
+                            .getNthSizeBlob(
+                                    0).area > MIN_BLOB_AREA_CLOSE
+                            || Hardware.frontUltraSonic
+                                    .getDistanceFromNearestBumper() > Hardware.retriever.LENGTH_OF_NESSIE_HEAD
+                                            + 3)
+                            && (Hardware.leftFrontDriveEncoder
+                                    .getDistance() > MIN_INCHES_CLOSE
+                                    || Hardware.rightFrontDriveEncoder
+                                            .getDistance() > MIN_INCHES_CLOSE))
+                        {
+                        System.out.println("stopped by blobs");
+                        state = DriveWithCameraState.STOP;
+                        }
                     }
                 }
             if (Hardware.whichRobot == Hardware.RobotYear.KILROY_2019)
@@ -640,12 +667,14 @@ private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 
 private final double DRIVE_CORRECTION = .15;
 
-private final double DRIVE_CORRECTION_CLOSE = .08;
+private final double DRIVE_CORRECTION_CLOSE = .1;
 
 private final double DRIVE_CORRECTION_CLOSE_2018 = .5;
 
 
-private static double MIN_BLOB_AREA = 600;// TODO
+private static double MIN_BLOB_AREA_CLOSE = 600;// TODO
+
+private static double MIN_BLOB_AREA = 900;// TODO
 
 private final double MIN_INCHES = 50;
 

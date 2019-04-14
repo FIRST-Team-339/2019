@@ -39,6 +39,7 @@ import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
 import frc.vision.VisionProcessor.ImageType;
+import edu.wpi.first.cameraserver.CameraServer;
 
 /**
  * This class contains all of the user code for the Autonomous part of the
@@ -59,10 +60,15 @@ public class Teleop
  */
 public static void init ()
 {
+    // if (Autonomous.canceledAuto == false)
+    // {
+    // Hardware.USBCam = CameraServer.getInstance()
+    // .startAutomaticCapture(0);// TODO
+    // }
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
     Hardware.axisCamera.setRelayValue(Value.kOn);
-    Hardware.axisCamera.processImage();
+    // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
 
     switch (Hardware.whichRobot)
@@ -234,6 +240,7 @@ public static void periodic ()
         }
     SmartDashboard.putNumber("Delay raw", Hardware.delayPot.get());
     SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
+
     // =================================================================
     // OPERATOR CONTROLS
     // =================================================================
@@ -294,15 +301,7 @@ public static void periodic ()
     // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
     // Hardware.cargoShipHatchButton);
 
-    if (inDemoMode == false)
-        {
-        // Button for Player Station Cargo Preset Height
-        // Hardware.lift.setLiftPositionByButton(
-        // Forklift.PLAYER_STATION_CARGO_HEIGHT,
-        // Forklift.PLAYER_STATION_CARGO_ANGLE,
-        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
-        // Hardware.playerStationCargoButton);
-        }
+
 
 
     if (inDemoMode == false)
@@ -323,6 +322,14 @@ public static void periodic ()
         // Forklift.PLAYER_STATION_CARGO_ANGLE,
         // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
         // Hardware.playerStationCargoButton);
+
+        Hardware.lift.setLiftPositionByButton(
+                Forklift.CARGO_SHIP_CARGO,
+                Forklift.CARGO_SHIP_CARGO_ANGLE,
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.playerStationCargoButton);
+
+
 
         // Button for Player Station Hatch Preset Height
         Hardware.lift.setLiftPositionByButton(
@@ -442,14 +449,19 @@ public static void periodic ()
             Hardware.depositGamePiece.resetDepositTeleop();
             }
 
-        if (Hardware.alignAndStopButton.isOnCheckNow() == true
-                && Hardware.depositGamePiece.overrideVision() == false)
-            {
-            if (Hardware.retriever.alignWithVision(.1))
-                {
-                Hardware.alignAndStopButton.setValue(false);
-                }
-            }
+        // if (Hardware.alignAndStopButton.isOnCheckNow() == true
+        // && Hardware.depositGamePiece.overrideVision() == false)
+        // {
+        // if (Hardware.retriever.alignWithVision(.1))
+        // {
+        // Hardware.alignAndStopButton.setValue(false);
+        // }
+        // }
+        // if (Hardware.alignAndStopButton.isOnCheckNow() == false
+        // && Hardware.alignVisionButton.isOnCheckNow() == false)
+        // {
+        // Hardware.driveWithCamera.state = Hardware.driveWithCamera.state.INIT;
+        // }
         }
     // end vision==============================================
 
@@ -459,6 +471,7 @@ public static void periodic ()
     if (Hardware.cancelTwoButton.get() == true
             && Hardware.cancelOneButton.get() == true)
         {
+        // Hardware.retriever.stopRetrieveHatch();
         Hardware.climber.finishEarly();
         Autonomous.endAutoPath();
         Hardware.lift.resetStateMachine();
@@ -471,6 +484,8 @@ public static void periodic ()
                 && Hardware.cancelAutoRightDriver.get() == true)
             {
             Hardware.climber.finishEarly();
+            // Hardware.retriever.stopRetrieveHatch();
+
             }
         }
     // Buttons to reset the forklift encoder. Should never be called during
@@ -485,7 +500,7 @@ public static void periodic ()
             Hardware.lift.resetEncoder();
             }
 
-        individualTest();
+        // individualTest();
 
         takePicture();
         }
@@ -502,6 +517,11 @@ public static void periodic ()
             // Hardware.climber.climb();
             Hardware.climber.newClimb();
             }
+        else
+            if (Hardware.rightDriver.getRawButton(12) == true)
+                {
+                Hardware.climber.skipStepClimb();
+                }
         }
 
     if (inDemoMode == false)
@@ -516,15 +536,27 @@ public static void periodic ()
         else
             if (Hardware.retrievalButton.get() == true)
                 {
-                Hardware.retriever.retrieveHatch();
+                // Hardware.retriever.retrieveHatch();
                 }
             else
-                if (Hardware.alignVisionButton.get() == false
-                        || Hardware.depositGamePiece.overrideVision())
+                if (true/*
+                         * (Hardware.alignVisionButton.get() == false
+                         * || Hardware.depositGamePiece.overrideVision())
+                         * &&
+                         * (Hardware.alignAndStopButton
+                         * .isOnCheckNow() == false
+                         * || Hardware.depositGamePiece
+                         * .overrideVision())
+                         */)
                     {
                     if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
-                            && RetrieveHatch.retrievalState == RetrieveHatch.RetrievalState.STANDBY)
+                            ||
+                            ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
+                            || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
                         {
+                        // System.out.println("TELEOP DRIVE");
+                        // SmartDashboard.putString("printDriveType",
+                        // "TELEOP DRIVE");
                         teleopDrive();
                         if (Hardware.solenoidButtonOne
                                 .isOnCheckNow() == true
@@ -660,18 +692,13 @@ public static boolean hasDoneTheThing = false;
 private static void connerTest ()
 {
 
-    System.out.println("calling move");
-    System.out.println(
-            "angle: " + Hardware.manipulator.getCurrentArmPosition());
-    System.out
-            .println("power to arm motor: " + Hardware.armMotor.get());
-    if (hasDoneTheThing == false)
+
+    if (Hardware.leftOperator.getRawButton(4))
         {
-        if (Hardware.depositGamePiece.depositCargo())
-            {
-            hasDoneTheThing = true;
-            }
+        Hardware.axisCamera.processImage();
         }
+    SmartDashboard.putBoolean("has blobs",
+            Hardware.axisCamera.hasBlobs());
 } // end connerTest()
 
 private static void coleTest ()
@@ -758,14 +785,14 @@ private static boolean coleBool2 = false;
 
 private static void guidoTest ()
 {
-    if (Hardware.leftOperator.getRawButton(3) == true)
-        {
-        Hardware.armIntakeSolenoid.setForward(true);
-        }
-    else
-        {
-        Hardware.armIntakeSolenoid.setReverse(true);
-        }
+    // if (Hardware.leftOperator.getRawButton(3) == true)
+    // {
+    // Hardware.armIntakeSolenoid.setForward(true);
+    // }
+    // else
+    // {
+    // Hardware.armIntakeSolenoid.setReverse(true);
+    // }
 } // end guidoTest()
 
 private static void patrickTest ()
@@ -1305,6 +1332,7 @@ public static void takePicture ()
             {
 
             Hardware.axisCamera.saveImage(ImageType.RAW);
+            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
 
             imageTaken = true;
             }
@@ -1376,6 +1404,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
  */
 public static void teleopDrive ()
 {
+    // System.out.println("reeeeeeeeeeeee");
     Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
     Hardware.drive.shiftGears(

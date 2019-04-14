@@ -632,13 +632,13 @@ public void update ()
 
     if (Hardware.whichRobot != Hardware.RobotYear.KILROY_2018)
         {
-        if (manipulator.isArmClearOfFrame() == false)
+        if (manipulator.isArmPartiallyClearOfFrame() == false)
             this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
-        // else
-        // if (manipulator.isArmPartiallyClearOfFrame() == false)
-        // this.currentLiftMaxHeight = PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT;
         else
-            this.currentLiftMaxHeight = MAX_HEIGHT;
+            if (manipulator.isArmClearOfFrame() == false)
+                this.currentLiftMaxHeight = PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT;
+            else
+                this.currentLiftMaxHeight = MAX_HEIGHT;
 
         if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
             this.manipulator
@@ -762,6 +762,19 @@ private void movingToPositionPreciseState ()
     double adjustedSpeed = this.forkliftTargetSpeed;
     double distanceFromHeight = Math
             .abs(currentHeight - this.forkliftTargetHeight);
+
+
+    // TODO test to see if this prevents us from passing max or min height
+    if ((currentHeight > currentLiftMaxHeight)
+            || (currentHeight < currentLiftMinHeight)
+            || (this.forkliftTargetHeight > currentLiftMaxHeight)
+            || (this.forkliftTargetHeight < currentLiftMinHeight))
+        {
+        liftState = ForkliftState.STAY_AT_POSITION;
+        return;
+        }
+
+
 
     // Begins by stating whether we are increasing or decreasing
     if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
@@ -931,11 +944,11 @@ private double SET_LIFT_UPWARD_LIFT_MOVEMENT_SCALER = 1.0;
 
 // leave this positive even though it is the downward scalar;
 // the speed is multipled by a negative value later in the code
-private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.4;
+private double SET_LIFT_DOWNWARD_LIFT_MOVEMENT_SCALER = 0.3;
 
 private double UP_JOYSTICK_SCALAR = 1.0;
 
-private double DOWN_JOYSTICK_SCALAR = 0.4;
+private double DOWN_JOYSTICK_SCALAR = 0.3;
 
 private double DEFAULT_SPEED_UP = UP_JOYSTICK_SCALAR;
 
@@ -946,7 +959,7 @@ public static double DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED = 1.0;
 
 // speed sent to the forklift motor to hold position when we do not
 // have any game piece
-private double STAY_UP_NO_PIECE = 0.1;
+private double STAY_UP_NO_PIECE = 0.12;
 
 // speed sent to the forklift motor to hold position when we have a
 // cargo
@@ -987,7 +1000,7 @@ public final static double MIDDLE_ROCKET_HATCH_ANGLE = 51;
 public final static double LOWER_ROCKET_HATCH_ANGLE = 33;
 
 // heights for the cargo and hatch openings on the cargo ship
-public final static double CARGO_SHIP_CARGO = 30;
+public final static double CARGO_SHIP_CARGO = 26.5;
 
 public final static double CARGO_SHIP_HATCH = LOWER_ROCKET_HATCH;
 
@@ -999,7 +1012,7 @@ public final static double PLAYER_STATION_HEIGHT = .2;
 
 public final static double PLAYER_STATION_ANGLE = 33;
 
-public final static double CARGO_SHIP_CARGO_ANGLE = 45;
+public final static double CARGO_SHIP_CARGO_ANGLE = 59;
 
 // private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
@@ -1014,7 +1027,7 @@ private double LIMIT_ARM_ANGLE_HEIGHT = .2;
 
 private double HIGHER_ARM_ANGLE_LIMIT_HEIGHT = 43;
 
-private double PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT = 21.5;
+private double PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT = 43;
 
 private final double NO_PIECE_MIN_HEIGHT = 0;
 
