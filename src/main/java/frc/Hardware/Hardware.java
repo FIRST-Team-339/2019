@@ -80,7 +80,9 @@ public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 // ---------------------------------------
 // Hardware Tunables
 // ---------------------------------------
-public static boolean demoMode = Teleop.inDemoMode;
+public static boolean demoMode = false;
+
+public static int DEMO_MAX_FORK = 40;
 
 // **********************************************************
 // DIGITAL I/O CLASSES
@@ -475,6 +477,8 @@ public static void initialize ()
     // are exactly the same between 2018
     // and 2019. Make them only once
     // ---------------------------
+
+
     switch (whichRobot)
         {
         case KILROY_2018:
@@ -1116,6 +1120,10 @@ public static void robotInitialize2019 ()
  */
 public static void setHardwareSettings ()
 {
+    if (Hardware.demoModeSwitch.isOn())
+        {
+        Hardware.demoMode = true;
+        }
     switch (whichRobot)
         {
         case KILROY_2018:

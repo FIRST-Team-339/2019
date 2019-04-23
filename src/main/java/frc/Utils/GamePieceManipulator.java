@@ -283,7 +283,7 @@ public double getCurrentArmPosition ()
     // scales the value from the arm pot so parallel to the ground is
     // zero, and perpendicular to the ground and pointing up is 90
 
-    if (Teleop.inDemoMode == false)
+    if (Hardware.demoMode == false)
         {
         return (this.armPot.get()
                 - ARM_POT_RAW_HORIZONTAL_VALUE)

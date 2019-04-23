@@ -625,20 +625,29 @@ public void update ()
 {
     // Make sure the lift stays up to prevent bad things when folding the
     // deploy
-    if (Hardware.demoMode == true)
-        {
-        this.currentLiftMaxHeight = DEMO_HEIGHT;
-        }
+
 
     if (Hardware.whichRobot != Hardware.RobotYear.KILROY_2018)
         {
+
         if (manipulator.isArmPartiallyClearOfFrame() == false)
             this.currentLiftMaxHeight = IS_NOT_CLEAR_FRAME_MAX_HEIGHT;
         else
             if (manipulator.isArmClearOfFrame() == false)
                 this.currentLiftMaxHeight = PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT;
             else
-                this.currentLiftMaxHeight = MAX_HEIGHT;
+                {
+                if (Hardware.demoMode
+                        || Hardware.demoModeSwitch.isOn() == true)
+                    {
+
+                    this.currentLiftMaxHeight = DEMO_HEIGHT;
+                    }
+                else
+                    {
+                    this.currentLiftMaxHeight = MAX_HEIGHT;
+                    }
+                }
 
         if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
             this.manipulator
@@ -661,6 +670,7 @@ public void update ()
 
     if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
         setPositionPreciseInit = true;
+
 
     // main switch statement for the forklift state machine
     switch (liftState)
@@ -873,8 +883,8 @@ public void printDebugInfo ()
     SmartDashboard.putNumber("FL Height: ", this.getForkliftHeight());
     SmartDashboard.putNumber("FL Encoder Ticks: ",
             this.forkliftEncoder.get());
-    // SmartDashboard.putNumber("FL current max height",
-    // currentLiftMaxHeight);
+    SmartDashboard.putNumber("FL current max height",
+            currentLiftMaxHeight);
     // SmartDashboard.putNumber("FL current min height",
     // currentLiftMinHeight);
     SmartDashboard.putString("FL Overall State: ", "" + this.liftState);
@@ -883,6 +893,8 @@ public void printDebugInfo ()
     // SmartDashboard.putBoolean("FL setLiftPositionInit: ",
     // setLiftPositionInit);
     SmartDashboard.putNumber("Forklift Motor", forkliftMotor.get());
+
+
 }
 
 // ==================
@@ -912,6 +924,7 @@ public static enum ForkliftDirectionState
     }
 
 // ===== Variables =====
+
 
 // Variable for defining the overall state of the forklift
 public ForkliftState liftState = ForkliftState.STAY_AT_POSITION;
@@ -1017,11 +1030,11 @@ public final static double CARGO_SHIP_CARGO_ANGLE = 59;
 // private final static double CARGO_SHIP_HATCH_ANGLE = 40;
 
 
-private static final double MAX_HEIGHT = 56;
+private static double MAX_HEIGHT = 56;
 
 private double IS_NOT_CLEAR_FRAME_MAX_HEIGHT = 0;
 
-private double DEMO_HEIGHT = 45;
+private double DEMO_HEIGHT = 40;
 
 private double LIMIT_ARM_ANGLE_HEIGHT = .2;
 

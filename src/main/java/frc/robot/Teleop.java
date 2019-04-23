@@ -67,7 +67,10 @@ public static void init ()
     // }
     Hardware.depositGamePiece.resetDepositTeleop();
     Hardware.alignVisionButton.setValue(false);
-    Hardware.axisCamera.setRelayValue(Value.kOn);
+    if (!Hardware.demoMode)
+        {
+        Hardware.axisCamera.setRelayValue(Value.kOn);
+        }
     // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
 
@@ -105,11 +108,12 @@ public static void init ()
 
     if (inDemoMode == true)
         {
-        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-        // Hardware.delayPot.get(.01, 1.0));
-        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-        // Hardware.delayPot.get(.01, 1.0));
-        // Hardware.manipulator.setMaxArmAngle(65);
+        Hardware.lift.setMaxLiftHeight(Hardware.DEMO_MAX_FORK);
+        Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                Hardware.delayPot.get(.01, 1.0));
+        Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+                Hardware.delayPot.get(.01, 1.0));
+        Hardware.manipulator.setMaxArmAngle(65);
         }
 
 
@@ -500,10 +504,11 @@ public static void periodic ()
             Hardware.lift.resetEncoder();
             }
 
-        // individualTest();
+
 
         takePicture();
         }
+    individualTest();
     // Hardware.telemetry.printToShuffleboard();
 
     // Hardware.telemetry.printToConsole();
@@ -606,7 +611,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    // connerTest();
+    connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -691,14 +696,10 @@ public static boolean hasDoneTheThing = false;
 
 private static void connerTest ()
 {
+    SmartDashboard.putBoolean("inDemoMode", inDemoMode);
+    SmartDashboard.putBoolean("inDemoMode switch",
+            Hardware.demoModeSwitch.isOn());
 
-
-    if (Hardware.leftOperator.getRawButton(4))
-        {
-        Hardware.axisCamera.processImage();
-        }
-    SmartDashboard.putBoolean("has blobs",
-            Hardware.axisCamera.hasBlobs());
 } // end connerTest()
 
 private static void coleTest ()
@@ -1424,7 +1425,7 @@ public static void teleopDrive ()
 // Constants
 // ================================
 
-public static boolean inDemoMode = false;
+private static boolean inDemoMode = Hardware.demoMode;
 
 // The number of gears we want to not go over. There is no reason to make this
 // more than 3 unless the code is fixed. Thanks McGee.
