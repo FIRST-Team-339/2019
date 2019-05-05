@@ -214,6 +214,7 @@ public void moveArmByJoystick (Joystick armJoystick,
                     || (joystickValue < 0 && this
                             .getCurrentArmPosition() < currentDeployMinAngle))
                 {
+
                 this.deployMovementState = DeployMovementState.STAY_AT_POSITION;
                 // return so we exit the method and do not accidentally set
                 // deployMovementState to MOVING_BY_JOY;
@@ -283,13 +284,9 @@ public double getCurrentArmPosition ()
     // scales the value from the arm pot so parallel to the ground is
     // zero, and perpendicular to the ground and pointing up is 90
 
-    // if (Hardware.demoMode == false)
-        {
-        return (this.armPot.get()
-                - ARM_POT_RAW_HORIZONTAL_VALUE)
-                * ARM_POT_SCALE_TO_DEGREES;
-        }
-
+    return (this.armPot.get()
+            - ARM_POT_RAW_HORIZONTAL_VALUE)
+            * ARM_POT_SCALE_TO_DEGREES;
 
     // } else // if we are not using an armPot, we should be using an encoder
     // {
@@ -556,6 +553,11 @@ public void setMaxArmAngle (double angle)
     this.currentDeployMaxAngle = angle;
 }
 
+public void setMinArmAngle (double angle)
+{
+    this.currentDeployMinAngle = angle;
+}
+
 public boolean toggleIgnoreMakeBreak ()
 {
     return this.intake.toggleIgnoreMakeBreak();
@@ -634,6 +636,13 @@ public void deployUpdate ()
     if (deployMovementState != DeployMovementState.MOVING_TO_POSITION_PRECISE)
         moveArmToPositionPreciseInit = true;
 
+    if (Hardware.demoMode
+            || Hardware.demoModeSwitch.isOn() == true)
+        {
+
+        this.currentDeployMaxAngle = DEMO_MAX_ANGLE;
+        this.currentDeployMinAngle = DEMO_MIN_ANGLE;
+        }
     switch (deployMovementState)
         {
         case MOVING_TO_POSITION:
@@ -1233,6 +1242,10 @@ private static final double DEPLOY_JOYSTICK_DEADBAND = 0.2;
 
 
 // ----- Deploy Position Constants 2019 -----
+
+private double DEMO_MAX_ANGLE = 65;
+
+private double DEMO_MIN_ANGLE = 0;
 
 public int MAX_ARM_POSITION_ADJUSTED = 120;
 

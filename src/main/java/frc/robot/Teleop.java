@@ -108,12 +108,14 @@ public static void init ()
 
     if (inDemoMode == true)
         {
+        // i love arbituary numbers
         Hardware.lift.setMaxLiftHeight(Hardware.DEMO_MAX_FORK);
         Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                 Hardware.delayPot.get(.01, 1.0));
         Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
                 Hardware.delayPot.get(.01, 1.0));
         Hardware.manipulator.setMaxArmAngle(65);
+        Hardware.manipulator.setMinArmAngle(5);
         }
 
 
@@ -263,26 +265,35 @@ public static void periodic ()
     if (inDemoMode == true)
         {
         // System.out.println("pot = " + Hardware.delayPot.get(0.0, 1.0));
-        // if (Hardware.leftDriver.getRawButton(7) == true
-        // /* && Hardware.leftDriver.getRawButton(8) == true */)
-        // {
-        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, .4);
-        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, .4);
-        // }
-        // if (Hardware.leftDriver.getRawButton(9) == true
-        // /* && Hardware.leftDriver.getRawButton(10) == true */)
-        // {
-        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, 1.0);
-        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, 1.0);
-        // }
-        // if (Hardware.leftDriver.getRawButton(11) == true
-        // /* && Hardware.leftDriver.getRawButton(12) == true */)
-        // {
-        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-        // Hardware.delayPot.get(0.0, 1.0));
-        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-        // Hardware.delayPot.get(0.0, 1.0));
-        // }
+        // System.out
+        // .println("First gear percentage: " + Hardware.drive
+        // .getGearPercentage(FIRST_GEAR_NUMBER));
+        // System.out
+        // .println("Second gear percentage: "
+        // + Hardware.drive
+        // .getGearPercentage(SECOND_GEAR_NUMBER));
+
+        if (Hardware.leftDriver.getRawButton(7) == true
+        /* && Hardware.leftDriver.getRawButton(8) == true */)
+            {
+
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, .4);
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, .4);
+            }
+        if (Hardware.leftDriver.getRawButton(9) == true
+        /* && Hardware.leftDriver.getRawButton(10) == true */)
+            {
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, 1.0);
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, 1.0);
+            }
+        if (Hardware.leftDriver.getRawButton(11) == true
+        /* && Hardware.leftDriver.getRawButton(12) == true */)
+            {
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                    Hardware.delayPot.get(0.0, 1.0));
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+                    Hardware.delayPot.get(0.0, 1.0));
+            }
         }
 
 

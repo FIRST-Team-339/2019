@@ -249,6 +249,18 @@ public void setGearPercentage (int gear, double value)
 }
 
 /**
+ *
+ *
+ * @param gear
+ *                 the gear number
+ * @return the current gear percentage
+ */
+public double getGearPercentage (int gear)
+{
+    return gearRatios[gear];
+}
+
+/**
  * TODO test deadbands Sets the minimum value the joysticks must output in order
  * for the robot to start moving.
  *

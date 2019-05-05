@@ -282,7 +282,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
 
 
             // gets the position of the center
-            double centerX = this.getCameraCenterValue();
+            double centerX = this.visionProcessor
+                    .getCameraCenterValue();
             // turns on the ring light
 
 
@@ -290,7 +291,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
 
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (centerX >= SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
+            if (centerX >= this.visionProcessor.SWITCH_CAMERA_CENTER
+                    - CAMERA_DEADBAND)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
@@ -305,7 +307,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
 
             else
-                if (centerX <= SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
+                if (centerX <= this.visionProcessor.SWITCH_CAMERA_CENTER
+                        + CAMERA_DEADBAND)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
@@ -459,12 +462,14 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
 
             // if we get close enought to the target and have to stop
             // gets the position of the center
-            double centerX = this.getCameraCenterValue();
+            double centerX = this.visionProcessor
+                    .getCameraCenterValue();
             // turns on the ring light
 
             // if the switch center is to the right of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the left
-            if (centerX >= SWITCH_CAMERA_CENTER - CAMERA_DEADBAND)
+            if (centerX >= this.visionProcessor.SWITCH_CAMERA_CENTER
+                    - CAMERA_DEADBAND)
                 {
                 // the switch's center is too far right, drive faster on the
                 // left
@@ -476,7 +481,8 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
             // if the switch center is to the left of our center set by the
             // SWITCH_CAMERA_CENTER, correct by driving faster on the right
             else
-                if (centerX <= SWITCH_CAMERA_CENTER + CAMERA_DEADBAND)
+                if (centerX <= this.visionProcessor.SWITCH_CAMERA_CENTER
+                        + CAMERA_DEADBAND)
                     {
                     // the switch's center is too far left, drive faster on the
                     // right
@@ -504,6 +510,104 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
     return false;
 }
 
+public boolean alignWithVisionTest (RoughDistance roughDistance,
+        double stopDistance)
+{
+    switch (state)
+        {
+        case INIT:
+            Hardware.axisCamera.processImage();
+            Hardware.drive.resetEncoders();
+            if (roughDistance == RoughDistance.CLOSE)
+                {
+                minDistance = MIN_INCHES_CLOSE;
+                }
+            else
+                if (roughDistance == roughDistance.MEDIUM)
+                    {
+                    minDistance = MIN_INCHES;
+                    }
+                else
+                    if (roughDistance == roughDistance.FAR)
+                        {
+                        minDistance = MIN_INCHES_MEDIUM;
+                        }
+
+
+            state = DriveWithCameraState.DRIVE_WITH_CAMERA;
+            break;
+        case DRIVE_WITH_CAMERA:
+            // visionProcessor.saveImage(ImageType.RAW);
+            // visionProcessor.saveImage(ImageType.PROCESSED);
+
+            double angle = this.visionProcessor.getYawAngleDegrees(
+                    this.visionProcessor.getParticleReports()[0]);
+
+            if (angle > ANGLE_DEADBAND)
+                {
+
+
+                // ===========10===========
+                if (angle < 10)
+                    {
+
+                    }
+                // ============25==========
+                else
+                    if (angle < 25)
+                        {
+
+                        }
+                    // ==========50============
+                    else
+                        if (angle < 50)
+                            {
+
+                            }
+                }
+            else
+                if (angle < ANGLE_DEADBAND)
+                    {
+
+                    // ===========-10===========
+                    if (angle < -10)
+                        {
+
+                        }
+                    // ============-25==========
+                    else
+                        if (angle < -25)
+                            {
+
+                            }
+                        // ==========-50============
+                        else
+                            if (angle < -50)
+                                {
+
+                                }
+                    }
+                else
+                    {
+                    this.driveStraight(DRIVE_STRAIGHT_SPEED, 0, true);
+                    }
+
+
+            break;
+        default:
+        case STOP:
+            // Hardware.axisCamera.setRelayValue(Value.kOff);
+            // if we are too close to the wall, brake, then set all motors to
+            // zero, else drive by ultrasonic
+
+            state = DriveWithCameraState.INIT;
+            this.getTransmission().driveRaw(0, 0);
+
+            return true;
+        }
+    return false;
+}
+
 /**
  * Code for 2019 camera to align to the rocket. returns Side that the camera see
  * vision targets on
@@ -514,24 +618,28 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
 public Side getTargetSide ()
 {
     Hardware.axisCamera.processImage();
-    if (this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
-            - CAMERA_DEADBAND)
+    if (this.visionProcessor
+            .getCameraCenterValue() < this.visionProcessor.SWITCH_CAMERA_CENTER
+                    - CAMERA_DEADBAND)
         {
         side = Side.RIGHT;
         return side;
         }
     else
-        if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
-                + CAMERA_DEADBAND)
+        if (this.visionProcessor
+                .getCameraCenterValue() > this.visionProcessor.SWITCH_CAMERA_CENTER
+                        + CAMERA_DEADBAND)
             {
             side = Side.LEFT;
             return side;
             }
         else
-            if (this.getCameraCenterValue() > SWITCH_CAMERA_CENTER
-                    - CAMERA_DEADBAND
-                    && this.getCameraCenterValue() < SWITCH_CAMERA_CENTER
-                            + CAMERA_DEADBAND)
+            if (this.visionProcessor
+                    .getCameraCenterValue() > this.visionProcessor.SWITCH_CAMERA_CENTER
+                            - CAMERA_DEADBAND
+                    && this.visionProcessor
+                            .getCameraCenterValue() < this.visionProcessor.SWITCH_CAMERA_CENTER
+                                    + CAMERA_DEADBAND)
                 {
                 side = Side.CENTER;
                 return side;
@@ -593,51 +701,62 @@ public enum DriveWithCameraState
  *
  * @return the current center x value
  */
-public double getCameraCenterValue ()
-{
-    Hardware.axisCamera.setRelayValue(Value.kOn);
-    double center = 0;
+// public double getCameraCenterValue ()
+// {
+// Hardware.axisCamera.setRelayValue(Value.kOn);
+// double center = 0;
 
-    visionProcessor.processImage();
-    // if we have at least two blobs, the center is equal to the average
-    // center
-    // x position of the 1st and second largest blobs
-    if (visionProcessor.getParticleReports().length >= 2)
-        {
-        center = (visionProcessor.getNthSizeBlob(0).center.x
-                + visionProcessor.getNthSizeBlob(1).center.x) / 2;
-
-
-        // System.out.println("TWO BLOBS");
-        // System.out.println("blob center: " + center);
-        }
-    // if we only can detect one blob, the center is equal to the center x
-    // position of the blob
-    else
-        if (visionProcessor.getParticleReports().length == 1)
-            {
-            center = visionProcessor.getNthSizeBlob(0).center.x;
-            // System.out.println("ONE BLOBS");
-            // System.out.println("blob center: " + center);
-            }
-        // if we don't have any blobs, set the center equal to the constanct
-        // center,
-        // we can use this to just drive straight
-        else
-            {
-            center = SWITCH_CAMERA_CENTER;
-            // System.out.println("NO BLOBS");
-            }
-    return center;
-}
+// visionProcessor.processImage();
+// // if we have at least two blobs, the center is equal to the average
+// // center
+// // x position of the 1st and second largest blobs
+// if (visionProcessor.getParticleReports().length >= 2)
+// {
+// center = (visionProcessor.getNthSizeBlob(0).center.x
+// + visionProcessor.getNthSizeBlob(1).center.x) / 2;
 
 
+// // System.out.println("TWO BLOBS");
+// // System.out.println("blob center: " + center);
+// }
+// // if we only can detect one blob, the center is equal to the center x
+// // position of the blob
+// else
+// if (visionProcessor.getParticleReports().length == 1)
+// {
+// center = visionProcessor.getNthSizeBlob(0).center.x;
+// // System.out.println("ONE BLOBS");
+// // System.out.println("blob center: " + center);
+// }
+// // if we don't have any blobs, set the center equal to the constanct
+// // center,
+// // we can use this to just drive straight
+// else
+// {
+// center = SWITCH_CAMERA_CENTER;
+// // System.out.println("NO BLOBS");
+// }
+// return center;
+// }
 
+
+public enum RoughDistance
+    {
+    CLOSE, MEDIUM, FAR
+    }
+
+public static RoughDistance roughDistance = RoughDistance.CLOSE;
+// =========================== variables =================
+
+private double minDistance = 0;
 // ================VISION CONSTANTS================
 
+private final double DRIVE_STRAIGHT_SPEED = .2;
 
+private final double ANGLE_DEADBAND = 3;// TODO
 // the distance in inches in which we drive the robot straight using the
 // ultrasonic
+
 private final double CAMERA_NO_LONGER_WORKS = 0;
 
 // The minimum encoder distance we must drive before we enable the ultrasonic
@@ -662,8 +781,8 @@ private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 private final double SLOW_MODIFIER = .75;// lower for slower
 
 
-private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
-// 160 originally
+// private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
+// // 160 originally
 
 private final double DRIVE_CORRECTION = .15;
 
@@ -679,5 +798,7 @@ private static double MIN_BLOB_AREA = 900;// TODO
 private final double MIN_INCHES = 50;
 
 private final double MIN_INCHES_CLOSE = 15;
+
+private final double MIN_INCHES_MEDIUM = 30;
 
 }
