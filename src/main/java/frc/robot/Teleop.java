@@ -404,7 +404,7 @@ public static void periodic ()
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
-    Hardware.lift.printDebugInfo();
+    // Hardware.lift.printDebugInfo();
     // System.out.println(
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================

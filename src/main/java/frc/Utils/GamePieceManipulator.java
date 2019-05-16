@@ -1250,7 +1250,7 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 48;
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 56;
 
 // vertical angle: 106
 
@@ -1263,7 +1263,7 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // calculate by via the formula: 90/ (Raw Pot Value when arm is vertical -
 // Raw Pot Horizontal Value)
-private static double ARM_POT_SCALE_TO_DEGREES = 1.0714; // 90/84
+private static double ARM_POT_SCALE_TO_DEGREES = 1.11111111; // 90/81
 
 // // value that is multiplied by the number of ticks to convert it to degrees
 // private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //
