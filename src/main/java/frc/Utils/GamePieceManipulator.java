@@ -283,16 +283,13 @@ public double getCurrentArmPosition ()
     // scales the value from the arm pot so parallel to the ground is
     // zero, and perpendicular to the ground and pointing up is 90
 
-    if (Hardware.demoMode == false)
+    // if (Hardware.demoMode == false)
         {
         return (this.armPot.get()
                 - ARM_POT_RAW_HORIZONTAL_VALUE)
                 * ARM_POT_SCALE_TO_DEGREES;
         }
-    else
-        {
-        return (6.0);
-        }
+
 
     // } else // if we are not using an armPot, we should be using an encoder
     // {
@@ -617,8 +614,18 @@ public void setIntakeState (RollerIntakeMechanism.IntakeState state)
 public void deployUpdate ()
 {
 
+    if (Hardware.demoMode == true)
+        {
+        if (this.intake.isOpen() == true)
+            {
+            currentDeployMinAngle = DEMO_MODE_OPEN_MIN_ANGLE;
+            }
+        else
+            {
+            currentDeployMinAngle = MIN_ARM_POSITION_ADJUSTED;
+            }
+        }
     // this.updatePastArmPositions();
-
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
         {
         this.stayAtPosition2018InitIsReady = true;
@@ -1089,8 +1096,10 @@ public void printDeployDebugInfo ()
     // currentDeployMinAngle);
     // SmartDashboard.putString("isSetDeployPositionInitReady",
     // "" + isSetDeployPositionInitReady);
-    SmartDashboard.putString("armSolenoid setForward",
-            "" + this.intake.armSolenoid.getForward());
+    // SmartDashboard.putString("armSolenoid setForward",
+    // "" + this.intake.armSolenoid.getForward());
+    SmartDashboard.putString("intake isOpen:",
+            "" + this.intake.isOpen());
 }
 
 // =========================================================================
@@ -1201,7 +1210,7 @@ public void resetStateMachine ()
  */
 public double getCurrentDeployMinAngle ()
 {
-    return MIN_ARM_POSITION_ADJUSTED;// currentDeployMinAngle;
+    return /* MIN_ARM_POSITION_ADJUSTED; */ currentDeployMinAngle;
 }
 
 // =========================================================================
@@ -1365,6 +1374,8 @@ private double deployTargetSpeed = 0.0;
 private double currentDeployMaxAngle = MAX_ARM_POSITION_ADJUSTED;
 
 private double currentDeployMinAngle = MIN_ARM_POSITION_ADJUSTED;
+
+private double DEMO_MODE_OPEN_MIN_ANGLE = 10;
 
 private boolean isSetDeployPositionInitReady = true;
 

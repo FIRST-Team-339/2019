@@ -97,6 +97,14 @@ public void toggleSolenoid (QuickSwitch button)
         }
 }
 
+/**
+ * @return Returns true if the armSolenoid is open/ the active hatch
+ *         pickup is together, false otherwise
+ */
+public boolean isOpen ()
+{
+    return this.armSolenoid.getForward() == true;
+}
 
 /**
  * Method for calling intake and outtake when they are both mapped to two
