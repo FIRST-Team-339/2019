@@ -1082,9 +1082,9 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor(axisCameraIp,
-            CameraModel.AXIS_M1013,
-            ringLightRelay);
+    // axisCamera = new VisionProcessor(axisCameraIp,
+    //         CameraModel.AXIS_M1013,
+    //         ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
