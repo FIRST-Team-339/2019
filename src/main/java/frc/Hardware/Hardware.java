@@ -58,7 +58,8 @@ import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
  *
  * @class HardwareDeclarations
  * @author Bob Brown
- * @written Jan 2, 2011 -------------------------------------------------------
+ * @written Jan 2, 2011-1
+ *          -------------------------------------------------------
  */
 
 public class Hardware
