@@ -624,8 +624,8 @@ private static void individualTest ()
 private static void ashleyTest ()
 {
 
-    System.out.println(
-            "ballllllll????? = " + Hardware.armBallDetector.get());
+    // System.out.println(
+    // "ballllllll????? = " + Hardware.armBallDetector.get());
     // System.out.println("level switch state = "
     // + Hardware.autoDisableSwitch.isOn());
     // if (Hardware.armHackButton.isOnCheckNow() == true)
@@ -907,6 +907,7 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
+
         // ==================================
         // Scale Alignment
         // ==================================
@@ -1206,8 +1207,8 @@ public static void printStatements ()
         // Hardware.telemetry.printToConsole("delay pot: " +
         // Hardware.delayPot.get(0, 5));
 
-        System.out.println("Intake deploy sensor: "
-                + Hardware.armPot.get());
+        // System.out.println("Intake deploy sensor: "
+        // + Hardware.armPot.get());
         // SmartDashboard.putNumber("Arm Pot sensor: ",
         // Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
