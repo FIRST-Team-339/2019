@@ -387,6 +387,8 @@ public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
 
+public static MomentarySwitch cameraZeroOnOffButton = null;
+
 // --------------------------------------------------
 
 public static JoystickButton climbOneButton = null;
@@ -726,6 +728,8 @@ public static void commonInitialization ()
     // ----------Right Driver--------------
 
     driveStraightButton = new JoystickButton(rightDriver, 2);
+
+    cameraZeroOnOffButton = new MomentarySwitch(rightDriver, 2, false);
 
     solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
 
@@ -1084,8 +1088,8 @@ public static void robotInitialize2019 ()
 
     // Axis/USB Camera class
     // axisCamera = new VisionProcessor(axisCameraIp,
-    //         CameraModel.AXIS_M1013,
-    //         ringLightRelay);
+    // CameraModel.AXIS_M1013,
+    // ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the
