@@ -975,7 +975,7 @@ private double calculateDesiredArmMotorVoltage (
             break;
         }
     // SmartDashboard.putNumber("getArmMotorVoltage", speed);
-    return speed;
+    return 0;// speed;//TODO
 
 }
 
@@ -1089,10 +1089,10 @@ public void printDeployDebugInfo ()
     // SmartDashboard.putString("stayAtPositionInitIsReady",
     // "" + this.stayAtPositionInitIsReady);
     SmartDashboard.putString("Has Cargo:", "" + this.hasCargo());
-    // SmartDashboard.putNumber("currentDeployMaxAngle",
-    // currentDeployMaxAngle);
-    // SmartDashboard.putNumber("currentDeployMinAngle",
-    // currentDeployMinAngle);
+    SmartDashboard.putNumber("currentDeployMaxAngle",
+            currentDeployMaxAngle);
+    SmartDashboard.putNumber("currentDeployMinAngle",
+            currentDeployMinAngle);
     // SmartDashboard.putString("isSetDeployPositionInitReady",
     // "" + isSetDeployPositionInitReady);
     SmartDashboard.putString("armSolenoid setForward",
@@ -1207,7 +1207,7 @@ public void resetStateMachine ()
  */
 public double getCurrentDeployMinAngle ()
 {
-    return MIN_ARM_POSITION_ADJUSTED;// currentDeployMinAngle;
+    return currentDeployMinAngle;
 }
 
 // =========================================================================

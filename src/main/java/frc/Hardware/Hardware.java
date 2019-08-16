@@ -14,7 +14,7 @@
 // ====================================================================
 package frc.Hardware;
 
-import frc.HardwareInterfaces.DriveWithCamera;
+// import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.DoubleSolenoid;
 import frc.HardwareInterfaces.DoubleThrowSwitch;
 import frc.HardwareInterfaces.KilroyEncoder;
@@ -30,6 +30,8 @@ import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
 import frc.Utils.drive.Drive.BrakeType;
 import frc.robot.Teleop;
+import frc.vision.NewDriveWithVision;
+import frc.vision.NewVisionInterface;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
@@ -276,7 +278,12 @@ public static KilroySPIGyro gyro = null;
 // -------------------------------------
 // Axis/USB Camera class
 // -------------------------------------
-public static VisionProcessor axisCamera = null;
+// public static VisionProcessor axisCamera = null;
+
+
+public static NewDriveWithVision visionDriving = null;
+
+public static NewVisionInterface visionInterface = null;
 
 public static String axisCameraIp = null;
 
@@ -445,7 +452,7 @@ public static Drive drive = null;
 
 public static DrivePID drivePID = null;
 
-public static DriveWithCamera driveWithCamera = null;
+// public static DriveWithCamera driveWithCamera = null;
 
 // -------------------
 // Assembly classes (e.g. forklift)
@@ -461,6 +468,7 @@ public static AlignPerpendicularToTape alignByTape = null;
 public static DepositGamePiece depositGamePiece = null;
 
 public static RetrieveHatch retriever = null;
+
 
 // ====================================
 // Methods
@@ -545,7 +553,7 @@ public static void commonInitialization ()
 
     levelTwoSwitch = new SingleThrowSwitch(23);
 
-    demoModeSwitch = new SingleThrowSwitch(0);
+    demoModeSwitch = new SingleThrowSwitch(1);
 
     autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
             levelTwoSwitch);
@@ -629,9 +637,15 @@ public static void commonInitialization ()
 
     // Axis/USB Camera class
 
-    axisCamera = new VisionProcessor(axisCameraIp,
-            CameraModel.AXIS_M1013,
-            ringLightRelay);
+    // axisCamera = new VisionProcessor(axisCameraIp,
+    // CameraModel.AXIS_M1013,
+    // ringLightRelay);
+
+    visionInterface = new NewVisionInterface();
+    visionDriving = new NewDriveWithVision();
+
+
+
     // -------------------------------------
     // declare the USB camera server and the
     // USB camera it serves at the same time
@@ -803,9 +817,9 @@ public static void commonInitialization ()
             leftFrontDriveEncoder, rightFrontDriveEncoder,
             leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
 
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
+    // driveWithCamera = new DriveWithCamera(
+    // transmission, null, null, frontUltraSonic,
+    // frontUltraSonic, gyro, axisCamera);
 
     // Assembly classes (e.g. forklift)
     manipulator = new GamePieceManipulator(
@@ -1082,9 +1096,9 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    axisCamera = new VisionProcessor(axisCameraIp,
-            CameraModel.AXIS_M1013,
-            ringLightRelay);
+    // axisCamera = new VisionProcessor(axisCameraIp,
+    // CameraModel.AXIS_M1013,
+    // ringLightRelay);
 
     // -------------------------------------
     // declare the USB camera server and the

@@ -38,6 +38,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
+import frc.vision.VisionProcessor;
+import frc.vision.NewVisionInterface.LedMode;
 import frc.vision.VisionProcessor.ImageType;
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -60,6 +62,7 @@ public class Teleop
  */
 public static void init ()
 {
+
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -69,7 +72,7 @@ public static void init ()
     Hardware.alignVisionButton.setValue(false);
     if (!Hardware.demoMode)
         {
-        Hardware.axisCamera.setRelayValue(Value.kOn);
+        // Hardware.axisCamera.setRelayValue(Value.kOn);
         }
     // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
@@ -114,6 +117,7 @@ public static void init ()
                 Hardware.delayPot.get(.01, 1.0));
         Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
                 Hardware.delayPot.get(.01, 1.0));
+
         Hardware.manipulator.setMaxArmAngle(65);
         Hardware.manipulator.setMinArmAngle(5);
         }
@@ -236,9 +240,14 @@ public static void initTeleop2019 ()
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
+public static boolean doThing = false;
 
 public static void periodic ()
 {
+    Hardware.visionInterface.updateValues();
+
+    // System.out.println(
+    // "Demo mode sw = " + Hardware.demoModeSwitch.isOn());
     if (inDemoMode == true)
         {
         // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
@@ -426,43 +435,68 @@ public static void periodic ()
 
     if (inDemoMode == false)
         {
-        // vision=====================================
+        // vision=======================================================
         // 8 and 9visionHeightDownButton
 
         // TODO find a better way to set visionHeight than using timer
         // and also find some way of telling the driver's what
         // height they are at
-        if (Hardware.visionHeightUpButton.get() == true
-                && visionHeight < 2 && Hardware.telopTimer.get() > .25)
+
+
+        // if (Hardware.visionHeightUpButton.get() == true
+        // && visionHeight < 2 && Hardware.telopTimer.get() > .25)
+        // {
+        // Hardware.telopTimer.reset();
+        // visionHeight++;
+        // Hardware.telopTimer.start();
+        // }
+        // if (Hardware.visionHeightDownButton.get() == true
+        // && visionHeight > 0 && Hardware.telopTimer.get() > .25)
+        // {
+        // Hardware.telopTimer.reset();
+        // visionHeight--;
+        // Hardware.telopTimer.start();
+        // }
+        if (Hardware.visionHeightUpButton.get() == true)
             {
-            Hardware.telopTimer.reset();
-            visionHeight++;
-            Hardware.telopTimer.start();
-            }
-        if (Hardware.visionHeightDownButton.get() == true
-                && visionHeight > 0 && Hardware.telopTimer.get() > .25)
-            {
-            Hardware.telopTimer.reset();
-            visionHeight--;
-            Hardware.telopTimer.start();
+            System.out.println(
+                    Hardware.visionInterface.getDistanceFromTarget());
+
             }
 
-        if (Hardware.alignVisionButton.isOnCheckNow() == true
-                && Hardware.depositGamePiece.overrideVision() == false)
+        if (Hardware.visionHeightDownButton.get() == true)
             {
+            System.out.println("set blink");
+            Hardware.visionInterface.setLedMode(LedMode.BLINK);
+            }
 
-            if (Hardware.depositGamePiece
-                    .startTeleopDeposit(visionHeight,
-                            false))
+        if (Hardware.leftOperator.getRawButton(4) == true)
+            {
+            doThing = true;
+            }
+
+        if (doThing == true)
+            {
+            if (Hardware.visionDriving.driveToTarget())
                 {
-                Hardware.alignVisionButton.setValue(false);
-
+                doThing = false;
                 }
+
+            // if (Hardware.depositGamePiece
+            // .startTeleopDeposit(visionHeight,
+            // false))
+            // {
+            // Hardware.alignVisionButton.setValue(false);
+            // }
             }
-        else
+        if (doThing == false)
             {
-            Hardware.depositGamePiece.resetDepositTeleop();
+            teleopDrive();
             }
+        // else
+        // {
+        // Hardware.depositGamePiece.resetDepositTeleop();
+        // }
 
         // if (Hardware.alignAndStopButton.isOnCheckNow() == true
         // && Hardware.depositGamePiece.overrideVision() == false)
@@ -519,6 +553,7 @@ public static void periodic ()
 
         takePicture();
         }
+
     individualTest();
     // Hardware.telemetry.printToShuffleboard();
 
@@ -573,7 +608,7 @@ public static void periodic ()
                         // System.out.println("TELEOP DRIVE");
                         // SmartDashboard.putString("printDriveType",
                         // "TELEOP DRIVE");
-                        teleopDrive();
+                        // teleopDrive();//TODO
                         if (Hardware.solenoidButtonOne
                                 .isOnCheckNow() == true
                                 && Hardware.solenoidButtonTwo
@@ -590,7 +625,7 @@ public static void periodic ()
         }
     else
         {
-        teleopDrive();
+        // teleopDrive();/TODO
         }
 
     if (inDemoMode == false)
@@ -602,11 +637,11 @@ public static void periodic ()
                         .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
                                 + 12.0)
             {
-            ringLightFlash(true, .5);
+            // ringLightFlash(true, .5);
             }
         else
             {
-            ringLightFlash(false, .5);
+            // ringLightFlash(false, .5);
             }
         }
     printStatements();
@@ -622,7 +657,7 @@ public static void periodic ()
 private static void individualTest ()
 {
     // ashleyTest();
-    connerTest();
+    // connerTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -707,9 +742,9 @@ public static boolean hasDoneTheThing = false;
 
 private static void connerTest ()
 {
-    SmartDashboard.putBoolean("inDemoMode", inDemoMode);
-    SmartDashboard.putBoolean("inDemoMode switch",
-            Hardware.demoModeSwitch.isOn());
+
+
+
 
 } // end connerTest()
 
@@ -1343,8 +1378,8 @@ public static void takePicture ()
                 && imageTaken == false)
             {
 
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+            // Hardware.axisCamera.saveImage(ImageType.RAW);
+            // Hardware.axisCamera.saveImage(ImageType.PROCESSED);//TODO
 
             imageTaken = true;
             }
