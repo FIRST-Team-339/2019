@@ -466,33 +466,35 @@ public static void periodic ()
 
         if (Hardware.visionHeightDownButton.get() == true)
             {
-            System.out.println("set blink");
-            Hardware.visionInterface.setLedMode(LedMode.BLINK);
+            // TODO make work
+            doThing = false;
             }
-
+        // align===================================
         if (Hardware.leftOperator.getRawButton(4) == true)
             {
             doThing = true;
             }
-
-        if (doThing == true)
+        if (Hardware.leftOperator.getRawButton(4) || doThing == true)
+        /* && Hardware.depositGamePiece.overrideVision() == false */
             {
             if (Hardware.visionDriving.driveToTarget())
                 {
                 doThing = false;
                 }
-
-            // if (Hardware.depositGamePiece
-            // .startTeleopDeposit(visionHeight,
-            // false))
-            // {
-            // Hardware.alignVisionButton.setValue(false);
-            // }
             }
-        if (doThing == false)
+        else
             {
             teleopDrive();
             }
+        // end align=================================
+        // if (Hardware.depositGamePiece
+        // .startTeleopDeposit(visionHeight,
+        // false))
+        // {
+        // Hardware.alignVisionButton.setValue(false);
+        // }
+
+
         // else
         // {
         // Hardware.depositGamePiece.resetDepositTeleop();
@@ -509,143 +511,147 @@ public static void periodic ()
         // if (Hardware.alignAndStopButton.isOnCheckNow() == false
         // && Hardware.alignVisionButton.isOnCheckNow() == false)
         // {
-        // Hardware.driveWithCamera.state = Hardware.driveWithCamera.state.INIT;
+        // Hardware.driveWithCamera.state =
+        // Hardware.driveWithCamera.state.INIT;
         // }
-        }
-    // end vision==============================================
 
-    // buttons
 
-    // buttons to cancel everything ===========================
-    if (Hardware.cancelTwoButton.get() == true
-            && Hardware.cancelOneButton.get() == true)
-        {
-        // Hardware.retriever.stopRetrieveHatch();
-        Hardware.climber.finishEarly();
-        Autonomous.endAutoPath();
-        Hardware.lift.resetStateMachine();
-        Hardware.manipulator.resetStateMachine();
-        } // end if
+        // end vision==============================================
 
-    if (inDemoMode == false)
-        {
-        if (Hardware.cancelAutoLeftDriver.get() == true
-                && Hardware.cancelAutoRightDriver.get() == true)
+        // buttons
+
+        // buttons to cancel everything ===========================
+        if (Hardware.cancelTwoButton.get() == true
+                && Hardware.cancelOneButton.get() == true)
             {
-            Hardware.climber.finishEarly();
             // Hardware.retriever.stopRetrieveHatch();
+            Hardware.climber.finishEarly();
+            Autonomous.endAutoPath();
+            Hardware.lift.resetStateMachine();
+            Hardware.manipulator.resetStateMachine();
+            } // end if
 
-            }
-        }
-    // Buttons to reset the forklift encoder. Should never be called during
-    // a match; only is in the final code for the purpsoe of speeding up
-    // testing in the pits
-
-    if (inDemoMode == false)
-        {
-        if (Hardware.resetForkliftEncoderButton1.get() == true
-                && Hardware.resetForkliftEncoderButton2.get() == true)
+        if (inDemoMode == false)
             {
-            Hardware.lift.resetEncoder();
-            }
-
-
-
-        takePicture();
-        }
-
-    individualTest();
-    // Hardware.telemetry.printToShuffleboard();
-
-    // Hardware.telemetry.printToConsole();
-
-    if (inDemoMode == false)
-        {
-        if (Hardware.climbOneButton.get() == true
-        /* && Hardware.climbTwoButton.get() == true */)
-        // if (Hardware.leftDriver.getRawButton(6) == true)
-            {
-            // Hardware.climber.climb();
-            Hardware.climber.newClimb();
-            }
-        else
-            if (Hardware.rightDriver.getRawButton(12) == true)
+            if (Hardware.cancelAutoLeftDriver.get() == true
+                    && Hardware.cancelAutoRightDriver.get() == true)
                 {
-                Hardware.climber.skipStepClimb();
+                Hardware.climber.finishEarly();
+                // Hardware.retriever.stopRetrieveHatch();
+
                 }
-        }
-
-    if (inDemoMode == false)
-        {
-        if (Hardware.driveStraightButton.get() == true)
-            {
-            Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
-                    Autonomous.ACCELERATION_TIME,
-                    Autonomous.USING_GYRO);
-
             }
-        else
-            if (Hardware.retrievalButton.get() == true)
+        // Buttons to reset the forklift encoder. Should never be called during
+        // a match; only is in the final code for the purpsoe of speeding up
+        // testing in the pits
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.resetForkliftEncoderButton1.get() == true
+                    && Hardware.resetForkliftEncoderButton2
+                            .get() == true)
                 {
-                // Hardware.retriever.retrieveHatch();
+                Hardware.lift.resetEncoder();
+                }
+
+
+
+            takePicture();
+            }
+
+        individualTest();
+        // Hardware.telemetry.printToShuffleboard();
+
+        // Hardware.telemetry.printToConsole();
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.climbOneButton.get() == true
+            /* && Hardware.climbTwoButton.get() == true */)
+            // if (Hardware.leftDriver.getRawButton(6) == true)
+                {
+                // Hardware.climber.climb();
+                Hardware.climber.newClimb();
                 }
             else
-                if (true/*
-                         * (Hardware.alignVisionButton.get() == false
-                         * || Hardware.depositGamePiece.overrideVision())
-                         * &&
-                         * (Hardware.alignAndStopButton
-                         * .isOnCheckNow() == false
-                         * || Hardware.depositGamePiece
-                         * .overrideVision())
-                         */)
+                if (Hardware.rightDriver.getRawButton(12) == true)
                     {
-                    if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
-                            ||
-                            ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
-                            || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
+                    Hardware.climber.skipStepClimb();
+                    }
+            }
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.driveStraightButton.get() == true)
+                {
+                Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
+                        Autonomous.ACCELERATION_TIME,
+                        Autonomous.USING_GYRO);
+
+                }
+            else
+                if (Hardware.retrievalButton.get() == true)
+                    {
+                    // Hardware.retriever.retrieveHatch();
+                    }
+                else
+                    if (true/*
+                             * (Hardware.alignVisionButton.get() == false
+                             * || Hardware.depositGamePiece.overrideVision())
+                             * &&
+                             * (Hardware.alignAndStopButton
+                             * .isOnCheckNow() == false
+                             * || Hardware.depositGamePiece
+                             * .overrideVision())
+                             */)
                         {
-                        // System.out.println("TELEOP DRIVE");
-                        // SmartDashboard.putString("printDriveType",
-                        // "TELEOP DRIVE");
-                        // teleopDrive();//TODO
-                        if (Hardware.solenoidButtonOne
-                                .isOnCheckNow() == true
-                                && Hardware.solenoidButtonTwo
-                                        .isOnCheckNow() == true)
+                        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
+                                ||
+                                ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
+                                || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
                             {
-                            Hardware.driveSolenoid.setForward(false);
-                            }
-                        else
-                            {
-                            Hardware.driveSolenoid.setForward(true);
+                            // System.out.println("TELEOP DRIVE");
+                            // SmartDashboard.putString("printDriveType",
+                            // "TELEOP DRIVE");
+                            // teleopDrive();//TODO
+                            if (Hardware.solenoidButtonOne
+                                    .isOnCheckNow() == true
+                                    && Hardware.solenoidButtonTwo
+                                            .isOnCheckNow() == true)
+                                {
+                                Hardware.driveSolenoid
+                                        .setForward(false);
+                                }
+                            else
+                                {
+                                Hardware.driveSolenoid.setForward(true);
+                                }
                             }
                         }
-                    }
-        }
-    else
-        {
-        // teleopDrive();/TODO
-        }
-
-    if (inDemoMode == false)
-        {
-        if (Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                &&
-                Hardware.frontUltraSonic
-                        .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                                + 12.0)
-            {
-            // ringLightFlash(true, .5);
             }
         else
             {
-            // ringLightFlash(false, .5);
+            // teleopDrive();/TODO
             }
-        }
-    printStatements();
 
+        if (inDemoMode == false)
+            {
+            if (Hardware.frontUltraSonic
+                    .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                    &&
+                    Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                                    + 12.0)
+                {
+                // ringLightFlash(true, .5);
+                }
+            else
+                {
+                // ringLightFlash(false, .5);
+                }
+            }
+        printStatements();
+        }
 
 } // end Periodic()
 
@@ -1235,6 +1241,7 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
 
+        SmartDashboard.putNumber("Arm Pot", Hardware.armPot.get(270));
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
         // SmartDashboard.putNumber("Delay pot: ",
         // Hardware.delayPot.get());
