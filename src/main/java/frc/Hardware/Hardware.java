@@ -32,6 +32,7 @@ import frc.Utils.drive.Drive.BrakeType;
 import frc.robot.Teleop;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
+import frc.vision.NewVisionInterface;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -71,7 +72,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2019;
+public static final RobotYear whichRobot = RobotYear.TEST_BOARD;
 
 // -------------------------------------
 // Private Constants
@@ -462,6 +463,8 @@ public static DepositGamePiece depositGamePiece = null;
 
 public static RetrieveHatch retriever = null;
 
+
+public static NewVisionInterface vision = null;
 // ====================================
 // Methods
 // ====================================
@@ -504,6 +507,7 @@ public static void initialize ()
 
 public static void commonInitialization ()
 {
+    vision = new NewVisionInterface();
 
     // **********************************************************
     // DIGITAL I/O CLASSES
@@ -521,12 +525,12 @@ public static void commonInitialization ()
     // ====================================
     // CAN classes
     // ====================================
-    pdp = new PowerDistributionPanel(2);
+    // pdp = new PowerDistributionPanel(2);
 
     // ====================================
     // Relay classes
     // ====================================
-    ringLightRelay = new Relay(0);
+    // ringLightRelay = new Relay(0);
 
     // ====================================
     // Digital Inputs
@@ -534,23 +538,23 @@ public static void commonInitialization ()
     // -------------------------------------
     // Single and double throw switches
     // -------------------------------------
-    leftAutoSwitch = new SingleThrowSwitch(24);
+    // leftAutoSwitch = new SingleThrowSwitch(24);
 
-    rightAutoSwitch = new SingleThrowSwitch(25);
+    // rightAutoSwitch = new SingleThrowSwitch(25);
 
-    autoCenterSwitch = new DoubleThrowSwitch(leftAutoSwitch,
-            rightAutoSwitch);
+    // autoCenterSwitch = new DoubleThrowSwitch(leftAutoSwitch,
+    // rightAutoSwitch);
 
-    levelOneSwitch = new SingleThrowSwitch(22);
+    // levelOneSwitch = new SingleThrowSwitch(22);
 
-    levelTwoSwitch = new SingleThrowSwitch(23);
+    // levelTwoSwitch = new SingleThrowSwitch(23);
 
-    demoModeSwitch = new SingleThrowSwitch(0);
+    // demoModeSwitch = new SingleThrowSwitch(0);
 
-    autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
-            levelTwoSwitch);
+    // autoDisableSwitch = new DoubleThrowSwitch(levelOneSwitch,
+    // levelTwoSwitch);
 
-    autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
+    // autoSixPosSwitch = new SixPositionSwitch(13, 14, 15, 16, 17, 18);
 
     // Gear Tooth Sensors
 
@@ -558,12 +562,12 @@ public static void commonInitialization ()
     // -------------------------------------
     // Red Light/IR Sensor class
     // -------------------------------------
-    armBallDetector = new LightSensor(21);
+    // armBallDetector = new LightSensor(21);
 
-    leftBackIR = new LightSensor(8);
+    // leftBackIR = new LightSensor(8);
 
 
-    rightBackIR = new LightSensor(9);
+    // rightBackIR = new LightSensor(9);
 
     // ====================================
     // I2C Classes
@@ -575,7 +579,7 @@ public static void commonInitialization ()
     // ====================================
     // Compressor class - runs the compressor
     // ====================================
-    compressor = new Compressor();
+    // compressor = new Compressor();
 
     // ====================================
     // Pneumatic Control Module
@@ -587,10 +591,10 @@ public static void commonInitialization ()
 
     // Double Solenoids
 
-    driveSolenoid = new DoubleSolenoid(2,
-            3);
+    // driveSolenoid = new DoubleSolenoid(2,
+    // 3);
 
-    armIntakeSolenoid = new DoubleSolenoid(4, 5);
+    // armIntakeSolenoid = new DoubleSolenoid(4, 5);
 
 
 
@@ -609,19 +613,19 @@ public static void commonInitialization ()
 
     // Potentiometers
 
-    delayPot = new RobotPotentiometer(2, 300);
+    // delayPot = new RobotPotentiometer(2, 300);
 
-    armPot = new RobotPotentiometer(1, 300);
+    // armPot = new RobotPotentiometer(1, 300);
 
-    // Sonar/Ultrasonic
-    frontUltraSonic = new LVMaxSonarEZ(3);
+    // // Sonar/Ultrasonic
+    // frontUltraSonic = new LVMaxSonarEZ(3);
 
     // =====================================
     // SPI Bus
     // =====================================
 
     // Analog Interfaces
-    gyro = new KilroySPIGyro(true);
+    // gyro = new KilroySPIGyro(true);
 
     // **********************************************************
     // roboRIO CONNECTIONS CLASSES
@@ -629,19 +633,19 @@ public static void commonInitialization ()
 
     // Axis/USB Camera class
 
-    axisCamera = new VisionProcessor(axisCameraIp,
-            CameraModel.AXIS_M1013,
-            ringLightRelay);
+    // axisCamera = new VisionProcessor(axisCameraIp,
+    // CameraModel.AXIS_M1013,
+    // ringLightRelay);
     // -------------------------------------
     // declare the USB camera server and the
     // USB camera it serves at the same time
     // -------------------------------------
     // TODO: put somewhere useful
     // Camera settings: 320-240, 20fps, 87 ????
-    USBCam = CameraServer.getInstance().startAutomaticCapture(0);
+    // USBCam = CameraServer.getInstance().startAutomaticCapture(0);
 
 
-    USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
+    // USBCamII = CameraServer.getInstance().startAutomaticCapture(1);
 
     // **********************************************************
     // DRIVER STATION CLASSES
@@ -649,186 +653,186 @@ public static void commonInitialization ()
 
     // DriverStations class
 
-    driverStation = DriverStation.getInstance();
+    // driverStation = DriverStation.getInstance();
 
-    // Joystick classes
-    leftDriver = new Joystick(0);
+    // // Joystick classes
+    // leftDriver = new Joystick(0);
 
-    rightDriver = new Joystick(1);
+    // rightDriver = new Joystick(1);
 
-    leftOperator = new Joystick(2);
+    // leftOperator = new Joystick(2);
 
-    rightOperator = new Joystick(3);
+    // rightOperator = new Joystick(3);
 
-    // Buttons classes
-    // ----- Left Operator -----
+    // // Buttons classes
+    // // ----- Left Operator -----
 
-    cancelOneButton = new JoystickButton(leftOperator, 10);
+    // cancelOneButton = new JoystickButton(leftOperator, 10);
 
-    // left trigger
-    intakeTriggerLeft = new JoystickButton(leftOperator, 1);
+    // // left trigger
+    // intakeTriggerLeft = new JoystickButton(leftOperator, 1);
 
-    outtakeButtonLeft = new JoystickButton(leftOperator, 2);
+    // outtakeButtonLeft = new JoystickButton(leftOperator, 2);
 
-    armSolenoidToggleButton = new QuickSwitch(leftOperator, 3);
+    // armSolenoidToggleButton = new QuickSwitch(leftOperator, 3);
 
-    alignAndStopButton = new MomentarySwitch(leftOperator, 4, false);
+    // alignAndStopButton = new MomentarySwitch(leftOperator, 4, false);
 
-    playerStationCargoButton = new QuickSwitch(leftOperator, 6);
+    // playerStationCargoButton = new QuickSwitch(leftOperator, 6);
 
-    playerStationButton = new QuickSwitch(leftOperator, 7);
+    // playerStationButton = new QuickSwitch(leftOperator, 7);
 
-    // cargoShipCargoButton = new QuickSwitch(leftOperator, 11);
+    // // cargoShipCargoButton = new QuickSwitch(leftOperator, 11);
 
-    visionHeightUpButton = new JoystickButton(leftOperator, 9);//
+    // visionHeightUpButton = new JoystickButton(leftOperator, 9);//
 
-    visionHeightDownButton = new JoystickButton(leftOperator, 8);
+    // visionHeightDownButton = new JoystickButton(leftOperator, 8);
 
-    alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
+    // alignVisionButton = new MomentarySwitch(leftOperator, 5, false);
 
-    toggleIgnoreMakeBreakButton = new QuickSwitch(leftOperator, 11);
+    // toggleIgnoreMakeBreakButton = new QuickSwitch(leftOperator, 11);
 
-    // ----- Right Operator -----
+    // // ----- Right Operator -----
 
-    pictureButtonOne = new JoystickButton(rightOperator, 8);
+    // pictureButtonOne = new JoystickButton(rightOperator, 8);
 
-    pictureButtonTwo = new JoystickButton(rightOperator, 9);
+    // pictureButtonTwo = new JoystickButton(rightOperator, 9);
 
-    cancelTwoButton = new JoystickButton(rightOperator, 10);
+    // cancelTwoButton = new JoystickButton(rightOperator, 10);
 
-    // right trigger
+    // // right trigger
 
-    intakeTriggerRight = new JoystickButton(rightOperator, 1);
+    // intakeTriggerRight = new JoystickButton(rightOperator, 1);
 
-    outtakeButtonRight = new JoystickButton(rightOperator, 2);
+    // outtakeButtonRight = new JoystickButton(rightOperator, 2);
 
-    chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
+    // chooseCargoRocketHeights = new JoystickButton(rightOperator, 4);
 
-    forkliftOverride = new JoystickButton(rightOperator, 5);
+    // forkliftOverride = new JoystickButton(rightOperator, 5);
 
-    intakeOverride = forkliftOverride;
+    // intakeOverride = forkliftOverride;
 
-    deployOverride = forkliftOverride;
+    // deployOverride = forkliftOverride;
 
-    nextHigherLiftHeightButton = new QuickSwitch(rightOperator, 6);
+    // nextHigherLiftHeightButton = new QuickSwitch(rightOperator, 6);
 
-    nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
-            7);
+    // nextLowerLiftHeightButton = new QuickSwitch(rightOperator,
+    // 7);
 
-    // ----------Left Driver---------------
+    // // ----------Left Driver---------------
 
 
-    // Momentary Switches
+    // // Momentary Switches
 
-    upshiftButton = new JoystickButton(leftDriver, 1);
+    // upshiftButton = new JoystickButton(leftDriver, 1);
 
-    // ----------Right Driver--------------
+    // // ----------Right Driver--------------
 
-    driveStraightButton = new JoystickButton(rightDriver, 2);
+    // driveStraightButton = new JoystickButton(rightDriver, 2);
 
-    solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
+    // solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
 
-    solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
+    // solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
-    retrievalButton = new JoystickButton(leftDriver, 9);// fix button
-                                                        // yeeeeeeeeeeee
+    // retrievalButton = new JoystickButton(leftDriver, 9);// fix button
+    // // yeeeeeeeeeeee
 
-    climbOneButton = new JoystickButton(leftDriver, 11);
+    // climbOneButton = new JoystickButton(leftDriver, 11);
 
-    climbTwoButton = new JoystickButton(rightDriver, 11);
+    // climbTwoButton = new JoystickButton(rightDriver, 11);
 
-    cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
+    // cancelAutoRightDriver = new JoystickButton(rightDriver, 10);
 
-    cancelAutoLeftDriver = new JoystickButton(leftDriver, 10);
+    // cancelAutoLeftDriver = new JoystickButton(leftDriver, 10);
 
-    downshiftButton = new JoystickButton(rightDriver, 1);
+    // downshiftButton = new JoystickButton(rightDriver, 1);
 
-    // Momentary Switches
+    // // Momentary Switches
 
-    // ----------Right Driver--------------
+    // // ----------Right Driver--------------
 
 
-    poweredManipulatorForClimbButton = new JoystickButton(rightDriver,
-            6);
+    // poweredManipulatorForClimbButton = new JoystickButton(rightDriver,
+    // 6);
 
 
-    resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
+    // resetForkliftEncoderButton1 = new JoystickButton(rightDriver, 7);
 
-    resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
+    // resetForkliftEncoderButton2 = new JoystickButton(rightDriver, 8);
 
 
 
-    // hacks
-    // armHackButton = new MomentarySwitch(rightDriver, 6, false);
+    // // hacks
+    // // armHackButton = new MomentarySwitch(rightDriver, 6, false);
 
-    // liftHackButton = new JoystickButton(rightDriver, 5);
+    // // liftHackButton = new JoystickButton(rightDriver, 5);
 
-    // descendButton = new MomentarySwitch(leftOperator, 5, false);
+    // // descendButton = new MomentarySwitch(leftOperator, 5, false);
 
-    // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
+    // // ringLightButton = new MomentarySwitch(leftOperator, 6, false);
 
-    // **********************************************************
-    // Kilroy's Ancillary classes
-    // **********************************************************
-    // PID tuneables
-    // PID classes
-    // Utility classes
-    autoTimer = new Timer();
+    // // **********************************************************
+    // // Kilroy's Ancillary classes
+    // // **********************************************************
+    // // PID tuneables
+    // // PID classes
+    // // Utility classes
+    // autoTimer = new Timer();
 
-    takePictureTimer = new Timer();
+    // takePictureTimer = new Timer();
 
-    telopTimer = new Timer();
+    // telopTimer = new Timer();
 
-    ringLightTimer = new Timer();
+    // ringLightTimer = new Timer();
 
 
 
-    telemetry = new Telemetry(10000);
+    // telemetry = new Telemetry(10000);
 
-    // Transmission class
-    transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
+    // // Transmission class
+    // transmission = new TankTransmission(
+    // new SpeedControllerGroup(leftFrontCANMotor,
+    // leftRearCANMotor),
+    // new SpeedControllerGroup(rightFrontCANMotor,
+    // rightRearCANMotor));
 
-    // ------------------------------------
-    // Drive system
-    // ------------------------------------
-    drive = new Drive(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            gyro);
+    // // ------------------------------------
+    // // Drive system
+    // // ------------------------------------
+    // drive = new Drive(transmission,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder,
+    // gyro);
 
-    drivePID = new DrivePID(transmission,
-            leftFrontDriveEncoder, rightFrontDriveEncoder,
-            leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
+    // drivePID = new DrivePID(transmission,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder,
+    // leftFrontDriveEncoder, rightFrontDriveEncoder, gyro);
 
-    driveWithCamera = new DriveWithCamera(
-            transmission, null, null, frontUltraSonic,
-            frontUltraSonic, gyro, axisCamera);
+    // driveWithCamera = new DriveWithCamera(
+    // transmission, null, null, frontUltraSonic,
+    // frontUltraSonic, gyro, axisCamera);
 
-    // Assembly classes (e.g. forklift)
-    manipulator = new GamePieceManipulator(
-            armMotor, armPot/* armEncoder */,
-            armRoller,
-            armBallDetector,
-            armIntakeSolenoid);
+    // // Assembly classes (e.g. forklift)
+    // manipulator = new GamePieceManipulator(
+    // armMotor, armPot/* armEncoder */,
+    // armRoller,
+    // armBallDetector,
+    // armIntakeSolenoid);
 
-    lift = new Forklift(liftMotor, liftingEncoder, manipulator);
+    // lift = new Forklift(liftMotor, liftingEncoder, manipulator);
 
-    alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
-            drive);
+    // alignByTape = new AlignPerpendicularToTape(leftBackIR, rightBackIR,
+    // drive);
 
-    depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
+    // depositGamePiece = new DepositGamePiece(drive, lift, manipulator);
 
 
 
-    climber = new ClimbToLevelTwo(
-            driveSolenoid, armMotor, armPot,
-            drive, lift, frontUltraSonic);
+    // climber = new ClimbToLevelTwo(
+    // driveSolenoid, armMotor, armPot,
+    // drive, lift, frontUltraSonic);
 
 
-    retriever = new RetrieveHatch();
+    // retriever = new RetrieveHatch();
 
 } // end of commonInitialization()
 

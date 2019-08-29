@@ -193,7 +193,7 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
 
             break;
         case DRIVE_WITH_CAMERA:
-            // Hardware.axisCamera.processImage();// TODO check and see if this
+            Hardware.axisCamera.processImage();// TODO check and see if this
             // cause lag or watchdog errors
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
@@ -398,6 +398,7 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
+            Hardware.axisCamera.processImage();
             correctionValue = DRIVE_CORRECTION_CLOSE;
             // Hardware.axisCamera.processImage();// TODO
             visionProcessor.saveImage(ImageType.RAW);
@@ -537,6 +538,7 @@ public boolean alignWithVisionTest (RoughDistance roughDistance,
             state = DriveWithCameraState.DRIVE_WITH_CAMERA;
             break;
         case DRIVE_WITH_CAMERA:
+            Hardware.axisCamera.processImage();
             // visionProcessor.saveImage(ImageType.RAW);
             // visionProcessor.saveImage(ImageType.PROCESSED);
 
@@ -646,6 +648,16 @@ public Side getTargetSide ()
                 }
     side = Side.NULL;
     return side;
+}
+
+public static double getDistanceWithBlobs ()
+{
+
+    // 264,66
+    // 448,51.75
+    // 680, 41.5
+    // 984,34.5
+    return 1;
 }
 
 public static enum Side
