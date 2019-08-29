@@ -27,15 +27,17 @@ public boolean driveToTarget ()
     double adjustmentValueRight = 0;
     double adjustmentValueLeft = 0;
 
-
-    if (Hardware.visionInterface.getDistanceFromTarget() >= 35)
+    System.out.println("camera distance"
+            + Hardware.visionInterface.getDistanceFromTarget());
+    if (Hardware.visionInterface.getDistanceFromTarget() >= 40)
         {
         System.out.println("driving to target");
 
-        if (offness < -1.0)
+        if (offness < 0)
             {
 
-            adjustmentValueLeft = MIN_MOVE;
+            adjustmentValueLeft = MIN_MOVE
+                    - (Math.abs(offness) * ADJUST_PORP);
             adjustmentValueRight = MIN_MOVE
                     + (Math.abs(offness) * ADJUST_PORP);
             // Hardware.drive.drive(adjustmentValueLeft,
@@ -46,22 +48,23 @@ public boolean driveToTarget ()
 
 
         else
-            if (offness > 1.0)
-                {
+        /* if (offness > 0) */
+            {
 
-                adjustmentValueLeft = MIN_MOVE
-                        + (Math.abs(offness) * ADJUST_PORP);
-                adjustmentValueRight = MIN_MOVE;
+            adjustmentValueLeft = MIN_MOVE
+                    + (Math.abs(offness) * ADJUST_PORP);
+            adjustmentValueRight = MIN_MOVE
+                    - (Math.abs(offness) * ADJUST_PORP);
 
-                // Hardware.drive.drive(adjustmentValueLeft,
-                // adjustmentValueRight);
-                Hardware.transmission.driveRaw(adjustmentValueLeft,
-                        adjustmentValueRight);
-                }
-            else
-                {
-                Hardware.transmission.driveRaw(.2, .2);
-                }
+            // Hardware.drive.drive(adjustmentValueLeft,
+            // adjustmentValueRight);
+            Hardware.transmission.driveRaw(adjustmentValueLeft,
+                    adjustmentValueRight);
+            }
+        // else
+        // {
+        // Hardware.transmission.driveRaw(.2, .2);
+        // }
         }
     else
         {
@@ -142,9 +145,10 @@ public boolean driveToTargetArc ()
 
             System.out.println("driving to target the second");
 
-            if (offness < -1.0)
+            if (offness < 0)
                 {
-                adjustmentValueLeft = MIN_MOVE;
+                adjustmentValueLeft = MIN_MOVE
+                        - (Math.abs(offness) * ADJUST_PORP);
                 adjustmentValueRight = MIN_MOVE
                         + (Math.abs(offness) * ADJUST_PORP);
 
@@ -152,21 +156,22 @@ public boolean driveToTargetArc ()
                         adjustmentValueRight);
                 }
             else
-                if (offness > 1.0)
-                    {
+            /* if (offness > 0) */
+                {
 
-                    adjustmentValueLeft = MIN_MOVE
-                            + (Math.abs(offness) * ADJUST_PORP);
-                    adjustmentValueRight = MIN_MOVE;
+                adjustmentValueLeft = MIN_MOVE
+                        + (Math.abs(offness) * ADJUST_PORP);
+                adjustmentValueRight = MIN_MOVE
+                        - (Math.abs(offness) * ADJUST_PORP);
 
-                    Hardware.transmission.driveRaw(adjustmentValueLeft,
-                            adjustmentValueRight);
-                    }
-                else
-                    {
-                    // drives until reaches the distance to stop
-                    Hardware.transmission.driveRaw(.2, .2);
-                    }
+                Hardware.transmission.driveRaw(adjustmentValueLeft,
+                        adjustmentValueRight);
+                }
+            // else
+            // {
+            // // drives until reaches the distance to stop
+            // Hardware.transmission.driveRaw(.2, .2);
+            // }
             }
         }
     else
@@ -185,8 +190,8 @@ public boolean driveToTargetArc ()
     return false;
 }
 
-final double MIN_MOVE = .1;
+final double MIN_MOVE = .15;
 
-final double ADJUST_PORP = .025;
+final double ADJUST_PORP = .01;
 
 }
