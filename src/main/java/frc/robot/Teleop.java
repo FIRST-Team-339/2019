@@ -428,7 +428,7 @@ public static void periodic ()
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
-    Hardware.lift.printDebugInfo();
+    // Hardware.lift.printDebugInfo();
     // System.out.println(
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
@@ -673,8 +673,54 @@ private static void individualTest ()
     // nithyaTest();
 } // end individualTest()
 
+public static boolean prevCameraToggleButton = false;
+
 private static void ashleyTest ()
 {
+
+    // code to shut off usb camera- causes problems when trying to start up
+    // again
+    // look into removeCamera function to maybe fix
+    if (prevCameraToggleButton == false
+            &&
+            Hardware.cameraZeroOnOffButton.isOnCheckNow() == true)
+        {
+        Hardware.USBCam.close();
+        }
+    // else
+    // if (prevCameraToggleButton == true
+    // && Hardware.cameraZeroOnOffButton
+    // .isOnCheckNow() == false)
+    // {
+    // Hardware.USBCam = CameraServer.getInstance()
+    // .startAutomaticCapture(0);
+    // }
+
+
+    // if (Hardware.rightDriver.getRawButton(3) == true)
+    // {
+    // Hardware.USBCam = CameraServer.getInstance()
+    // .startAutomaticCapture(0);
+    // CameraServer.getInstance().
+    // }
+    // prevCameraToggleButton = Hardware.cameraZeroOnOffButton
+    // .isOnCheckNow();
+
+
+    // if (Hardware.cameraZeroOnOffButton.isOnCheckNow() == true
+    // && Hardware.cameraZeroOnOffButton.isOn() == false)
+    // {
+    // Hardware.USBCam.close();
+    // }
+    // else
+    // if (Hardware.cameraZeroOnOffButton.isOnCheckNow() == false
+    // && Hardware.cameraZeroOnOffButton.isOn() == true)
+    // {
+    // CameraServer.getInstance().startAutomaticCapture(0);
+    // }
+
+    // System.out.println(
+    // "ballllllll????? = " + Hardware.armBallDetector.get());
     // System.out.println("level switch state = "
     // + Hardware.autoDisableSwitch.isOn());
     // if (Hardware.armHackButton.isOnCheckNow() == true)
@@ -956,6 +1002,7 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
+
         // ==================================
         // Scale Alignment
         // ==================================

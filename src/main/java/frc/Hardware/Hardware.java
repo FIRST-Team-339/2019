@@ -60,7 +60,8 @@ import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
  *
  * @class HardwareDeclarations
  * @author Bob Brown
- * @written Jan 2, 2011 -------------------------------------------------------
+ * @written Jan 2, 2011-1
+ *          -------------------------------------------------------
  */
 
 public class Hardware
@@ -392,6 +393,8 @@ public static JoystickButton liftHackButton = null;
 public static MomentarySwitch descendButton = null;
 
 public static MomentarySwitch ringLightButton = null;
+
+public static MomentarySwitch cameraZeroOnOffButton = null;
 
 // --------------------------------------------------
 
@@ -739,6 +742,8 @@ public static void commonInitialization ()
     // ----------Right Driver--------------
 
     driveStraightButton = new JoystickButton(rightDriver, 2);
+
+    cameraZeroOnOffButton = new MomentarySwitch(rightDriver, 2, false);
 
     solenoidButtonOne = new MomentarySwitch(leftDriver, 7, false);
 

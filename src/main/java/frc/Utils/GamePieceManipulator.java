@@ -284,9 +284,13 @@ public double getCurrentArmPosition ()
     // scales the value from the arm pot so parallel to the ground is
     // zero, and perpendicular to the ground and pointing up is 90
 
-    return (this.armPot.get()
-            - ARM_POT_RAW_HORIZONTAL_VALUE)
-            * ARM_POT_SCALE_TO_DEGREES;
+    // if (Hardware.demoMode == false)
+        {
+        return (this.armPot.get()
+                - ARM_POT_RAW_HORIZONTAL_VALUE)
+                * ARM_POT_SCALE_TO_DEGREES;
+        }
+
 
     // } else // if we are not using an armPot, we should be using an encoder
     // {
@@ -616,8 +620,18 @@ public void setIntakeState (RollerIntakeMechanism.IntakeState state)
 public void deployUpdate ()
 {
 
+    if (Hardware.demoMode == true)
+        {
+        if (this.intake.isOpen() == true)
+            {
+            currentDeployMinAngle = DEMO_MODE_OPEN_MIN_ANGLE;
+            }
+        else
+            {
+            currentDeployMinAngle = MIN_ARM_POSITION_ADJUSTED;
+            }
+        }
     // this.updatePastArmPositions();
-
     if (deployMovementState != DeployMovementState.STAY_AT_POSITION)
         {
         this.stayAtPosition2018InitIsReady = true;
@@ -1095,8 +1109,10 @@ public void printDeployDebugInfo ()
             currentDeployMinAngle);
     // SmartDashboard.putString("isSetDeployPositionInitReady",
     // "" + isSetDeployPositionInitReady);
-    SmartDashboard.putString("armSolenoid setForward",
-            "" + this.intake.armSolenoid.getForward());
+    // SmartDashboard.putString("armSolenoid setForward",
+    // "" + this.intake.armSolenoid.getForward());
+    SmartDashboard.putString("intake isOpen:",
+            "" + this.intake.isOpen());
 }
 
 // =========================================================================
@@ -1207,7 +1223,7 @@ public void resetStateMachine ()
  */
 public double getCurrentDeployMinAngle ()
 {
-    return currentDeployMinAngle;
+    return /* MIN_ARM_POSITION_ADJUSTED; */ currentDeployMinAngle;
 }
 
 // =========================================================================
@@ -1260,7 +1276,7 @@ private static int PARALLEL_TO_GROUND_ADJUSTED = 0;
 
 // value that the arm pot returns when the manipulator is
 // parallel to the floor
-private static double ARM_POT_RAW_HORIZONTAL_VALUE = 48;
+private static double ARM_POT_RAW_HORIZONTAL_VALUE = 56;
 
 // vertical angle: 106
 
@@ -1273,7 +1289,7 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // calculate by via the formula: 90/ (Raw Pot Value when arm is vertical -
 // Raw Pot Horizontal Value)
-private static double ARM_POT_SCALE_TO_DEGREES = 1.0714; // 90/84
+private static double ARM_POT_SCALE_TO_DEGREES = 1.11111111; // 90/81
 
 // // value that is multiplied by the number of ticks to convert it to degrees
 // private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //
@@ -1375,6 +1391,8 @@ private double deployTargetSpeed = 0.0;
 private double currentDeployMaxAngle = MAX_ARM_POSITION_ADJUSTED;
 
 private double currentDeployMinAngle = MIN_ARM_POSITION_ADJUSTED;
+
+private double DEMO_MODE_OPEN_MIN_ANGLE = 10;
 
 private boolean isSetDeployPositionInitReady = true;
 
