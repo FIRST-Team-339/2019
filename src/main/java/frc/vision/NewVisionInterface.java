@@ -1,13 +1,11 @@
 package frc.vision;
 
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.*;
 
 
 public class NewVisionInterface
 {
-
 
 NetworkTable limelight = NetworkTableInstance.getDefault()
         .getTable("limelight");
@@ -36,7 +34,7 @@ NetworkTableEntry tshort = limelight.getEntry("tshort");
 // length of longest side
 NetworkTableEntry tlong = limelight.getEntry("tlong");
 
-// horizontal side length
+// horizontal side length(the strongest avenger)
 NetworkTableEntry thor = limelight.getEntry("thor");
 
 // vertical side length
@@ -47,6 +45,8 @@ NetworkTableEntry getpipe = limelight.getEntry("getpipe");
 
 // 3d stuff
 NetworkTableEntry camtran = limelight.getEntry("camtran");
+
+NetworkTableEntry Led_Mode = limelight.getEntry("ledMode");
 
 public boolean hasTargets;
 
@@ -72,14 +72,18 @@ public double pipeline;
 
 public double camtan;
 
+public double led_Mode;
+
 
 
 // to be called continuously
 // updates internal values with those recieved from the network table
 public void updateValues ()
 {
+
     try
         {
+
         hasTargets = hasTargets(tv.getDouble(0));
         x = tx.getDouble(0);
         y = ty.getDouble(0);
@@ -91,7 +95,8 @@ public void updateValues ()
         horizontal = thor.getDouble(0);
         vertical = tvert.getDouble(0);
         pipeline = getpipe.getDouble(0);
-
+        led_Mode = Led_Mode.getDouble(0);
+        // publishValues();
         }
     catch (NullPointerException exception)
         {
@@ -161,6 +166,10 @@ public void publishValues ()
     SmartDashboard.putNumber("horizontal ", horizontal);
     SmartDashboard.putNumber("vertical ", vertical);
     SmartDashboard.putNumber("pipeline ", pipeline);
+
+    SmartDashboard.putNumber("ledMode", led_Mode);
+    // SmartDashboard.putNumber("distance", getDistanceFromTarget());
+
 }
 
 public boolean hasTargets (double targets)
@@ -204,6 +213,44 @@ public void setPipeline (int pipe)
 public void takePicture ()
 {
     // TODO
-
 }
+
+
+
+
+public double distance = 0;
+
+public double getDistanceFromTarget ()
+{
+    // alternating piplein to compare the different blob goups?
+
+    // set pipeline()
+
+
+
+    // double distance = 0;
+    // d = (h2-h1) / tan(a1+a2)
+    // distance = ((CAMERA_HEIGHT - TARGET_HEIGHT_LOW)
+    // / Math.sin(Math.abs(getYOffSet())))
+    // * Math.sin(90 - Math.abs(getYOffSet()));
+
+    distance = 16.15 / Math.tan(Math.toRadians(Math.abs(getYOffSet())));
+
+    if (hasTargets == true)
+        {
+        return distance;
+        }
+    else
+        {
+        return 0;
+        }
+}
+
+final double CAMERA_HEIGHT = 44.5;// TODO
+
+final double TARGET_HEIGHT_LOW = 29;// TODO
+
+final double TARGET_HEIGHT_HIGH = 35;// TODO
+
+final double MOUNTING_ANGLE = 0;// TODO
 }

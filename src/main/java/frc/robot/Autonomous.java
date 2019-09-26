@@ -32,9 +32,9 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
-import frc.HardwareInterfaces.DriveWithCamera;
+// import frc.HardwareInterfaces.DriveWithCamera;
 import frc.HardwareInterfaces.LightSensor;
-import frc.HardwareInterfaces.DriveWithCamera.Side;
+// import frc.HardwareInterfaces.DriveWithCamera.Side;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -636,11 +636,12 @@ private static boolean depositCargoHatch ()
             // .getDistanceFromNearestBumper());
             Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
-            if (Hardware.driveWithCamera
-                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
-                {
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
-                }
+            // if (Hardware.driveWithCamera
+            // .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
+            // {
+            // depositCargoHatchState =
+            // DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+            // }
 
 
 
@@ -933,25 +934,25 @@ private static boolean depositRocketHatch ()
                 case FIND_SIDE:
                     // System.out.println("find side: "
                     // + Hardware.driveWithCamera.getTargetSide());
-                    if (Hardware.driveWithCamera
-                            .getTargetSide() == Side.RIGHT)
-                        {
-                        driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
-                        }
-                    else
-                        if (Hardware.driveWithCamera
-                                .getTargetSide() == Side.LEFT)
-                            {
-                            driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
-                            }
-                        else
-                            {
-                            if (Hardware.drive.driveStraightInches(
-                                    DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
-                                    .4,
-                                    ACCELERATION_TIME, USING_GYRO))
-                                rocketHatchState = RocketHatchState.FINISH;
-                            }
+                    // if (Hardware.driveWithCamera
+                    // .getTargetSide() == Side.RIGHT)
+                    // {
+                    // driveWithCameraStates = DriveWithCameraStates.TURN_LEFT;
+                    // }
+                    // else
+                    // if (Hardware.driveWithCamera
+                    // .getTargetSide() == Side.LEFT)
+                    // {
+                    // driveWithCameraStates = DriveWithCameraStates.TURN_RIGHT;
+                    // }
+                    // else
+                    // {
+                    // if (Hardware.drive.driveStraightInches(
+                    // DISTANCE_TO_CROSS_AUTOLINE_CAMERA,
+                    // .4,
+                    // ACCELERATION_TIME, USING_GYRO))
+                    // rocketHatchState = RocketHatchState.FINISH;
+                    // }
                     break;
                 case TURN_RIGHT:
                     // System.out.println("right");[]
@@ -978,14 +979,14 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
-                    if (Hardware.driveWithCamera
-                            .driveToTarget(DRIVE_WITH_CAMERA_SPEED,
-                                    false))
-                        {
+                    // if (Hardware.driveWithCamera
+                    // .driveToTarget(DRIVE_WITH_CAMERA_SPEED,
+                    // false))
+                    // {
 
 
-                        rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
-                        }
+                    // rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                    // }
 
                     Hardware.depositGamePiece.prepToDepositHatch();
 
@@ -1208,14 +1209,14 @@ private static boolean depositSideCargoBall ()
             break;
 
         case VISION_DRIVE_TOWARDS_CARGO_SHIP:
-            if (Hardware.driveWithCamera
-                    .driveToTargetClose(.2, true))// TODO constant nad vision
-                                                  // function
-                {
-                sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
-                // //TODO
+            // if (Hardware.driveWithCamera
+            // .driveToTargetClose(.2, true))// TODO constant nad vision
+            // // function
+            // {
+            // sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
+            // // //TODO
 
-                }
+            // }
             break;
         case DEPOSIT_BALL:
 
@@ -1574,11 +1575,12 @@ private static boolean jankyDepositCargoHatch ()
             Hardware.depositGamePiece.prepToDepositHatch();
             // Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
-            if (Hardware.driveWithCamera
-                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
-                {
-                jankyDepositCargoHatchState = JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
-                }
+            // if (Hardware.driveWithCamera
+            // .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
+            // {
+            // jankyDepositCargoHatchState =
+            // JankyDepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+            // }
             break;
         case STRAIGHT_DEPOSIT_DEPOSIT_HATCH:
             // System.out.println("Deposit");
@@ -1599,7 +1601,8 @@ private static boolean jankyDepositCargoHatch ()
 
 public static void endAutoPath ()
 {
-    Hardware.driveWithCamera.state = DriveWithCamera.DriveWithCameraState.INIT;
+    // Hardware.driveWithCamera.state =
+    // DriveWithCamera.DriveWithCameraState.INIT;
     sideCargoBallState = SideCargoBallState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;

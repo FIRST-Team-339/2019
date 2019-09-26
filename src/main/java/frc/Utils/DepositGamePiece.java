@@ -3,7 +3,7 @@ package frc.Utils;
 import frc.Utils.drive.*;
 import frc.vision.VisionProcessor;
 import frc.Hardware.Hardware;
-import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
+// import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
 import frc.Utils.GamePieceManipulator;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -457,18 +457,18 @@ public boolean depositTeleopStateMachine ()
 
             // TODO uncomment
             // calls vision which the sets up the forklift and manipulator
-            if (Hardware.driveWithCamera.driveToTargetClose(.1, true))
-                {
-                Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+            // if (Hardware.driveWithCamera.driveToTargetClose(.1, true))
+            // {
+            // Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
 
-                depositTeleopState = DepositTeleopState.PREP_MANIPULATOR;
+            // depositTeleopState = DepositTeleopState.PREP_MANIPULATOR;
 
-                // if (depositHeighthatch == 0)
-                // {
-                // depositTeleopState = DepositTeleopState.LOWER_FORK_1;
-                // }
-                // depositTeleopState = DepositTeleopState.DEPOSIT;
-                }
+            // // if (depositHeighthatch == 0)
+            // // {
+            // // depositTeleopState = DepositTeleopState.LOWER_FORK_1;
+            // // }
+            // // depositTeleopState = DepositTeleopState.DEPOSIT;
+            // }
             break;
         case DRIVE_STRAIGHT_FORWARD:
 

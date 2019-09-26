@@ -38,6 +38,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
+import frc.vision.VisionProcessor;
+// import frc.vision.NewVisionInterface.LedMode;
+import frc.vision.VisionProcessor.ImageType;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.vision.NewVisionInterface;
 
@@ -69,7 +72,14 @@ public static void init ()
     // Hardware.USBCam = CameraServer.getInstance()
     // .startAutomaticCapture(0);// TODO
     // }
-
+    Hardware.depositGamePiece.resetDepositTeleop();
+    Hardware.alignVisionButton.setValue(false);
+    if (!Hardware.demoMode)
+        {
+        // Hardware.axisCamera.setRelayValue(Value.kOn);
+        }
+    // Hardware.axisCamera.processImage();
+    Hardware.telopTimer.start();
 
     switch (Hardware.whichRobot)
         {
@@ -234,12 +244,419 @@ public static void initTeleop2019 ()
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
+public static boolean doThing = false;
 
 public static void periodic ()
 {
-    Hardware.vision.updateValues();
-    Hardware.vision.publishValues();
-    Hardware.vision.setLedMode(0);
+    Hardware.visionInterface.updateValues();
+
+    // System.out.println(
+    // "Demo mode sw = " + Hardware.demoModeSwitch.isOn());
+    if (inDemoMode == true)
+        {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+        // .21);
+        }
+    SmartDashboard.putNumber("Delay raw", Hardware.delayPot.get());
+    SmartDashboard.putNumber("Delay", Hardware.delayPot.get(0, 5));
+
+    // =================================================================
+    // OPERATOR CONTROLS
+    // =================================================================
+    // if (Hardware.intakeTriggerLeft.get() == true
+    // || Hardware.intakeTriggerRight.get() == true)
+    // {
+    // runIntake = true;
+    // }
+    // else
+    // {
+    // runIntake = false;
+    // }
+
+
+
+    if (inDemoMode == true)
+        {
+        // System.out.println("pot = " + Hardware.delayPot.get(0.0, 1.0));
+        // System.out
+        // .println("First gear percentage: " + Hardware.drive
+        // .getGearPercentage(FIRST_GEAR_NUMBER));
+        // System.out
+        // .println("Second gear percentage: "
+        // + Hardware.drive
+        // .getGearPercentage(SECOND_GEAR_NUMBER));
+
+        if (Hardware.leftDriver.getRawButton(7) == true
+        /* && Hardware.leftDriver.getRawButton(8) == true */)
+            {
+
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, .4);
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, .4);
+            }
+        if (Hardware.leftDriver.getRawButton(9) == true
+        /* && Hardware.leftDriver.getRawButton(10) == true */)
+            {
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, 1.0);
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, 1.0);
+            }
+        if (Hardware.leftDriver.getRawButton(11) == true
+        /* && Hardware.leftDriver.getRawButton(12) == true */)
+            {
+            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+                    Hardware.delayPot.get(0.0, 1.0));
+            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+                    Hardware.delayPot.get(0.0, 1.0));
+            }
+        }
+
+
+
+    // Forklift
+
+    // Function for joystick control of forklift
+    Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
+            Hardware.forkliftOverride.get());
+
+    if (inDemoMode == false)
+        {
+        // Button for Cargo Ship Cargo Preset Height
+        // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_CARGO,
+        // Forklift.CARGO_SHIP_CARGO_ANGLE,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+        // Hardware.cargoShipCargoButton);
+        }
+    // Hardware.lift.setLiftPositionByButton(Forklift.CARGO_SHIP_HATCH,
+    // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+    // Hardware.cargoShipHatchButton);
+
+
+
+
+    if (inDemoMode == false)
+        {
+
+        // Player Station Cargo Preset Height is commented out at
+        // the moment at the request of Mr. Brown.
+        // If this is uncommented, will not work unless the forklift
+        // state machine is changed to allow manipulator to move to
+        // an angle of about 85 degrees. There is some code
+        // written and commented out already to do this, and it is somewhat
+        // safe, but not what Mr. Brown wants. Consult MR. Brown or Cole
+        // (preferably both) before uncommented this.
+
+        // Button for Player Station Cargo Preset Height
+        // Hardware.lift.setLiftPositionByButton(
+        // Forklift.PLAYER_STATION_CARGO_HEIGHT,
+        // Forklift.PLAYER_STATION_CARGO_ANGLE,
+        // Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+        // Hardware.playerStationCargoButton);
+
+        Hardware.lift.setLiftPositionByButton(
+                Forklift.CARGO_SHIP_CARGO,
+                Forklift.CARGO_SHIP_CARGO_ANGLE,
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.playerStationCargoButton);
+
+
+
+        // Button for Player Station Hatch Preset Height
+        Hardware.lift.setLiftPositionByButton(
+                Forklift.PLAYER_STATION_HEIGHT,
+                Forklift.PLAYER_STATION_ANGLE,
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.playerStationButton);
+
+        }
+
+
+    if (inDemoMode == false)
+        {
+        Hardware.lift.setToNextHigherPreset(
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.nextHigherLiftHeightButton,
+                Hardware.chooseCargoRocketHeights.get());
+        }
+
+    if (inDemoMode == false)
+        {
+        Hardware.lift.setToNextLowerPreset(
+                Forklift.DEFAULT_TELEOP_BUTTON_SPEED_UNSCALED,
+                Hardware.nextLowerLiftHeightButton,
+                Hardware.chooseCargoRocketHeights.get());
+        }
+    // Game Piece Manipulator
+
+    // Function for joystick control of manipulator
+    Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
+            Hardware.deployOverride.get());
+
+    if (Hardware.toggleIgnoreMakeBreakButton.getCurrentValue() == true)
+        Hardware.manipulator.toggleIgnoreMakeBreak();
+
+    if (inDemoMode == false)
+        {
+        Hardware.manipulator.poweredDeployDownForClimb(
+                Hardware.poweredManipulatorForClimbButton);
+        }
+    // Becuase solenoid auto closes whenever we are not intaking,
+    // this toggle code is currently useless
+    // Hardware.manipulator
+    // .toggleSolenoid(Hardware.armSolenoidToggleButton);
+
+    // Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+    // Hardware.intakeTriggerLeft.get(),
+    // Hardware.outtakeButton.get(),
+    // Hardware.intakeOverride.get());
+
+    Hardware.manipulator.intakeOuttakeByButtonsSeperated(
+            (Hardware.intakeTriggerLeft.get() == true
+                    || Hardware.intakeTriggerRight.get() == true),// TODO
+            (Hardware.outtakeButtonLeft.get() == true
+                    || Hardware.outtakeButtonRight.get() == true),
+            Hardware.intakeOverride.get());
+
+    // // =================================================================
+    Hardware.lift.update();
+
+    Hardware.manipulator.masterUpdate();
+
+    // Hardware.climber.climbUpdate();
+    if (inDemoMode == false)
+        {
+        Hardware.retriever.retrievalUpdate();
+
+        Hardware.climber.newClimbUpdate();
+
+        Hardware.depositGamePiece.depositTeleopStateMachine();
+        }
+    // debug =============================
+    // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
+    Hardware.manipulator.printDeployDebugInfo();
+    // Hardware.lift.printDebugInfo();
+    // System.out.println(
+    // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
+    // debug =====================================================
+
+    if (inDemoMode == false)
+        {
+        // vision=======================================================
+        // 8 and 9visionHeightDownButton
+
+        // TODO find a better way to set visionHeight than using timer
+        // and also find some way of telling the driver's what
+        // height they are at
+
+
+        // if (Hardware.visionHeightUpButton.get() == true
+        // && visionHeight < 2 && Hardware.telopTimer.get() > .25)
+        // {
+        // Hardware.telopTimer.reset();
+        // visionHeight++;
+        // Hardware.telopTimer.start();
+        // }
+        // if (Hardware.visionHeightDownButton.get() == true
+        // && visionHeight > 0 && Hardware.telopTimer.get() > .25)
+        // {
+        // Hardware.telopTimer.reset();
+        // visionHeight--;
+        // Hardware.telopTimer.start();
+        // }
+        if (Hardware.visionHeightUpButton.get() == true)
+            {
+            System.out.println(
+                    Hardware.visionInterface.getDistanceFromTarget());
+
+            }
+
+        if (Hardware.visionHeightDownButton.get() == true)
+            {
+            // TODO make work
+            doThing = false;
+            }
+        // align===================================
+        if (Hardware.leftOperator.getRawButton(4) == true)
+            {
+            doThing = true;
+            }
+        if (Hardware.leftOperator.getRawButton(4) || doThing == true)
+        /* && Hardware.depositGamePiece.overrideVision() == false */
+            {
+            if (Hardware.visionDriving.driveToTarget())
+                {
+                doThing = false;
+                }
+            }
+        else
+            {
+            teleopDrive();
+            }
+        // end align=================================
+        // if (Hardware.depositGamePiece
+        // .startTeleopDeposit(visionHeight,
+        // false))
+        // {
+        // Hardware.alignVisionButton.setValue(false);
+        // }
+
+
+        // else
+        // {
+        // Hardware.depositGamePiece.resetDepositTeleop();
+        // }
+
+        // if (Hardware.alignAndStopButton.isOnCheckNow() == true
+        // && Hardware.depositGamePiece.overrideVision() == false)
+        // {
+        // if (Hardware.retriever.alignWithVision(.1))
+        // {
+        // Hardware.alignAndStopButton.setValue(false);
+        // }
+        // }
+        // if (Hardware.alignAndStopButton.isOnCheckNow() == false
+        // && Hardware.alignVisionButton.isOnCheckNow() == false)
+        // {
+        // Hardware.driveWithCamera.state =
+        // Hardware.driveWithCamera.state.INIT;
+        // }
+
+
+        // end vision==============================================
+
+        // buttons
+
+        // buttons to cancel everything ===========================
+        if (Hardware.cancelTwoButton.get() == true
+                && Hardware.cancelOneButton.get() == true)
+            {
+            // Hardware.retriever.stopRetrieveHatch();
+            Hardware.climber.finishEarly();
+            Autonomous.endAutoPath();
+            Hardware.lift.resetStateMachine();
+            Hardware.manipulator.resetStateMachine();
+            } // end if
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.cancelAutoLeftDriver.get() == true
+                    && Hardware.cancelAutoRightDriver.get() == true)
+                {
+                Hardware.climber.finishEarly();
+                // Hardware.retriever.stopRetrieveHatch();
+
+                }
+            }
+        // Buttons to reset the forklift encoder. Should never be called during
+        // a match; only is in the final code for the purpsoe of speeding up
+        // testing in the pits
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.resetForkliftEncoderButton1.get() == true
+                    && Hardware.resetForkliftEncoderButton2
+                            .get() == true)
+                {
+                Hardware.lift.resetEncoder();
+                }
+
+
+
+            takePicture();
+            }
+
+        individualTest();
+        // Hardware.telemetry.printToShuffleboard();
+
+        // Hardware.telemetry.printToConsole();
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.climbOneButton.get() == true
+            /* && Hardware.climbTwoButton.get() == true */)
+            // if (Hardware.leftDriver.getRawButton(6) == true)
+                {
+                // Hardware.climber.climb();
+                Hardware.climber.newClimb();
+                }
+            else
+                if (Hardware.rightDriver.getRawButton(12) == true)
+                    {
+                    Hardware.climber.skipStepClimb();
+                    }
+            }
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.driveStraightButton.get() == true)
+                {
+                Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
+                        Autonomous.ACCELERATION_TIME,
+                        Autonomous.USING_GYRO);
+
+                }
+            else
+                if (Hardware.retrievalButton.get() == true)
+                    {
+                    // Hardware.retriever.retrieveHatch();
+                    }
+                else
+                    if (true/*
+                             * (Hardware.alignVisionButton.get() == false
+                             * || Hardware.depositGamePiece.overrideVision())
+                             * &&
+                             * (Hardware.alignAndStopButton
+                             * .isOnCheckNow() == false
+                             * || Hardware.depositGamePiece
+                             * .overrideVision())
+                             */)
+                        {
+                        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
+                                ||
+                                ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
+                                || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
+                            {
+                            // System.out.println("TELEOP DRIVE");
+                            // SmartDashboard.putString("printDriveType",
+                            // "TELEOP DRIVE");
+                            // teleopDrive();//TODO
+                            if (Hardware.solenoidButtonOne
+                                    .isOnCheckNow() == true
+                                    && Hardware.solenoidButtonTwo
+                                            .isOnCheckNow() == true)
+                                {
+                                Hardware.driveSolenoid
+                                        .setForward(false);
+                                }
+                            else
+                                {
+                                Hardware.driveSolenoid.setForward(true);
+                                }
+                            }
+                        }
+            }
+        else
+            {
+            // teleopDrive();/TODO
+            }
+
+        if (inDemoMode == false)
+            {
+            if (Hardware.frontUltraSonic
+                    .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                    &&
+                    Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                                    + 12.0)
+                {
+                // ringLightFlash(true, .5);
+                }
+            else
+                {
+                // ringLightFlash(false, .5);
+                }
+            }
+        printStatements();
+        }
+
 } // end Periodic()
 
 
@@ -260,8 +677,54 @@ private static void individualTest ()
     // nithyaTest();
 } // end individualTest()
 
+public static boolean prevCameraToggleButton = false;
+
 private static void ashleyTest ()
 {
+
+    // code to shut off usb camera- causes problems when trying to start up
+    // again
+    // look into removeCamera function to maybe fix
+    if (prevCameraToggleButton == false
+            &&
+            Hardware.cameraZeroOnOffButton.isOnCheckNow() == true)
+        {
+        Hardware.USBCam.close();
+        }
+    // else
+    // if (prevCameraToggleButton == true
+    // && Hardware.cameraZeroOnOffButton
+    // .isOnCheckNow() == false)
+    // {
+    // Hardware.USBCam = CameraServer.getInstance()
+    // .startAutomaticCapture(0);
+    // }
+
+
+    // if (Hardware.rightDriver.getRawButton(3) == true)
+    // {
+    // Hardware.USBCam = CameraServer.getInstance()
+    // .startAutomaticCapture(0);
+    // CameraServer.getInstance().
+    // }
+    // prevCameraToggleButton = Hardware.cameraZeroOnOffButton
+    // .isOnCheckNow();
+
+
+    // if (Hardware.cameraZeroOnOffButton.isOnCheckNow() == true
+    // && Hardware.cameraZeroOnOffButton.isOn() == false)
+    // {
+    // Hardware.USBCam.close();
+    // }
+    // else
+    // if (Hardware.cameraZeroOnOffButton.isOnCheckNow() == false
+    // && Hardware.cameraZeroOnOffButton.isOn() == true)
+    // {
+    // CameraServer.getInstance().startAutomaticCapture(0);
+    // }
+
+    // System.out.println(
+    // "ballllllll????? = " + Hardware.armBallDetector.get());
     // System.out.println("level switch state = "
     // + Hardware.autoDisableSwitch.isOn());
     // if (Hardware.armHackButton.isOnCheckNow() == true)
@@ -337,12 +800,12 @@ private static void connerTest ()
 {
 
 
-    Hardware.axisCamera.processImage();
-    if (Hardware.axisCamera.hasBlobs() == true
-            || Hardware.rightOperator.getRawButton(11))
-        SmartDashboard.putNumber("angle",
-                Hardware.axisCamera.getYawAngleDegrees(
-                        Hardware.axisCamera.getParticleReports()[0]));
+    // Hardware.axisCamera.processImage();
+    // if (Hardware.axisCamera.hasBlobs() == true
+    // || Hardware.rightOperator.getRawButton(11))
+    // SmartDashboard.putNumber("angle",
+    // Hardware.axisCamera.getYawAngleDegrees(
+    // Hardware.axisCamera.getParticleReports()[0]));
 
     // 66, 264
     // 41.5, 680
@@ -551,6 +1014,7 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
+
         // ==================================
         // Scale Alignment
         // ==================================
@@ -836,6 +1300,7 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
 
+        SmartDashboard.putNumber("Arm Pot", Hardware.armPot.get(270));
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
         // SmartDashboard.putNumber("Delay pot: ",
         // Hardware.delayPot.get());
