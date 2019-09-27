@@ -1600,6 +1600,7 @@ private static boolean jankyDepositCargoHatch ()
 public static void endAutoPath ()
 {
     Hardware.driveWithCamera.state = DriveWithCamera.DriveWithCameraState.INIT;
+
     sideCargoBallState = SideCargoBallState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
     rocketHatchState = RocketHatchState.FINISH;
