@@ -612,6 +612,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
+    // craigTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -748,8 +749,24 @@ private static void connerTest ()
 
 } // end connerTest()
 
+private static void craigTest ()
+{
+
+    System.out.println("In Craig Test");
+
+    if (Hardware.rightDriver.getRawButton(2))
+        {
+
+        Hardware.drive.pivotTurnDegrees(90, .8, .5, false);
+        System.out.println("It should have turned");
+        }
+
+}// end craigTest()
+
 private static void coleTest ()
 {
+
+
 
 
     // TODO retest forklift with the new way the scaling factor works
@@ -950,6 +967,8 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
+
+
 
         // ==================================
         // Scale Alignment
@@ -1252,8 +1271,8 @@ public static void printStatements ()
 
         // System.out.println("Intake deploy sensor: "
         // + Hardware.armPot.get());
-        // SmartDashboard.putNumber("Arm Pot sensor: ",
-        // Hardware.armPot.get());
+        SmartDashboard.putNumber("Arm Pot sensor: ",
+                Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
