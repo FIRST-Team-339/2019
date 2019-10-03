@@ -629,31 +629,50 @@ public static void periodic ()
                             }
                         }
             }
-        else
-            {
-            // teleopDrive();/TODO
-            }
-
-        if (inDemoMode == false)
-            {
-            if (Hardware.frontUltraSonic
-                    .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                    &&
-                    Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                                    + 12.0)
-                {
-                // ringLightFlash(true, .5);
-                }
-            else
-                {
-                // ringLightFlash(false, .5);
-                }
-            }
-        printStatements();
+        }
+    else
+        {
+        teleopDrive();
         }
 
-} // end Periodic()
+    // if (inDemoMode == false)
+    // {
+    // if (Hardware.frontUltraSonic
+    // .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    // &&
+    // Hardware.frontUltraSonic
+    // .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    // + 12.0)
+    // {
+    // //ringLightFlash(true, .5);
+    // }
+    // else
+    // {
+    // // ringLightFlash(false, .5);
+    // }
+    // }
+    printStatements();
+
+    if (inDemoMode == false)
+        {
+        if (Hardware.frontUltraSonic
+                .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                &&
+                Hardware.frontUltraSonic
+                        .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+                                + 12.0)
+            {
+            // ringLightFlash(true, .5);
+            }
+        else
+            {
+            // ringLightFlash(false, .5);
+            }
+        }
+    printStatements();
+}
+
+// end Periodic()
 
 
 // Individual testing methods for each programmer. Each programmer should //put
