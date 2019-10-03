@@ -582,22 +582,22 @@ public static void periodic ()
         teleopDrive();
         }
 
-    if (inDemoMode == false)
-        {
-        if (Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                &&
-                Hardware.frontUltraSonic
-                        .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                                + 12.0)
-            {
-            ringLightFlash(true, .5);
-            }
-        else
-            {
-            ringLightFlash(false, .5);
-            }
-        }
+    // if (inDemoMode == false)
+    //     {
+    //     if (Hardware.frontUltraSonic
+    //             .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    //             &&
+    //             Hardware.frontUltraSonic
+    //                     .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    //                             + 12.0)
+    //         {
+    //         //ringLightFlash(true, .5);
+    //         }
+    //     else
+    //         {
+    //        // ringLightFlash(false, .5);
+    //         }
+    //     }
     printStatements();
 
 
