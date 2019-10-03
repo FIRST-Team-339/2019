@@ -224,7 +224,7 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
-    // Hardware.manipulator.initiliazeArmPositonAverage();
+
     Hardware.lift.resetStateMachine();
     Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
@@ -428,7 +428,7 @@ public static void periodic ()
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
-    // Hardware.lift.printDebugInfo();
+    Hardware.lift.printDebugInfo();
     // System.out.println(
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
