@@ -1082,6 +1082,8 @@ public void printDeployDebugInfo ()
             "" + this.armMotor.get());
     SmartDashboard.putString("Deploy State",
             "" + this.getDeployState());
+    // SmartDashboard.putNumber("Left Operator Y",
+    // Hardware.leftOperator.getY());
     // SmartDashboard.putString("Is Deployed", "" + this.isDeployed());
     // SmartDashboard.putNumber("Left Operator",
     // Hardware.leftOperator.getY());
@@ -1099,7 +1101,10 @@ public void printDeployDebugInfo ()
     // SmartDashboard.putString("armSolenoid setForward",
     // "" + this.intake.armSolenoid.getForward());
     SmartDashboard.putString("intake isOpen:",
-            "" + this.intake.isOpen());
+            "" + !this.intake.isOpen());
+
+    SmartDashboard.putNumber("Left Operator Y",
+            Hardware.leftOperator.getY());
 }
 
 // =========================================================================

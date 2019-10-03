@@ -218,7 +218,7 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
-    // Hardware.manipulator.initiliazeArmPositonAverage();
+
     Hardware.lift.resetStateMachine();
     Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
@@ -408,7 +408,7 @@ public static void periodic ()
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
-    // Hardware.lift.printDebugInfo();
+    Hardware.lift.printDebugInfo();
     // System.out.println(
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
@@ -583,21 +583,21 @@ public static void periodic ()
         }
 
     // if (inDemoMode == false)
-    //     {
-    //     if (Hardware.frontUltraSonic
-    //             .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-    //             &&
-    //             Hardware.frontUltraSonic
-    //                     .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-    //                             + 12.0)
-    //         {
-    //         //ringLightFlash(true, .5);
-    //         }
-    //     else
-    //         {
-    //        // ringLightFlash(false, .5);
-    //         }
-    //     }
+    // {
+    // if (Hardware.frontUltraSonic
+    // .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    // &&
+    // Hardware.frontUltraSonic
+    // .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    // + 12.0)
+    // {
+    // //ringLightFlash(true, .5);
+    // }
+    // else
+    // {
+    // // ringLightFlash(false, .5);
+    // }
+    // }
     printStatements();
 
 
