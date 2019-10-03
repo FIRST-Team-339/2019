@@ -1747,7 +1747,17 @@ public void setGear (int gear)
  */
 public void setGearPercentage (int gear, double percent)
 {
+
     this.transmission.setGearPercentage(gear, percent);
+}
+
+/**
+ *
+ * return the current gear percentage
+ */
+public double getGearPercentage (int gear)
+{
+    return this.transmission.getGearPercentage(gear);
 }
 
 /**

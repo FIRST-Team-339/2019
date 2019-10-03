@@ -838,7 +838,8 @@ private void createParticleReports (List<MatOfPoint> contours)
 /**
  * TODO TEST THIS AND COMMENT SOME OF THE CALCULATIONS
  *
- * Calculates the angle the target is at from the center line. The formula can
+ * Calculates the angle the target is at from the center line(up and down). The
+ * formula can
  * be cut into two easier sections, one for the focal length and one for the
  * angle.
  *
@@ -873,7 +874,8 @@ public double getPitchAngleDegrees (ParticleReport target)
 /**
  * TODO TEST THIS AND COMMENT SOME OF THE CALCULATIONS
  *
- * Calculates the angle the target is at from the center line. The formula can
+ * Calculates the angle the target is at from the center line(left and right).
+ * The formula can
  * be cut into two easier sections, one for the focal length and one for the
  * angle.
  *
@@ -888,9 +890,19 @@ public double getPitchAngleDegrees (ParticleReport target)
  */
 public double getYawAngleDegrees (ParticleReport target)
 {
-    int distFromCenterLine = (int) Math
-            .abs((image.size().width / 2.0) - target.center.x);
-
+    int distFromCenterLine = 0;
+    if (particleReports.length > 1)
+        {
+        distFromCenterLine = (int) Math
+                .abs((image.size().width / 2.0)
+                        - getCameraCenterValue());// take the average center
+                                                  // from the 2 largest blobs
+        }
+    else
+        {
+        distFromCenterLine = (int) Math
+                .abs((image.size().width / 2.0) - target.center.x);
+        }
     // The focal length is dependent on the resolution of the image, since
     // units must remain in pixels, and the field of view must not change.
     double focalLengthPixels = image.size().width
@@ -905,6 +917,50 @@ public double getYawAngleDegrees (ParticleReport target)
     return -Math.toDegrees(
             Math.atan(distFromCenterLine / focalLengthPixels));
 } // end getYawAngleDegrees()
+
+/**
+ * Gets the center x value of of the vision targets (average of the x values of
+ * both visions targets)
+ *
+ * @return the current center x value
+ */
+public double getCameraCenterValue ()
+{
+    // setRelayValue(Value.kOn);
+    double center = 0;
+
+    // processImage();
+    // if we have at least two blobs, the center is equal to the average
+    // center
+    // x position of the 1st and second largest blobs
+    if (getParticleReports().length >= 2)
+        {
+        center = (getNthSizeBlob(0).center.x
+                + getNthSizeBlob(1).center.x) / 2;
+
+
+        // System.out.println("TWO BLOBS");
+        // System.out.println("blob center: " + center);
+        }
+    // if we only can detect one blob, the center is equal to the center x
+    // position of the blob
+    else
+        if (getParticleReports().length == 1)
+            {
+            center = getNthSizeBlob(0).center.x;
+            // System.out.println("ONE BLOBS");
+            // System.out.println("blob center: " + center);
+            }
+        // if we don't have any blobs, set the center equal to the constanct
+        // center,
+        // we can use this to just drive straight
+        else
+            {
+            center = SWITCH_CAMERA_CENTER;
+            // System.out.println("NO BLOBS");
+            }
+    return center;
+}
 
 // -------------------------------------
 // Max number of processed images allowed on the roboRIO
@@ -921,4 +977,6 @@ private final int maxRawImagesAllowedToCollect = 25;
 private final static String timeStamp = new SimpleDateFormat("MMddHHmm")
         .format(new Date());
 
+public final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
+// 160 originally
 } // end class
