@@ -648,26 +648,26 @@ public void update ()
                     this.currentLiftMaxHeight = MAX_HEIGHT;
                     }
                 }
-        if (Hardware.demoMode == false)
-            {
-            if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
+        // if (Hardware.demoMode == false)
+        // {
+        if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
+            this.manipulator
+                    .setMaxArmAngle(
+                            manipulator.MAX_ARM_POSITION_ADJUSTED);
+        // else
+        // if (this.getForkliftHeight() < PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
+        // this.manipulator.setMaxArmAngle(
+        // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
+        else
+            if (this.getForkliftHeight() < HIGHER_ARM_ANGLE_LIMIT_HEIGHT)
                 this.manipulator
                         .setMaxArmAngle(
-                                manipulator.MAX_ARM_POSITION_ADJUSTED);
-            // else
-            // if (this.getForkliftHeight() < PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
-            // this.manipulator.setMaxArmAngle(
-            // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
+                                manipulator.MAX_FORKLIFT_UP_ANGLE);
             else
-                if (this.getForkliftHeight() < HIGHER_ARM_ANGLE_LIMIT_HEIGHT)
-                    this.manipulator
-                            .setMaxArmAngle(
-                                    manipulator.MAX_FORKLIFT_UP_ANGLE);
-                else
-                    this.manipulator
-                            .setMaxArmAngle(
-                                    manipulator.HIGHER_MAX_FORKLIFT_UP_ANGLE);
-            }
+                this.manipulator
+                        .setMaxArmAngle(
+                                manipulator.HIGHER_MAX_FORKLIFT_UP_ANGLE);
+        // }
         }
 
     if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
