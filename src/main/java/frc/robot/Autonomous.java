@@ -122,7 +122,7 @@ public static void init ()
     // Hardware.axisCamera.setRelayValue(Value.kOff);
 
     Hardware.liftingEncoder.reset();
-
+    // TODO auto disable
     if (Hardware.autoDisableSwitch.isOn() == true)
         {
         autoLevel = Level.DISABLE;
@@ -367,6 +367,7 @@ private static void setPositionAndLevel ()
     // getting the level.
     if (Hardware.levelOneSwitch.isOn() == true)
         {
+
         autoLevel = Level.LEVEL_ONE;
         }
     else
@@ -451,7 +452,7 @@ private static boolean crossAutoline ()
                     distanceToCrossAutoline
                             - Hardware.drive.getBrakeStoppingDistance(),
                     LEAVE_LEVEL_ONE_SPEED, ACCELERATION_TIME,
-                    true) == true)
+                    false) == true)
                 {
 
                 cross = CrossAutoState.BRAKE;
@@ -987,7 +988,7 @@ private static boolean depositRocketHatch ()
                         rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                         }
 
-                    Hardware.depositGamePiece.prepToDepositHatch();
+                    // Hardware.depositGamePiece.prepToDepositHatch();
 
 
                     break;

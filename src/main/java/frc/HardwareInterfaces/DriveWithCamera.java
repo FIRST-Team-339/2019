@@ -8,6 +8,7 @@ import frc.vision.VisionProcessor.ImageType;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Contains all game specific vision code, including code to drive to the switch
@@ -193,7 +194,7 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
 
             break;
         case DRIVE_WITH_CAMERA:
-            // Hardware.axisCamera.processImage();// TODO check and see if this
+            Hardware.axisCamera.processImage();// TODO check and see if this
             // cause lag or watchdog errors
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
@@ -397,8 +398,8 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
         case DRIVE_WITH_CAMERA:
             correctionValue = DRIVE_CORRECTION_CLOSE;
             // Hardware.axisCamera.processImage();// TODO
-            visionProcessor.saveImage(ImageType.RAW);
-            visionProcessor.saveImage(ImageType.PROCESSED);
+            // visionProcessor.saveImage(ImageType.RAW);
+            // visionProcessor.saveImage(ImageType.PROCESSED);
             if (Hardware.axisCamera.hasBlobs() == true)
                 {
                 // System.out.println("area of blob" + Hardware.axisCamera
@@ -538,6 +539,15 @@ public Side getTargetSide ()
                 }
     side = Side.NULL;
     return side;
+}
+
+public void visionDebugOld ()
+{
+
+    SmartDashboard.putNumber("Front Ultrasonic distance",
+            Hardware.frontUltraSonic.getDistanceFromNearestBumper());
+    SmartDashboard.putBoolean("Has blobs",
+            Hardware.axisCamera.hasBlobs());
 }
 
 public static enum Side
