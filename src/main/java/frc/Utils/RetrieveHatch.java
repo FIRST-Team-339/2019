@@ -2,7 +2,7 @@ package frc.Utils;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.Hardware.Hardware;
-// import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
+import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
 import frc.Utils.RollerIntakeMechanism.IntakeState;
 
 public class RetrieveHatch
@@ -244,13 +244,13 @@ public void stop ()
 public boolean alignWithVision (double speed)
 {
 
-    // if (Hardware.driveWithCamera.driveToTargetClose(.15, false))
-    // {
+    if (Hardware.driveWithCamera.driveToTargetClose(.15, false))
+        {
 
-    // Hardware.alignAndStopButton.setValue(false);
-    // Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
-    // return true;
-    // }
+        Hardware.alignAndStopButton.setValue(false);
+        Hardware.driveWithCamera.state = DriveWithCameraState.INIT;
+        return true;
+        }
 
     return false;
 }

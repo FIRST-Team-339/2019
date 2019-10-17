@@ -38,8 +38,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
-import frc.vision.VisionProcessor;
-import frc.vision.NewVisionInterface.LedMode;
 import frc.vision.VisionProcessor.ImageType;
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -62,7 +60,6 @@ public class Teleop
  */
 public static void init ()
 {
-
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -72,7 +69,7 @@ public static void init ()
     Hardware.alignVisionButton.setValue(false);
     if (!Hardware.demoMode)
         {
-        // Hardware.axisCamera.setRelayValue(Value.kOn);
+        Hardware.axisCamera.setRelayValue(Value.kOn);
         }
     // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
@@ -111,15 +108,12 @@ public static void init ()
 
     if (inDemoMode == true)
         {
-        // i love arbituary numbers
         Hardware.lift.setMaxLiftHeight(Hardware.DEMO_MAX_FORK);
         Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                 Hardware.delayPot.get(.01, 1.0));
         Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
                 Hardware.delayPot.get(.01, 1.0));
-
         Hardware.manipulator.setMaxArmAngle(65);
-        Hardware.manipulator.setMinArmAngle(5);
         }
 
 
@@ -240,14 +234,9 @@ public static void initTeleop2019 ()
  * @author Nathanial Lydick
  * @written Jan 13, 2015
  */
-public static boolean doThing = false;
 
 public static void periodic ()
 {
-    Hardware.visionInterface.updateValues();
-
-    // System.out.println(
-    // "Demo mode sw = " + Hardware.demoModeSwitch.isOn());
     if (inDemoMode == true)
         {
         // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
@@ -274,35 +263,26 @@ public static void periodic ()
     if (inDemoMode == true)
         {
         // System.out.println("pot = " + Hardware.delayPot.get(0.0, 1.0));
-        // System.out
-        // .println("First gear percentage: " + Hardware.drive
-        // .getGearPercentage(FIRST_GEAR_NUMBER));
-        // System.out
-        // .println("Second gear percentage: "
-        // + Hardware.drive
-        // .getGearPercentage(SECOND_GEAR_NUMBER));
-
-        if (Hardware.leftDriver.getRawButton(7) == true
-        /* && Hardware.leftDriver.getRawButton(8) == true */)
-            {
-
-            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, .4);
-            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, .4);
-            }
-        if (Hardware.leftDriver.getRawButton(9) == true
-        /* && Hardware.leftDriver.getRawButton(10) == true */)
-            {
-            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, 1.0);
-            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, 1.0);
-            }
-        if (Hardware.leftDriver.getRawButton(11) == true
-        /* && Hardware.leftDriver.getRawButton(12) == true */)
-            {
-            Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
-                    Hardware.delayPot.get(0.0, 1.0));
-            Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
-                    Hardware.delayPot.get(0.0, 1.0));
-            }
+        // if (Hardware.leftDriver.getRawButton(7) == true
+        // /* && Hardware.leftDriver.getRawButton(8) == true */)
+        // {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, .4);
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, .4);
+        // }
+        // if (Hardware.leftDriver.getRawButton(9) == true
+        // /* && Hardware.leftDriver.getRawButton(10) == true */)
+        // {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER, 1.0);
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER, 1.0);
+        // }
+        // if (Hardware.leftDriver.getRawButton(11) == true
+        // /* && Hardware.leftDriver.getRawButton(12) == true */)
+        // {
+        // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
+        // Hardware.delayPot.get(0.0, 1.0));
+        // Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
+        // Hardware.delayPot.get(0.0, 1.0));
+        // }
         }
 
 
@@ -435,70 +415,43 @@ public static void periodic ()
 
     if (inDemoMode == false)
         {
-        // vision=======================================================
+        // vision=====================================
         // 8 and 9visionHeightDownButton
 
         // TODO find a better way to set visionHeight than using timer
         // and also find some way of telling the driver's what
         // height they are at
-
-
-        // if (Hardware.visionHeightUpButton.get() == true
-        // && visionHeight < 2 && Hardware.telopTimer.get() > .25)
-        // {
-        // Hardware.telopTimer.reset();
-        // visionHeight++;
-        // Hardware.telopTimer.start();
-        // }
-        // if (Hardware.visionHeightDownButton.get() == true
-        // && visionHeight > 0 && Hardware.telopTimer.get() > .25)
-        // {
-        // Hardware.telopTimer.reset();
-        // visionHeight--;
-        // Hardware.telopTimer.start();
-        // }
-        if (Hardware.visionHeightUpButton.get() == true)
+        if (Hardware.visionHeightUpButton.get() == true
+                && visionHeight < 2 && Hardware.telopTimer.get() > .25)
             {
-            System.out.println(
-                    Hardware.visionInterface.getDistanceFromTarget());
-
+            Hardware.telopTimer.reset();
+            visionHeight++;
+            Hardware.telopTimer.start();
+            }
+        if (Hardware.visionHeightDownButton.get() == true
+                && visionHeight > 0 && Hardware.telopTimer.get() > .25)
+            {
+            Hardware.telopTimer.reset();
+            visionHeight--;
+            Hardware.telopTimer.start();
             }
 
-        if (Hardware.visionHeightDownButton.get() == true)
+        if (Hardware.alignVisionButton.isOnCheckNow() == true
+                && Hardware.depositGamePiece.overrideVision() == false)
             {
-            // TODO make work
-            doThing = false;
-            }
-        // align===================================
-        if (Hardware.leftOperator.getRawButton(4) == true)
-            {
-            doThing = true;
-            }
-        if (Hardware.leftOperator.getRawButton(4) || doThing == true)
-        /* && Hardware.depositGamePiece.overrideVision() == false */
-            {
-            if (Hardware.visionDriving.driveToTarget())
+
+            if (Hardware.depositGamePiece
+                    .startTeleopDeposit(visionHeight,
+                            false))
                 {
-                doThing = false;
+                Hardware.alignVisionButton.setValue(false);
+
                 }
             }
         else
             {
-            teleopDrive();
+            Hardware.depositGamePiece.resetDepositTeleop();
             }
-        // end align=================================
-        // if (Hardware.depositGamePiece
-        // .startTeleopDeposit(visionHeight,
-        // false))
-        // {
-        // Hardware.alignVisionButton.setValue(false);
-        // }
-
-
-        // else
-        // {
-        // Hardware.depositGamePiece.resetDepositTeleop();
-        // }
 
         // if (Hardware.alignAndStopButton.isOnCheckNow() == true
         // && Hardware.depositGamePiece.overrideVision() == false)
@@ -511,124 +464,118 @@ public static void periodic ()
         // if (Hardware.alignAndStopButton.isOnCheckNow() == false
         // && Hardware.alignVisionButton.isOnCheckNow() == false)
         // {
-        // Hardware.driveWithCamera.state =
-        // Hardware.driveWithCamera.state.INIT;
+        // Hardware.driveWithCamera.state = Hardware.driveWithCamera.state.INIT;
         // }
+        }
+    // end vision==============================================
 
+    // buttons
 
-        // end vision==============================================
+    // buttons to cancel everything ===========================
+    if (Hardware.cancelTwoButton.get() == true
+            && Hardware.cancelOneButton.get() == true)
+        {
+        // Hardware.retriever.stopRetrieveHatch();
+        Hardware.climber.finishEarly();
+        Autonomous.endAutoPath();
+        Hardware.lift.resetStateMachine();
+        Hardware.manipulator.resetStateMachine();
+        } // end if
 
-        // buttons
-
-        // buttons to cancel everything ===========================
-        if (Hardware.cancelTwoButton.get() == true
-                && Hardware.cancelOneButton.get() == true)
+    if (inDemoMode == false)
+        {
+        if (Hardware.cancelAutoLeftDriver.get() == true
+                && Hardware.cancelAutoRightDriver.get() == true)
             {
-            // Hardware.retriever.stopRetrieveHatch();
             Hardware.climber.finishEarly();
-            Autonomous.endAutoPath();
-            Hardware.lift.resetStateMachine();
-            Hardware.manipulator.resetStateMachine();
-            } // end if
+            // Hardware.retriever.stopRetrieveHatch();
 
-        if (inDemoMode == false)
-            {
-            if (Hardware.cancelAutoLeftDriver.get() == true
-                    && Hardware.cancelAutoRightDriver.get() == true)
-                {
-                Hardware.climber.finishEarly();
-                // Hardware.retriever.stopRetrieveHatch();
-
-                }
             }
-        // Buttons to reset the forklift encoder. Should never be called during
-        // a match; only is in the final code for the purpsoe of speeding up
-        // testing in the pits
+        }
+    // Buttons to reset the forklift encoder. Should never be called during
+    // a match; only is in the final code for the purpsoe of speeding up
+    // testing in the pits
 
-        if (inDemoMode == false)
+    if (inDemoMode == false)
+        {
+        if (Hardware.resetForkliftEncoderButton1.get() == true
+                && Hardware.resetForkliftEncoderButton2.get() == true)
             {
-            if (Hardware.resetForkliftEncoderButton1.get() == true
-                    && Hardware.resetForkliftEncoderButton2
-                            .get() == true)
-                {
-                Hardware.lift.resetEncoder();
-                }
-
-
-
-            takePicture();
+            Hardware.lift.resetEncoder();
             }
 
-        individualTest();
-        // Hardware.telemetry.printToShuffleboard();
 
-        // Hardware.telemetry.printToConsole();
 
-        if (inDemoMode == false)
+        takePicture();
+        }
+    individualTest();
+    // Hardware.telemetry.printToShuffleboard();
+
+    // Hardware.telemetry.printToConsole();
+
+    if (inDemoMode == false)
+        {
+        if (Hardware.climbOneButton.get() == true
+        /* && Hardware.climbTwoButton.get() == true */)
+        // if (Hardware.leftDriver.getRawButton(6) == true)
             {
-            if (Hardware.climbOneButton.get() == true
-            /* && Hardware.climbTwoButton.get() == true */)
-            // if (Hardware.leftDriver.getRawButton(6) == true)
+            // Hardware.climber.climb();
+            Hardware.climber.newClimb();
+            }
+        else
+            if (Hardware.rightDriver.getRawButton(12) == true)
                 {
-                // Hardware.climber.climb();
-                Hardware.climber.newClimb();
+                Hardware.climber.skipStepClimb();
+                }
+        }
+
+    if (inDemoMode == false)
+        {
+        if (Hardware.driveStraightButton.get() == true)
+            {
+            Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
+                    Autonomous.ACCELERATION_TIME,
+                    Autonomous.USING_GYRO);
+
+            }
+        else
+            if (Hardware.retrievalButton.get() == true)
+                {
+                // Hardware.retriever.retrieveHatch();
                 }
             else
-                if (Hardware.rightDriver.getRawButton(12) == true)
+                if (true/*
+                         * (Hardware.alignVisionButton.get() == false
+                         * || Hardware.depositGamePiece.overrideVision())
+                         * &&
+                         * (Hardware.alignAndStopButton
+                         * .isOnCheckNow() == false
+                         * || Hardware.depositGamePiece
+                         * .overrideVision())
+                         */)
                     {
-                    Hardware.climber.skipStepClimb();
-                    }
-            }
-
-        if (inDemoMode == false)
-            {
-            if (Hardware.driveStraightButton.get() == true)
-                {
-                Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
-                        Autonomous.ACCELERATION_TIME,
-                        Autonomous.USING_GYRO);
-
-                }
-            else
-                if (Hardware.retrievalButton.get() == true)
-                    {
-                    // Hardware.retriever.retrieveHatch();
-                    }
-                else
-                    if (true/*
-                             * (Hardware.alignVisionButton.get() == false
-                             * || Hardware.depositGamePiece.overrideVision())
-                             * &&
-                             * (Hardware.alignAndStopButton
-                             * .isOnCheckNow() == false
-                             * || Hardware.depositGamePiece
-                             * .overrideVision())
-                             */)
+                    if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
+                            ||
+                            ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
+                            || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
                         {
-                        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
-                                ||
-                                ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
-                                || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
+                        // System.out.println("TELEOP DRIVE");
+                        // SmartDashboard.putString("printDriveType",
+                        // "TELEOP DRIVE");
+                        teleopDrive();
+                        if (Hardware.solenoidButtonOne
+                                .isOnCheckNow() == true
+                                && Hardware.solenoidButtonTwo
+                                        .isOnCheckNow() == true)
                             {
-                            // System.out.println("TELEOP DRIVE");
-                            // SmartDashboard.putString("printDriveType",
-                            // "TELEOP DRIVE");
-                            // teleopDrive();//TODO
-                            if (Hardware.solenoidButtonOne
-                                    .isOnCheckNow() == true
-                                    && Hardware.solenoidButtonTwo
-                                            .isOnCheckNow() == true)
-                                {
-                                Hardware.driveSolenoid
-                                        .setForward(false);
-                                }
-                            else
-                                {
-                                Hardware.driveSolenoid.setForward(true);
-                                }
+                            Hardware.driveSolenoid.setForward(false);
+                            }
+                        else
+                            {
+                            Hardware.driveSolenoid.setForward(true);
                             }
                         }
-            }
+                    }
         }
     else
         {
@@ -653,26 +600,8 @@ public static void periodic ()
     // }
     printStatements();
 
-    if (inDemoMode == false)
-        {
-        if (Hardware.frontUltraSonic
-                .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                &&
-                Hardware.frontUltraSonic
-                        .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                                + 12.0)
-            {
-            // ringLightFlash(true, .5);
-            }
-        else
-            {
-            // ringLightFlash(false, .5);
-            }
-        }
-    printStatements();
-}
 
-// end Periodic()
+} // end Periodic()
 
 
 // Individual testing methods for each programmer. Each programmer should //put
@@ -683,6 +612,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
+    // craigTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -813,9 +743,9 @@ public static boolean hasDoneTheThing = false;
 
 private static void connerTest ()
 {
-
-
-
+    SmartDashboard.putBoolean("inDemoMode", inDemoMode);
+    SmartDashboard.putBoolean("inDemoMode switch",
+            Hardware.demoModeSwitch.isOn());
 
 } // end connerTest()
 
@@ -1325,7 +1255,6 @@ public static void printStatements ()
         // Potentiometers
         // ----------------------------------
 
-        SmartDashboard.putNumber("Arm Pot", Hardware.armPot.get(270));
         // System.out.println("Delay pot: " + Hardware.delayPot.get());
         // SmartDashboard.putNumber("Delay pot: ",
         // Hardware.delayPot.get());
@@ -1377,7 +1306,7 @@ public static void printStatements ()
         // ---------------------------------
 
         // System.out.println("Gyro: " + Hardware.gyro.getAngle());
-        // SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
+        SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
         // Hardware.telemetry.printToConsole("Gyro: " +
         // Hardware.gyro.getAngle());
 
@@ -1469,8 +1398,8 @@ public static void takePicture ()
                 && imageTaken == false)
             {
 
-            // Hardware.axisCamera.saveImage(ImageType.RAW);
-            // Hardware.axisCamera.saveImage(ImageType.PROCESSED);//TODO
+            Hardware.axisCamera.saveImage(ImageType.RAW);
+            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
 
             imageTaken = true;
             }
@@ -1562,7 +1491,7 @@ public static void teleopDrive ()
 // Constants
 // ================================
 
-private static boolean inDemoMode = Hardware.demoMode;
+private static boolean inDemoMode = Hardware.demoModeSwitch.isOn();
 
 // The number of gears we want to not go over. There is no reason to make this
 // more than 3 unless the code is fixed. Thanks McGee.
