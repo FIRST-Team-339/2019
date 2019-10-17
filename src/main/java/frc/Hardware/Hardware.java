@@ -74,13 +74,13 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2019;
+public static final RobotYear whichRobot = RobotYear.KILROY_2018;
 
 // -------------------------------------
 // Private Constants
 // -------------------------------------
 
-// ---------------------------------------
+// ---------------------------------------%
 // Hardware Tunables
 // ---------------------------------------
 public static boolean demoMode = false;
@@ -877,13 +877,13 @@ public static void robotInitialize2018 ()
     // ====================================
     liftMotor = new WPI_TalonSRX(23);
 
-    rightFrontCANMotor = new WPI_TalonSRX(14);
+    rightFrontCANMotor = new WPI_TalonSRX(23);// 14
 
-    leftFrontCANMotor = new WPI_TalonSRX(11);
+    leftFrontCANMotor = new WPI_TalonSRX(7);// 11
 
-    rightRearCANMotor = new WPI_TalonSRX(15);
+    rightRearCANMotor = new WPI_TalonSRX(6);// 15
 
-    leftRearCANMotor = new WPI_TalonSRX(13);
+    leftRearCANMotor = new WPI_TalonSRX(9);// 13
 
     armRoller = new WPI_TalonSRX(10);
 
@@ -1224,6 +1224,7 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
+
     Hardware.rightFrontCANMotor.setInverted(true);
     Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
