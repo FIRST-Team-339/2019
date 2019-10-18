@@ -17,7 +17,7 @@ public static RetrievalState retrievalState = RetrievalState.STANDBY;
 public static Timer delayTimer = new Timer();
 
 
-public static void retrieveHatch ()
+public void retrieveHatch ()
 {
     retrievalState = RetrievalState.START_RETRIEVAL;
 

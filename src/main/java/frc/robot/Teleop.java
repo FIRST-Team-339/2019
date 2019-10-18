@@ -541,7 +541,7 @@ public static void periodic ()
         else
             if (Hardware.retrievalButton.get() == true)
                 {
-                // Hardware.retriever.retrieveHatch();
+                Hardware.retriever.retrieveHatch();
                 }
             else
                 if (true/*

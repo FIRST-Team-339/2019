@@ -73,7 +73,7 @@ public static void init ()
     switch (Hardware.whichRobot)
         {
         case KILROY_2018:
-            Hardware.ringLightRelay.set(Value.kOff);
+            Hardware.ringLightRelay.set(Value.kOn);
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XIX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -90,7 +90,8 @@ public static void init ()
         default:
         case KILROY_2019:
             Hardware.ringLightRelay.set(Value.kOn);
-            // Hardware.axisCamera.processImage();
+
+            Hardware.axisCamera.processImage();
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -187,7 +188,7 @@ public static void periodic ()
 
 
     if (Hardware.cancelAutoLeftDriver.get() == true
-            && Hardware.cancelAutoRightDriver.get() == true)
+            || Hardware.cancelAutoRightDriver.get() == true)
         {
         endAutoPath();
         canceledAuto = true;
@@ -575,7 +576,7 @@ private static boolean depositCargoHatch ()
             break;
         case STRAIGHT_DEPOSIT_DRIVE_2:
             if (Hardware.drive.driveStraightInches(
-                    DRIVE_STRAIGHT_DEPOSIT_1, DRIVE_SPEED,
+                    DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
                     ACCELERATION_TIME,
                     USING_GYRO))
                 {
@@ -619,7 +620,7 @@ private static boolean depositCargoHatch ()
 
             Hardware.depositGamePiece.prepToDepositHatch();
             if (Hardware.drive.driveStraightInches(
-                    DRIVE_STRAIGHT_DEPOSIT_2, DRIVE_SPEED,
+                    DRIVE_STRAIGHT_DEPOSIT_3, DRIVE_SPEED,
                     ACCELERATION_TIME,
                     USING_GYRO)
                     || Hardware.frontUltraSonic
@@ -1600,6 +1601,7 @@ private static boolean jankyDepositCargoHatch ()
 
 public static void endAutoPath ()
 {
+    System.out.println("canceled autopath");
     Hardware.driveWithCamera.state = DriveWithCamera.DriveWithCameraState.INIT;
 
     sideCargoBallState = SideCargoBallState.FINISHED;
@@ -1607,6 +1609,7 @@ public static void endAutoPath ()
     rocketHatchState = RocketHatchState.FINISH;
     descentState = DescentState.FINISH;
     cross = CrossAutoState.FINISH;
+    driverControl();
 
 } // end endAutoPath()
 
@@ -1726,7 +1729,9 @@ public static final int DISTANCE_TO_CROSS_AUTOLINE_CAMERA = 60;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_1 = 37;
 
-public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 170;
+public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 35;
+
+public static final double DRIVE_STRAIGHT_DEPOSIT_3 = 170;
 
 public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 60.0;// TODO
 

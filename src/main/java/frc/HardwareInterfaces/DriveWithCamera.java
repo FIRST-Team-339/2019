@@ -412,7 +412,7 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
                             || Hardware.axisCamera
                                     .getNthSizeBlob(
                                             0).area > MIN_BLOB_AREA)
-                            && (Hardware.leftFrontDriveEncoder
+                            || (Hardware.leftFrontDriveEncoder
                                     .getDistance() > MIN_INCHES_CLOSE
                                     || Hardware.rightFrontDriveEncoder
                                             .getDistance() > MIN_INCHES_CLOSE))
@@ -658,7 +658,7 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 15;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
 // length of nessie head + drive forward distance
 private final double DISTANCE_FROM_WALL_TO_STOP_CARGO = 29;
