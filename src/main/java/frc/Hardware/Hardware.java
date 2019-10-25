@@ -30,7 +30,7 @@ import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
 import frc.Utils.drive.Drive.BrakeType;
 import frc.robot.Teleop;
-// import frc.vision.NewDriveWithVision;
+import frc.vision.NewDriveWithVision;
 import frc.vision.NewVisionInterface;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
@@ -84,6 +84,8 @@ public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 // Hardware Tunables
 // ---------------------------------------
 public static boolean demoMode = false;
+
+public static boolean usingLime = false;
 
 public static int DEMO_MAX_FORK = 40;
 
@@ -282,9 +284,9 @@ public static KilroySPIGyro gyro = null;
 public static VisionProcessor axisCamera = null;
 
 
-// public static NewDriveWithVision visionDriving = null;
+public static NewDriveWithVision visionDriving = null;
 
-// public static NewVisionInterface visionInterface = null;
+public static NewVisionInterface visionInterface = null;
 
 public static String axisCameraIp = null;
 
@@ -644,8 +646,8 @@ public static void commonInitialization ()
             CameraModel.AXIS_M1013,
             ringLightRelay);
 
-    // visionInterface = new NewVisionInterface();
-    // visionDriving = new NewDriveWithVision();
+    visionInterface = new NewVisionInterface();
+    visionDriving = new NewDriveWithVision();
 
 
 

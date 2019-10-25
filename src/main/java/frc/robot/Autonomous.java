@@ -89,9 +89,13 @@ public static void init ()
 
         default:
         case KILROY_2019:
-            Hardware.ringLightRelay.set(Value.kOn);
+            if (Hardware.usingLime == false)
+                {
 
-            Hardware.axisCamera.processImage();
+                Hardware.ringLightRelay.set(Value.kOn);
+
+                Hardware.axisCamera.processImage();
+                }
             Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
                     FIRST_AUTO_GEAR_RATIO_KILROY_XX);
             Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
@@ -511,11 +515,12 @@ private static boolean depositCargoHatch ()
                 }
             break;
         case DESCEND: // driving off of level 2
-        // if (descendFromLevelTwo(usingAlignByWall))
-            {
-            // turn based on start position
-            depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
-            }
+            if (descendFromLevelTwo(usingAlignByWall, goingBackwards,
+                    turningAroundAfter))
+                {
+                // turn based on start position
+                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DRIVE_1;
+                }
             break;
 
         case STRAIGHT_DEPOSIT_DRIVE_1: // first leg forward
@@ -638,10 +643,20 @@ private static boolean depositCargoHatch ()
             // .getDistanceFromNearestBumper());
             Hardware.depositGamePiece.prepToDepositHatch();
             // maybe align with vision
-            if (Hardware.driveWithCamera
-                    .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
+            if (Hardware.usingLime == false)
                 {
-                depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+                if (Hardware.driveWithCamera
+                        .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
+                    {
+                    depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+                    }
+                }
+            else
+                {
+                if (Hardware.visionDriving.driveToTarget())
+                    {
+                    depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
+                    }
                 }
 
 
@@ -980,13 +995,24 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
-                    if (Hardware.driveWithCamera
-                            .driveToTarget(DRIVE_WITH_CAMERA_SPEED,
-                                    false))
+                    // TODO
+                    if (Hardware.usingLime = false)
                         {
+                        if (Hardware.driveWithCamera
+                                .driveToTarget(DRIVE_WITH_CAMERA_SPEED,
+                                        false))
+                            {
 
 
-                        rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                            rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                            }
+                        }
+                    else
+                        {
+                        if (Hardware.visionDriving.driveToTarget())
+                            {
+                            rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
+                            }
                         }
 
                     // Hardware.depositGamePiece.prepToDepositHatch();
@@ -1713,7 +1739,7 @@ public static final double CAMERA_ACCELERATION = .2;
 
 public static final double DRIVE_WITH_CAMERA_SPEED = .3;
 
-public static final int TURN_FOR_CAMERA_DEGREES = 67;
+public static final int TURN_FOR_CAMERA_DEGREES = 45;
 
 
 // changed to correct-ish number 2 February 2019

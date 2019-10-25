@@ -44,7 +44,9 @@ public void retrievalUpdate ()
             if (!armIsReady)
                 {
                 prepareArmPositions();
+
                 }
+
             // prepareArmPositions();
             if (alignWithVision(.15))
                 {
@@ -79,7 +81,8 @@ public void retrievalUpdate ()
                 delayInit();
                 forkliftHeightReached = false;
                 manipulatorAngleReached = false;
-                retrievalState = RetrievalState.DELAY_ONE;
+                retrievalState = RetrievalState.STOP;
+                // retrievalState = RetrievalState.DELAY_ONE;
                 break;
                 }
 

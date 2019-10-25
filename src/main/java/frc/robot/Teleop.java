@@ -177,6 +177,7 @@ public static void initTeleop2018 ()
  */
 public static void initTeleop2019 ()
 {
+    Hardware.ringLightRelay.set(Value.kOn);
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
 
@@ -237,6 +238,10 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
+    if (Hardware.usingLime)
+        {
+        Hardware.visionInterface.updateValues();
+        }
     if (inDemoMode == true)
         {
         // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
