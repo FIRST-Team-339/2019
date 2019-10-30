@@ -69,7 +69,7 @@ public static void init ()
     Hardware.alignVisionButton.setValue(false);
     if (!Hardware.demoMode)
         {
-        Hardware.axisCamera.setRelayValue(Value.kOn);
+        // Hardware.axisCamera.setRelayValue(Value.kOn);
         }
     // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
@@ -177,7 +177,7 @@ public static void initTeleop2018 ()
  */
 public static void initTeleop2019 ()
 {
-    Hardware.ringLightRelay.set(Value.kOn);
+    Hardware.ringLightRelay.set(Value.kOff);
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
 
@@ -296,7 +296,7 @@ public static void periodic ()
 
     // Function for joystick control of forklift
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-            Hardware.forkliftOverride.get());
+            true/* Hardware.forkliftOverride.get() */);
 
     if (inDemoMode == false)
         {
@@ -369,7 +369,7 @@ public static void periodic ()
 
     // Function for joystick control of manipulator
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
-            Hardware.deployOverride.get());
+            true /* Hardware.deployOverride.get() */);
 
     if (Hardware.toggleIgnoreMakeBreakButton.getCurrentValue() == true)
         Hardware.manipulator.toggleIgnoreMakeBreak();
@@ -408,7 +408,7 @@ public static void periodic ()
 
         Hardware.climber.newClimbUpdate();
 
-        Hardware.depositGamePiece.depositTeleopStateMachine();
+        // Hardware.depositGamePiece.depositTeleopStateMachine();
         }
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
@@ -418,7 +418,7 @@ public static void periodic ()
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
 
-    if (inDemoMode == false)
+    if (inDemoMode == true)// TODO
         {
         // vision=====================================
         // 8 and 9visionHeightDownButton
@@ -972,7 +972,9 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
-
+        // Hardware.ringLightRelay.set(Value.kOn);
+        SmartDashboard.putNumber("camera offness raw",
+                Hardware.driveWithCamera.getCameraCenterValue());
 
 
         // ==================================
@@ -1287,9 +1289,10 @@ public static void printStatements ()
 
         // System.out.println("ultrasonic " + Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
-        // SmartDashboard.putNumber("F ultrasonic: ",
-        // Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        SmartDashboard.putNumber("F ultrasonic: ",
+                Hardware.frontUltraSonic
+                        .getDistanceFromNearestBumper());
+
         // Hardware.telemetry.printToConsole("ultrasonic " +
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -1394,7 +1397,7 @@ public static void takePicture ()
             pictureButton1 = true;
             pictureButton2 = true;
             Hardware.takePictureTimer.reset();
-            Hardware.ringLightRelay.set(Value.kOn);
+            // Hardware.ringLightRelay.set(Value.kOn);//TODO
             firstPress = false;
             Hardware.takePictureTimer.start();
             }
@@ -1403,8 +1406,9 @@ public static void takePicture ()
                 && imageTaken == false)
             {
 
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+            // Hardware.axisCamera.saveImage(ImageType.RAW);
+            // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+            // TODO
 
             imageTaken = true;
             }
@@ -1449,7 +1453,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
             }
         if (Hardware.ringLightTimer.get() >= ringLightFlashDelay)
             {
-            Hardware.ringLightRelay.set(Value.kOn);
+            // Hardware.ringLightRelay.set(Value.kOn);//TODO
             }
         if (Hardware.ringLightTimer.get() >= 2 * ringLightFlashDelay)
             {
@@ -1462,7 +1466,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
         }
     else
         {
-        Hardware.ringLightRelay.set(Value.kOn);
+        Hardware.ringLightRelay.set(Value.kOff);
         }
 }
 

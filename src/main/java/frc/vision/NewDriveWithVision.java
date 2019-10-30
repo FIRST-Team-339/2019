@@ -112,7 +112,7 @@ public boolean driveToTargetArc ()
         setUp = true;
         }
 
-    if (Hardware.visionInterface.getDistanceFromTarget() >= 35)
+    if (Hardware.visionInterface.getDistanceFromTarget() >= 40)
     // TODO check distane with ultra
         {
         if (!secondTurn)

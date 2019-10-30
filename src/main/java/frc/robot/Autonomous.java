@@ -239,7 +239,8 @@ public static void periodic ()
             break;
 
         case DEPOSIT_STRAIGHT_CARGO_HATCH:
-            if (depositCargoHatch() == true)
+            if (depositCargoHatch() == true
+                    || Hardware.cancelAutoLeftDriver.get())
                 {
                 autoState = State.FINISH;
                 }
@@ -248,7 +249,8 @@ public static void periodic ()
         case DEPOSIT_ROCKET_HATCH:
             // System.out.println("rocket hatch");
             usingVision = true;
-            if (depositRocketHatch() == true)
+            if (depositRocketHatch() == true
+                    || Hardware.cancelAutoLeftDriver.get())
                 {
                 autoState = State.FINISH;
                 }
@@ -645,8 +647,11 @@ private static boolean depositCargoHatch ()
             // maybe align with vision
             if (Hardware.usingLime == false)
                 {
+                System.out.println("not using lime");
+
                 if (Hardware.driveWithCamera
-                        .driveToTarget(DRIVE_WITH_CAMERA_SPEED, false))
+                        .driveToTargetClose(DRIVE_WITH_CAMERA_SPEED,
+                                false))
                     {
                     depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                     }
@@ -999,7 +1004,8 @@ private static boolean depositRocketHatch ()
                     if (Hardware.usingLime = false)
                         {
                         if (Hardware.driveWithCamera
-                                .driveToTarget(DRIVE_WITH_CAMERA_SPEED,
+                                .driveToTargetClose(
+                                        DRIVE_WITH_CAMERA_SPEED,
                                         false))
                             {
 
@@ -1632,6 +1638,7 @@ public static void endAutoPath ()
 
     sideCargoBallState = SideCargoBallState.FINISHED;
     depositCargoHatchState = DepositCargoHatchState.FINISHED;
+
     rocketHatchState = RocketHatchState.FINISH;
     descentState = DescentState.FINISH;
     cross = CrossAutoState.FINISH;
