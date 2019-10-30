@@ -1006,7 +1006,11 @@ private static boolean depositRocketHatch ()
                         if (Hardware.driveWithCamera
                                 .driveToTargetClose(
                                         DRIVE_WITH_CAMERA_SPEED,
-                                        false))
+                                        false)
+                        /*
+                         * Hardware.driveWithCamera
+                         * .driveToTargetPorportional()
+                         */)
                             {
 
 
@@ -1047,7 +1051,7 @@ private static boolean depositRocketHatch ()
 
 
         case DEPOSIT_HATCH:
-            if (Hardware.depositGamePiece.depositHatch(true))
+            if (/* Hardware.depositGamePiece.depositHatch(true) */1 == 1)
                 {
                 rocketHatchState = RocketHatchState.FINISH;
                 }
@@ -1253,7 +1257,7 @@ private static boolean depositSideCargoBall ()
             break;
         case DEPOSIT_BALL:
 
-            if (Hardware.depositGamePiece.depositCargo(true))
+            if (/* Hardware.depositGamePiece.depositCargo(true) */1 == 1)
                 {
                 sideCargoBallState = SideCargoBallState.FINISHED;
                 }

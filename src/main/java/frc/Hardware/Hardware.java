@@ -251,6 +251,14 @@ public static DoubleSolenoid driveSolenoid = null;
 // --------------------------------------
 // Potentiometers
 // --------------------------------------
+// Wiring diagram for Potentiometers
+//
+// on the RV4NAYSD104A potentiometer,
+// metal tabs facing away, shaft pointing at you
+// power on left tab, five volts on RIO, red
+// signal in the middle tab, white
+// ground on the right tab, black
+
 public static RobotPotentiometer delayPot = null;
 
 public static RobotPotentiometer armPot = null;

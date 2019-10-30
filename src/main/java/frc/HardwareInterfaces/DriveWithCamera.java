@@ -744,7 +744,6 @@ private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
 private final double SLOW_MODIFIER = .75;// lower for slower
 
-
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
@@ -753,7 +752,6 @@ private final double DRIVE_CORRECTION = .15;
 private final double DRIVE_CORRECTION_CLOSE = .1;
 
 private final double DRIVE_CORRECTION_CLOSE_2018 = .5;
-
 
 private static double MIN_BLOB_AREA_CLOSE = 600;// TODO
 
