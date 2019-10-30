@@ -1202,7 +1202,7 @@ private static boolean depositSideCargoBall ()
             if (autoPosition == Position.LEFT)
                 {
 
-                if (Hardware.drive.turnDegrees(TURN_FOR_CAMERA_DEGREES,
+                if (Hardware.drive.turnDegrees(90,
                         TURN_SPEED,
                         ACCELERATION_TIME, USING_GYRO) == true)
                     {
@@ -1214,7 +1214,7 @@ private static boolean depositSideCargoBall ()
                 if (autoPosition == Position.RIGHT)
                     {
                     if (Hardware.drive.turnDegrees(
-                            -TURN_FOR_CAMERA_DEGREES,
+                            -90,
                             TURN_SPEED,
                             ACCELERATION_TIME, USING_GYRO) == true)
                         {
@@ -1766,9 +1766,9 @@ public static final double DRIVE_STRAIGHT_DEPOSIT_2 = 35;
 
 public static final double DRIVE_STRAIGHT_DEPOSIT_3 = 170;
 
-public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 60.0;// TODO
+public static final double DISTANCE_TO_DRIVE_TOWARDS_ROCKET_WITH_SIDE_BALL = 75;// TODO
 
-public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 120.0;
+public static final double DISTANCE_TO_DRIVE_PARALLEL_TO_ROCKET = 90;
 
 public static final double DISTANCE_TO_BACK_UP = 0.0;
 
