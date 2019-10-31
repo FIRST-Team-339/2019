@@ -189,7 +189,8 @@ public static boolean canceledAuto = false;
 
 public static void periodic ()
 {
-
+    // TODO remove
+    Teleop.printStatements();
 
     if (Hardware.cancelAutoLeftDriver.get() == true
             || Hardware.cancelAutoRightDriver.get() == true)
@@ -1246,20 +1247,24 @@ private static boolean depositSideCargoBall ()
             break;
 
         case VISION_DRIVE_TOWARDS_CARGO_SHIP:
-            if (Hardware.driveWithCamera
-                    .driveToTargetClose(.2, true))// TODO constant nad vision
-                                                  // function
-                {
-                sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
-                // //TODO
+            // Hardware.axisCamera.processImage();
+            // if (Hardware.driveWithCamera
+            // .driveToTargetClose(.2, true)
+            // /* Hardware.driveWithCamera.driveToTargetPorportional() */)
+            // // function
+            // {
+            sideCargoBallState = SideCargoBallState.DEPOSIT_BALL;
+            // //TODO
 
-                }
+            // }
             break;
         case DEPOSIT_BALL:
 
             if (/* Hardware.depositGamePiece.depositCargo(true) */1 == 1)
                 {
-                sideCargoBallState = SideCargoBallState.FINISHED;
+                if (Hardware.drive.driveStraightInches(15, .3, .1,
+                        USING_GYRO))
+                    sideCargoBallState = SideCargoBallState.FINISHED;
                 }
             break;
 
@@ -1743,7 +1748,7 @@ public static final int DEGREES_TO_TURN_ALONG_FIELD_WALL = 50;
 
 
 // rocket hatch vision constants
-public static final double CAMERA_TURN_SPEED = .5;
+public static final double CAMERA_TURN_SPEED = .3;
 
 public static final double CAMERA_ACCELERATION = .2;
 

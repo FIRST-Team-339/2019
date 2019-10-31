@@ -296,7 +296,7 @@ public static void periodic ()
 
     // Function for joystick control of forklift
     Hardware.lift.moveForkliftWithController(Hardware.rightOperator,
-            true/* Hardware.forkliftOverride.get() */);
+            Hardware.forkliftOverride.get());
 
     if (inDemoMode == false)
         {
@@ -369,7 +369,7 @@ public static void periodic ()
 
     // Function for joystick control of manipulator
     Hardware.manipulator.moveArmByJoystick(Hardware.leftOperator,
-            true /* Hardware.deployOverride.get() */);
+            Hardware.deployOverride.get());
 
     if (Hardware.toggleIgnoreMakeBreakButton.getCurrentValue() == true)
         Hardware.manipulator.toggleIgnoreMakeBreak();

@@ -253,7 +253,8 @@ public static DoubleSolenoid driveSolenoid = null;
 // --------------------------------------
 // Wiring diagram for Potentiometers
 //
-// on the RV4NAYSD104A potentiometer,
+// on the RV4NAYSD104A potentiometer, resistance is 100k, manufactuare PEC
+// digikey.com/product-detail/en/precion-electronics-corporation/RV4NAYSD104A/RV4N104C-NS/222811
 // metal tabs facing away, shaft pointing at you
 // power on left tab, five volts on RIO, red
 // signal in the middle tab, white
