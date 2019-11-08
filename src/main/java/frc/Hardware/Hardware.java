@@ -428,7 +428,9 @@ public static JoystickButton cancelTwoButton = null;
 
 public static JoystickButton cancelAutoRightDriver = null;
 
-public static JoystickButton retrievalButton = null;
+// public static JoystickButton retrievalButton = null;
+
+public static MomentarySwitch retrievalButton = null;
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -760,8 +762,8 @@ public static void commonInitialization ()
 
     solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
-    retrievalButton = new JoystickButton(leftDriver, 9);// fix button
-                                                        // yeeeeeeeeeeee
+    retrievalButton = new MomentarySwitch(leftDriver, 9, false);// fix button
+    // yeeeeeeeeeeee
 
     climbOneButton = new JoystickButton(leftDriver, 11);
 

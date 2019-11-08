@@ -397,6 +397,7 @@ public boolean moveArmToPosition (double angle)
 {
     // Sets the target position and speed, enables "moving-to-position"
     // state.
+
     if (isSetDeployPositionInitReady == true)
         {
         this.deployTargetAngle = angle;
@@ -418,7 +419,7 @@ public boolean moveArmToPosition (double angle)
         this.deployTargetSpeed = this
                 .calculateDesiredArmMotorVoltage(
                         RequiredArmSpeedState.GO_UP,
-                        false, false);
+                        false, false);// TODO
         }
     else // if the manipulator will move down
         {
@@ -435,6 +436,7 @@ public boolean moveArmToPosition (double angle)
 
 public boolean moveArmToPositionPrecise (double angle)
 {
+    System.out.println("movign arm");
     if (deployTargetAngle != angle)
         {
         moveArmToPositionPreciseInit = true;
@@ -444,7 +446,7 @@ public boolean moveArmToPositionPrecise (double angle)
     if (moveArmToPositionPreciseInit == true)
         {
         this.deployTargetAngle = angle;
-        deployDirection = DeployMovementDirection.NEUTRAL;
+        // deployDirection = DeployMovementDirection.NEUTRAL;
         this.deployMovementState = DeployMovementState.MOVING_TO_POSITION_PRECISE;
         moveArmToPositionPreciseInit = false;
         }
@@ -769,6 +771,7 @@ public void deployUpdate ()
 
 private void movingToPositionPreciseState ()
 {
+    System.out.println("but really we should be moving ");
     double currentAngle = this.getCurrentArmPosition();
     double adjustedSpeed = this.deployTargetSpeed;
     // positive if we are above target
@@ -848,8 +851,11 @@ private void movingToPositionPreciseState ()
                     false, false);
 
         // we have NOT passed the value , keep going down.
+
+        System.out.println(adjustedSpeed);
         this.armMotor.set(adjustedSpeed);
         }
+    System.out.println(adjustedSpeed);
 
 
 }
@@ -1254,7 +1260,7 @@ private double IS_FULLY_CLEAR_OF_FRAME_ANGLE = 60;
 // the maximum angle for the deploy so
 public double MAX_FORKLIFT_UP_ANGLE = 70;
 
-private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 70;
+private double IS_PARTIALLY_CLEAR_OF_FRAME_ANGLE = 75;
 
 public double HIGHER_MAX_FORKLIFT_UP_ANGLE = 50;
 
@@ -1277,7 +1283,8 @@ private static final double ACCEPTABLE_ERROR = 0.0;
 
 // calculate by via the formula: 90/ (Raw Pot Value when arm is vertical -
 // Raw Pot Horizontal Value)
-private static double ARM_POT_SCALE_TO_DEGREES = 1.11111111; // 90/81
+private static double ARM_POT_SCALE_TO_DEGREES = .95;// 1.11111111; //
+                                                     // 90/81
 
 // // value that is multiplied by the number of ticks to convert it to degrees
 // private static final double ARM_ENCODER_SCALE_TO_DEGREES = 0.0; //

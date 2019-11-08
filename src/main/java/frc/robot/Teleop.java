@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
+import frc.Utils.RetrieveHatch.RetrievalState;
 import frc.vision.VisionProcessor.ImageType;
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -192,6 +193,8 @@ public static void initTeleop2019 ()
             FIRST_GEAR_RATIO_KILROY_XX);
     Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
             SECOND_GEAR_RATIO_KILROY_XX);
+    Hardware.drive.setGearPercentage(THIRD_GEAR_NUMBER,
+            THIRD_GEAR_RATIO_KILROY_XX);
     // sets the gear to 0 at the beginning.
     Hardware.drive.setGear(0);
 
@@ -410,6 +413,11 @@ public static void periodic ()
 
         // Hardware.depositGamePiece.depositTeleopStateMachine();
         }
+    if (Math.abs(Hardware.leftOperator.getY()) > .2
+            || Math.abs(Hardware.rightOperator.getY()) > .2)
+        {
+        Hardware.retriever.retrievalState = RetrievalState.STANDBY;
+        }
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
@@ -544,9 +552,16 @@ public static void periodic ()
 
             }
         else
-            if (Hardware.retrievalButton.get() == true)
+            if (Hardware.retrievalButton.isOnCheckNow()
+                    && ((Math.abs(Hardware.leftOperator.getY()) < .1)
+                            || Math.abs(Hardware.rightOperator
+                                    .getY()) < .1))
                 {
-                Hardware.retriever.retrieveHatch();
+                // Hardware.retriever.retrieveHatch();
+                if (Hardware.retriever.prepareArmPositions())
+                    {
+                    Hardware.retrievalButton.setValue(false);
+                    }
                 }
             else
                 if (true/*
@@ -1480,7 +1495,18 @@ public static void ringLightFlash (boolean ringLightFlashOn,
  */
 public static void teleopDrive ()
 {
+    if (Hardware.rightDriver.getRawButton(3))
+        {
+        Hardware.drive.setGear(2);
+        }
+    else
+        SmartDashboard.putNumber("current gear",
+                Hardware.drive.getCurrentGear());
+    SmartDashboard.putNumber("Current motor power",
+            Hardware.leftFrontCANMotor.get());
+
     // System.out.println("reeeeeeeeeeeee");
+
     Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
     Hardware.drive.shiftGears(
@@ -1488,10 +1514,15 @@ public static void teleopDrive ()
             Hardware.upshiftButton.get());
 
     // makes sure the gear never goes over 2
-    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+    if (Hardware.rightDriver.getRawButton(3))
         {
-        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        } // end if
+        Hardware.drive.setGear(2);
+        }
+    else
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+            {
+            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+            } // end if
 } // end teleopDrive()
 
 
@@ -1510,13 +1541,17 @@ public static final int FIRST_GEAR_NUMBER = 0;
 
 public static final int SECOND_GEAR_NUMBER = 1;
 
+public static final int THIRD_GEAR_NUMBER = 2;
+
 private static final double FIRST_GEAR_RATIO_KILROY_XIX = .5;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 
 public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
 
-public static final double SECOND_GEAR_RATIO_KILROY_XX = .6;
+public static final double SECOND_GEAR_RATIO_KILROY_XX = .75;
+
+public static final double THIRD_GEAR_RATIO_KILROY_XX = 1.0;
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 

@@ -1,6 +1,7 @@
 package frc.Utils;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Hardware.Hardware;
 import frc.HardwareInterfaces.DriveWithCamera.DriveWithCameraState;
 import frc.Utils.RollerIntakeMechanism.IntakeState;
@@ -58,6 +59,10 @@ public void retrievalUpdate ()
             // double checks that the forklift and the manipulator are in the
             // right positions and moves them to the right positions if theyre
             // not in the right positions
+            SmartDashboard.putBoolean("fork ready",
+                    forkliftHeightReached);
+            SmartDashboard.putBoolean("arm ready",
+                    manipulatorAngleReached);
             if (forkliftHeightReached == false && Hardware.lift
                     .setLiftPositionPrecise(
                             LIFT_HEIGHT_TO_RETRIEVE_HATCH,
@@ -68,6 +73,8 @@ public void retrievalUpdate ()
 
             // only moves the manipulator if it hasn't already reached it's
             // target position
+            SmartDashboard.putBoolean("arm ready",
+                    manipulatorAngleReached);
             if (manipulatorAngleReached == false && Hardware.manipulator
                     .moveArmToPositionPrecise(
                             Forklift.PLAYER_STATION_ANGLE) == true)
@@ -190,8 +197,9 @@ public void stopRetrieveHatch ()
 private boolean usingPartialRetrieve = true;
 
 
-public void prepareArmPositions ()
+public boolean prepareArmPositions ()
 {
+    System.out.println("rinnakan");
     // double checks that the forklift and the manipulator are in the
     // right positions and moves them to the right positions if theyre
     // not in the right positions
@@ -215,12 +223,13 @@ public void prepareArmPositions ()
     if (forkliftHeightReached == true
             && manipulatorAngleReached == true)
         {
-        delayInit();
+        // delayInit();
         forkliftHeightReached = false;
         manipulatorAngleReached = false;
         armIsReady = true;
+        return true;
         }
-
+    return false;
 }
 
 /**
