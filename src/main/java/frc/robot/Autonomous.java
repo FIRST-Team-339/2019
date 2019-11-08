@@ -1002,7 +1002,7 @@ private static boolean depositRocketHatch ()
                     // Hardware.axisCamera.saveImage(ImageType.RAW);
                     // align with the camera
                     // TODO
-                    if (Hardware.usingLime = false)
+                    if (Hardware.usingLime == false)
                         {
                         if (Hardware.driveWithCamera
                                 .driveToTargetClose(
@@ -1020,6 +1020,7 @@ private static boolean depositRocketHatch ()
                         }
                     else
                         {
+                        System.out.println("aligning vision");
                         if (Hardware.visionDriving.driveToTarget())
                             {
                             rocketHatchState = RocketHatchState.DEPOSIT_HATCH;

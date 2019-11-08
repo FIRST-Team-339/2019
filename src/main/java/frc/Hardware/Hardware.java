@@ -85,7 +85,7 @@ public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 // ---------------------------------------
 public static boolean demoMode = false;
 
-public static boolean usingLime = false;
+public static boolean usingLime = true;
 
 public static int DEMO_MAX_FORK = 40;
 

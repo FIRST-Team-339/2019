@@ -243,6 +243,7 @@ public static void periodic ()
 {
     if (Hardware.usingLime)
         {
+        System.out.println("updating");
         Hardware.visionInterface.updateValues();
         }
     if (inDemoMode == true)
@@ -426,7 +427,7 @@ public static void periodic ()
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
 
-    if (inDemoMode == true)// TODO
+    if (inDemoMode == false)// TODO
         {
         // vision=====================================
         // 8 and 9visionHeightDownButton
@@ -449,8 +450,7 @@ public static void periodic ()
             Hardware.telopTimer.start();
             }
 
-        if (Hardware.alignVisionButton.isOnCheckNow() == true
-                && Hardware.depositGamePiece.overrideVision() == false)
+        if (Hardware.alignVisionButton.isOnCheckNow() == true)
             {
 
             if (Hardware.depositGamePiece
