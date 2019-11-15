@@ -466,19 +466,15 @@ public static void periodic ()
             Hardware.depositGamePiece.resetDepositTeleop();
             }
 
-        // if (Hardware.alignAndStopButton.isOnCheckNow() == true
-        // && Hardware.depositGamePiece.overrideVision() == false)
-        // {
-        // if (Hardware.retriever.alignWithVision(.1))
-        // {
-        // Hardware.alignAndStopButton.setValue(false);
-        // }
-        // }
-        // if (Hardware.alignAndStopButton.isOnCheckNow() == false
-        // && Hardware.alignVisionButton.isOnCheckNow() == false)
-        // {
-        // Hardware.driveWithCamera.state = Hardware.driveWithCamera.state.INIT;
-        // }
+        if (Hardware.alignAndStopButton.isOnCheckNow() == true
+                && Hardware.depositGamePiece.overrideVision() == false)
+            {
+            if (Hardware.visionDriving.driveToTarget())
+                {
+                Hardware.alignAndStopButton.setValue(false);
+                }
+            }
+
         }
     // end vision==============================================
 

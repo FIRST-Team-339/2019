@@ -659,7 +659,7 @@ private static boolean depositCargoHatch ()
                 }
             else
                 {
-                if (Hardware.visionDriving.driveToTarget())
+                if (Hardware.visionDriving.driveToTarget() == true)
                     {
                     depositCargoHatchState = DepositCargoHatchState.STRAIGHT_DEPOSIT_DEPOSIT_HATCH;
                     }
@@ -1021,7 +1021,8 @@ private static boolean depositRocketHatch ()
                     else
                         {
                         System.out.println("aligning vision");
-                        if (Hardware.visionDriving.driveToTarget())
+                        if (Hardware.visionDriving
+                                .driveToTarget() == true)
                             {
                             rocketHatchState = RocketHatchState.DEPOSIT_HATCH;
                             }
