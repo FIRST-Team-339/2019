@@ -1514,15 +1514,15 @@ public static void teleopDrive ()
             Hardware.upshiftButton.get());
 
     // makes sure the gear never goes over 2
-    // if (Hardware.rightDriver.getRawButton(3))
-    // {
-    // Hardware.drive.setGear(0);
-    // }
-    // else
-    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+    if (Hardware.rightDriver.getRawButton(3) && !inDemoMode)
         {
-        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        } // end if
+        Hardware.drive.setGear(2);
+        }
+    else
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+            {
+            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+            } // end if
 } // end teleopDrive()
 
 
@@ -1547,9 +1547,9 @@ private static final double FIRST_GEAR_RATIO_KILROY_XIX = .5;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 
-public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
+public static final double FIRST_GEAR_RATIO_KILROY_XX = .3;
 
-public static final double SECOND_GEAR_RATIO_KILROY_XX = .75;
+public static final double SECOND_GEAR_RATIO_KILROY_XX = .7;
 
 public static final double THIRD_GEAR_RATIO_KILROY_XX = 1.0;
 
