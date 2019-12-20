@@ -22,6 +22,12 @@ public class NewDriveWithVision
  */
 public boolean driveToTarget ()
 {
+
+    if (!Hardware.visionInterface.filterPass)
+        {
+        System.out.println("have no blobs. Cannot continue");
+        return true;
+        }
     System.out.println("aligning non arc");
     double offness = Hardware.visionInterface.getXOffSet();
 

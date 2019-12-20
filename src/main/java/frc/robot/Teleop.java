@@ -61,6 +61,10 @@ public class Teleop
  */
 public static void init ()
 {
+    Hardware.rightFrontCANMotor.set(0);
+    Hardware.rightRearCANMotor.set(0);
+    Hardware.leftFrontCANMotor.set(0);
+    Hardware.leftRearCANMotor.set(0);
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -241,9 +245,12 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
+
+
+
     if (Hardware.usingLime)
         {
-        System.out.println("updating");
+        // System.out.println("updating");
         Hardware.visionInterface.updateValues();
         }
     if (inDemoMode == true)
@@ -450,21 +457,7 @@ public static void periodic ()
             Hardware.telopTimer.start();
             }
 
-        if (Hardware.alignVisionButton.isOnCheckNow() == true)
-            {
 
-            if (Hardware.depositGamePiece
-                    .startTeleopDeposit(visionHeight,
-                            false))
-                {
-                Hardware.alignVisionButton.setValue(false);
-
-                }
-            }
-        else
-            {
-            Hardware.depositGamePiece.resetDepositTeleop();
-            }
 
         if (Hardware.alignAndStopButton.isOnCheckNow() == true
                 && Hardware.depositGamePiece.overrideVision() == false)
@@ -473,6 +466,10 @@ public static void periodic ()
                 {
                 Hardware.alignAndStopButton.setValue(false);
                 }
+            }
+        else
+            {
+            teleopDrive();
             }
 
         }
@@ -578,7 +575,7 @@ public static void periodic ()
                         // System.out.println("TELEOP DRIVE");
                         // SmartDashboard.putString("printDriveType",
                         // "TELEOP DRIVE");
-                        teleopDrive();
+                        // teleopDrive();
                         if (Hardware.solenoidButtonOne
                                 .isOnCheckNow() == true
                                 && Hardware.solenoidButtonTwo
@@ -595,7 +592,7 @@ public static void periodic ()
         }
     else
         {
-        teleopDrive();
+        // teleopDrive();
         }
 
     // if (inDemoMode == false)
@@ -1491,15 +1488,22 @@ public static void ringLightFlash (boolean ringLightFlashOn,
  */
 public static void teleopDrive ()
 {
-    if (Hardware.rightDriver.getRawButton(3))
+
+    if (Hardware.demoMode == false)
         {
-        Hardware.drive.setGear(2);
+        if (Hardware.rightDriver.getRawButton(3))
+            {
+            Hardware.drive.setGear(2);
+            }
+        else
+            {
+            SmartDashboard.putNumber("current gear",
+                    Hardware.drive.getCurrentGear());
+            SmartDashboard.putNumber("Current motor power",
+                    Hardware.leftFrontCANMotor.get());
+            }
         }
-    else
-        SmartDashboard.putNumber("current gear",
-                Hardware.drive.getCurrentGear());
-    SmartDashboard.putNumber("Current motor power",
-            Hardware.leftFrontCANMotor.get());
+
 
     // System.out.println("reeeeeeeeeeeee");
 
@@ -1510,15 +1514,15 @@ public static void teleopDrive ()
             Hardware.upshiftButton.get());
 
     // makes sure the gear never goes over 2
-    if (Hardware.rightDriver.getRawButton(3))
+    // if (Hardware.rightDriver.getRawButton(3))
+    // {
+    // Hardware.drive.setGear(0);
+    // }
+    // else
+    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
         {
-        Hardware.drive.setGear(2);
-        }
-    else
-        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
-            {
-            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-            } // end if
+        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+        } // end if
 } // end teleopDrive()
 
 

@@ -189,8 +189,7 @@ public static boolean canceledAuto = false;
 
 public static void periodic ()
 {
-    // TODO remove
-    Teleop.printStatements();
+
 
     if (Hardware.cancelAutoLeftDriver.get() == true
             || Hardware.cancelAutoRightDriver.get() == true)

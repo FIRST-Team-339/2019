@@ -502,7 +502,8 @@ public static void initialize ()
     // and 2019. Make them only once
     // ---------------------------
 
-
+    // if (usingLime == false)
+    // {
     switch (whichRobot)
         {
         case KILROY_2018:
@@ -519,10 +520,11 @@ public static void initialize ()
         case TEST_BOARD:
             break;
         } // end switch
-          // ------------------------
-          // The function calls in commonKilroyAncillary
-          // must follow all other hardware declarations
-          // -------------------------
+    // }
+    // ------------------------
+    // The function calls in commonKilroyAncillary
+    // must follow all other hardware declarations
+    // -------------------------
     commonInitialization();
 } // end initialize()
 
@@ -652,11 +654,12 @@ public static void commonInitialization ()
     // **********************************************************
 
     // Axis/USB Camera class
-
+    // if (!usingLime)
+    // {
     axisCamera = new VisionProcessor(axisCameraIp,
             CameraModel.AXIS_M1013,
             ringLightRelay);
-
+    // }
     visionInterface = new NewVisionInterface();
     visionDriving = new NewDriveWithVision();
 

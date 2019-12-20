@@ -96,7 +96,8 @@ public void updateValues ()
         vertical = tvert.getDouble(0);
         pipeline = getpipe.getDouble(0);
         led_Mode = Led_Mode.getDouble(0);
-        // publishValues();
+        // filterBlobs();
+        publishValues();
         }
     catch (NullPointerException exception)
         {
@@ -108,6 +109,7 @@ public void updateValues ()
 public double getXOffSet ()
 {
     return x;
+
 }
 
 public double getYOffSet ()
@@ -172,12 +174,16 @@ public void publishValues ()
     // SmartDashboard.putNumber("distance", getDistanceFromTarget());
 }
 
+
+
 public boolean hasTargets (double targets)
 {
     if (targets != 0)
         {
+
         return true;
         }
+
     return false;
 
 }
@@ -247,6 +253,22 @@ public void takePicture ()
     // TODO
 }
 
+public boolean filterPass = true;
+
+public void filterBlobs ()
+{
+
+    if (longSide > 50)
+        {
+        filterPass = false;
+        }
+    else
+        {
+        filterPass = true;
+        }
+
+
+}
 
 
 
@@ -270,6 +292,7 @@ public double getDistanceFromTarget ()
 
     if (hasTargets == true)
         {
+
         return distance;
         }
     else
@@ -278,7 +301,8 @@ public double getDistanceFromTarget ()
         }
 }
 
-final double CAMERA_HEIGHT = 44.5;// TODO
+
+public final double CAMERA_HEIGHT = 44.5;// TODO
 
 final double TARGET_HEIGHT_LOW = 29;// TODO
 
