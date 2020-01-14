@@ -153,9 +153,10 @@ public void autonomousPeriodic ()
 public void disabledInit ()
 {
     Hardware.rightFrontCANMotor.set(0);
-    Hardware.rightRearCANMotor.set(0);
+    // Hardware.rightRearCANMotor.set(0);// TODO
     Hardware.leftFrontCANMotor.set(0);
-    Hardware.leftRearCANMotor.set(0);
+    // Hardware.leftRearCANMotor.set(0);
+    // TODO
     // ---------------------------------------
     // start setup - tell the user we are beginning
     // setup

@@ -129,10 +129,10 @@ public static SpeedController rightFrontCANMotor = null;
 public static SpeedController leftFrontCANMotor = null;
 
 /** The right rear drive motor */
-public static SpeedController rightRearCANMotor = null;
+// public static SpeedController rightRearCANMotor = null;
 
 /** The left rear drive motor */
-public static SpeedController leftRearCANMotor = null;
+// public static SpeedController leftRearCANMotor = null;// TODO
 
 public static SpeedController armRoller = null;
 
@@ -175,7 +175,7 @@ public static KilroyEncoder leftFrontDriveEncoder = null;
 
 public static KilroyEncoder rightFrontDriveEncoder = null;
 
-public static KilroyEncoder leftRearDriveEncoder = null;
+public static KilroyEncoder leftRearDriveEncoder = null;// TODO
 
 public static KilroyEncoder rightRearDriveEncoder = null;
 
@@ -822,10 +822,14 @@ public static void commonInitialization ()
 
     // Transmission class
     transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
+            new SpeedControllerGroup(leftFrontCANMotor/*
+                                                       * ,
+                                                       * % * leftRearCANMotor
+                                                       */),
+            new SpeedControllerGroup(rightFrontCANMotor/*
+                                                        * ,
+                                                        * rightRearCANMotor
+                                                        */));// TODO
 
     // ------------------------------------
     // Drive system
@@ -897,10 +901,10 @@ public static void robotInitialize2018 ()
 
     leftFrontCANMotor = new WPI_TalonSRX(11);
 
-    rightRearCANMotor = new WPI_TalonSRX(15);
+    // rightRearCANMotor = new WPI_TalonSRX(15);// TODO
 
-    leftRearCANMotor = new WPI_TalonSRX(13);
-
+    // leftRearCANMotor = new WPI_TalonSRX(13);
+    // TODO
     armRoller = new WPI_TalonSRX(10);
 
     // ====================================
@@ -1027,14 +1031,15 @@ public static void robotInitialize2019 ()
 
     liftMotor = new WPI_TalonSRX(23);
 
-    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
+    rightFrontCANMotor = new CANSparkMax(15, MotorType.kBrushless);// can 14
 
-    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
+    leftFrontCANMotor = new CANSparkMax(13, MotorType.kBrushless);// can 11
 
-    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
+    // rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
+    // TODO
 
-    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
-
+    // leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
+    // TODO
     armRoller = new WPI_TalonSRX(10);
 
     // ====================================
@@ -1051,17 +1056,18 @@ public static void robotInitialize2019 ()
     // Gear Tooth Sensors
 
     // Encoders
+
     leftFrontDriveEncoder = new KilroyEncoder(
             (CANSparkMax) leftFrontCANMotor);
 
     rightFrontDriveEncoder = new KilroyEncoder(
             (CANSparkMax) rightFrontCANMotor);
 
-    leftRearDriveEncoder = new KilroyEncoder(
-            (CANSparkMax) leftRearCANMotor);
+    // leftRearDriveEncoder = new KilroyEncoder(
+    // (CANSparkMax) leftRearCANMotor);
 
-    rightRearDriveEncoder = new KilroyEncoder(
-            (CANSparkMax) rightRearCANMotor);
+    // rightRearDriveEncoder = new KilroyEncoder(
+    // (CANSparkMax) rightRearCANMotor);// TODO
 
     liftingEncoder = new KilroyEncoder((BaseMotorController) liftMotor);
 
@@ -1240,11 +1246,11 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
-    Hardware.rightFrontCANMotor.setInverted(true);
-    Hardware.rightRearCANMotor.setInverted(true);
+    Hardware.rightFrontCANMotor.setInverted(true);// true
+    // Hardware.rightRearCANMotor.setInverted(true);// TODO
     Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
-
+    // Hardware.leftRearCANMotor.setInverted(false);
+    // TODO
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
@@ -1289,19 +1295,23 @@ public static void setHardwareSettings2019 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
-    Hardware.rightFrontCANMotor.setInverted(true);
-    Hardware.rightRearCANMotor.setInverted(true);
-    Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
+    Hardware.rightFrontCANMotor.setInverted(true);// true
+    // Hardware.rightRearCANMotor.setInverted(true);s 0
+
+    // TODO
+    Hardware.leftFrontCANMotor.setInverted(false);// false
+    // Hardware.leftRearCANMotor.setInverted(false);
+    // TODO
     Hardware.armMotor.setInverted(true);
 
 
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
-    // Hardware.rightFrontDriveEncoder.setReverseDirection(false);
-    // Hardware.leftFrontDriveEncoder.setReverseDirection(false);
+    Hardware.rightFrontDriveEncoder.setReverseDirection(false);
+    Hardware.leftFrontDriveEncoder.setReverseDirection(false);
     // Hardware.rightRearDriveEncoder.setReverseDirection(false);
+
     // Hardware.leftRearDriveEncoder.setReverseDirection(false);
     // Hardware.liftingEncoder.setReverseDirection(false);
 
@@ -1312,10 +1322,10 @@ public static void setHardwareSettings2019 ()
             .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
     Hardware.rightFrontDriveEncoder
             .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    Hardware.leftFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    Hardware.rightFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.leftRearDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.rightRearDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
 
@@ -1324,8 +1334,9 @@ public static void setHardwareSettings2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightRearDriveEncoder.reset();
-    Hardware.leftRearDriveEncoder.reset();
+    // Hardware.rightRearDriveEncoder.reset();// TODO
+    // Hardware.leftRearDriveEncoder.reset();
+    // TODO
     Hardware.liftingEncoder.reset();
 
 

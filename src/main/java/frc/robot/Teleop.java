@@ -62,9 +62,9 @@ public class Teleop
 public static void init ()
 {
     Hardware.rightFrontCANMotor.set(0);
-    Hardware.rightRearCANMotor.set(0);
+    // Hardware.rightRearCANMotor.set(0);// TODO
     Hardware.leftFrontCANMotor.set(0);
-    Hardware.leftRearCANMotor.set(0);
+    // Hardware.leftRearCANMotor.set(0); // TODO left REAR
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -216,8 +216,8 @@ public static void initTeleop2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightRearDriveEncoder.reset();
-    Hardware.leftRearDriveEncoder.reset();
+    // Hardware.rightRearDriveEncoder.reset();//TODO
+    // Hardware.leftRearDriveEncoder.reset();//TODO
     // DO NOT RESET THE LIFT ENCODER
 
     // ---------------------------------
@@ -953,6 +953,7 @@ private static void patrickTest ()
     // }
 } // end patrickTest()
 
+
 private static void annaTest ()
 {
 
@@ -1507,7 +1508,8 @@ public static void teleopDrive ()
 
     // System.out.println("reeeeeeeeeeeee");
 
-    Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    // CRAIG COMMENT THIS BACK
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
     Hardware.drive.shiftGears(
             Hardware.downshiftButton.get(),
