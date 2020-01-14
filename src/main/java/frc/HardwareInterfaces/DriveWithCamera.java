@@ -196,6 +196,8 @@ public boolean driveToTarget (double speed, boolean cargoAuto)
         case DRIVE_WITH_CAMERA:
             Hardware.axisCamera.processImage();// TODO check and see if this
             // cause lag or watchdog errors
+            SmartDashboard.putNumber("camera offness",
+                    this.getCameraCenterValue());
             visionProcessor.saveImage(ImageType.RAW);
             visionProcessor.saveImage(ImageType.PROCESSED);
             correctionValue = DRIVE_CORRECTION;
@@ -409,10 +411,12 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
                     if ((Hardware.frontUltraSonic
                             .getDistanceFromNearestBumper() > Hardware.retriever.LENGTH_OF_NESSIE_HEAD
                                     + 3
-                            || Hardware.axisCamera
-                                    .getNthSizeBlob(
-                                            0).area > MIN_BLOB_AREA)
-                            && (Hardware.leftFrontDriveEncoder
+                    /*
+                     * || Hardware.axisCamera
+                     * .getNthSizeBlob(
+                     * 0).area > MIN_BLOB_AREA
+                     */)
+                            || (Hardware.leftFrontDriveEncoder
                                     .getDistance() > MIN_INCHES_CLOSE
                                     || Hardware.rightFrontDriveEncoder
                                             .getDistance() > MIN_INCHES_CLOSE))
@@ -423,12 +427,14 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
                     }
                 else
                     {
-                    if ((Hardware.axisCamera
-                            .getNthSizeBlob(
-                                    0).area > MIN_BLOB_AREA_CLOSE
-                            || Hardware.frontUltraSonic
-                                    .getDistanceFromNearestBumper() > Hardware.retriever.LENGTH_OF_NESSIE_HEAD
-                                            + 3)
+                    if ((/*
+                          * Hardware.axisCamera
+                          * .getNthSizeBlob(
+                          * 0).area > MIN_BLOB_AREA_CLOSE
+                          * ||
+                          */Hardware.frontUltraSonic
+                            .getDistanceFromNearestBumper() > Hardware.retriever.LENGTH_OF_NESSIE_HEAD
+                                    + 3)
                             && (Hardware.leftFrontDriveEncoder
                                     .getDistance() > MIN_INCHES_CLOSE
                                     || Hardware.rightFrontDriveEncoder
@@ -503,6 +509,67 @@ public boolean driveToTargetClose (double speed, boolean stopClose)
             return true;
         }
     return false;
+}
+
+public boolean driveToTargetPorportional ()
+{
+
+    double offness = this.getDegreeOffness(this.getCameraCenterValue());
+
+    double adjustmentValueRight = 0;
+    double adjustmentValueLeft = 0;
+
+
+    if (/* Hardware.visionInterface.getDistanceFromTarget() >= 40 */Hardware.frontUltraSonic
+            .getDistanceFromNearestBumper() > 30)
+        {
+
+
+        if (offness < 0)
+            {
+
+            adjustmentValueLeft = MIN_MOVE
+                    - (Math.abs(offness) * ADJUST_PORP);
+            adjustmentValueRight = MIN_MOVE
+                    + (Math.abs(offness) * ADJUST_PORP);
+            // Hardware.drive.drive(adjustmentValueLeft,
+            // adjustmentValueRight);
+            Hardware.transmission.driveRaw(adjustmentValueLeft,
+                    adjustmentValueRight);
+            }
+
+
+        else
+        /* if (offness > 0) */
+            {
+
+            adjustmentValueLeft = MIN_MOVE
+                    + (Math.abs(offness) * ADJUST_PORP);
+            adjustmentValueRight = MIN_MOVE
+                    - (Math.abs(offness) * ADJUST_PORP);
+
+            // Hardware.drive.drive(adjustmentValueLeft,
+            // adjustmentValueRight);
+            Hardware.transmission.driveRaw(adjustmentValueLeft,
+                    adjustmentValueRight);
+            }
+        // else
+        // {
+        // Hardware.transmission.driveRaw(.2, .2);
+        // }
+        }
+    else
+        {
+        System.out.println("done");
+        if (Hardware.drive.driveStraightInches(10, .2, 0, true))
+            {
+            Hardware.drive.stop();
+
+            return true;
+            }
+        }
+    return false;
+
 }
 
 /**
@@ -641,6 +708,12 @@ public double getCameraCenterValue ()
     return center;
 }
 
+public double getDegreeOffness (double CenterValue)
+{
+    double degreeOffness = 0;
+    degreeOffness = (getCameraCenterValue() / 294) * 67;
+    return degreeOffness;
+}
 
 
 // ================VISION CONSTANTS================
@@ -658,7 +731,7 @@ private final double CAMERA_NO_LONGER_WORKS = 0;
 private final double CAMERA_DEADBAND = 15;
 
 // the distance from the wall (in inches) where we start stopping the robot
-private final double DISTANCE_FROM_WALL_TO_STOP = 15;
+private final double DISTANCE_FROM_WALL_TO_STOP = 25;
 
 // length of nessie head + drive forward distance
 private final double DISTANCE_FROM_WALL_TO_STOP_CARGO = 29;
@@ -671,7 +744,6 @@ private final double DISTANCE_FROM_WALL_TO_SLOW2 = 60;
 
 private final double SLOW_MODIFIER = .75;// lower for slower
 
-
 private final double SWITCH_CAMERA_CENTER = 160;// Center of a 320x240 image
 // 160 originally
 
@@ -681,13 +753,19 @@ private final double DRIVE_CORRECTION_CLOSE = .1;
 
 private final double DRIVE_CORRECTION_CLOSE_2018 = .5;
 
-
 private static double MIN_BLOB_AREA_CLOSE = 600;// TODO
 
 private static double MIN_BLOB_AREA = 900;// TODO
 
 private final double MIN_INCHES = 50;
 
-private final double MIN_INCHES_CLOSE = 15;
+private final double MIN_INCHES_CLOSE = 20;
 
+// offnes max = 294
+// fov = 67
+final double MIN_MOVE = .2;
+
+final double FOV = 67 / 2;
+
+final double ADJUST_PORP = .01;
 }

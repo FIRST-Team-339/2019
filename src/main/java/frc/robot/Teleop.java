@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
+import frc.Utils.RetrieveHatch.RetrievalState;
 import frc.vision.VisionProcessor.ImageType;
 import java.security.KeyStore.TrustedCertificateEntry;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -63,8 +64,8 @@ public class Teleop
 public static void init ()
 {
     Hardware.rightFrontCANMotor.set(0);
-    Hardware.leftFrontCANMotor.set(0);
     // Hardware.rightRearCANMotor.set(0);
+    Hardware.leftFrontCANMotor.set(0);
     // Hardware.leftRearCANMotor.set(0);
     // if (Autonomous.canceledAuto == false)
     // {
@@ -75,7 +76,7 @@ public static void init ()
     Hardware.alignVisionButton.setValue(false);
     if (!Hardware.demoMode)
         {
-        Hardware.axisCamera.setRelayValue(Value.kOn);
+        // Hardware.axisCamera.setRelayValue(Value.kOn);
         }
     // Hardware.axisCamera.processImage();
     Hardware.telopTimer.start();
@@ -183,6 +184,7 @@ public static void initTeleop2018 ()
  */
 public static void initTeleop2019 ()
 {
+    Hardware.ringLightRelay.set(Value.kOff);
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
 
@@ -197,6 +199,8 @@ public static void initTeleop2019 ()
             FIRST_GEAR_RATIO_KILROY_XX);
     Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
             SECOND_GEAR_RATIO_KILROY_XX);
+    Hardware.drive.setGearPercentage(THIRD_GEAR_NUMBER,
+            THIRD_GEAR_RATIO_KILROY_XX);
     // sets the gear to 0 at the beginning.
     Hardware.drive.setGear(0);
 
@@ -243,17 +247,14 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
-    if (Hardware.rightDriver.getRawButton(4))
+
+
+
+    if (Hardware.usingLime)
         {
-        craigBool = false;
+        // System.out.println("updating");
+        Hardware.visionInterface.updateValues();
         }
-
-    if (Hardware.rightDriver.getRawButton(3))
-        {
-        craigBool = true;
-        }
-
-
     if (inDemoMode == true)
         {
         // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
@@ -420,7 +421,12 @@ public static void periodic ()
 
         Hardware.climber.newClimbUpdate();
 
-        Hardware.depositGamePiece.depositTeleopStateMachine();
+        // Hardware.depositGamePiece.depositTeleopStateMachine();
+        }
+    if (Math.abs(Hardware.leftOperator.getY()) > .2
+            || Math.abs(Hardware.rightOperator.getY()) > .2)
+        {
+        Hardware.retriever.retrievalState = RetrievalState.STANDBY;
         }
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
@@ -430,7 +436,7 @@ public static void periodic ()
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
 
-    if (inDemoMode == false)
+    if (inDemoMode == false)// TODO
         {
         // vision=====================================
         // 8 and 9visionHeightDownButton
@@ -453,36 +459,21 @@ public static void periodic ()
             Hardware.telopTimer.start();
             }
 
-        if (Hardware.alignVisionButton.isOnCheckNow() == true
+
+
+        if (Hardware.alignAndStopButton.isOnCheckNow() == true
                 && Hardware.depositGamePiece.overrideVision() == false)
             {
-
-            if (Hardware.depositGamePiece
-                    .startTeleopDeposit(visionHeight,
-                            false))
+            if (Hardware.visionDriving.driveToTarget())
                 {
-                Hardware.alignVisionButton.setValue(false);
-
+                Hardware.alignAndStopButton.setValue(false);
                 }
             }
         else
             {
-            Hardware.depositGamePiece.resetDepositTeleop();
+            teleopDrive();
             }
 
-        // if (Hardware.alignAndStopButton.isOnCheckNow() == true
-        // && Hardware.depositGamePiece.overrideVision() == false)
-        // {
-        // if (Hardware.retriever.alignWithVision(.1))
-        // {
-        // Hardware.alignAndStopButton.setValue(false);
-        // }
-        // }
-        // if (Hardware.alignAndStopButton.isOnCheckNow() == false
-        // && Hardware.alignVisionButton.isOnCheckNow() == false)
-        // {
-        // Hardware.driveWithCamera.state = Hardware.driveWithCamera.state.INIT;
-        // }
         }
     // end vision==============================================
 
@@ -556,9 +547,16 @@ public static void periodic ()
 
             }
         else
-            if (Hardware.retrievalButton.get() == true)
+            if (Hardware.retrievalButton.isOnCheckNow()
+                    && ((Math.abs(Hardware.leftOperator.getY()) < .1)
+                            || Math.abs(Hardware.rightOperator
+                                    .getY()) < .1))
                 {
-                Hardware.retriever.retrieveHatch();
+                // Hardware.retriever.retrieveHatch();
+                if (Hardware.retriever.prepareArmPositions())
+                    {
+                    Hardware.retrievalButton.setValue(false);
+                    }
                 }
             else
                 if (true/*
@@ -579,7 +577,7 @@ public static void periodic ()
                         // System.out.println("TELEOP DRIVE");
                         // SmartDashboard.putString("printDriveType",
                         // "TELEOP DRIVE");
-                        teleopDrive();
+                        // teleopDrive();
                         if (Hardware.solenoidButtonOne
                                 .isOnCheckNow() == true
                                 && Hardware.solenoidButtonTwo
@@ -596,7 +594,7 @@ public static void periodic ()
         }
     else
         {
-        teleopDrive();
+        // teleopDrive();
         }
 
     // if (inDemoMode == false)
@@ -981,7 +979,9 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
-
+        // Hardware.ringLightRelay.set(Value.kOn);
+        SmartDashboard.putNumber("camera offness raw",
+                Hardware.driveWithCamera.getCameraCenterValue());
 
 
         // ==================================
@@ -1296,9 +1296,10 @@ public static void printStatements ()
 
         // System.out.println("ultrasonic " + Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
-        // SmartDashboard.putNumber("F ultrasonic: ",
-        // Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        SmartDashboard.putNumber("F ultrasonic: ",
+                Hardware.frontUltraSonic
+                        .getDistanceFromNearestBumper());
+
         // Hardware.telemetry.printToConsole("ultrasonic " +
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -1403,7 +1404,7 @@ public static void takePicture ()
             pictureButton1 = true;
             pictureButton2 = true;
             Hardware.takePictureTimer.reset();
-            Hardware.ringLightRelay.set(Value.kOn);
+            // Hardware.ringLightRelay.set(Value.kOn);//TODO
             firstPress = false;
             Hardware.takePictureTimer.start();
             }
@@ -1412,8 +1413,9 @@ public static void takePicture ()
                 && imageTaken == false)
             {
 
-            Hardware.axisCamera.saveImage(ImageType.RAW);
-            Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+            // Hardware.axisCamera.saveImage(ImageType.RAW);
+            // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+            // TODO
 
             imageTaken = true;
             }
@@ -1458,7 +1460,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
             }
         if (Hardware.ringLightTimer.get() >= ringLightFlashDelay)
             {
-            Hardware.ringLightRelay.set(Value.kOn);
+            // Hardware.ringLightRelay.set(Value.kOn);//TODO
             }
         if (Hardware.ringLightTimer.get() >= 2 * ringLightFlashDelay)
             {
@@ -1471,7 +1473,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
         }
     else
         {
-        Hardware.ringLightRelay.set(Value.kOn);
+        Hardware.ringLightRelay.set(Value.kOff);
         }
 }
 
@@ -1488,30 +1490,41 @@ public static boolean craigBool = false;
 public static void teleopDrive ()
 
 {
-    System.out.println(craigBool);
-    if (craigBool)
+
+    if (Hardware.demoMode == false)
         {
-        System.out.println("testing controller: "
-                + Hardware.controllerOne.getY(Hand.kLeft));
-        Hardware.drive.drive(-Hardware.controllerOne.getY(Hand.kLeft),
-                -Hardware.controllerOne.getY(Hand.kRight));
-        }
-    else
-        {
-        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        if (Hardware.rightDriver.getRawButton(3))
+            {
+            Hardware.drive.setGear(2);
+            }
+        else
+            {
+            SmartDashboard.putNumber("current gear",
+                    Hardware.drive.getCurrentGear());
+            SmartDashboard.putNumber("Current motor power",
+                    Hardware.leftFrontCANMotor.get());
+            }
         }
 
 
+    // System.out.println("reeeeeeeeeeeee");
+
+    Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
     Hardware.drive.shiftGears(
             Hardware.downshiftButton.get(),
             Hardware.upshiftButton.get());
 
     // makes sure the gear never goes over 2
-    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+    if (Hardware.rightDriver.getRawButton(3) && !inDemoMode)
         {
-        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        } // end if
+        Hardware.drive.setGear(2);
+        }
+    else
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+            {
+            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+            } // end if
 } // end teleopDrive()
 
 
@@ -1530,6 +1543,8 @@ public static final int FIRST_GEAR_NUMBER = 0;
 
 public static final int SECOND_GEAR_NUMBER = 1;
 
+public static final int THIRD_GEAR_NUMBER = 2;
+
 private static final double FIRST_GEAR_RATIO_KILROY_XIX = .5;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
@@ -1537,6 +1552,8 @@ private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 public static final double FIRST_GEAR_RATIO_KILROY_XX = .3;
 
 public static final double SECOND_GEAR_RATIO_KILROY_XX = .7;
+
+public static final double THIRD_GEAR_RATIO_KILROY_XX = 1.0;
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 

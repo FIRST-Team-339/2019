@@ -347,6 +347,7 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
 
 public boolean setLiftPositionPrecise (double height, double speed)
 {
+    System.out.println("movign fork");
     if (forkliftTargetHeight != height)
         setPositionPreciseInit = true;
 
@@ -1023,7 +1024,7 @@ public final static double PLAYER_STATION_CARGO_HEIGHT = 21;
 
 public final static double PLAYER_STATION_CARGO_ANGLE = 85;
 
-public final static double PLAYER_STATION_HEIGHT = .2;
+public final static double PLAYER_STATION_HEIGHT = 4;// .2;
 
 public final static double PLAYER_STATION_ANGLE = 33;
 

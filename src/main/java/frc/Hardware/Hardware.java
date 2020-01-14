@@ -30,7 +30,7 @@ import frc.Utils.drive.Drive;
 import frc.Utils.drive.DrivePID;
 import frc.Utils.drive.Drive.BrakeType;
 import frc.robot.Teleop;
-// import frc.vision.NewDriveWithVision;
+import frc.vision.NewDriveWithVision;
 import frc.vision.NewVisionInterface;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
@@ -88,6 +88,8 @@ public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 // Hardware Tunables
 // ---------------------------------------
 public static boolean demoMode = false;
+
+public static boolean usingLime = true;
 
 public static int DEMO_MAX_FORK = 40;
 
@@ -253,6 +255,15 @@ public static DoubleSolenoid driveSolenoid = null;
 // --------------------------------------
 // Potentiometers
 // --------------------------------------
+// Wiring diagram for Potentiometers
+//
+// on the RV4NAYSD104A potentiometer, resistance is 100k, manufactuare PEC
+// digikey.com/product-detail/en/precion-electronics-corporation/RV4NAYSD104A/RV4N104C-NS/222811
+// metal tabs facing away, shaft pointing at you
+// power on left tab, five volts on RIO, red
+// signal in the middle tab, white
+// ground on the right tab, black
+
 public static RobotPotentiometer delayPot = null;
 
 public static RobotPotentiometer armPot = null;
@@ -286,9 +297,9 @@ public static KilroySPIGyro gyro = null;
 public static VisionProcessor axisCamera = null;
 
 
-// public static NewDriveWithVision visionDriving = null;
+public static NewDriveWithVision visionDriving = null;
 
-// public static NewVisionInterface visionInterface = null;
+public static NewVisionInterface visionInterface = null;
 
 public static String axisCameraIp = null;
 
@@ -425,7 +436,9 @@ public static JoystickButton cancelTwoButton = null;
 
 public static JoystickButton cancelAutoRightDriver = null;
 
-public static JoystickButton retrievalButton = null;
+// public static JoystickButton retrievalButton = null;
+
+public static MomentarySwitch retrievalButton = null;
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -497,7 +510,8 @@ public static void initialize ()
     // and 2019. Make them only once
     // ---------------------------
 
-
+    // if (usingLime == false)
+    // {
     switch (whichRobot)
         {
         case KILROY_2018:
@@ -516,10 +530,11 @@ public static void initialize ()
         case TEST_BOARD:
             break;
         } // end switch
-          // ------------------------
-          // The function calls in commonKilroyAncillary
-          // must follow all other hardware declarations
-          // -------------------------
+    // }
+    // ------------------------
+    // The function calls in commonKilroyAncillary
+    // must follow all other hardware declarations
+    // -------------------------
     commonInitialization();
 } // end initialize()
 
@@ -649,13 +664,14 @@ public static void commonInitialization ()
     // **********************************************************
 
     // Axis/USB Camera class
-
+    // if (!usingLime)
+    // {
     axisCamera = new VisionProcessor(axisCameraIp,
             CameraModel.AXIS_M1013,
             ringLightRelay);
-
-    // visionInterface = new NewVisionInterface();
-    // visionDriving = new NewDriveWithVision();
+    // }
+    visionInterface = new NewVisionInterface();
+    visionDriving = new NewDriveWithVision();
 
 
 
@@ -759,8 +775,8 @@ public static void commonInitialization ()
 
     solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
-    retrievalButton = new JoystickButton(leftDriver, 9);// fix button
-                                                        // yeeeeeeeeeeee
+    retrievalButton = new MomentarySwitch(leftDriver, 9, false);// fix button
+    // yeeeeeeeeeeee
 
     climbOneButton = new JoystickButton(leftDriver, 11);
 
