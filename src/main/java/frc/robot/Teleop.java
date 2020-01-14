@@ -32,6 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +41,7 @@ import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
 import frc.Utils.RetrieveHatch.RetrievalState;
 import frc.vision.VisionProcessor.ImageType;
+import java.security.KeyStore.TrustedCertificateEntry;
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
@@ -62,9 +64,9 @@ public class Teleop
 public static void init ()
 {
     Hardware.rightFrontCANMotor.set(0);
-    // Hardware.rightRearCANMotor.set(0);// TODO
+    // Hardware.rightRearCANMotor.set(0);
     Hardware.leftFrontCANMotor.set(0);
-    // Hardware.leftRearCANMotor.set(0); // TODO left REAR
+    // Hardware.leftRearCANMotor.set(0);
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -216,8 +218,8 @@ public static void initTeleop2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    // Hardware.rightRearDriveEncoder.reset();//TODO
-    // Hardware.leftRearDriveEncoder.reset();//TODO
+    // Hardware.rightRearDriveEncoder.reset();
+    // Hardware.leftRearDriveEncoder.reset();
     // DO NOT RESET THE LIFT ENCODER
 
     // ---------------------------------
@@ -613,7 +615,7 @@ public static void periodic ()
     // }
     printStatements();
 
-
+    craigTest();
 } // end Periodic()
 
 
@@ -625,7 +627,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    // craigTest();
+    craigTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -764,15 +766,12 @@ private static void connerTest ()
 
 private static void craigTest ()
 {
+    // System.out.println("In Craig Test");
 
-    System.out.println("In Craig Test");
+    // Hardware.drive.drive(-Hardware.controllerOne.getY(Hand.kLeft),
+    // -Hardware.controllerOne.getY(Hand.kRight));
 
-    if (Hardware.rightDriver.getRawButton(2))
-        {
 
-        Hardware.drive.pivotTurnDegrees(90, .8, .5, false);
-        System.out.println("It should have turned");
-        }
 
 }// end craigTest()
 
@@ -855,9 +854,9 @@ private static void coleTest ()
 
 } // end coleTest()
 
-private static boolean coleBool1 = false;
+// private static boolean coleBool1 = false;
 
-private static boolean coleBool2 = false;
+// private static boolean coleBool2 = false;
 
 
 private static void guidoTest ()
@@ -1487,7 +1486,10 @@ public static void ringLightFlash (boolean ringLightFlashOn,
  *
  * @author Anna, Meghan, and Patrick.
  */
+public static boolean craigBool = false;
+
 public static void teleopDrive ()
+
 {
 
     if (Hardware.demoMode == false)

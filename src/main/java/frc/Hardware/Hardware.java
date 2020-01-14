@@ -52,6 +52,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+
+
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -80,7 +84,7 @@ public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 // Private Constants
 // -------------------------------------
 
-// ---------------------------------------
+// ---------------------------------------%
 // Hardware Tunables
 // ---------------------------------------
 public static boolean demoMode = false;
@@ -132,7 +136,11 @@ public static SpeedController leftFrontCANMotor = null;
 // public static SpeedController rightRearCANMotor = null;
 
 /** The left rear drive motor */
+<<<<<<< HEAD
 // public static SpeedController leftRearCANMotor = null;// TODO
+=======
+// public static SpeedController leftRearCANMotor = null;
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
 
 public static SpeedController armRoller = null;
 
@@ -175,9 +183,13 @@ public static KilroyEncoder leftFrontDriveEncoder = null;
 
 public static KilroyEncoder rightFrontDriveEncoder = null;
 
+<<<<<<< HEAD
 public static KilroyEncoder leftRearDriveEncoder = null;// TODO
+=======
+// public static KilroyEncoder leftRearDriveEncoder = null;
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
 
-public static KilroyEncoder rightRearDriveEncoder = null;
+// public static KilroyEncoder rightRearDriveEncoder = null;
 
 public static KilroyEncoder liftingEncoder = null;
 
@@ -330,6 +342,10 @@ public static Joystick rightDriver = null;
 public static Joystick leftOperator = null;
 
 public static Joystick rightOperator = null;
+
+public static XboxController controllerOne = null;
+
+public static XboxController controllerTwo = null;
 
 // ------------------------------------
 // Buttons classes and Quick Switches
@@ -513,6 +529,8 @@ public static void initialize ()
 
         default:
         case KILROY_2019:
+            controllerOne = new XboxController(5);
+            controllerTwo = new XboxController(6);
             axisCameraIp = "10.3.39.11";
             robotInitialize2019();
             break;
@@ -822,6 +840,7 @@ public static void commonInitialization ()
 
     // Transmission class
     transmission = new TankTransmission(
+<<<<<<< HEAD
             new SpeedControllerGroup(leftFrontCANMotor/*
                                                        * ,
                                                        * % * leftRearCANMotor
@@ -830,6 +849,18 @@ public static void commonInitialization ()
                                                         * ,
                                                         * rightRearCANMotor
                                                         */));// TODO
+=======
+            new SpeedControllerGroup(leftFrontCANMotor
+            /*
+             * ,leftRearCANMotor
+             */
+            ),
+            new SpeedControllerGroup(rightFrontCANMotor
+            /*
+             * ,rightRearCANMotor
+             */
+            ));
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
 
     // ------------------------------------
     // Drive system
@@ -888,20 +919,26 @@ public static void robotInitialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    armMotor = new VictorSP(4);
+    armMotor = new WPI_TalonSRX(4);
 
     // ----- Servo classes -----
 
     // ====================================
     // CAN classes
     // ====================================
-    liftMotor = new WPI_TalonSRX(23);
+    liftMotor = new WPI_TalonSRX(18);
 
-    rightFrontCANMotor = new WPI_TalonSRX(14);
+    rightFrontCANMotor = new WPI_TalonSRX(23);// 14
 
-    leftFrontCANMotor = new WPI_TalonSRX(11);
+    leftFrontCANMotor = new WPI_TalonSRX(7);// 11
 
+<<<<<<< HEAD
     // rightRearCANMotor = new WPI_TalonSRX(15);// TODO
+=======
+    // rightRearCANMotor = new WPI_TalonSRX(6);// 15
+
+    // leftRearCANMotor = new WPI_TalonSRX(9);// 13
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
 
     // leftRearCANMotor = new WPI_TalonSRX(13);
     // TODO
@@ -1031,6 +1068,7 @@ public static void robotInitialize2019 ()
 
     liftMotor = new WPI_TalonSRX(23);
 
+<<<<<<< HEAD
     rightFrontCANMotor = new CANSparkMax(15, MotorType.kBrushless);// can 14
 
     leftFrontCANMotor = new CANSparkMax(13, MotorType.kBrushless);// can 11
@@ -1041,6 +1079,17 @@ public static void robotInitialize2019 ()
     // leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
     // TODO
     armRoller = new WPI_TalonSRX(10);
+=======
+    rightFrontCANMotor = new CANSparkMax(15, MotorType.kBrushless);// 14
+
+    leftFrontCANMotor = new CANSparkMax(13, MotorType.kBrushless);// 11
+
+    // rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
+
+    // leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
+
+    armRoller = new WPI_TalonSRX(0);
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
 
     // ====================================
     // Relay classes
@@ -1067,7 +1116,11 @@ public static void robotInitialize2019 ()
     // (CANSparkMax) leftRearCANMotor);
 
     // rightRearDriveEncoder = new KilroyEncoder(
+<<<<<<< HEAD
     // (CANSparkMax) rightRearCANMotor);// TODO
+=======
+    // (CANSparkMax) rightRearCANMotor);
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
 
     liftingEncoder = new KilroyEncoder((BaseMotorController) liftMotor);
 
@@ -1246,11 +1299,20 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
+<<<<<<< HEAD
     Hardware.rightFrontCANMotor.setInverted(true);// true
     // Hardware.rightRearCANMotor.setInverted(true);// TODO
     Hardware.leftFrontCANMotor.setInverted(false);
     // Hardware.leftRearCANMotor.setInverted(false);
     // TODO
+=======
+
+    Hardware.rightFrontCANMotor.setInverted(true);
+    // Hardware.rightRearCANMotor.setInverted(true);
+    Hardware.leftFrontCANMotor.setInverted(false);
+    // Hardware.leftRearCANMotor.setInverted(false);
+
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
@@ -1295,6 +1357,7 @@ public static void setHardwareSettings2019 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
+<<<<<<< HEAD
     Hardware.rightFrontCANMotor.setInverted(true);// true
     // Hardware.rightRearCANMotor.setInverted(true);s 0
 
@@ -1302,6 +1365,12 @@ public static void setHardwareSettings2019 ()
     Hardware.leftFrontCANMotor.setInverted(false);// false
     // Hardware.leftRearCANMotor.setInverted(false);
     // TODO
+=======
+    Hardware.rightFrontCANMotor.setInverted(true);
+    /// Hardware.rightRearCANMotor.setInverted(true);
+    Hardware.leftFrontCANMotor.setInverted(false);
+    // Hardware.leftRearCANMotor.setInverted(false);
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
     Hardware.armMotor.setInverted(true);
 
 
@@ -1334,9 +1403,14 @@ public static void setHardwareSettings2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
+<<<<<<< HEAD
     // Hardware.rightRearDriveEncoder.reset();// TODO
     // Hardware.leftRearDriveEncoder.reset();
     // TODO
+=======
+    // Hardware.rightRearDriveEncoder.reset();
+    // Hardware.leftRearDriveEncoder.reset();
+>>>>>>> 690a427d0122525e8256ddf2cf4f390471e97c5b
     Hardware.liftingEncoder.reset();
 
 
