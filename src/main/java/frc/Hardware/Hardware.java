@@ -52,6 +52,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+
+
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -74,7 +78,7 @@ public enum RobotYear
     KILROY_2018, KILROY_2019, TEST_BOARD
     }
 
-public static final RobotYear whichRobot = RobotYear.KILROY_2018;
+public static final RobotYear whichRobot = RobotYear.KILROY_2019;
 
 // -------------------------------------
 // Private Constants
@@ -127,10 +131,10 @@ public static SpeedController rightFrontCANMotor = null;
 public static SpeedController leftFrontCANMotor = null;
 
 /** The right rear drive motor */
-public static SpeedController rightRearCANMotor = null;
+// public static SpeedController rightRearCANMotor = null;
 
 /** The left rear drive motor */
-public static SpeedController leftRearCANMotor = null;
+// public static SpeedController leftRearCANMotor = null;
 
 public static SpeedController armRoller = null;
 
@@ -173,9 +177,9 @@ public static KilroyEncoder leftFrontDriveEncoder = null;
 
 public static KilroyEncoder rightFrontDriveEncoder = null;
 
-public static KilroyEncoder leftRearDriveEncoder = null;
+// public static KilroyEncoder leftRearDriveEncoder = null;
 
-public static KilroyEncoder rightRearDriveEncoder = null;
+// public static KilroyEncoder rightRearDriveEncoder = null;
 
 public static KilroyEncoder liftingEncoder = null;
 
@@ -319,6 +323,10 @@ public static Joystick rightDriver = null;
 public static Joystick leftOperator = null;
 
 public static Joystick rightOperator = null;
+
+public static XboxController controllerOne = null;
+
+public static XboxController controllerTwo = null;
 
 // ------------------------------------
 // Buttons classes and Quick Switches
@@ -499,6 +507,8 @@ public static void initialize ()
 
         default:
         case KILROY_2019:
+            controllerOne = new XboxController(5);
+            controllerTwo = new XboxController(6);
             axisCameraIp = "10.3.39.11";
             robotInitialize2019();
             break;
@@ -806,10 +816,16 @@ public static void commonInitialization ()
 
     // Transmission class
     transmission = new TankTransmission(
-            new SpeedControllerGroup(leftFrontCANMotor,
-                    leftRearCANMotor),
-            new SpeedControllerGroup(rightFrontCANMotor,
-                    rightRearCANMotor));
+            new SpeedControllerGroup(leftFrontCANMotor
+            /*
+             * ,leftRearCANMotor
+             */
+            ),
+            new SpeedControllerGroup(rightFrontCANMotor
+            /*
+             * ,rightRearCANMotor
+             */
+            ));
 
     // ------------------------------------
     // Drive system
@@ -868,22 +884,22 @@ public static void robotInitialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    armMotor = new VictorSP(4);
+    armMotor = new WPI_TalonSRX(4);
 
     // ----- Servo classes -----
 
     // ====================================
     // CAN classes
     // ====================================
-    liftMotor = new WPI_TalonSRX(23);
+    liftMotor = new WPI_TalonSRX(18);
 
     rightFrontCANMotor = new WPI_TalonSRX(23);// 14
 
     leftFrontCANMotor = new WPI_TalonSRX(7);// 11
 
-    rightRearCANMotor = new WPI_TalonSRX(6);// 15
+    // rightRearCANMotor = new WPI_TalonSRX(6);// 15
 
-    leftRearCANMotor = new WPI_TalonSRX(9);// 13
+    // leftRearCANMotor = new WPI_TalonSRX(9);// 13
 
     armRoller = new WPI_TalonSRX(10);
 
@@ -1011,15 +1027,15 @@ public static void robotInitialize2019 ()
 
     liftMotor = new WPI_TalonSRX(23);
 
-    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
+    rightFrontCANMotor = new CANSparkMax(15, MotorType.kBrushless);// 14
 
-    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
+    leftFrontCANMotor = new CANSparkMax(13, MotorType.kBrushless);// 11
 
-    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
+    // rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
 
-    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
+    // leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
 
-    armRoller = new WPI_TalonSRX(10);
+    armRoller = new WPI_TalonSRX(0);
 
     // ====================================
     // Relay classes
@@ -1041,11 +1057,11 @@ public static void robotInitialize2019 ()
     rightFrontDriveEncoder = new KilroyEncoder(
             (CANSparkMax) rightFrontCANMotor);
 
-    leftRearDriveEncoder = new KilroyEncoder(
-            (CANSparkMax) leftRearCANMotor);
+    // leftRearDriveEncoder = new KilroyEncoder(
+    // (CANSparkMax) leftRearCANMotor);
 
-    rightRearDriveEncoder = new KilroyEncoder(
-            (CANSparkMax) rightRearCANMotor);
+    // rightRearDriveEncoder = new KilroyEncoder(
+    // (CANSparkMax) rightRearCANMotor);
 
     liftingEncoder = new KilroyEncoder((BaseMotorController) liftMotor);
 
@@ -1226,9 +1242,9 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
 
     Hardware.rightFrontCANMotor.setInverted(true);
-    Hardware.rightRearCANMotor.setInverted(true);
+    // Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
+    // Hardware.leftRearCANMotor.setInverted(false);
 
     // ---------------------------
     // Encoder Initialization
@@ -1275,9 +1291,9 @@ public static void setHardwareSettings2019 ()
     // motor initialization
     // ----------------------------
     Hardware.rightFrontCANMotor.setInverted(true);
-    Hardware.rightRearCANMotor.setInverted(true);
+    /// Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
+    // Hardware.leftRearCANMotor.setInverted(false);
     Hardware.armMotor.setInverted(true);
 
 
@@ -1309,8 +1325,8 @@ public static void setHardwareSettings2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightRearDriveEncoder.reset();
-    Hardware.leftRearDriveEncoder.reset();
+    // Hardware.rightRearDriveEncoder.reset();
+    // Hardware.leftRearDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
 

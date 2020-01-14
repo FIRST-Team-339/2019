@@ -32,6 +32,7 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +40,7 @@ import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
 import frc.vision.VisionProcessor.ImageType;
+import java.security.KeyStore.TrustedCertificateEntry;
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
@@ -60,6 +62,10 @@ public class Teleop
  */
 public static void init ()
 {
+    Hardware.rightFrontCANMotor.set(0);
+    Hardware.leftFrontCANMotor.set(0);
+    // Hardware.rightRearCANMotor.set(0);
+    // Hardware.leftRearCANMotor.set(0);
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -208,8 +214,8 @@ public static void initTeleop2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightRearDriveEncoder.reset();
-    Hardware.leftRearDriveEncoder.reset();
+    // Hardware.rightRearDriveEncoder.reset();
+    // Hardware.leftRearDriveEncoder.reset();
     // DO NOT RESET THE LIFT ENCODER
 
     // ---------------------------------
@@ -237,6 +243,17 @@ public static void initTeleop2019 ()
 
 public static void periodic ()
 {
+    if (Hardware.rightDriver.getRawButton(4))
+        {
+        craigBool = false;
+        }
+
+    if (Hardware.rightDriver.getRawButton(3))
+        {
+        craigBool = true;
+        }
+
+
     if (inDemoMode == true)
         {
         // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
@@ -541,7 +558,7 @@ public static void periodic ()
         else
             if (Hardware.retrievalButton.get() == true)
                 {
-                // Hardware.retriever.retrieveHatch();
+                Hardware.retriever.retrieveHatch();
                 }
             else
                 if (true/*
@@ -600,7 +617,7 @@ public static void periodic ()
     // }
     printStatements();
 
-
+    craigTest();
 } // end Periodic()
 
 
@@ -612,7 +629,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
-    // craigTest();
+    craigTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -751,15 +768,12 @@ private static void connerTest ()
 
 private static void craigTest ()
 {
+    // System.out.println("In Craig Test");
 
-    System.out.println("In Craig Test");
+    // Hardware.drive.drive(-Hardware.controllerOne.getY(Hand.kLeft),
+    // -Hardware.controllerOne.getY(Hand.kRight));
 
-    if (Hardware.rightDriver.getRawButton(2))
-        {
 
-        Hardware.drive.pivotTurnDegrees(90, .8, .5, false);
-        System.out.println("It should have turned");
-        }
 
 }// end craigTest()
 
@@ -842,9 +856,9 @@ private static void coleTest ()
 
 } // end coleTest()
 
-private static boolean coleBool1 = false;
+// private static boolean coleBool1 = false;
 
-private static boolean coleBool2 = false;
+// private static boolean coleBool2 = false;
 
 
 private static void guidoTest ()
@@ -1469,10 +1483,25 @@ public static void ringLightFlash (boolean ringLightFlashOn,
  *
  * @author Anna, Meghan, and Patrick.
  */
+public static boolean craigBool = false;
+
 public static void teleopDrive ()
+
 {
-    // System.out.println("reeeeeeeeeeeee");
-    Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+    System.out.println(craigBool);
+    if (craigBool)
+        {
+        System.out.println("testing controller: "
+                + Hardware.controllerOne.getY(Hand.kLeft));
+        Hardware.drive.drive(-Hardware.controllerOne.getY(Hand.kLeft),
+                -Hardware.controllerOne.getY(Hand.kRight));
+        }
+    else
+        {
+        Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+        }
+
+
 
     Hardware.drive.shiftGears(
             Hardware.downshiftButton.get(),
@@ -1505,9 +1534,9 @@ private static final double FIRST_GEAR_RATIO_KILROY_XIX = .5;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 
-public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
+public static final double FIRST_GEAR_RATIO_KILROY_XX = .3;
 
-public static final double SECOND_GEAR_RATIO_KILROY_XX = .6;
+public static final double SECOND_GEAR_RATIO_KILROY_XX = .7;
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 
