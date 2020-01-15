@@ -34,7 +34,7 @@ NetworkTableEntry tshort = limelight.getEntry("tshort");
 // length of longest side
 NetworkTableEntry tlong = limelight.getEntry("tlong");
 
-// horizontal side length(the strongest avenger)
+// horizontal side length (The "strongest" avenger)
 NetworkTableEntry thor = limelight.getEntry("thor");
 
 // vertical side length
@@ -96,7 +96,8 @@ public void updateValues ()
         vertical = tvert.getDouble(0);
         pipeline = getpipe.getDouble(0);
         led_Mode = Led_Mode.getDouble(0);
-        // publishValues();
+        // filterBlobs();
+        publishValues();
         }
     catch (NullPointerException exception)
         {
@@ -166,42 +167,76 @@ public void publishValues ()
     SmartDashboard.putNumber("horizontal ", horizontal);
     SmartDashboard.putNumber("vertical ", vertical);
     SmartDashboard.putNumber("pipeline ", pipeline);
-
     SmartDashboard.putNumber("ledMode", led_Mode);
     // SmartDashboard.putNumber("distance", getDistanceFromTarget());
-
 }
+
+
 
 public boolean hasTargets (double targets)
 {
     if (targets != 0)
         {
+
         return true;
         }
+
     return false;
 
 }
 
+public enum LedMode
+    {
+    PIPELINE, OFF, BLINK, ON
+    }
 
-// TODO make an enum
+public LedMode ledmode = LedMode.PIPELINE;
+
 // @parameters
 // 0 pipeline control
 // 1 off
 // 2 blink
 // 3 on
-public void setLedMode (int mode)
+public void setLedMode (LedMode ledMode)
 {
-    limelight.getEntry("ledMode").setNumber(mode);
+    switch (ledmode)
+        {
+        case PIPELINE:
+            limelight.getEntry("ledMode").setNumber(0);
+            break;
+        case OFF:
+            limelight.getEntry("ledMode").setNumber(1);
+            break;
+        case BLINK:
+            limelight.getEntry("ledMode").setNumber(2);
+            break;
+        case ON:
+            limelight.getEntry("ledMode").setNumber(3);
+            break;
+        }
 }
+
+public enum CamMode
+    {
+    PROCESSOR, CAMERA
+    }
+
+public CamMode camMode = CamMode.PROCESSOR;
 
 // TODO make enum
 // 0 vision processor
 // 1 driver camera
-
 public void setCamMode (int mode)
 {
-    limelight.getEntry("camMode").setNumber(mode);
-
+    switch (camMode)
+        {
+        case PROCESSOR:
+            limelight.getEntry("camMode").setNumber(0);
+            break;
+        case CAMERA:
+            limelight.getEntry("camMode").setNumber(1);
+            break;
+        }
 }
 
 // pipeline number
@@ -215,6 +250,22 @@ public void takePicture ()
     // TODO
 }
 
+public boolean filterPass = true;
+
+public void filterBlobs ()
+{
+
+    if (longSide > 50)
+        {
+        filterPass = false;
+        }
+    else
+        {
+        filterPass = true;
+        }
+
+
+}
 
 
 
@@ -234,10 +285,13 @@ public double getDistanceFromTarget ()
     // / Math.sin(Math.abs(getYOffSet())))
     // * Math.sin(90 - Math.abs(getYOffSet()));
 
-    distance = 16.15 / Math.tan(Math.toRadians(Math.abs(getYOffSet())));
+    // distance = 16.15 / Math.tan(Math.toRadians(Math.abs(getYOffSet())));
+    distance = (CAMERA_HEIGHT - TARGET_HEIGHT)
+            / Math.tan(Math.toRadians(Math.abs(getYOffSet())));
 
     if (hasTargets == true)
         {
+
         return distance;
         }
     else
@@ -246,11 +300,12 @@ public double getDistanceFromTarget ()
         }
 }
 
-final double CAMERA_HEIGHT = 44.5;// TODO
+
+public final double CAMERA_HEIGHT = 42.5;// TODO
 
 final double TARGET_HEIGHT_LOW = 29;// TODO
 
-final double TARGET_HEIGHT_HIGH = 35;// TODO
+final double TARGET_HEIGHT = 94;// TODO
 
 final double MOUNTING_ANGLE = 0;// TODO
 }

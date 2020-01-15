@@ -37,6 +37,10 @@ private String m_autoSelected;
 @Override
 public void robotInit ()
 {
+    // Clear Can
+
+
+
     // ---------------------------------------
     // start setup - tell the user we are beginning
     // setup
@@ -152,6 +156,10 @@ public void autonomousPeriodic ()
 @Override
 public void disabledInit ()
 {
+    Hardware.rightFrontCANMotor.set(0);
+    // Hardware.rightRearCANMotor.set(0);
+    Hardware.leftFrontCANMotor.set(0);
+    // Hardware.leftRearCANMotor.set(0);
     // ---------------------------------------
     // start setup - tell the user we are beginning
     // setup

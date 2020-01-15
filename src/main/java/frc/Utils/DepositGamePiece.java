@@ -74,12 +74,12 @@ public boolean depositHatch (boolean inAuto)
         case DEPOSIT_HATCH:
             // TODO magic number for drive speed
             // drives forward to put the hatch on the velcro
-
+            Hardware.manipulator.setIntakeState(
+                    RollerIntakeMechanism.IntakeState.INTAKE);
             if (this.drive.driveStraightInches(FORWARD_TO_DEPOSIT,
                     .2, BACKUP_ACCELERATION, usingGyro))
                 {
-                Hardware.manipulator.setIntakeState(
-                        RollerIntakeMechanism.IntakeState.INTAKE);
+
                 depositHatchState = DepositHatchState.BACKUP_HATCH;
 
                 }
@@ -88,6 +88,8 @@ public boolean depositHatch (boolean inAuto)
         case PREP_TO_BACKUP:
             if (inAuto)
                 {
+                Hardware.manipulator.setIntakeState(
+                        RollerIntakeMechanism.IntakeState.INTAKE);
                 // lower the arm in auto in order to deposit
                 if (Hardware.manipulator
                         .moveArmToPosition(DEPOSIT_ARM_ANGLE_AUTO))
@@ -98,7 +100,7 @@ public boolean depositHatch (boolean inAuto)
                 }
             else
                 if (depositHeighthatch == 2)
-
+                // TODO wont work
                     {
                     // lower angle to deposit for level 3
                     if (Hardware.manipulator.moveArmToPosition(
@@ -112,6 +114,7 @@ public boolean depositHatch (boolean inAuto)
                     }
                 else
                     {
+                    // TODO wont work
                     // lower the forklift for levels 1 and 2
                     if (Hardware.lift.setLiftPosition(
                             forkliftHeight - 3))
@@ -125,6 +128,11 @@ public boolean depositHatch (boolean inAuto)
             // back up after the hook is clear of the hatch
             Hardware.manipulator.setIntakeState(
                     RollerIntakeMechanism.IntakeState.INTAKE);
+            if (inAuto)
+                {
+                // TODO magic number
+                Hardware.manipulator.moveArmToPosition(40);
+                }
             if (this.drive.driveStraightInches(BACKUP_INCHES,
                     -BACKUP_SPEED, BACKUP_ACCELERATION,
                     usingGyro))
@@ -704,9 +712,9 @@ public final double SAFE_MAN_ANGLE = Hardware.lift.LOWER_ROCKET_HATCH_ANGLE
 
 // Hatch constants======================
 
-private static final int FORWARD_TO_DEPOSIT = 4;
+private static final int FORWARD_TO_DEPOSIT = 6;
 
-private static final double DEPOSIT_ARM_ANGLE_AUTO = 76;
+private static final double DEPOSIT_ARM_ANGLE_AUTO = 70;
 
 // otro constants===========================
 

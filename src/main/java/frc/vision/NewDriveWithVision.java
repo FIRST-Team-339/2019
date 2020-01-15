@@ -14,14 +14,21 @@ public class NewDriveWithVision
 
 
 /**
- * Aligns to vision targets using a one turn system. For use if already mostly.
+ * Aligns to vision targets using a one turn system. For use if already
+ * mostly.
  * Will drive up to deposit distance from the targets.
  *
  * @return
  */
 public boolean driveToTarget ()
 {
-    System.out.println("gotta go fast");
+
+    if (!Hardware.visionInterface.filterPass)
+        {
+        System.out.println("have no blobs. Cannot continue");
+        return true;
+        }
+    System.out.println("aligning non arc");
     double offness = Hardware.visionInterface.getXOffSet();
 
     double adjustmentValueRight = 0;
@@ -29,7 +36,8 @@ public boolean driveToTarget ()
 
     System.out.println("camera distance"
             + Hardware.visionInterface.getDistanceFromTarget());
-    if (Hardware.visionInterface.getDistanceFromTarget() >= 40)
+    if (/* Hardware.visionInterface.getDistanceFromTarget() >= 40 */Hardware.frontUltraSonic
+            .getDistanceFromNearestBumper() > 40)
         {
         System.out.println("driving to target");
 
@@ -87,8 +95,10 @@ boolean setUp = false;
 double initXoff = 0;
 
 /**
- * Aligns to vision targets using a two turn system. The first turn centers the
- * robot on the target if starting from a weird angle. The second turn finishes
+ * Aligns to vision targets using a two turn system. The first turn centers
+ * the
+ * robot on the target if starting from a weird angle. The second turn
+ * finishes
  * the alignment to the target and drive to them.
  *
  * @return
@@ -108,7 +118,7 @@ public boolean driveToTargetArc ()
         setUp = true;
         }
 
-    if (Hardware.visionInterface.getDistanceFromTarget() >= 35)
+    if (Hardware.visionInterface.getDistanceFromTarget() >= 40)
     // TODO check distane with ultra
         {
         if (!secondTurn)

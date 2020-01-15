@@ -782,9 +782,17 @@ public ParticleReport[] getParticleReports ()
 public boolean hasBlobs ()
 {
     // @ANE
-    if (this.getParticleReports().length >= 1)
+    try
         {
-        return true;
+        if (this.getParticleReports().length >= 1)
+            {
+            return true;
+            }
+
+        }
+    catch (Exception e)
+        {
+
         }
 
     return false;

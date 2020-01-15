@@ -32,15 +32,16 @@
 package frc.robot;
 
 import frc.Hardware.Hardware;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Relay.Value;
 // import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Utils.ClimbToLevelTwo;
 import frc.Utils.Forklift;
 import frc.Utils.RetrieveHatch;
-import frc.vision.VisionProcessor;
-// import frc.vision.NewVisionInterface.LedMode;
+import frc.Utils.RetrieveHatch.RetrievalState;
 import frc.vision.VisionProcessor.ImageType;
+import java.security.KeyStore.TrustedCertificateEntry;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.vision.NewVisionInterface;
 
@@ -66,7 +67,10 @@ public class Teleop
  */
 public static void init ()
 {
-
+    Hardware.rightFrontCANMotor.set(0);
+    // Hardware.rightRearCANMotor.set(0);
+    Hardware.leftFrontCANMotor.set(0);
+    // Hardware.leftRearCANMotor.set(0);
     // if (Autonomous.canceledAuto == false)
     // {
     // Hardware.USBCam = CameraServer.getInstance()
@@ -187,6 +191,7 @@ public static void initTeleop2018 ()
  */
 public static void initTeleop2019 ()
 {
+    Hardware.ringLightRelay.set(Value.kOff);
     Hardware.telemetry
             .setTimeBetweenPrints(TELEMETRY_PERIODICITY_KILROY_XX);
 
@@ -201,6 +206,8 @@ public static void initTeleop2019 ()
             FIRST_GEAR_RATIO_KILROY_XX);
     Hardware.drive.setGearPercentage(SECOND_GEAR_NUMBER,
             SECOND_GEAR_RATIO_KILROY_XX);
+    Hardware.drive.setGearPercentage(THIRD_GEAR_NUMBER,
+            THIRD_GEAR_RATIO_KILROY_XX);
     // sets the gear to 0 at the beginning.
     Hardware.drive.setGear(0);
 
@@ -218,8 +225,8 @@ public static void initTeleop2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightRearDriveEncoder.reset();
-    Hardware.leftRearDriveEncoder.reset();
+    // Hardware.rightRearDriveEncoder.reset();
+    // Hardware.leftRearDriveEncoder.reset();
     // DO NOT RESET THE LIFT ENCODER
 
     // ---------------------------------
@@ -228,7 +235,7 @@ public static void initTeleop2019 ()
     // Hardware.rightDriveMotor.set(0);
     // Hardware.leftDriveMotor.set(0);
 
-    // Hardware.manipulator.initiliazeArmPositonAverage();
+
     Hardware.lift.resetStateMachine();
     Hardware.manipulator.resetStateMachine();
 } // end initTeleop2019()
@@ -248,10 +255,14 @@ public static boolean doThing = false;
 
 public static void periodic ()
 {
-    Hardware.visionInterface.updateValues();
 
-    // System.out.println(
-    // "Demo mode sw = " + Hardware.demoModeSwitch.isOn());
+
+
+    if (Hardware.usingLime)
+        {
+        // System.out.println("updating");
+        Hardware.visionInterface.updateValues();
+        }
     if (inDemoMode == true)
         {
         // Hardware.drive.setGearPercentage(FIRST_GEAR_NUMBER,
@@ -427,17 +438,22 @@ public static void periodic ()
 
         Hardware.climber.newClimbUpdate();
 
-        Hardware.depositGamePiece.depositTeleopStateMachine();
+        // Hardware.depositGamePiece.depositTeleopStateMachine();
+        }
+    if (Math.abs(Hardware.leftOperator.getY()) > .2
+            || Math.abs(Hardware.rightOperator.getY()) > .2)
+        {
+        Hardware.retriever.retrievalState = RetrievalState.STANDBY;
         }
     // debug =============================
     // Hardware.depositGamePiece.printDebugStatements();// TODO comment out
     Hardware.manipulator.printDeployDebugInfo();
-    // Hardware.lift.printDebugInfo();
+    Hardware.lift.printDebugInfo();
     // System.out.println(
     // "delay potentiometer = " + Hardware.delayPot.get(0, 5.0));
     // debug =====================================================
 
-    if (inDemoMode == false)
+    if (inDemoMode == false)// TODO
         {
         // vision=======================================================
         // 8 and 9visionHeightDownButton
@@ -473,17 +489,15 @@ public static void periodic ()
             // TODO make work
             doThing = false;
             }
-        // align===================================
-        if (Hardware.leftOperator.getRawButton(4) == true)
-            {
-            doThing = true;
-            }
-        if (Hardware.leftOperator.getRawButton(4) || doThing == true)
-        /* && Hardware.depositGamePiece.overrideVision() == false */
+
+
+
+        if (Hardware.alignAndStopButton.isOnCheckNow() == true
+                && Hardware.depositGamePiece.overrideVision() == false)
             {
             if (Hardware.visionDriving.driveToTarget())
                 {
-                doThing = false;
+                Hardware.alignAndStopButton.setValue(false);
                 }
             }
         else
@@ -504,159 +518,158 @@ public static void periodic ()
         // Hardware.depositGamePiece.resetDepositTeleop();
         // }
 
-        // if (Hardware.alignAndStopButton.isOnCheckNow() == true
-        // && Hardware.depositGamePiece.overrideVision() == false)
-        // {
-        // if (Hardware.retriever.alignWithVision(.1))
-        // {
-        // Hardware.alignAndStopButton.setValue(false);
-        // }
-        // }
-        // if (Hardware.alignAndStopButton.isOnCheckNow() == false
-        // && Hardware.alignVisionButton.isOnCheckNow() == false)
-        // {
-        // Hardware.driveWithCamera.state =
-        // Hardware.driveWithCamera.state.INIT;
-        // }
+        }
+    // end vision==============================================
 
 
-        // end vision==============================================
+    // end vision==============================================
 
-        // buttons
+    // buttons
 
-        // buttons to cancel everything ===========================
-        if (Hardware.cancelTwoButton.get() == true
-                && Hardware.cancelOneButton.get() == true)
+    // buttons to cancel everything ===========================
+    if (Hardware.cancelTwoButton.get() == true
+            && Hardware.cancelOneButton.get() == true)
+        {
+        // Hardware.retriever.stopRetrieveHatch();
+        Hardware.climber.finishEarly();
+        Autonomous.endAutoPath();
+        Hardware.lift.resetStateMachine();
+        Hardware.manipulator.resetStateMachine();
+        } // end if
+
+    if (inDemoMode == false)
+        {
+        if (Hardware.cancelAutoLeftDriver.get() == true
+                && Hardware.cancelAutoRightDriver.get() == true)
             {
-            // Hardware.retriever.stopRetrieveHatch();
             Hardware.climber.finishEarly();
-            Autonomous.endAutoPath();
-            Hardware.lift.resetStateMachine();
-            Hardware.manipulator.resetStateMachine();
-            } // end if
+            // Hardware.retriever.stopRetrieveHatch();
 
-        if (inDemoMode == false)
-            {
-            if (Hardware.cancelAutoLeftDriver.get() == true
-                    && Hardware.cancelAutoRightDriver.get() == true)
-                {
-                Hardware.climber.finishEarly();
-                // Hardware.retriever.stopRetrieveHatch();
-
-                }
             }
-        // Buttons to reset the forklift encoder. Should never be called during
-        // a match; only is in the final code for the purpsoe of speeding up
-        // testing in the pits
+        }
+    // Buttons to reset the forklift encoder. Should never be called during
+    // a match; only is in the final code for the purpsoe of speeding up
+    // testing in the pits
 
-        if (inDemoMode == false)
+    if (inDemoMode == false)
+        {
+        if (Hardware.resetForkliftEncoderButton1.get() == true
+                && Hardware.resetForkliftEncoderButton2
+                        .get() == true)
             {
-            if (Hardware.resetForkliftEncoderButton1.get() == true
-                    && Hardware.resetForkliftEncoderButton2
-                            .get() == true)
-                {
-                Hardware.lift.resetEncoder();
-                }
-
-
-
-            takePicture();
+            Hardware.lift.resetEncoder();
             }
 
-        individualTest();
-        // Hardware.telemetry.printToShuffleboard();
 
-        // Hardware.telemetry.printToConsole();
 
-        if (inDemoMode == false)
-            {
-            if (Hardware.climbOneButton.get() == true
-            /* && Hardware.climbTwoButton.get() == true */)
-            // if (Hardware.leftDriver.getRawButton(6) == true)
-                {
-                // Hardware.climber.climb();
-                Hardware.climber.newClimb();
-                }
-            else
-                if (Hardware.rightDriver.getRawButton(12) == true)
-                    {
-                    Hardware.climber.skipStepClimb();
-                    }
-            }
-
-        if (inDemoMode == false)
-            {
-            if (Hardware.driveStraightButton.get() == true)
-                {
-                Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
-                        Autonomous.ACCELERATION_TIME,
-                        Autonomous.USING_GYRO);
-
-                }
-            else
-                if (Hardware.retrievalButton.get() == true)
-                    {
-                    // Hardware.retriever.retrieveHatch();
-                    }
-                else
-                    if (true/*
-                             * (Hardware.alignVisionButton.get() == false
-                             * || Hardware.depositGamePiece.overrideVision())
-                             * &&
-                             * (Hardware.alignAndStopButton
-                             * .isOnCheckNow() == false
-                             * || Hardware.depositGamePiece
-                             * .overrideVision())
-                             */)
-                        {
-                        if (ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STANDBY
-                                ||
-                                ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.STOP
-                                || ClimbToLevelTwo.newClimbState == ClimbToLevelTwo.NewClimberState.FINISH)
-                            {
-                            // System.out.println("TELEOP DRIVE");
-                            // SmartDashboard.putString("printDriveType",
-                            // "TELEOP DRIVE");
-                            // teleopDrive();//TODO
-                            if (Hardware.solenoidButtonOne
-                                    .isOnCheckNow() == true
-                                    && Hardware.solenoidButtonTwo
-                                            .isOnCheckNow() == true)
-                                {
-                                Hardware.driveSolenoid
-                                        .setForward(false);
-                                }
-                            else
-                                {
-                                Hardware.driveSolenoid.setForward(true);
-                                }
-                            }
-                        }
-            }
-        else
-            {
-            // teleopDrive();/TODO
-            }
-
-        if (inDemoMode == false)
-            {
-            if (Hardware.frontUltraSonic
-                    .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                    &&
-                    Hardware.frontUltraSonic
-                            .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
-                                    + 12.0)
-                {
-                // ringLightFlash(true, .5);
-                }
-            else
-                {
-                // ringLightFlash(false, .5);
-                }
-            }
-        printStatements();
+        takePicture();
         }
 
+    individualTest();
+    // Hardware.telemetry.printToShuffleboard();
+
+    // Hardware.telemetry.printToConsole();
+
+    if (inDemoMode == false)
+        {
+        if (Hardware.climbOneButton.get() == true
+        /* && Hardware.climbTwoButton.get() == true */)
+        // if (Hardware.leftDriver.getRawButton(6) == true)
+            {
+            // Hardware.climber.climb();
+            Hardware.climber.newClimb();
+            }
+        else
+            if (Hardware.rightDriver.getRawButton(12) == true)
+                {
+                Hardware.climber.skipStepClimb();
+                }
+        }
+
+    if (inDemoMode == false)
+        {
+        Hardware.drive.driveStraight(.2 * DRIVE_SPEED,
+                Autonomous.ACCELERATION_TIME,
+                Autonomous.USING_GYRO);
+
+        }
+    else
+        if (Hardware.retrievalButton.isOnCheckNow()
+                && ((Math.abs(Hardware.leftOperator.getY()) < .1)
+                        || Math.abs(Hardware.rightOperator
+                                .getY()) < .1))
+            {
+            // Hardware.retriever.retrieveHatch();
+            if (Hardware.retriever.prepareArmPositions())
+                {
+                Hardware.retrievalButton.setValue(false);
+                }
+            }
+        else
+            if (Hardware.retrievalButton.get() == true)
+                {
+                // Hardware.retriever.retrieveHatch();
+                }
+            else
+                if (true/*
+                         * (Hardware.alignVisionButton.get() == false
+                         * || Hardware.depositGamePiece.overrideVision())
+                         * &&
+                         * (Hardware.alignAndStopButton
+                         * .isOnCheckNow() == false
+                         * || Hardware.depositGamePiece
+                         * .overrideVision())
+                         */)
+                    {
+
+                    if (Hardware.solenoidButtonOne
+                            .isOnCheckNow() == true
+                            && Hardware.solenoidButtonTwo
+                                    .isOnCheckNow() == true)
+                        {
+
+                        // teleopDrive();//TODO
+                        if (Hardware.solenoidButtonOne
+                                .isOnCheckNow() == true
+                                && Hardware.solenoidButtonTwo
+                                        .isOnCheckNow() == true)
+                            {
+                            Hardware.driveSolenoid
+                                    .setForward(false);
+                            }
+                        else
+                            {
+                            Hardware.driveSolenoid.setForward(true);
+                            }
+                        }
+                    }
+                else
+                    {
+                    // teleopDrive();
+                    }
+
+
+
+
+    // if (inDemoMode == false)
+    // {
+    // if (Hardware.frontUltraSonic
+    // .getDistanceFromNearestBumper() >= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    // &&
+    // Hardware.frontUltraSonic
+    // .getDistanceFromNearestBumper() <= RetrieveHatch.DISTANCE_TO_RETRIEVE
+    // + 12.0)
+    // {
+    // //ringLightFlash(true, .5);
+    // }
+    // else
+    // {
+    // // ringLightFlash(false, .5);
+    // }
+    // }
+    printStatements();
+
+    craigTest();
 } // end Periodic()
 
 
@@ -668,6 +681,7 @@ private static void individualTest ()
 {
     // ashleyTest();
     // connerTest();
+    craigTest();
     // coleTest();
     // guidoTest();
     // patrickTest();
@@ -812,8 +826,21 @@ private static void connerTest ()
 
 } // end connerTest()
 
+private static void craigTest ()
+{
+    // System.out.println("In Craig Test");
+
+    // Hardware.drive.drive(-Hardware.controllerOne.getY(Hand.kLeft),
+    // -Hardware.controllerOne.getY(Hand.kRight));
+
+
+
+}// end craigTest()
+
 private static void coleTest ()
 {
+
+
 
 
     // TODO retest forklift with the new way the scaling factor works
@@ -889,9 +916,9 @@ private static void coleTest ()
 
 } // end coleTest()
 
-private static boolean coleBool1 = false;
+// private static boolean coleBool1 = false;
 
-private static boolean coleBool2 = false;
+// private static boolean coleBool2 = false;
 
 
 private static void guidoTest ()
@@ -987,6 +1014,7 @@ private static void patrickTest ()
     // }
 } // end patrickTest()
 
+
 private static void annaTest ()
 {
 
@@ -1014,6 +1042,10 @@ public static void printStatements ()
 {
     if (Hardware.driverStation.isFMSAttached() == false)
         {
+        // Hardware.ringLightRelay.set(Value.kOn);
+        // SmartDashboard.putNumber("camera offness raw",
+        //         Hardware.driveWithCamera.getCameraCenterValue());
+
 
         // ==================================
         // Scale Alignment
@@ -1317,8 +1349,8 @@ public static void printStatements ()
 
         // System.out.println("Intake deploy sensor: "
         // + Hardware.armPot.get());
-        // SmartDashboard.putNumber("Arm Pot sensor: ",
-        // Hardware.armPot.get());
+        SmartDashboard.putNumber("Arm Pot sensor: ",
+                Hardware.armPot.get());
         // Hardware.telemetry.printToConsole("Intake deploy sensor: "
         // + Hardware.intakeDeploySensor.get());
 
@@ -1328,9 +1360,10 @@ public static void printStatements ()
 
         // System.out.println("ultrasonic " + Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
-        // SmartDashboard.putNumber("F ultrasonic: ",
-        // Hardware.frontUltraSonic
-        // .getDistanceFromNearestBumper());
+        SmartDashboard.putNumber("F ultrasonic: ",
+                Hardware.frontUltraSonic
+                        .getDistanceFromNearestBumper());
+
         // Hardware.telemetry.printToConsole("ultrasonic " +
         // Hardware.frontUltraSonic
         // .getDistanceFromNearestBumper());
@@ -1352,7 +1385,7 @@ public static void printStatements ()
         // ---------------------------------
 
         // System.out.println("Gyro: " + Hardware.gyro.getAngle());
-        // SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
+        SmartDashboard.putNumber("Gyro: ", Hardware.gyro.getAngle());
         // Hardware.telemetry.printToConsole("Gyro: " +
         // Hardware.gyro.getAngle());
 
@@ -1435,11 +1468,30 @@ public static void takePicture ()
             pictureButton1 = true;
             pictureButton2 = true;
             Hardware.takePictureTimer.reset();
-            Hardware.ringLightRelay.set(Value.kOn);
+            // Hardware.ringLightRelay.set(Value.kOn);//TODO
             firstPress = false;
             Hardware.takePictureTimer.start();
             }
         // Takes a picture after 1 second of the ring light relay being on
+        if (Hardware.takePictureTimer.get() >= 1.0
+                && imageTaken == false)
+            {
+
+            // Hardware.axisCamera.saveImage(ImageType.RAW);
+            // Hardware.axisCamera.saveImage(ImageType.PROCESSED);
+            // TODO
+
+            imageTaken = true;
+            }
+        // If three seconds have passed resets all variables used and turns off
+        // ring light relay
+        if (Hardware.takePictureTimer.get() >= 3.0)
+            {
+            // Hardware.ringLightRelay.set(Value.kOff);
+            firstPress = true;
+            pictureButton1 = false;
+            pictureButton2 = false;
+            }
 
 
         imageTaken = true;
@@ -1485,7 +1537,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
             }
         if (Hardware.ringLightTimer.get() >= ringLightFlashDelay)
             {
-            Hardware.ringLightRelay.set(Value.kOn);
+            // Hardware.ringLightRelay.set(Value.kOn);//TODO
             }
         if (Hardware.ringLightTimer.get() >= 2 * ringLightFlashDelay)
             {
@@ -1498,7 +1550,7 @@ public static void ringLightFlash (boolean ringLightFlashOn,
         }
     else
         {
-        Hardware.ringLightRelay.set(Value.kOn);
+        Hardware.ringLightRelay.set(Value.kOff);
         }
 }
 
@@ -1510,20 +1562,47 @@ public static void ringLightFlash (boolean ringLightFlashOn,
  *
  * @author Anna, Meghan, and Patrick.
  */
+public static boolean craigBool = false;
+
 public static void teleopDrive ()
+
 {
+
+    if (Hardware.demoMode == false)
+        {
+        if (Hardware.rightDriver.getRawButton(3))
+            {
+            Hardware.drive.setGear(2);
+            }
+        else
+            {
+            SmartDashboard.putNumber("current gear",
+                    Hardware.drive.getCurrentGear());
+            SmartDashboard.putNumber("Current motor power",
+                    Hardware.leftFrontCANMotor.get());
+            }
+        }
+
+
     // System.out.println("reeeeeeeeeeeee");
-    Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
+
+    // CRAIG COMMENT THIS BACK
+    // Hardware.drive.drive(Hardware.leftDriver, Hardware.rightDriver);
 
     Hardware.drive.shiftGears(
             Hardware.downshiftButton.get(),
             Hardware.upshiftButton.get());
 
     // makes sure the gear never goes over 2
-    if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+    if (Hardware.rightDriver.getRawButton(3) && !inDemoMode)
         {
-        Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
-        } // end if
+        Hardware.drive.setGear(2);
+        }
+    else
+        if (Hardware.drive.getCurrentGear() >= MAX_GEAR_NUMBERS)
+            {
+            Hardware.drive.setGear(MAX_GEAR_NUMBERS - 1);
+            } // end if
 } // end teleopDrive()
 
 
@@ -1532,7 +1611,7 @@ public static void teleopDrive ()
 // Constants
 // ================================
 
-private static boolean inDemoMode = Hardware.demoMode;
+private static boolean inDemoMode = Hardware.demoModeSwitch.isOn();
 
 // The number of gears we want to not go over. There is no reason to make this
 // more than 3 unless the code is fixed. Thanks McGee.
@@ -1542,13 +1621,17 @@ public static final int FIRST_GEAR_NUMBER = 0;
 
 public static final int SECOND_GEAR_NUMBER = 1;
 
+public static final int THIRD_GEAR_NUMBER = 2;
+
 private static final double FIRST_GEAR_RATIO_KILROY_XIX = .5;
 
 private static final double SECOND_GEAR_RATIO_KILROY_XIX = 1.0;
 
-public static final double FIRST_GEAR_RATIO_KILROY_XX = .4;
+public static final double FIRST_GEAR_RATIO_KILROY_XX = .3;
 
-public static final double SECOND_GEAR_RATIO_KILROY_XX = .6;
+public static final double SECOND_GEAR_RATIO_KILROY_XX = .7;
+
+public static final double THIRD_GEAR_RATIO_KILROY_XX = 1.0;
 
 private static final int TELEMETRY_PERIODICITY_KILROY_XIX = 1000;
 

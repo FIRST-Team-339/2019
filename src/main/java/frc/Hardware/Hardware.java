@@ -34,7 +34,6 @@ import frc.vision.NewDriveWithVision;
 import frc.vision.NewVisionInterface;
 import frc.vision.VisionProcessor;
 import frc.vision.VisionProcessor.CameraModel;
-import frc.vision.NewVisionInterface;
 import frc.HardwareInterfaces.Transmission.TankTransmission;
 import frc.Utils.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -53,6 +52,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+
+
 
 /**
  * ------------------------------------------------------- puts all of the
@@ -81,10 +84,12 @@ public static final RobotYear whichRobot = RobotYear.TEST_BOARD;
 // Private Constants
 // -------------------------------------
 
-// ---------------------------------------
+// ---------------------------------------%
 // Hardware Tunables
 // ---------------------------------------
 public static boolean demoMode = false;
+
+public static boolean usingLime = true;
 
 public static int DEMO_MAX_FORK = 40;
 
@@ -128,10 +133,10 @@ public static SpeedController rightFrontCANMotor = null;
 public static SpeedController leftFrontCANMotor = null;
 
 /** The right rear drive motor */
-public static SpeedController rightRearCANMotor = null;
+// public static SpeedController rightRearCANMotor = null;
 
 /** The left rear drive motor */
-public static SpeedController leftRearCANMotor = null;
+// public static SpeedController leftRearCANMotor = null;
 
 public static SpeedController armRoller = null;
 
@@ -174,9 +179,9 @@ public static KilroyEncoder leftFrontDriveEncoder = null;
 
 public static KilroyEncoder rightFrontDriveEncoder = null;
 
-public static KilroyEncoder leftRearDriveEncoder = null;
+// public static KilroyEncoder leftRearDriveEncoder = null;
 
-public static KilroyEncoder rightRearDriveEncoder = null;
+// public static KilroyEncoder rightRearDriveEncoder = null;
 
 public static KilroyEncoder liftingEncoder = null;
 
@@ -250,6 +255,15 @@ public static DoubleSolenoid driveSolenoid = null;
 // --------------------------------------
 // Potentiometers
 // --------------------------------------
+// Wiring diagram for Potentiometers
+//
+// on the RV4NAYSD104A potentiometer, resistance is 100k, manufactuare PEC
+// digikey.com/product-detail/en/precion-electronics-corporation/RV4NAYSD104A/RV4N104C-NS/222811
+// metal tabs facing away, shaft pointing at you
+// power on left tab, five volts on RIO, red
+// signal in the middle tab, white
+// ground on the right tab, black
+
 public static RobotPotentiometer delayPot = null;
 
 public static RobotPotentiometer armPot = null;
@@ -280,7 +294,8 @@ public static KilroySPIGyro gyro = null;
 // -------------------------------------
 // Axis/USB Camera class
 // -------------------------------------
-// public static VisionProcessor axisCamera = null;
+public static VisionProcessor axisCamera = null;
+
 
 
 public static NewDriveWithVision visionDriving = null;
@@ -320,6 +335,10 @@ public static Joystick rightDriver = null;
 public static Joystick leftOperator = null;
 
 public static Joystick rightOperator = null;
+
+public static XboxController controllerOne = null;
+
+public static XboxController controllerTwo = null;
 
 // ------------------------------------
 // Buttons classes and Quick Switches
@@ -418,7 +437,9 @@ public static JoystickButton cancelTwoButton = null;
 
 public static JoystickButton cancelAutoRightDriver = null;
 
-public static JoystickButton retrievalButton = null;
+// public static JoystickButton retrievalButton = null;
+
+public static MomentarySwitch retrievalButton = null;
 // **********************************************************
 // Kilroy's Ancillary classes
 // **********************************************************
@@ -474,8 +495,6 @@ public static DepositGamePiece depositGamePiece = null;
 public static RetrieveHatch retriever = null;
 
 
-
-public static NewVisionInterface vision = null;
 // ====================================
 // Methods
 // ====================================
@@ -492,7 +511,8 @@ public static void initialize ()
     // and 2019. Make them only once
     // ---------------------------
 
-
+    // if (usingLime == false)
+    // {
     switch (whichRobot)
         {
         case KILROY_2018:
@@ -502,6 +522,8 @@ public static void initialize ()
 
         default:
         case KILROY_2019:
+            controllerOne = new XboxController(5);
+            controllerTwo = new XboxController(6);
             axisCameraIp = "10.3.39.11";
             robotInitialize2019();
             break;
@@ -509,16 +531,17 @@ public static void initialize ()
         case TEST_BOARD:
             break;
         } // end switch
-          // ------------------------
-          // The function calls in commonKilroyAncillary
-          // must follow all other hardware declarations
-          // -------------------------
+    // }
+    // ------------------------
+    // The function calls in commonKilroyAncillary
+    // must follow all other hardware declarations
+    // -------------------------
     commonInitialization();
 } // end initialize()
 
 public static void commonInitialization ()
 {
-    vision = new NewVisionInterface();
+    visionInterface = new NewVisionInterface();
 
     // **********************************************************
     // DIGITAL I/O CLASSES
@@ -644,15 +667,14 @@ public static void commonInitialization ()
     // **********************************************************
 
     // Axis/USB Camera class
-
-    // axisCamera = new VisionProcessor(axisCameraIp,
-    // CameraModel.AXIS_M1013,
-    // ringLightRelay);
-
-
+    if (!usingLime)
+        {
+        axisCamera = new VisionProcessor(axisCameraIp,
+                CameraModel.AXIS_M1013,
+                ringLightRelay);
+        }
     visionInterface = new NewVisionInterface();
     visionDriving = new NewDriveWithVision();
-
 
 
 
@@ -754,8 +776,8 @@ public static void commonInitialization ()
 
     // solenoidButtonTwo = new MomentarySwitch(leftDriver, 8, false);
 
-    // retrievalButton = new JoystickButton(leftDriver, 9);// fix button
-    // // yeeeeeeeeeeee
+    retrievalButton = new MomentarySwitch(leftDriver, 9, false);// fix button
+    // yeeeeeeeeeeee
 
     // climbOneButton = new JoystickButton(leftDriver, 11);
 
@@ -809,12 +831,18 @@ public static void commonInitialization ()
 
     // telemetry = new Telemetry(10000);
 
-    // // Transmission class
-    // transmission = new TankTransmission(
-    // new SpeedControllerGroup(leftFrontCANMotor,
-    // leftRearCANMotor),
-    // new SpeedControllerGroup(rightFrontCANMotor,
-    // rightRearCANMotor));
+    // Transmission class
+    transmission = new TankTransmission(
+            new SpeedControllerGroup(leftFrontCANMotor
+            /*
+             * ,leftRearCANMotor
+             */
+            ),
+            new SpeedControllerGroup(rightFrontCANMotor
+            /*
+             * ,rightRearCANMotor
+             */
+            ));
 
     // // ------------------------------------
     // // Drive system
@@ -873,23 +901,25 @@ public static void robotInitialize2018 ()
     // ----- Talon classes -----
     // ----- Victor classes -----
 
-    armMotor = new VictorSP(4);
+    armMotor = new WPI_TalonSRX(4);
 
     // ----- Servo classes -----
 
     // ====================================
     // CAN classes
     // ====================================
-    liftMotor = new WPI_TalonSRX(23);
+    liftMotor = new WPI_TalonSRX(18);
 
-    rightFrontCANMotor = new WPI_TalonSRX(14);
+    rightFrontCANMotor = new WPI_TalonSRX(23);// 14
 
-    leftFrontCANMotor = new WPI_TalonSRX(11);
+    leftFrontCANMotor = new WPI_TalonSRX(7);// 11
 
-    rightRearCANMotor = new WPI_TalonSRX(15);
+    // rightRearCANMotor = new WPI_TalonSRX(6);// 15
 
-    leftRearCANMotor = new WPI_TalonSRX(13);
+    // leftRearCANMotor = new WPI_TalonSRX(9);// 13
 
+    // leftRearCANMotor = new WPI_TalonSRX(13);
+    // TODO
     armRoller = new WPI_TalonSRX(10);
 
     // ====================================
@@ -1016,15 +1046,15 @@ public static void robotInitialize2019 ()
 
     liftMotor = new WPI_TalonSRX(23);
 
-    rightFrontCANMotor = new CANSparkMax(14, MotorType.kBrushless);
+    rightFrontCANMotor = new CANSparkMax(15, MotorType.kBrushless);// 14
 
-    leftFrontCANMotor = new CANSparkMax(11, MotorType.kBrushless);
+    leftFrontCANMotor = new CANSparkMax(13, MotorType.kBrushless);// 11
 
-    rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
+    // rightRearCANMotor = new CANSparkMax(15, MotorType.kBrushless);
 
-    leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
+    // leftRearCANMotor = new CANSparkMax(13, MotorType.kBrushless);
 
-    armRoller = new WPI_TalonSRX(10);
+    armRoller = new WPI_TalonSRX(0);
 
     // ====================================
     // Relay classes
@@ -1040,17 +1070,18 @@ public static void robotInitialize2019 ()
     // Gear Tooth Sensors
 
     // Encoders
+
     leftFrontDriveEncoder = new KilroyEncoder(
             (CANSparkMax) leftFrontCANMotor);
 
     rightFrontDriveEncoder = new KilroyEncoder(
             (CANSparkMax) rightFrontCANMotor);
 
-    leftRearDriveEncoder = new KilroyEncoder(
-            (CANSparkMax) leftRearCANMotor);
+    // leftRearDriveEncoder = new KilroyEncoder(
+    // (CANSparkMax) leftRearCANMotor);
 
-    rightRearDriveEncoder = new KilroyEncoder(
-            (CANSparkMax) rightRearCANMotor);
+    // rightRearDriveEncoder = new KilroyEncoder(
+    // (CANSparkMax) rightRearCANMotor);
 
     liftingEncoder = new KilroyEncoder((BaseMotorController) liftMotor);
 
@@ -1106,9 +1137,7 @@ public static void robotInitialize2019 ()
     // **********************************************************
 
     // Axis/USB Camera class
-    // axisCamera = new VisionProcessor(axisCameraIp,
-    // CameraModel.AXIS_M1013,
-    // ringLightRelay);
+
 
     // -------------------------------------
     // declare the USB camera server and the
@@ -1229,10 +1258,11 @@ public static void setHardwareSettings2018 ()
     // ----------------------------
     // motor initialization
     // ----------------------------
+
     Hardware.rightFrontCANMotor.setInverted(true);
-    Hardware.rightRearCANMotor.setInverted(true);
+    // Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
+    // Hardware.leftRearCANMotor.setInverted(false);
 
     // ---------------------------
     // Encoder Initialization
@@ -1279,18 +1309,19 @@ public static void setHardwareSettings2019 ()
     // motor initialization
     // ----------------------------
     Hardware.rightFrontCANMotor.setInverted(true);
-    Hardware.rightRearCANMotor.setInverted(true);
+    /// Hardware.rightRearCANMotor.setInverted(true);
     Hardware.leftFrontCANMotor.setInverted(false);
-    Hardware.leftRearCANMotor.setInverted(false);
+    // Hardware.leftRearCANMotor.setInverted(false);
     Hardware.armMotor.setInverted(true);
 
 
     // ---------------------------
     // Encoder Initialization
     // ---------------------------
-    // Hardware.rightFrontDriveEncoder.setReverseDirection(false);
-    // Hardware.leftFrontDriveEncoder.setReverseDirection(false);
+    Hardware.rightFrontDriveEncoder.setReverseDirection(false);
+    Hardware.leftFrontDriveEncoder.setReverseDirection(false);
     // Hardware.rightRearDriveEncoder.setReverseDirection(false);
+
     // Hardware.leftRearDriveEncoder.setReverseDirection(false);
     // Hardware.liftingEncoder.setReverseDirection(false);
 
@@ -1301,10 +1332,10 @@ public static void setHardwareSettings2019 ()
             .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
     Hardware.rightFrontDriveEncoder
             .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    Hardware.leftFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
-    Hardware.rightFrontDriveEncoder
-            .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.leftRearDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
+    // Hardware.rightRearDriveEncoder
+    // .setDistancePerPulse(KILROY_XX_DRIVE_ENCODER_DPP);
     Hardware.liftingEncoder
             .setDistancePerPulse(KILROY_XX_LIFT_ENCODER_DPP);
 
@@ -1313,8 +1344,8 @@ public static void setHardwareSettings2019 ()
     // -------------------------------------
     Hardware.rightFrontDriveEncoder.reset();
     Hardware.leftFrontDriveEncoder.reset();
-    Hardware.rightRearDriveEncoder.reset();
-    Hardware.leftRearDriveEncoder.reset();
+    // Hardware.rightRearDriveEncoder.reset();
+    // Hardware.leftRearDriveEncoder.reset();
     Hardware.liftingEncoder.reset();
 
 

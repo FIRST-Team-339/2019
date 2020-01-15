@@ -347,6 +347,7 @@ public boolean setLiftPosition (double position, double forkliftSpeed)
 
 public boolean setLiftPositionPrecise (double height, double speed)
 {
+    System.out.println("movign fork");
     if (forkliftTargetHeight != height)
         setPositionPreciseInit = true;
 
@@ -651,119 +652,132 @@ public void update ()
         if (Hardware.demoMode == false)
             {
             if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
-                this.manipulator
-                        .setMaxArmAngle(
-                                manipulator.MAX_ARM_POSITION_ADJUSTED);
-            // else
-            // if (this.getForkliftHeight() < PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
-            // this.manipulator.setMaxArmAngle(
-            // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
-            else
-                if (this.getForkliftHeight() < HIGHER_ARM_ANGLE_LIMIT_HEIGHT)
+                // if (Hardware.demoMode == false)
+                // {
+                if (this.getForkliftHeight() < LIMIT_ARM_ANGLE_HEIGHT)
                     this.manipulator
                             .setMaxArmAngle(
-                                    manipulator.MAX_FORKLIFT_UP_ANGLE);
+                                    manipulator.MAX_ARM_POSITION_ADJUSTED);
+                // else
+                // if (this.getForkliftHeight() <
+                // PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
+                // this.manipulator.setMaxArmAngle(
+                // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
                 else
-                    this.manipulator
-                            .setMaxArmAngle(
-                                    manipulator.HIGHER_MAX_FORKLIFT_UP_ANGLE);
+                    if (this.getForkliftHeight() < HIGHER_ARM_ANGLE_LIMIT_HEIGHT)
+                        this.manipulator
+                                .setMaxArmAngle(
+                                        manipulator.MAX_ARM_POSITION_ADJUSTED);
+                    // else
+                    // if (this.getForkliftHeight() <
+                    // PARTIALLY_LIMIT_ARM_ANGLE_HEIGHT)
+                    // this.manipulator.setMaxArmAngle(
+                    // manipulator.FORKLIFT_PARTIALLY_UP_MAX_ANGLE);
+                    else
+                        this.manipulator
+                                .setMaxArmAngle(
+                                        manipulator.HIGHER_MAX_FORKLIFT_UP_ANGLE);
+            // }
             }
-        }
 
-    if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
-        setPositionPreciseInit = true;
+        if (this.liftState != ForkliftState.MOVING_TO_POSITION_PRECISE)
+            setPositionPreciseInit = true;
 
 
-    // main switch statement for the forklift state machine
-    switch (liftState)
-        {
-        case MOVING_TO_POSITION:
-            // Make sure we are not trying to move past the MAX or MIN position
-            if ((this.forkliftTargetHeight > currentLiftMaxHeight)
-                    || (this.forkliftTargetHeight < currentLiftMinHeight))
-                {
+        // main switch statement for the forklift state machine
+        switch (liftState)
+            {
+            case MOVING_TO_POSITION:
+                // Make sure we are not trying to move past the MAX or MIN
+                // position
+                if ((this.forkliftTargetHeight > currentLiftMaxHeight)
+                        || (this.forkliftTargetHeight < currentLiftMinHeight))
+                    {
+                    liftState = ForkliftState.STAY_AT_POSITION;
+                    break;
+                    }
+
+                // Begins by stating whether we are increasing or decreasing
+                if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
+                    {
+                    if (forkliftTargetHeight < this.getForkliftHeight())
+                        forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
+                    else
+                        forkliftDirection = ForkliftDirectionState.MOVING_UP;
+                    }
+
+                // Differentiate moving up from down
+                if (forkliftDirection == ForkliftDirectionState.MOVING_UP)
+                    {
+                    // If we have passed the value we wanted...
+                    if (this.getForkliftHeight() > forkliftTargetHeight)
+                        {
+                        liftState = ForkliftState.STAY_AT_POSITION;
+                        // Reset the direction for next time.
+                        forkliftDirection = ForkliftDirectionState.NEUTRAL;
+                        break;
+                        }
+                    // we have NOT passed the value , keep going up.
+                    this.forkliftMotor.set(forkliftTargetSpeed);
+
+                    }
+                else
+                    {
+                    // If we have passed the value we wanted...
+                    if (this.getForkliftHeight() < forkliftTargetHeight)
+                        {
+                        liftState = ForkliftState.STAY_AT_POSITION;
+                        // Reset the direction for next time.
+                        forkliftDirection = ForkliftDirectionState.NEUTRAL;
+                        break;
+                        }
+                    // we have NOT passed the value , keep going down.
+                    this.forkliftMotor.set(-forkliftTargetSpeed);
+                    }
+
+                break;
+
+            case MOVING_TO_POSITION_PRECISE:
+                this.movingToPositionPreciseState();
+                break;
+
+            case MOVE_JOY:
+                setLiftPositionInit = true;
+                this.forkliftMotor.set(forkliftTargetSpeed);
+                // If we are no longer holding the joystick, then it will
+                // automatically stay at position. If we are holding the
+                // joysticks,
+                // then other functions will set liftState back to MOVE_JOY
+                // before
+                // we get back here
                 liftState = ForkliftState.STAY_AT_POSITION;
                 break;
-                }
+            default:
+                // print out we reached the default case (which we shouldn't
+                // have),
+                // then fall through to STAY_AT_POSITION
+                // System.out.println(
+                // "Reached default in the liftState switch in "
+                // + "forkliftUpdate in Forklift");
+            case STAY_AT_POSITION:
+                // If the manipulator has a cargo piece, send the appropriate
+                // value to the motor so the forklift does not slide down due to
+                // gravity
 
-            // Begins by stating whether we are increasing or decreasing
-            if (forkliftDirection == ForkliftDirectionState.NEUTRAL)
-                {
-                if (forkliftTargetHeight < this.getForkliftHeight())
-                    forkliftDirection = ForkliftDirectionState.MOVING_DOWN;
-                else
-                    forkliftDirection = ForkliftDirectionState.MOVING_UP;
-                }
+                // if (manipulator.hasCargo() == true)
+                // this.forkliftMotor.set(STAY_UP_WITH_CARGO);
+                // else
+                this.forkliftMotor.set(STAY_UP_NO_PIECE);
 
-            // Differentiate moving up from down
-            if (forkliftDirection == ForkliftDirectionState.MOVING_UP)
-                {
-                // If we have passed the value we wanted...
-                if (this.getForkliftHeight() > forkliftTargetHeight)
-                    {
-                    liftState = ForkliftState.STAY_AT_POSITION;
-                    // Reset the direction for next time.
-                    forkliftDirection = ForkliftDirectionState.NEUTRAL;
-                    break;
-                    }
-                // we have NOT passed the value , keep going up.
-                this.forkliftMotor.set(forkliftTargetSpeed);
+                // Reset the direction for next move-to-position.
+                forkliftDirection = ForkliftDirectionState.NEUTRAL;
+                setLiftPositionInit = true;
+                break;
 
-                }
-            else
-                {
-                // If we have passed the value we wanted...
-                if (this.getForkliftHeight() < forkliftTargetHeight)
-                    {
-                    liftState = ForkliftState.STAY_AT_POSITION;
-                    // Reset the direction for next time.
-                    forkliftDirection = ForkliftDirectionState.NEUTRAL;
-                    break;
-                    }
-                // we have NOT passed the value , keep going down.
-                this.forkliftMotor.set(-forkliftTargetSpeed);
-                }
-
-            break;
-
-        case MOVING_TO_POSITION_PRECISE:
-            this.movingToPositionPreciseState();
-            break;
-
-        case MOVE_JOY:
-            setLiftPositionInit = true;
-            this.forkliftMotor.set(forkliftTargetSpeed);
-            // If we are no longer holding the joystick, then it will
-            // automatically stay at position. If we are holding the joysticks,
-            // then other functions will set liftState back to MOVE_JOY before
-            // we get back here
-            liftState = ForkliftState.STAY_AT_POSITION;
-            break;
-        default:
-            // print out we reached the default case (which we shouldn't
-            // have),
-            // then fall through to STAY_AT_POSITION
-            // System.out.println(
-            // "Reached default in the liftState switch in "
-            // + "forkliftUpdate in Forklift");
-        case STAY_AT_POSITION:
-            // If the manipulator has a cargo piece, send the appropriate
-            // value to the motor so the forklift does not slide down due to
-            // gravity
-
-            // if (manipulator.hasCargo() == true)
-            // this.forkliftMotor.set(STAY_UP_WITH_CARGO);
-            // else
-            this.forkliftMotor.set(STAY_UP_NO_PIECE);
-
-            // Reset the direction for next move-to-position.
-            forkliftDirection = ForkliftDirectionState.NEUTRAL;
-            setLiftPositionInit = true;
-            break;
-
-        case STOP:
-            this.forkliftMotor.set(0.0);
-            break;
+            case STOP:
+                this.forkliftMotor.set(0.0);
+                break;
+            }
         }
 }
 
@@ -1023,7 +1037,7 @@ public final static double PLAYER_STATION_CARGO_HEIGHT = 21;
 
 public final static double PLAYER_STATION_CARGO_ANGLE = 85;
 
-public final static double PLAYER_STATION_HEIGHT = .2;
+public final static double PLAYER_STATION_HEIGHT = 4;// .2;
 
 public final static double PLAYER_STATION_ANGLE = 33;
 

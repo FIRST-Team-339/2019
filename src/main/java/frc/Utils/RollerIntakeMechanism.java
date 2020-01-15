@@ -103,7 +103,7 @@ public void toggleSolenoid (QuickSwitch button)
  */
 public boolean isOpen ()
 {
-    return this.armSolenoid.getForward() == true;
+    return this.armSolenoid.getForward() == false;
 }
 
 /**
